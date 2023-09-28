@@ -43,7 +43,7 @@ export function InputForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className='w-2/3 space-y-8 flex space-x-6'
+        className='space-y-8 flex space-x-6'
       >
         <FormField
           control={form.control}
