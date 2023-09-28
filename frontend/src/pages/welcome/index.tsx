@@ -15,6 +15,7 @@ export default function Welcome() {
       shadow-md flex justify-between items-center mt-12 space-x-12'
       >
         <BtnLink name='Register' link='/register' />
+        {/* 원래는 42auth로 리다이렉션 되어야 합니다. */}
         <BtnLink name='Login' link='/login' />
       </div>
     </div>
