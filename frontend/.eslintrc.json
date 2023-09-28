@@ -54,5 +54,11 @@
     },
     "import/core-modules": ["styled-jsx/css"]
   },
-  "settings": {"import/core-modules": ["styled-jsx/css"]}
+  "settings": {"import/core-modules": ["styled-jsx/css"]},
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "parser": "@typescript-eslint/parser"
+    }
+  ]
 }
