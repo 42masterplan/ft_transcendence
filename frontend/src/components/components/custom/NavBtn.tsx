@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import {Button} from '@/components/ui/button';
+import {Button} from '../shadcn/button';
 import Image from 'next/image';
 
 interface NavBtnProps {
@@ -11,7 +11,7 @@ interface NavBtnProps {
 
 export default function NavBtn({path, file, width, height}: NavBtnProps) {
   return (
-    <Button variant='navBtn' size='navBtn'>
+    <Button asChild variant='navBtn' size='navBtn'>
       <Link href={path}>
         <Image
           src={`/icon/${file}.svg`}

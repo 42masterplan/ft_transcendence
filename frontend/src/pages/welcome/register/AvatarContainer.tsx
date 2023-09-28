@@ -1,5 +1,4 @@
-import AvatarIcon from '../../../components/Avatar';
-
+import AvatarIcon from '@/components/components/custom/AvatarIcon';
 export default function AvatarContainer() {
   return (
     <>

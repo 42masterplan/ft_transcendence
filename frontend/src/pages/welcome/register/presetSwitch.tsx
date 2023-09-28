@@ -1,5 +1,5 @@
-import {Label} from '@/components/ui/label';
-import {Switch} from '@/components/ui/switch';
+import {Label} from '@/components/components/shadcn/label';
+import {Switch} from '@/components/components/shadcn/switch';
 
 export function SwitchDemo() {
   return (

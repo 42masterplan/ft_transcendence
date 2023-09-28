@@ -1,9 +1,9 @@
-import Header from '../../../components/Header';
-import {InputForm} from '../../../components/InputForm';
+import Header from '@/components/components/custom/Header';
+import {InputForm} from '@/components/components/custom/InputForm';
 import {SwitchDemo} from './presetSwitch';
 import AvatarContainer from './AvatarContainer';
-import {InputWithLabel} from '../../../components/InputWithLabel';
-import {Button} from '@/components/ui/button';
+import {InputWithLabel} from '@/components/components/custom/InputWithLabel';
+import {Button} from '@/components/components/shadcn/button';
 
 export default function register() {
   return (
