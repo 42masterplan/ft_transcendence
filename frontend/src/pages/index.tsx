@@ -1,6 +1,7 @@
 // import Link from 'next/link';
 
 import {Button} from '@/components/components/shadcn/button';
+import Link from 'next/link';
 
 // import {useRouter} from 'next/router';
 
@@ -12,6 +13,9 @@ export default function Home() {
       <Button variant='ghost' className='bg-red-400'>
         Destructive
       </Button>
+      <Link href='/welcome'>
+        <Button>웰컴으로 가실?</Button>
+      </Link>
     </>
   );
 }
