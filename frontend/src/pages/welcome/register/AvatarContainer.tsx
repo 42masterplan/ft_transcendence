@@ -24,10 +24,12 @@ export default function AvatarContainer() {
       const rowSquares = [];
       for (let col = 0; col < 4; col++) {
         const idx = row * 4 + col;
-        rowSquares.push(<AvatarIcon avatarName={AvatarList[idx]} />);
+        rowSquares.push(<AvatarIcon key={idx} avatarName={AvatarList[idx]} />);
       }
       rows.push(
-        <div className='flex items-center space-x-3'>{rowSquares}</div>
+        <div className='flex items-center space-x-3' key={row}>
+          {rowSquares}
+        </div>
       );
     }
     return rows;
