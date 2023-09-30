@@ -1,6 +1,5 @@
 import Header from '@/components/components/custom/Header';
 import {InputForm} from '@/components/components/custom/InputForm';
-import {PresetSwitch} from './presetSwitch';
 import AvatarContainer from './AvatarContainer';
 import {InputWithLabel} from '@/components/components/custom/InputWithLabel';
 import {Button} from '@/components/components/shadcn/button';
