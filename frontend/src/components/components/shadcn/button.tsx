@@ -27,7 +27,8 @@ const buttonVariants = cva(
         icon: 'h-10 w-10',
         navBtn: 'h-1/7 w-1/6',
         check: 'h-10 w-28',
-        long: 'text-7xl'
+        long: 'text-7xl',
+        submit: 'h8  px-4 py-2'
       }
     },
     defaultVariants: {
