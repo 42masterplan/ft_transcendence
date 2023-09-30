@@ -1,7 +1,7 @@
 import {Label} from '@/components/components/shadcn/label';
 import {Switch} from '@/components/components/shadcn/switch';
 
-export function SwitchDemo() {
+export function PresetSwitch() {
   return (
     <div className='flex items-center space-x-3'>
       <h1
