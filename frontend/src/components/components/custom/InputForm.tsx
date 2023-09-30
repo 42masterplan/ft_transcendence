@@ -8,7 +8,6 @@ import {Button} from '../shadcn/button';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -54,7 +53,6 @@ export function InputForm() {
               <FormControl>
                 <Input placeholder='당신의 창의성을 믿어봐요' {...field} />
               </FormControl>
-              <FormDescription>사람들에게 보여질 이름입니다.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
