@@ -3,13 +3,14 @@ import {InputForm} from '@/components/components/custom/InputForm';
 import AvatarContainer from './AvatarContainer';
 import {InputWithLabel} from '@/components/components/custom/InputWithLabel';
 import {Button} from '@/components/components/shadcn/button';
+import LinkBtn from '@/components/components/custom/LinkBtn';
 
 export default function register() {
   return (
     <>
       <Header />
       <div className='flex justify-center'>
-        <div className='flex flex-col items-center w-[466px] h-[616px] rounded-lg overflow-y-auto p-6 bg-info_bg gap-3'>
+        <div className='flex flex-col items-center w-[466px] h-auto rounded-lg overflow-y-auto p-6 bg-info_bg gap-3'>
           <h1
             className='font-roboto-mono text-4xl
             font-semibold leading-10 tracking-normal text-center m-3'
@@ -33,9 +34,10 @@ export default function register() {
             header='상태메시지'
             placeholder='type what you want'
           />
-          <Button variant='default' size='lg' className='shrink-0'>
-            계속하기
-          </Button>
+          <LinkBtn
+            link='/welcome/register/2step-auth-register'
+            name='계속하기'
+          />
         </div>
       </div>
     </>
