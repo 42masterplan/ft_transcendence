@@ -17,9 +17,19 @@ export default function register() {
           >
             회원 정보 설정
           </h1>
-          <InputForm />
-          <PresetSwitch />
+          <InputForm
+            label='닉네임'
+            placeholder='당신의 창의성을 믿어봐요'
+            buttonLabel='중복확인'
+          />
+          <h1
+            className='font-roboto-mono text-1xl
+            font-semibold leading-10 tracking-normal text-center'
+          >
+            아바타 선택
+          </h1>
           <AvatarContainer />
+          <Button>커스텀 아바타 직접 올리기</Button>
           <InputWithLabel
             header='상태메시지'
             placeholder='type what you want'
