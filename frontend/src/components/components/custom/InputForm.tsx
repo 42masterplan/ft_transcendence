@@ -31,7 +31,7 @@ export function InputForm() {
     toast({
       title: 'You submitted the following values:',
       description: (
-        <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
+        <pre className='mt-2 rounded-md bg-slate-950 p-4'>
           <code className='text-white'>{JSON.stringify(data, null, 2)}</code>
         </pre>
       )
@@ -48,7 +48,7 @@ export function InputForm() {
           control={form.control}
           name='username'
           render={({field}) => (
-            <FormItem>
+            <FormItem className='w-[290px]'>
               <FormLabel>닉네임</FormLabel>
               <FormControl>
                 <Input placeholder='당신의 창의성을 믿어봐요' {...field} />
