@@ -22,7 +22,13 @@ const FormSchema = z.object({
   })
 });
 
-export function InputForm() {
+interface InputFormProps {
+  label: string;
+  placeholder: string;
+  buttonLabel: string;
+}
+
+export function InputForm({label, placeholder, buttonLabel}: InputFormProps) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema)
   });
@@ -48,16 +54,16 @@ export function InputForm() {
           control={form.control}
           name='username'
           render={({field}) => (
-            <FormItem className='w-[290px]'>
-              <FormLabel>닉네임</FormLabel>
+            <FormItem className='w-[280px]'>
+              <FormLabel>{label}</FormLabel>
               <FormControl>
-                <Input placeholder='당신의 창의성을 믿어봐요' {...field} />
+                <Input placeholder={placeholder} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type='submit'>Submit</Button>
+        <Button type='submit'>{buttonLabel}</Button>
       </form>
     </Form>
   );
