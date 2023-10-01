@@ -6,7 +6,7 @@ export default function Welcome() {
       <h1
         className='bg-gradient-to-r from-purple-700 via-blue-500
         to-cyan-300 text-transparent bg-clip-text
-        text-center font-roboto-mono text-7xl leading-tight font-semibold'
+        text-center font-roboto-mono text-7xl leading-normal font-semibold'
       >
         Welcome to Amazing Pong
       </h1>

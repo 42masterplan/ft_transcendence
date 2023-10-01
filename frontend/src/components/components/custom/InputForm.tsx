@@ -8,7 +8,6 @@ import {Button} from '../shadcn/button';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -23,7 +22,13 @@ const FormSchema = z.object({
   })
 });
 
-export function InputForm() {
+interface InputFormProps {
+  label: string;
+  placeholder: string;
+  buttonLabel: string;
+}
+
+export function InputForm({label, placeholder, buttonLabel}: InputFormProps) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema)
   });
@@ -32,7 +37,7 @@ export function InputForm() {
     toast({
       title: 'You submitted the following values:',
       description: (
-        <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
+        <pre className='mt-2 rounded-md bg-slate-950 p-4'>
           <code className='text-white'>{JSON.stringify(data, null, 2)}</code>
         </pre>
       )
@@ -49,17 +54,16 @@ export function InputForm() {
           control={form.control}
           name='username'
           render={({field}) => (
-            <FormItem>
-              <FormLabel>닉네임</FormLabel>
+            <FormItem className='w-[280px]'>
+              <FormLabel>{label}</FormLabel>
               <FormControl>
-                <Input placeholder='당신의 창의성을 믿어봐요' {...field} />
+                <Input placeholder={placeholder} {...field} />
               </FormControl>
-              <FormDescription>사람들에게 보여질 이름입니다.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type='submit'>Submit</Button>
+        <Button type='submit'>{buttonLabel}</Button>
       </form>
     </Form>
   );
