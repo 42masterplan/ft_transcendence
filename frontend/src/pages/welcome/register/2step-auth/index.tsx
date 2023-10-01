@@ -21,7 +21,7 @@ export default function twoStepAuth() {
           />
           <LinkBtn
             name='인증 코드 받기'
-            link='/welcome/register/2step-auth-register/validation'
+            link='/welcome/register/2step-auth/validation'
           />
         </div>
       </div>
