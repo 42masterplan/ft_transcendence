@@ -4,6 +4,7 @@ import AvatarContainer from './AvatarContainer';
 import {InputWithLabel} from '@/components/components/custom/InputWithLabel';
 import {Button} from '@/components/components/shadcn/button';
 import LinkBtn from '@/components/components/custom/LinkBtn';
+import { InputFile } from './InputFile';
 
 export default function register() {
   return (
@@ -29,13 +30,13 @@ export default function register() {
             아바타 선택
           </h1>
           <AvatarContainer />
-          <Button>커스텀 아바타 직접 올리기</Button>
+          <InputFile />
           <InputWithLabel
             header='상태메시지'
             placeholder='type what you want'
           />
           <LinkBtn
-            link='/welcome/register/2step-auth-register'
+            link='/welcome/register/2step-auth'
             name='계속하기'
           />
         </div>
