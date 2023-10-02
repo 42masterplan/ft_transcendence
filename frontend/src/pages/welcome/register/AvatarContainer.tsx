@@ -1,4 +1,10 @@
 import AvatarIcon from '@/components/components/custom/AvatarIcon';
+import {Label} from '@/components/components/shadcn/label';
+import {
+  RadioGroup,
+  RadioGroupItem
+} from '@/components/components/shadcn/radio-group';
+
 export default function AvatarContainer() {
   const AvatarList = [
     'cat_kickBoard',
@@ -23,7 +29,21 @@ export default function AvatarContainer() {
       const rowSquares = [];
       for (let col = 0; col < 4; col++) {
         const idx = row * 4 + col;
-        rowSquares.push(<AvatarIcon key={idx} avatarName={AvatarList[idx]} />);
+        rowSquares.push(
+          <div className='flex items-center space-x-2'>
+            <RadioGroupItem
+              value={idx.toString()}
+              id={idx.toString()}
+              className='peer sr-only'
+            />
+            <Label
+              htmlFor={idx.toString()}
+              className='flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-1 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary'
+            >
+              <AvatarIcon key={idx} avatarName={AvatarList[idx]} />
+            </Label>
+          </div>
+        );
       }
       rows.push(
         <div className='flex items-center space-x-3' key={row}>
@@ -33,5 +53,11 @@ export default function AvatarContainer() {
     }
     return rows;
   };
-  return <>{renderAvatarContainer()}</>;
+  return (
+    <>
+      <RadioGroup defaultValue='1' className='grid gap-4'>
+        {renderAvatarContainer()}
+      </RadioGroup>
+    </>
+  );
 }
