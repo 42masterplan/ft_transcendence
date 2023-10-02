@@ -10,7 +10,6 @@ export default function AvatarContainer() {
     'kangaroo_boxing',
     'koala_health',
     'mouse_health',
-    'mouse_run',
     'panda_health',
     'polarbear_ski',
     'rhino_health',

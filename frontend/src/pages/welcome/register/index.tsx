@@ -6,14 +6,14 @@ import {Button} from '@/components/components/shadcn/button';
 import LinkBtn from '@/components/components/custom/LinkBtn';
 import {InputFile} from './InputFile';
 
-export default function register() {
-  let memberData = {
-    name: '',
-    custom_avatar: 0,
-    profile_image: 'imageBinary',
-    introduction: 'Hello World!',
-    authorizationCode: ''
-  };
+export default function Register() {
+  // let memberData = {
+  //   name: '',
+  //   custom_avatar: 0,
+  //   profile_image: 'imageBinary',
+  //   introduction: 'Hello World!',
+  //   authorizationCode: ''
+  // };
   // 추후에  state로 관리할 배열입니다. 이걸 json으로 바꿔서 backend에게 넘겨주면 됨..!
   // 유의할 점 : custom_avatar와  profile_image 중 하나만 올릴 수 있음..!
   return (
