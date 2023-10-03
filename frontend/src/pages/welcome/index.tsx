@@ -1,4 +1,4 @@
-import LinkBtn from '@/components/components/custom/LinkBtn';
+import LinkBtn from '@/components/button/LinkBtn';
 
 export default function Welcome() {
   return (

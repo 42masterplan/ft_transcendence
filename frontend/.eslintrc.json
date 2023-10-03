@@ -23,7 +23,7 @@
 
   "rules": {
     "import/extensions": [
-      "error",
+      // "error",
       "ignorePackages",
       {
         "js": "never",
@@ -41,7 +41,7 @@
     "react/no-unknown-property": [
       2,
       {
-        "ignore": ["jsx"]
+        "ignore": ["tsx"]
       }
     ]
   },

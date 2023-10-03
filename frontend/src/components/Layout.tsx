@@ -1,4 +1,4 @@
-import NavBar from './NavBar';
+import NavBar from './navbar/NavBar';
 import React from 'react';
 import {useRouter} from 'next/router';
 export default function Layout({children}: {children: React.ReactNode}) {

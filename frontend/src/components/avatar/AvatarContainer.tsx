@@ -1,9 +1,6 @@
-import AvatarIcon from '@/components/components/custom/AvatarIcon';
-import {Label} from '@/components/components/shadcn/label';
-import {
-  RadioGroup,
-  RadioGroupItem
-} from '@/components/components/shadcn/radio-group';
+import AvatarIcon from '@/components/avatar/AvatarIcon';
+import {Label} from '@/components/shadcn/label';
+import {RadioGroup, RadioGroupItem} from '@/components/shadcn/radio-group';
 
 export default function AvatarContainer() {
   const AvatarList = [
@@ -26,9 +23,10 @@ export default function AvatarContainer() {
 
   function uploadHandler(id: string) {
     if (id === '15') {
-      const realUpload = document.getElementById(`fileUpload-${id}`);
-      if (realUpload) {
-        realUpload.click();
+      // 숨겨진 태그 선택
+      const hiddenInput = document.getElementById(`fileUpload-${id}`);
+      if (hiddenInput) {
+        hiddenInput.click();
       }
     }
   }
@@ -41,7 +39,7 @@ export default function AvatarContainer() {
         const idx = row * 4 + col;
         const id = idx.toString();
         rowSquares.push(
-          <div className='flex items-center space-x-2'>
+          <div className='flex items-center space-x-2' key={id}>
             <RadioGroupItem
               value={id}
               id={id}

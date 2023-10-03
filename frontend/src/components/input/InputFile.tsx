@@ -1,5 +1,5 @@
-import {Input} from '@/components/components/shadcn/input';
-import {Label} from '@/components/components/shadcn/label';
+import {Input} from '@/components/shadcn/input';
+import {Label} from '@/components/shadcn/label';
 
 export function InputFile() {
   return (
