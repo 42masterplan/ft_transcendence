@@ -18,7 +18,8 @@ export default function AvatarContainer() {
     'rhino_health',
     'rhino_skateBoard',
     'shark_health',
-    'sloth_health'
+    'sloth_health',
+    ''
   ];
 
   function uploadHandler(id: string) {
