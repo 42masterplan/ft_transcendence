@@ -1,10 +1,10 @@
 import Header from '@/components/Header';
 import {InputForm} from '@/components/input/InputForm';
-import AvatarContainer from '../../../components/avatar/AvatarContainer';
+import AvatarContainer from '@/components/avatar/AvatarContainer';
 import {InputWithLabel} from '@/components/input/InputWithLabel';
 import {Button} from '@/components/shadcn/button';
 import LinkBtn from '@/components/button/LinkBtn';
-import {InputFile} from '../../../components/input/InputFile';
+import {InputFile} from '@/components/input/InputFile';
 
 export default function Register() {
   // let memberData = {
