@@ -1,6 +1,6 @@
 // import Link from 'next/link';
 
-import {Button} from '@/components/components/shadcn/button';
+import {Button} from '@/components/shadcn/button';
 import Link from 'next/link';
 
 // import {useRouter} from 'next/router';

@@ -1,7 +1,7 @@
-import Header from '@/components/components/custom/Header';
-import LinkBtn from '@/components/components/custom/LinkBtn';
-import {InputWithLabel} from '@/components/components/custom/InputWithLabel';
-import {Button} from '@/components/components/shadcn/button';
+import Header from '@/components/Header';
+import LinkBtn from '@/components/button/LinkBtn';
+import {InputWithLabel} from '@/components/input/InputWithLabel';
+import {Button} from '@/components/shadcn/button';
 
 export default function twoStepAuth() {
   return (
