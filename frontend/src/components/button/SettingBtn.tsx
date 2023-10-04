@@ -7,6 +7,7 @@ import {
   DialogTrigger
 } from '@/components/shadcn/dialog';
 import ImageBtn from './ImageBtn';
+import {Button} from '../shadcn/button';
 import {InputForm} from '../input/InputForm';
 import AvatarContainer from '@/components/avatar/AvatarContainer';
 export default function SettingBtn() {
