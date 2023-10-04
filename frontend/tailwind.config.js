@@ -51,7 +51,15 @@ module.exports = {
           foreground: 'hsl(var(--card-foreground))'
         },
         btn_container: '#94A3B8',
-        info_bg: '#CBD5E1'
+        info_bg: '#CBD5E1',
+        color_1: '#F1F5F9',
+        color_2: '#E2E8F0',
+        color_3: '#CBD5E1',
+        color_4: '#94A3B8',
+        color_5: '#64748B',
+        color_6: '#475569',
+        color_7: '#334155',
+        color_8: '#1E293B'
       },
       borderRadius: {
         lg: 'var(--radius)',
