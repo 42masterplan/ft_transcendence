@@ -26,6 +26,7 @@ interface InputFormProps {
   label: string;
   placeholder: string;
   buttonLabel: string;
+  className?: string;
 }
 
 export function InputForm({label, placeholder, buttonLabel}: InputFormProps) {
@@ -46,15 +47,12 @@ export function InputForm({label, placeholder, buttonLabel}: InputFormProps) {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className='space-y-8 flex space-x-6'
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 grid'>
         <FormField
           control={form.control}
           name='username'
           render={({field}) => (
-            <FormItem className='w-[280px]'>
+            <FormItem className='flex flex-col'>
               <FormLabel>{label}</FormLabel>
               <FormControl>
                 <Input placeholder={placeholder} {...field} />

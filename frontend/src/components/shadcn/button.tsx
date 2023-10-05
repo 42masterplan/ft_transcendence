@@ -18,7 +18,8 @@ const buttonVariants = cva(
           'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
-        navBtn: 'bg-primary text-primary-foreground hover:bg-primary/90 flex'
+        navBtn: 'bg-primary text-primary-foreground hover:bg-primary/90 flex',
+        HeaderBtn: 'bg-primary text-primary-foreground hover:bg-primary/90'
       },
       size: {
         default: 'h-10 px-4 py-2',
@@ -28,7 +29,8 @@ const buttonVariants = cva(
         navBtn: 'h-1/7 w-1/6',
         check: 'h-10 w-28',
         long: 'text-7xl',
-        submit: 'h8  px-4 py-2'
+        submit: 'h8  px-4 py-2',
+        HeaderBtn: 'w-[70px] h-[70px]'
       }
     },
     defaultVariants: {

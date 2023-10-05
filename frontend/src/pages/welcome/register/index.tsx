@@ -1,10 +1,8 @@
 import Header from '@/components/Header';
-import {InputForm} from '@/components/input/InputForm';
-import AvatarContainer from '../../../components/avatar/AvatarContainer';
-import {InputWithLabel} from '@/components/input/InputWithLabel';
+
 import {Button} from '@/components/shadcn/button';
 import LinkBtn from '@/components/button/LinkBtn';
-import {InputFile} from '../../../components/input/InputFile';
+import SetUserInfo from '@/components/userInfo/SetUserInfo';
 
 export default function Register() {
   // let memberData = {
@@ -27,23 +25,7 @@ export default function Register() {
           >
             회원 정보 설정
           </h1>
-          <InputForm
-            label='닉네임'
-            placeholder='당신의 창의성을 믿어봐요'
-            buttonLabel='중복확인'
-          />
-          <h1
-            className='font-roboto-mono text-1xl
-            font-semibold leading-10 tracking-normal text-center'
-          >
-            아바타 선택
-          </h1>
-          <AvatarContainer />
-          <InputFile />
-          <InputWithLabel
-            header='상태메시지'
-            placeholder='type what you want'
-          />
+          <SetUserInfo />
           <LinkBtn link='/welcome/register/2step-auth' name='계속하기' />
         </div>
       </div>
