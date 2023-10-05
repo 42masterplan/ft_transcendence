@@ -14,7 +14,7 @@ import {Switch} from '@/components/shadcn/switch';
 import {Label} from '@/components/shadcn/label';
 export default function SettingBtn() {
   return (
-    <span className='fixed top-2.5 right-2.5'>
+    <p className='fixed top-2.5 right-2.5'>
       <Dialog>
         <DialogTrigger asChild>
           <ImageBtn
@@ -58,6 +58,6 @@ export default function SettingBtn() {
           </DialogHeader>
         </DialogContent>
       </Dialog>
-    </span>
+    </p>
   );
 }

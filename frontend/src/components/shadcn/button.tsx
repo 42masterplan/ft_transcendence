@@ -31,7 +31,8 @@ const buttonVariants = cva(
         check: 'h-10 w-28',
         long: 'text-7xl',
         submit: 'h8  px-4 py-2',
-        HeaderBtn: 'w-[70px] h-[70px]'
+        HeaderBtn: 'w-[70px] h-[70px]',
+        mini: 'h-6 w-20'
       }
     },
     defaultVariants: {
