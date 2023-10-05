@@ -8,6 +8,7 @@ import {
 } from '@/components/shadcn/dialog';
 import ImageBtn from './ImageBtn';
 import SetUserInfo from '@/components/userInfo/SetUserInfo';
+import {Button} from '../shadcn/button';
 export default function SettingBtn() {
   return (
     <span className='fixed top-2.5 right-2.5'>
@@ -25,8 +26,9 @@ export default function SettingBtn() {
             <DialogTitle className='text-center text-4xl top-0'>
               회원 정보 설정
             </DialogTitle>
-            <DialogDescription>
+            <DialogDescription className='flex flex-col'>
               <SetUserInfo />
+              <Button> 설정 저장</Button>
             </DialogDescription>
           </DialogHeader>
         </DialogContent>

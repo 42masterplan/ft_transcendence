@@ -5,7 +5,7 @@ import {InputFile} from '@/components/input/InputFile';
 export default function SetUserInfo() {
   // kind == 'modal' ?
   return (
-    <>
+    <div className='grid place-content-center  grid-rows-1 gap-2 '>
       <InputForm
         label='닉네임'
         placeholder='당신의 창의성을 믿어봐요'
@@ -18,8 +18,8 @@ export default function SetUserInfo() {
         아바타 선택
       </h1>
       <AvatarContainer />
-      <InputFile />
+      {/* <InputFile /> */}
       <InputWithLabel header='상태메시지' placeholder='type what you want' />
-    </>
+    </div>
   );
 }

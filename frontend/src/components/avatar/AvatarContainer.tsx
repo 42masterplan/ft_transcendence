@@ -65,7 +65,7 @@ export default function AvatarContainer() {
     return rows;
   };
   return (
-    <>
+    <div className=' flex place-content-center'>
       <input
         type='file'
         id={'fileUpload-15'}
@@ -76,6 +76,6 @@ export default function AvatarContainer() {
       <RadioGroup defaultValue='1' className='grid gap-4'>
         {renderAvatarContainer()}
       </RadioGroup>
-    </>
+    </div>
   );
 }
