@@ -18,7 +18,8 @@ const buttonVariants = cva(
           'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
-        navBtn: 'bg-primary text-primary-foreground hover:bg-primary/90 flex',
+        navBtn: 'bg-color_8 text-primary-foreground hover:bg-color_8/80 flex',
+        navBtnClicked: 'bg-color_3 text-primary-foreground flex',
         HeaderBtn: 'bg-primary text-primary-foreground hover:bg-primary/90'
       },
       size: {
