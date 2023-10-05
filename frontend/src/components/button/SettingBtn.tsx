@@ -9,7 +9,7 @@ import {
 import ImageBtn from './ImageBtn';
 import {Button} from '../shadcn/button';
 import {InputForm} from '../input/InputForm';
-import UserInfo from '@/components/userInfo/userInfo';
+import UserInfo from '@/components/userInfo/UserInfo';
 import AvatarContainer from '@/components/avatar/AvatarContainer';
 export default function SettingBtn() {
   return (
