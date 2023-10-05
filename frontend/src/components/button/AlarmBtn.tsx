@@ -42,14 +42,6 @@ export default function AlarmBtn() {
       current_status: 'OFFLINE',
       introduction: 'I love Swimming~',
       game_mode: 'swim'
-    },
-    {
-      id: 'uuid',
-      name: 'hkong',
-      profile_image: 'koala_health',
-      current_status: 'OFFLINE',
-      introduction: 'I love Swimming~',
-      game_mode: 'swim'
     }
   ];
   const friendRequest = [
@@ -73,6 +65,20 @@ export default function AlarmBtn() {
       profile_image: 'gorilla_baseBall',
       introduction: '난 조신이다!',
       current_status: 'OFFLINE'
+    },
+    {
+      id: 'RandomUUid',
+      name: 'joushin',
+      profile_image: 'gorilla_baseBall',
+      introduction: '난 조신이다!',
+      current_status: 'OFFLINE'
+    },
+    {
+      id: 'RandomUUid',
+      name: 'joushin',
+      profile_image: 'gorilla_baseBall',
+      introduction: '난 조신이다!',
+      current_status: 'OFFLINE'
     }
   ];
   return (
@@ -83,7 +89,7 @@ export default function AlarmBtn() {
         </SheetTrigger>
         <SheetContent className=' overflow-y-auto max-h-screen bg-color_3'>
           <SheetHeader>
-            <SheetTitle>알림</SheetTitle>
+            <SheetTitle className='text-center'>알림</SheetTitle>
           </SheetHeader>
           <div className='flex flex-col gap-4 py-4'>
             <h1
