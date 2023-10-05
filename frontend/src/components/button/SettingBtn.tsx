@@ -6,6 +6,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/shadcn/dialog';
+import {Mail} from 'lucide-react';
 import ImageBtn from './ImageBtn';
 import SetUserInfo from '@/components/userInfo/SetUserInfo';
 import {Button} from '../shadcn/button';
@@ -28,17 +29,31 @@ export default function SettingBtn() {
             <DialogTitle className='text-center text-4xl top-0'>
               회원 정보 설정
             </DialogTitle>
-            <DialogDescription className='flex flex-col items-center'>
+            <DialogDescription className='flex flex-col items-center space-y-3'>
               <SetUserInfo />
-              <div className='flex items-center content-center  space-x-2'>
+              <div className='flex items-center space-x-2'>
+                <Switch id='performance' />
                 <Label htmlFor='performance'>
-                  <span className='font-normal leading-snug text-muted-foreground'>
-                    이중인증 설정
+                  <span className='text-black font-medium text-l leading-[14px]'>
+                    2단계 인증 활성화
                   </span>
                 </Label>
-                <Switch id='performance' />
               </div>
+              <Button>
+                <Mail className='mr-2 h-4 w-4' /> 2단계 인증 이메일 변경
+              </Button>
+
               <Button> 설정 저장</Button>
+              <div className='flex space-x-3'>
+                <Button variant='destructive' size='sm'>
+                  {' '}
+                  로그아웃
+                </Button>
+                <Button variant='destructive' size='sm'>
+                  {' '}
+                  회원 탈퇴
+                </Button>
+              </div>
             </DialogDescription>
           </DialogHeader>
         </DialogContent>
