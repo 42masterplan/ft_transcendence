@@ -9,6 +9,8 @@ import {
 import ImageBtn from './ImageBtn';
 import SetUserInfo from '@/components/userInfo/SetUserInfo';
 import {Button} from '../shadcn/button';
+import {Switch} from '@/components/shadcn/switch';
+import {Label} from '@/components/shadcn/label';
 export default function SettingBtn() {
   return (
     <span className='fixed top-2.5 right-2.5'>
@@ -26,8 +28,16 @@ export default function SettingBtn() {
             <DialogTitle className='text-center text-4xl top-0'>
               회원 정보 설정
             </DialogTitle>
-            <DialogDescription className='flex flex-col'>
+            <DialogDescription className='flex flex-col items-center'>
               <SetUserInfo />
+              <div className='flex items-center content-center  space-x-2'>
+                <Label htmlFor='performance'>
+                  <span className='font-normal leading-snug text-muted-foreground'>
+                    이중인증 설정
+                  </span>
+                </Label>
+                <Switch id='performance' />
+              </div>
               <Button> 설정 저장</Button>
             </DialogDescription>
           </DialogHeader>
