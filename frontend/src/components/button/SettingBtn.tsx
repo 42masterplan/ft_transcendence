@@ -7,7 +7,7 @@ import {
   DialogTrigger
 } from '@/components/shadcn/dialog';
 import ImageBtn from './ImageBtn';
-import UserInfo from '@/components/userInfo/UserInfo';
+import SetUserInfo from '@/components/userInfo/SetUserInfo';
 export default function SettingBtn() {
   return (
     <span className='fixed top-2.5 right-2.5'>
@@ -20,13 +20,13 @@ export default function SettingBtn() {
             height={50}
           />
         </DialogTrigger>
-        <DialogContent className='sm:max-w-[425px] max-h-screen bg-color_3 overflow-y-auto'>
+        <DialogContent className='sm:max-w-[450px] max-h-screen bg-color_3 overflow-y-auto'>
           <DialogHeader>
-            <DialogTitle className='text-center text-4xl '>
+            <DialogTitle className='text-center text-4xl top-0'>
               회원 정보 설정
             </DialogTitle>
             <DialogDescription>
-              <UserInfo />
+              <SetUserInfo />
             </DialogDescription>
           </DialogHeader>
         </DialogContent>

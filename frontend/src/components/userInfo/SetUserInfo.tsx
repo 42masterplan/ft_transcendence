@@ -2,7 +2,8 @@ import {InputForm} from '@/components/input/InputForm';
 import AvatarContainer from '@/components/avatar/AvatarContainer';
 import {InputWithLabel} from '@/components/input/InputWithLabel';
 import {InputFile} from '@/components/input/InputFile';
-export default function UserInfo() {
+export default function SetUserInfo() {
+  // kind == 'modal' ?
   return (
     <>
       <InputForm

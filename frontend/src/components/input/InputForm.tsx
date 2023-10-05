@@ -26,6 +26,7 @@ interface InputFormProps {
   label: string;
   placeholder: string;
   buttonLabel: string;
+  className?: string;
 }
 
 export function InputForm({label, placeholder, buttonLabel}: InputFormProps) {

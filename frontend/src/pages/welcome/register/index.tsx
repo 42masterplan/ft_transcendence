@@ -2,7 +2,7 @@ import Header from '@/components/Header';
 
 import {Button} from '@/components/shadcn/button';
 import LinkBtn from '@/components/button/LinkBtn';
-import UserInfo from '@/components/userInfo/UserInfo';
+import SetUserInfo from '@/components/userInfo/SetUserInfo';
 
 export default function Register() {
   // let memberData = {
@@ -25,7 +25,7 @@ export default function Register() {
           >
             회원 정보 설정
           </h1>
-          <UserInfo />
+          <SetUserInfo />
           <LinkBtn link='/welcome/register/2step-auth' name='계속하기' />
         </div>
       </div>
