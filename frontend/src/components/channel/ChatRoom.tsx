@@ -1,9 +1,12 @@
 import * as React from 'react';
-import {Check, Plus, Send} from 'lucide-react';
-import {type FriendInfo} from '@/components/alarm/FriendRequest';
+import {Check, Airplay, Send} from 'lucide-react';
+import {LuUsers} from 'react-icons/lu';
 import {cn} from '@/lib/utils';
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/shadcn/avatar';
 import {Button} from '@/components/shadcn/button';
+import {useContext} from 'react';
+import {APIContext, type FriendInfoType, type ChatInfoType} from '../Layout';
+
 import {
   Card,
   CardContent,
@@ -35,66 +38,14 @@ import {
 } from '@/components/shadcn/tooltip';
 import AvatarIcon from '../avatar/AvatarIcon';
 
-const friendInfos = [
-  {
-    id: 'RandomUUid',
-    name: 'jjin',
-    profile_image: 'polarbear_ski',
-    introduction: 'I love badminton',
-    current_status: 'INGAME'
-  },
-  {
-    id: 'RandomUUid',
-    name: 'daejlee',
-    profile_image: 'rhino_health',
-    introduction: '난 대지리다!',
-    current_status: 'OFFLINE'
-  },
-  {
-    id: 'RandomUUid',
-    name: 'joushin',
-    profile_image: 'gorilla_baseBall',
-    introduction: '난 조신이다!',
-    current_status: 'OFFLINE'
-  },
-  {
-    id: 'uuid',
-    name: 'hkong',
-    profile_image: 'koala_health',
-    current_status: 'OFFLINE',
-    introduction: 'I love Swimming~'
-  },
-  {
-    id: 'uuid',
-    name: 'Seoyoo',
-    profile_image: 'shark_health',
-    current_status: 'ONLINE',
-    introduction: 'I love Health'
-  }
-] as const;
-
 export function CardsChat() {
+  const {friendInfos, chatInfos, chatMyInfo} = useContext(APIContext);
   const [open, setOpen] = React.useState(false);
-  const [selectedUsers, setSelectedUsers] = React.useState<FriendInfo[]>([]);
+  const [selectedUsers, setSelectedUsers] = React.useState<FriendInfoType[]>(
+    []
+  );
 
-  const [messages, setMessages] = React.useState([
-    {
-      role: 'agent',
-      content: 'Hi, how can I help you today?'
-    },
-    {
-      role: 'user',
-      content: "Hey, I'm having trouble with my account."
-    },
-    {
-      role: 'agent',
-      content: 'What seems to be the problem?'
-    },
-    {
-      role: 'user',
-      content: "I can't log in."
-    }
-  ]);
+  const [messages, setMessages] = React.useState(chatInfos);
   const [input, setInput] = React.useState('');
   const inputLength = input.trim().length;
 
@@ -103,11 +54,7 @@ export function CardsChat() {
       <Card>
         <CardHeader className='flex flex-row items-center'>
           <div className='flex items-center space-x-4'>
-            <AvatarIcon avatarName='sloth_health' />
-            <div>
-              <p className='text-sm font-medium leading-none'>Sofia Davis</p>
-              <p className='text-sm text-muted-foreground'>m@example.com</p>
-            </div>
+            <div className='font-bold text-2xl'>채팅방 제목</div>
           </div>
           <TooltipProvider delayDuration={0}>
             <Tooltip>
@@ -118,11 +65,11 @@ export function CardsChat() {
                   className='ml-auto rounded-full'
                   onClick={() => setOpen(true)}
                 >
-                  <Plus className='h-4 w-4' />
-                  <span className='sr-only'>New message</span>
+                  <LuUsers className='h-4 w-4' />
+                  <span className='sr-only'>참여 중 유저 목록</span>
                 </Button>
               </TooltipTrigger>
-              <TooltipContent sideOffset={10}>New message</TooltipContent>
+              <TooltipContent sideOffset={10}>참여 중 유저 목록</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </CardHeader>
@@ -133,12 +80,12 @@ export function CardsChat() {
                 key={index}
                 className={cn(
                   'flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm',
-                  message.role === 'user'
+                  message.id === chatMyInfo.id
                     ? 'ml-auto bg-primary text-primary-foreground'
                     : 'bg-muted'
                 )}
               >
-                {message.content}
+                {message.contents}
               </div>
             ))}
           </div>
@@ -151,8 +98,8 @@ export function CardsChat() {
               setMessages([
                 ...messages,
                 {
-                  role: 'user',
-                  content: input
+                  ...chatMyInfo,
+                  contents: input
                 }
               ]);
               setInput('');
