@@ -46,11 +46,9 @@ export default function SettingBtn() {
               <Button> 설정 저장</Button>
               <div className='flex space-x-3'>
                 <Button variant='destructive' size='sm'>
-                  {' '}
                   로그아웃
                 </Button>
                 <Button variant='destructive' size='sm'>
-                  {' '}
                   회원 탈퇴
                 </Button>
               </div>

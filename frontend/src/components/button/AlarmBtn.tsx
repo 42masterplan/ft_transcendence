@@ -4,6 +4,9 @@ import {Label} from '@/components/shadcn/label';
 import GameRequest from '../alarm/GameRequest';
 import FreindRequest from '../alarm/FriendRequest';
 import ImageBtn from './ImageBtn';
+import {useContext} from 'react';
+import {APIContext} from '../Layout';
+
 import {
   Sheet,
   SheetClose,
@@ -18,69 +21,7 @@ import {
 export default function AlarmBtn() {
   // 이건 일단 받아왔다고 생각하고 일단 진행 추후에는 직접 받아서 진행합니다.
   // 실제로 이렇게 생기지 않았을 가능성 높음!
-  const gameRequests = [
-    {
-      id: 'uuid',
-      name: 'Seoyoo',
-      profile_image: 'shark_health',
-      current_status: 'ONLINE',
-      introduction: 'I love Health',
-      game_mode: 'health'
-    },
-    {
-      id: 'uuid',
-      name: 'hkong',
-      profile_image: 'koala_health',
-      current_status: 'OFFLINE',
-      introduction: 'I love Swimming~',
-      game_mode: 'swim'
-    },
-    {
-      id: 'uuid',
-      name: 'hkong',
-      profile_image: 'koala_health',
-      current_status: 'OFFLINE',
-      introduction: 'I love Swimming~',
-      game_mode: 'swim'
-    }
-  ];
-  const friendRequest = [
-    {
-      id: 'RandomUUid',
-      name: 'jjin',
-      profile_image: 'polarbear_ski',
-      introduction: 'I love badminton',
-      current_status: 'INGAME'
-    },
-    {
-      id: 'RandomUUid',
-      name: 'daejlee',
-      profile_image: 'rhino_health',
-      introduction: '난 대지리다!',
-      current_status: 'OFFLINE'
-    },
-    {
-      id: 'RandomUUid',
-      name: 'joushin',
-      profile_image: 'gorilla_baseBall',
-      introduction: '난 조신이다!',
-      current_status: 'OFFLINE'
-    },
-    {
-      id: 'RandomUUid',
-      name: 'joushin',
-      profile_image: 'gorilla_baseBall',
-      introduction: '난 조신이다!',
-      current_status: 'OFFLINE'
-    },
-    {
-      id: 'RandomUUid',
-      name: 'joushin',
-      profile_image: 'gorilla_baseBall',
-      introduction: '난 조신이다!',
-      current_status: 'OFFLINE'
-    }
-  ];
+  const {gameRequests, friendInfos} = useContext(APIContext);
   return (
     <p className='fixed top-2.5 right-24'>
       <Sheet>
@@ -111,7 +52,7 @@ export default function AlarmBtn() {
             친구 요청
           </h1>
           <div className='flex flex-col gap-4 py-4'>
-            {friendRequest.map((item) => (
+            {friendInfos.map((item) => (
               <div>
                 <FreindRequest {...item} />
               </div>
