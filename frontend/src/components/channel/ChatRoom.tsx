@@ -131,12 +131,11 @@ export function CardsChat() {
         </CardFooter>
       </Card>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className='gap-0 p-0 outline-none'>
+        <DialogContent className='gap-0 p-0 outline-none bg-white'>
           <DialogHeader className='px-4 pb-4 pt-5'>
-            <DialogTitle>New message</DialogTitle>
+            <DialogTitle>참여중인 유저 목록</DialogTitle>
             <DialogDescription>
-              Invite a user to this thread. This will create a new group
-              message.
+              현재 채팅방의 멤버를 보여줍니다.
             </DialogDescription>
           </DialogHeader>
           <Command className='overflow-hidden rounded-t-none border-t'>
