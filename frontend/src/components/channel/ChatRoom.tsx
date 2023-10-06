@@ -33,12 +33,13 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from '@/components/shadcn/tooltip';
+import AvatarIcon from '../avatar/AvatarIcon';
 
 const users = [
   {
     name: 'Olivia Martin',
     email: 'm@example.com',
-    avatar: '/avatars/01.png'
+    avatar: ''
   },
   {
     name: 'Isabella Nguyen',
@@ -94,10 +95,7 @@ export function CardsChat() {
       <Card>
         <CardHeader className='flex flex-row items-center'>
           <div className='flex items-center space-x-4'>
-            <Avatar>
-              <AvatarImage src='/avatars/01.png' alt='Image' />
-              <AvatarFallback>OM</AvatarFallback>
-            </Avatar>
+            <AvatarIcon avatarName='sloth_health' />
             <div>
               <p className='text-sm font-medium leading-none'>Sofia Davis</p>
               <p className='text-sm text-muted-foreground'>m@example.com</p>
