@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {Check, Airplay, Send} from 'lucide-react';
+import {Check, Send} from 'lucide-react';
 import {LuUsers} from 'react-icons/lu';
 import {cn} from '@/lib/utils';
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/shadcn/avatar';
 import {Button} from '@/components/shadcn/button';
-import {useContext} from 'react';
-import {APIContext, type FriendInfoType, type ChatInfoType} from '../Layout';
+import {useContext, useRef, useEffect} from 'react';
+import {APIContext, type FriendInfoType} from '../Layout';
 
 import {
   Card,
@@ -44,11 +44,14 @@ export function CardsChat() {
   const [selectedUsers, setSelectedUsers] = React.useState<FriendInfoType[]>(
     []
   );
-
   const [messages, setMessages] = React.useState(chatInfos);
   const [input, setInput] = React.useState('');
   const inputLength = input.trim().length;
 
+  const messageEndRef = useRef<HTMLDivElement>();
+  useEffect(() => {
+    messageEndRef.current.scrollIntoView({behavior: 'smooth'});
+  }, [messages]);
   return (
     <>
       <Card className='w-full flex flex-col h-100'>
@@ -74,7 +77,7 @@ export function CardsChat() {
           </TooltipProvider>
         </CardHeader>
         <CardContent>
-          <div className='flex flex-col space-y-4 max-h-[800px] overflow-y-auto'>
+          <div className='flex flex-col space-y-4 max-h-[800px] overflow-y-auto '>
             {messages.map((message, index) => (
               <div
                 key={index}
@@ -89,7 +92,7 @@ export function CardsChat() {
                   <AvatarIcon size='small' avatarName={message.profile_image} />
                   {message.name}
                 </div>
-                <div className='grid place-items-center'>
+                <div className='grid place-items-center' ref={messageEndRef}>
                   {message.contents}
                 </div>
               </div>
@@ -143,7 +146,7 @@ export function CardsChat() {
               <CommandGroup className='p-2'>
                 {friendInfos.map((user) => (
                   <CommandItem
-                    key={user.email}
+                    key={user.id}
                     className='flex items-center px-2'
                     onSelect={() => {
                       if (selectedUsers.includes(user)) {
@@ -186,7 +189,7 @@ export function CardsChat() {
               <div className='flex -space-x-2 overflow-hidden'>
                 {selectedUsers.map((user) => (
                   <Avatar
-                    key={user.email}
+                    key={user.id}
                     className='inline-block border-2 border-background'
                   >
                     <AvatarImage src={user.avatar} />

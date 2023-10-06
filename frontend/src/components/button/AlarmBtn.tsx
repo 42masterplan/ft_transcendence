@@ -37,7 +37,7 @@ export default function AlarmBtn() {
               게임 요청
             </h1>
             {gameRequests.map((item) => (
-              <div>
+              <div key={item}>
                 <GameRequest {...item} />
               </div>
             ))}
