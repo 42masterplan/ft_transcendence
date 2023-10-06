@@ -1,5 +1,5 @@
 import SettingBtn from './button/SettingBtn';
-
+import AlarmBtn from './button/AlarmBtn';
 export default function Header() {
   return (
     <div>
@@ -11,6 +11,7 @@ export default function Header() {
         Amazing Pong
       </h1>
       <SettingBtn />
+      <AlarmBtn />
     </div>
   );
 }
