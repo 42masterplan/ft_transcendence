@@ -51,8 +51,8 @@ export function CardsChat() {
 
   return (
     <>
-      <Card>
-        <CardHeader className='flex flex-row items-center'>
+      <Card className='w-full flex flex-col h-100'>
+        <CardHeader className='flex flex-row items-center '>
           <div className='flex items-center space-x-4'>
             <div className='font-bold text-2xl'>채팅방 제목</div>
           </div>
@@ -74,18 +74,24 @@ export function CardsChat() {
           </TooltipProvider>
         </CardHeader>
         <CardContent>
-          <div className='space-y-4'>
+          <div className='flex flex-col space-y-4 max-h-[800px] overflow-y-auto'>
             {messages.map((message, index) => (
               <div
                 key={index}
                 className={cn(
-                  'flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm',
+                  'flex w-max max-w-[75%] rounded-lg px-3  text-sm',
                   message.id === chatMyInfo.id
                     ? 'ml-auto bg-primary text-primary-foreground'
                     : 'bg-muted'
                 )}
               >
-                {message.contents}
+                <div className='text-center p-1'>
+                  <AvatarIcon size='small' avatarName={message.profile_image} />
+                  {message.name}
+                </div>
+                <div className='grid place-items-center'>
+                  {message.contents}
+                </div>
               </div>
             ))}
           </div>

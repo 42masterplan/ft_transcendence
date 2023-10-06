@@ -1,6 +1,3 @@
-import {Button} from '@/components/shadcn/button';
-import {Input} from '@/components/shadcn/input';
-import {Label} from '@/components/shadcn/label';
 import GameRequest from '../alarm/GameRequest';
 import FreindRequest from '../alarm/FriendRequest';
 import ImageBtn from './ImageBtn';
@@ -52,8 +49,8 @@ export default function AlarmBtn() {
             친구 요청
           </h1>
           <div className='flex flex-col gap-4 py-4'>
-            {friendInfos.map((item) => (
-              <div>
+            {friendInfos.map((item, idx) => (
+              <div key={idx}>
                 <FreindRequest {...item} />
               </div>
             ))}

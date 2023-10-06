@@ -1,4 +1,3 @@
-import Header from '@/components/Header';
 import LinkBtn from '@/components/button/LinkBtn';
 import {InputWithLabel} from '@/components/input/InputWithLabel';
 import {Button} from '@/components/shadcn/button';
@@ -6,7 +5,6 @@ import {Button} from '@/components/shadcn/button';
 export default function twoStepAuth() {
   return (
     <>
-      <Header />
       <div className='flex justify-center'>
         <div className='flex flex-col items-center w-[466px] h-auto rounded-lg p-6 bg-info_bg gap-3'>
           <h1

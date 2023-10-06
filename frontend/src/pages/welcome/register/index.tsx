@@ -1,6 +1,3 @@
-import Header from '@/components/Header';
-
-import {Button} from '@/components/shadcn/button';
 import LinkBtn from '@/components/button/LinkBtn';
 import SetUserInfo from '@/components/userInfo/SetUserInfo';
 
@@ -16,7 +13,6 @@ export default function Register() {
   // 유의할 점 : custom_avatar와  profile_image 중 하나만 올릴 수 있음..!
   return (
     <>
-      <Header />
       <div className='flex justify-center'>
         <div className='flex flex-col items-center w-[466px] h-auto rounded-lg overflow-y-auto p-6 bg-info_bg gap-3'>
           <h1

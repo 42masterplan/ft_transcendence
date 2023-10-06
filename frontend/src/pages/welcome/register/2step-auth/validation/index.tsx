@@ -1,11 +1,9 @@
-import Header from '@/components/Header';
 import {Input} from '@/components/shadcn/input';
 import LinkBtn from '@/components/button/LinkBtn';
 
 export default function validation() {
   return (
     <>
-      <Header />
       <div className='flex justify-center'>
         <div
           className='flex flex-col items-center w-[466px] h-auto rounded-l
