@@ -59,7 +59,8 @@ module.exports = {
         color_5: '#64748B',
         color_6: '#475569',
         color_7: '#334155',
-        color_8: '#1E293B'
+        color_8: '#1E293B',
+        azure: '#f0ffff'
       },
       borderRadius: {
         lg: 'var(--radius)',

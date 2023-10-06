@@ -17,7 +17,7 @@ export default function FreindRequest({
 }: FriendInfoType) {
   return (
     <div
-      className='flex w-full h-24 items-center gap-2.5 bg-[azure] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] px-2.5 py-0 rounded-[10px]
+      className='flex w-full h-24 items-center gap-2.5 bg-azure shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] px-2.5 py-0 rounded-[10px]
 			bg-color_3'
     >
       <AvatarIcon avatarName={profile_image} />
