@@ -93,11 +93,26 @@ const friendInfos = [
 export default function Layout({children}: {children: React.ReactNode}) {
   const router = useRouter();
   console.log(router.pathname);
+
+  // styles for layout
+  const style = {
+    motherContainer: 'flex flex-row self-stretch',
+    centerContainer: 'flex justify-center min-w-[640px]',
+    sideContainer: 'w-full '
+  };
+
   return (
     <>
       <APIContext.Provider value={{gameRequests, friendInfos}}>
         <Header />
-        <div>{children}</div>
+        <main className={style.motherContainer}>
+          {/* main-left */}
+          <section className={style.sideContainer}></section>
+          {/* main-center -> width will be fixed to 640px */}
+          <section className={style.centerContainer}>{children}</section>
+          {/* main-right */}
+          <section className={style.sideContainer}></section>
+        </main>
       </APIContext.Provider>
       {router.pathname.match('/welcome') ? '' : <NavBar />}
     </>
