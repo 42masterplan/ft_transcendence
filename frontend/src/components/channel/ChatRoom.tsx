@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Check, Plus, Send} from 'lucide-react';
-
+import {type FriendInfo} from '@/components/alarm/FriendRequest';
 import {cn} from '@/lib/utils';
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/shadcn/avatar';
 import {Button} from '@/components/shadcn/button';
@@ -35,39 +35,47 @@ import {
 } from '@/components/shadcn/tooltip';
 import AvatarIcon from '../avatar/AvatarIcon';
 
-const users = [
+const friendInfos = [
   {
-    name: 'Olivia Martin',
-    email: 'm@example.com',
-    avatar: ''
+    id: 'RandomUUid',
+    name: 'jjin',
+    profile_image: 'polarbear_ski',
+    introduction: 'I love badminton',
+    current_status: 'INGAME'
   },
   {
-    name: 'Isabella Nguyen',
-    email: 'isabella.nguyen@email.com',
-    avatar: '/avatars/03.png'
+    id: 'RandomUUid',
+    name: 'daejlee',
+    profile_image: 'rhino_health',
+    introduction: '난 대지리다!',
+    current_status: 'OFFLINE'
   },
   {
-    name: 'Emma Wilson',
-    email: 'emma@example.com',
-    avatar: '/avatars/05.png'
+    id: 'RandomUUid',
+    name: 'joushin',
+    profile_image: 'gorilla_baseBall',
+    introduction: '난 조신이다!',
+    current_status: 'OFFLINE'
   },
   {
-    name: 'Jackson Lee',
-    email: 'lee@example.com',
-    avatar: '/avatars/02.png'
+    id: 'uuid',
+    name: 'hkong',
+    profile_image: 'koala_health',
+    current_status: 'OFFLINE',
+    introduction: 'I love Swimming~'
   },
   {
-    name: 'William Kim',
-    email: 'will@email.com',
-    avatar: '/avatars/04.png'
+    id: 'uuid',
+    name: 'Seoyoo',
+    profile_image: 'shark_health',
+    current_status: 'ONLINE',
+    introduction: 'I love Health'
   }
 ] as const;
 
-type User = (typeof users)[number];
-
 export function CardsChat() {
   const [open, setOpen] = React.useState(false);
-  const [selectedUsers, setSelectedUsers] = React.useState<User[]>([]);
+  const [selectedUsers, setSelectedUsers] = React.useState<FriendInfo[]>([]);
 
   const [messages, setMessages] = React.useState([
     {
@@ -180,7 +188,7 @@ export function CardsChat() {
             <CommandList>
               <CommandEmpty>No users found.</CommandEmpty>
               <CommandGroup className='p-2'>
-                {users.map((user) => (
+                {friendInfos.map((user) => (
                   <CommandItem
                     key={user.email}
                     className='flex items-center px-2'

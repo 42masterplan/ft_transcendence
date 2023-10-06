@@ -1,19 +1,20 @@
 import AvatarIcon from '../avatar/AvatarIcon';
 import {Button} from '../shadcn/button';
-interface GameInfo {
+interface GameInfoType {
   id: string;
   name: string;
   profile_image: string;
   current_status: string;
   game_mode: string;
 }
+
 export default function GameRequest({
   id,
   name,
   profile_image,
   current_status,
   game_mode
-}: GameInfo) {
+}: GameInfoType) {
   return (
     <div
       className='flex w-full h-24 items-center gap-2.5 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] px-2.5 py-0 rounded-[10px]

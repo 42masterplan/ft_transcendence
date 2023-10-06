@@ -1,6 +1,7 @@
 import AvatarIcon from '../avatar/AvatarIcon';
 import {Button} from '../shadcn/button';
-interface FriendInfo {
+
+interface FriendInfoType {
   id: string;
   name: string;
   profile_image: string;
@@ -13,7 +14,7 @@ export default function FreindRequest({
   profile_image,
   current_status,
   introduction
-}: FriendInfo) {
+}: FriendInfoType) {
   return (
     <div
       className='flex w-full h-24 items-center gap-2.5 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] px-2.5 py-0 rounded-[10px]
