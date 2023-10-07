@@ -4,6 +4,9 @@ user card component
 
 how to use: <UserCard userInfo={userInfo} cardType={cardType} />
 
+usage tip:
+1. locate this component in to the container which has flex flex-col px-1 style
+
 props for UserCard: { 
   1. userInfo: {id, name, profile_image, current_status, introduction} 
   2. cardType: {basic, friend, noneFriend, friendRequest, blockedUser}
