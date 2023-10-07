@@ -164,7 +164,7 @@ export function CardsChat() {
                     }}
                   >
                     <Avatar>
-                      <AvatarImage src={user.avatar} alt='Image' />
+                      <AvatarIcon avatarName={user.profile_image} size='big' />
                       <AvatarFallback>{user.name[0]}</AvatarFallback>
                     </Avatar>
                     <div className='ml-2'>
@@ -172,7 +172,7 @@ export function CardsChat() {
                         {user.name}
                       </p>
                       <p className='text-sm text-muted-foreground'>
-                        {user.email}
+                        {user.introduction}
                       </p>
                     </div>
                     {selectedUsers.includes(user) ? (
@@ -191,7 +191,7 @@ export function CardsChat() {
                     key={user.id}
                     className='inline-block border-2 border-background'
                   >
-                    <AvatarImage src={user.avatar} />
+                    <AvatarImage src={user.profile_image} />
                     <AvatarFallback>{user.name[0]}</AvatarFallback>
                   </Avatar>
                 ))}
