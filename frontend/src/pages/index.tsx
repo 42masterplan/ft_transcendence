@@ -1,4 +1,4 @@
-import UserCard from '@/components/card/UserCard';
+import UserCard from '@/components/card/UserCard/UserCard';
 import {APIContext} from '@/components/Layout';
 import {useContext} from 'react';
 
