@@ -7,8 +7,8 @@ import {
   ToastProvider,
   ToastTitle,
   ToastViewport
-} from './toast';
-import {useToast} from './use-toast';
+} from '@/components/shadcn/toast';
+import {useToast} from '@/components/shadcn/use-toast';
 
 export function Toaster() {
   const {toasts} = useToast();
