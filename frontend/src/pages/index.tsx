@@ -15,7 +15,11 @@ export default function Home() {
   // Get dummy data from APIContext
   const {friendInfos} = useContext(APIContext);
 
-  const mySelf = friendInfos[0]; // change this to real data
+  const user1 = friendInfos[0]; // change this to real data
+  const user2 = friendInfos[1]; // change this to real data
+  const user3 = friendInfos[2]; // change this to real data
+  const user4 = friendInfos[3]; // change this to real data
+  const user5 = friendInfos[4]; // change this to real data
   // ----------------------------------------------------------------------------
 
   return (
@@ -24,11 +28,11 @@ export default function Home() {
         {/* section left ->  user profile, rank, achievements */}
         <section className={style.subContainer}>
           <p>LEFT SECTION</p>
-          <UserCard userInfo={mySelf} cardType='basic' />
-          <UserCard userInfo={mySelf} cardType='friend' />
-          <UserCard userInfo={mySelf} cardType='noneFriend' />
-          <UserCard userInfo={mySelf} cardType='friendRequest' />
-          <UserCard userInfo={mySelf} cardType='blockedUser' />
+          <UserCard userInfo={user1} cardType='basic' />
+          <UserCard userInfo={user2} cardType='friend' />
+          <UserCard userInfo={user3} cardType='noneFriend' />
+          <UserCard userInfo={user4} cardType='friendRequest' />
+          <UserCard userInfo={user5} cardType='blockedUser' />
           <p>- User rank will be placed here</p>
           <p>- User achievements will be placed here</p>
         </section>

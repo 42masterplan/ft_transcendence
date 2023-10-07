@@ -127,7 +127,7 @@ function UserCardButton(props: any) {
     }
   };
 
-  // tailwind css style -
+  // tailwind css style
   const style = {
     btn: 'bg-color_3 flex justify-center items-center p-1 rounded-md h-min'
   };
@@ -167,16 +167,6 @@ buttons for each cardType:
 */
 
 export default function UserCard(props: any) {
-  // tailwind css style
-  const style = {
-    card: 'flex flex-row justify-between w-full my-1',
-    contentsContainer: 'flex flex-col w-full p-1',
-    iconContainer: 'p-2',
-    upperContainer: 'flex flex-row justify-between w-full p-1',
-    btnContainer: 'flex flex-row justify-between items-center space-x-1',
-    descriptionContainer: 'p-1'
-  };
-
   // get objects from props
   const userId = props.userInfo.id; // will not be used
   const userName = props.userInfo.name;
@@ -212,10 +202,36 @@ export default function UserCard(props: any) {
       break;
   }
 
+  // tailwind css style
+  const style = {
+    card: 'flex flex-row justify-between w-full my-1',
+    contentsContainer: 'flex flex-col w-full p-1',
+    iconContainer: 'p-2',
+    upperContainer: 'flex flex-row justify-between w-full p-1',
+    btnContainer: 'flex flex-row justify-between items-center space-x-1',
+    descriptionContainer: 'p-1'
+  };
+
   return (
     <>
       <Card className={style.card}>
         <div className={style.iconContainer}>
+          <div>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <img
+                    src='/icon/user-card-icon/status.svg'
+                    alt='status'
+                    className='w-4 h-4'
+                  />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{userStatus}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
           <AvatarIcon avatarName={userAvatar} />
         </div>
         <div className={style.contentsContainer}>
