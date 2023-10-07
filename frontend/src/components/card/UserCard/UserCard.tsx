@@ -19,6 +19,11 @@ buttons for each cardType:
 4. friendRequest: follow, unfollow, block
 5. blockedUser: unblock
 
+NOTE: There is a unsolved bug at the sub component UserCardButton.tsx. 
+but it will be fixed soon. 
+
+TODO: fix the bug at UserCardButton.tsx
+
 */
 
 import UserCardButton from './UserCardButton';
