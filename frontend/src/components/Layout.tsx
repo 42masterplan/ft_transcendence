@@ -3,6 +3,8 @@ import React from 'react';
 import {useRouter} from 'next/router';
 import Header from './Header';
 import {createContext} from 'react';
+import {Toaster} from '@/components/shadcn/toaster';
+
 export const APIContext = createContext<GlobalVariable>();
 
 // 이거 빨간줄 못  고쳐요~
@@ -351,7 +353,8 @@ export default function Layout({children}: {children: React.ReactNode}) {
   const style = {
     motherContainer: 'flex flex-row self-stretch',
     centerContainer: 'flex justify-center min-w-[640px]',
-    sideContainer: 'w-full '
+    sideContainer: 'w-full ',
+    toaster: 'bg-color_1'
   };
 
   return (
@@ -377,6 +380,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
         </main>
       </APIContext.Provider>
       {router.pathname.match('/welcome') ? '' : <NavBar />}
+      <Toaster />
     </>
   );
 }
