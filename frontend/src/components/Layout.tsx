@@ -30,10 +30,10 @@ interface channelType {
 }
 
 //1. 채널 방을 클릭하면 받아와야 하는 정보
-interface channelInfoType {
+export interface channelInfoType {
   chatList: Array<chatInfoType>; // 저장되어있는 대화의 내용들입니다.
   participants: Array<chatUserInfo>; // 현재 참여중인 유저들의 목록입니다.
-  myInfo: chatUserInfo; // 현재 채팅방에서 제 정보입니다.
+  myInfo: chatMyInfoType; // 현재 채팅방에서 제 정보입니다.
 }
 
 //1-1채팅방에서 메세지가 오는 정보 하나씩..! (이걸 배열로 받아요!)
@@ -42,7 +42,6 @@ export interface chatInfoType {
   id: string; //random uuid
   name: string; //채팅을 보낸 사람의 이름
   profile_image: string; //채팅을 보낸 사람의 프로필 사진
-  current_status: string; //채팅을 보낸 사람의 현재 상태
   contents: string; //채팅 내용
 }
 // 1-2 현재 채팅방에서 참여중인 유저의 정보입니다.
@@ -86,24 +85,24 @@ export interface GlobalVariable {
   blockUserInfos: Array<blockUserType>; //내가 차단한 유저의 목록입니다.
 }
 
-//게임 요청이 올 때 정보
+//a. 게임 요청이 올 때 정보
 const gameRequests: Array<GameInfoType> = [
   {
-    id: 'uuid',
+    id: 'Seoyoo',
     name: 'Seoyoo',
     profile_image: 'shark_health',
     current_status: 'ONLINE',
     game_mode: 'health'
   },
   {
-    id: 'uuid',
+    id: 'hkong',
     name: 'hkong',
     profile_image: 'koala_health',
     current_status: 'OFFLINE',
     game_mode: 'swim'
   },
   {
-    id: 'uuid',
+    id: 'hkong',
     name: 'hkong',
     profile_image: 'koala_health',
     current_status: 'OFFLINE',
@@ -111,38 +110,38 @@ const gameRequests: Array<GameInfoType> = [
   }
 ];
 
-//친구 목록입니다. (여러군데애서 같은 형식을 쓰고 있음)
-const friendInfos = [
+//b.친구 목록입니다.
+const friendInfos: Array<FriendInfoType> = [
   {
-    id: 'RandomUUid',
+    id: 'jjin',
     name: 'jjin',
     profile_image: 'polarbear_ski',
     introduction: 'I love badminton',
     current_status: 'INGAME'
   },
   {
-    id: 'RandomUUid',
+    id: 'daejlee',
     name: 'daejlee',
     profile_image: 'rhino_health',
     introduction: '난 대지리다!',
     current_status: 'OFFLINE'
   },
   {
-    id: 'MY_ID',
+    id: 'joushin',
     name: 'joushin',
     profile_image: 'gorilla_baseBall',
     introduction: '난 조신이다!',
     current_status: 'OFFLINE'
   },
   {
-    id: 'uuid',
+    id: 'hkong',
     name: 'hkong',
     profile_image: 'koala_health',
     current_status: 'OFFLINE',
     introduction: 'I love Swimming~'
   },
   {
-    id: 'uuid',
+    id: 'Seoyoo',
     name: 'Seoyoo',
     profile_image: 'shark_health',
     current_status: 'ONLINE',
@@ -150,69 +149,109 @@ const friendInfos = [
   }
 ];
 
-//채팅 할 때 메세지가 오는 정보를 나타냅니다.
-const chatInfos = [
+//c.채팅방 목록 정보 입니다.
+const channelList: Array<channelType> = [
   {
-    id: 'RandomUUid',
-    name: 'jjin',
-    profile_image: 'polarbear_ski',
-    current_status: 'INGAME',
-    contents: 'Do you want build snow man?',
-    role: 'admin'
+    id: '아비꼬',
+    roomName: '아비꼬',
+    userSize: 11
   },
   {
-    id: 'RandomUUid',
+    id: '압둘알리',
+    roomName: '압둘알리',
+    userSize: 15
+  },
+  {
+    id: '헬스는 사랑이다.',
+    roomName: '헬스는 사랑이다.',
+    userSize: 13
+  },
+  {
+    id: '배드민턴',
+    roomName: '배드민턴',
+    userSize: 12
+  },
+  {
+    id: '42정병',
+    roomName: '42정병',
+    userSize: 15
+  },
+  {
+    id: '코딩.',
+    roomName: '코딩.',
+    userSize: 2
+  },
+  {
+    id: '축구선수',
+    roomName: '축구선수',
+    userSize: 3
+  },
+  {
+    id: '방 제목 제한은 8',
+    roomName: '방 제목 제한은 8',
+    userSize: 5
+  },
+  {
+    id: '서준님의 헬스사랑',
+    roomName: '서준님의 헬스사랑',
+    userSize: 2
+  },
+  {
+    id: '찐의 배드민턴 사랑',
+    roomName: '찐의 배드민턴 사랑',
+    userSize: 50
+  }
+];
+
+//d-1. 채팅 할 때 메세지가 오는 정보를 나타냅니다.
+const chatInfos: Array<chatInfoType> = [
+  {
+    id: 'jjin',
+    name: 'jjin',
+    profile_image: 'polarbear_ski',
+    contents: 'Do you want build snow man?'
+  },
+  {
+    id: 'daejlee',
     name: 'daejlee',
     profile_image: 'rhino_health',
-    current_status: 'OFFLINE',
-    contents: '라이노는 코뿔소 들이 박아버려 다 겁을 줘~~',
-    role: 'admin'
+    contents: '라이노는 코뿔소 들이 박아버려 다 겁을 줘~~'
   },
   {
     id: 'MY_ID',
     name: 'joushin',
     profile_image: 'gorilla_baseBall',
-    current_status: 'OFFLINE',
-    contents: '고릴라를 무시하지 마라',
-    role: 'manager'
+    contents: '고릴라를 무시하지 마라'
   },
   {
-    id: 'RandomUUid',
+    id: 'joshin',
     name: 'joshin',
     profile_image: 'gorilla_baseBall',
-    current_status: 'OFFLINE',
-    contents: '고릴라를 무시하지 마라',
-    role: 'admin'
+    contents: '고릴라를 무시하지 마라'
   },
   {
-    id: 'uuid',
+    id: 'hkong',
     name: 'hkong',
     profile_image: 'koala_health',
-    current_status: 'OFFLINE',
-    contents: '수영 꿀잼~~',
-    role: 'user'
+    contents: '수영 꿀잼~~'
   },
   {
-    id: 'uuid',
+    id: 'Seoyoo',
     name: 'Seoyoo',
     profile_image: 'shark_health',
-    current_status: 'ONLINE',
-    contents: '무게가 가볍다?? 근손실 안돼!!',
-    role: 'user'
+    contents: '무게가 가볍다?? 근손실 안돼!!'
   },
   {
-    id: 'uuid',
+    id: 'Seoyoo',
     name: 'Seoyoo',
     profile_image: 'shark_health',
-    current_status: 'ONLINE',
     contents:
-      '아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트',
-    role: 'user'
+      '아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트'
   }
 ];
 
-//현재 채팅방에 참여중인 유저에 대한 정보입니다.
-const chatUserInfos = [
+//d-2. 현재 채팅방에 참여중인 유저에 대한 정보입니다.
+const channelUserList = [
   {
     id: 'RandomUUid',
     name: 'jjin',
@@ -263,110 +302,41 @@ const chatUserInfos = [
   }
 ];
 
-// 현재 채팅방에서 금지된 유저의 목록입니다.
-const banUserList = [
-  {
-    id: 'RandomUUid',
-    name: 'Naki',
-    profile_image: 'dog_stateBoard',
-    introduction: 'I Am Crazy',
-    current_status: 'INGAME'
-  }
-];
-
-//내가 차단한 유저의 목록입니다.
-const blockUserInfos = [
-  {
-    id: 'RandomUUid',
-    name: 'Naki',
-    profile_image: 'dog_stateBoard',
-    introduction: 'I Am Crazy',
-    current_status: 'INGAME'
-  }
-];
-
-//현재 채팅방에서 제 정보입니다.
-const chatMyInfo = {
+//d-3. 현재 채팅방에서 제 정보입니다.
+const chatMyInfo: chatMyInfoType = {
   id: 'MY_ID',
   name: 'joushin',
   profile_image: 'gorilla_baseBall',
-  current_status: 'Online',
-  contents: '고릴라를 무시하지 마라',
   role: 'manager'
 };
 
-//채팅방 목록 정보 입니다.
-//여기에 friendInfos를 그대로 사용했는데 이러면 채널에서 어떤 역활을 맡았는지를 알 수가 없습니다.
-const chatRoomInfos = [
+//[d]채팅 방을 클릭하면 받아와야 하는 정보입니다.
+const channelInfo: channelInfoType = {
+  chatList: chatInfos, // 저장되어있는 대화의 내용들입니다.
+  participants: channelUserList, // 현재 참여중인 유저들의 목록입니다.
+  myInfo: chatMyInfo // 현재 채팅방에서 제 정보입니다.
+};
+
+//e. 현재 채팅방에서 금지된 유저의 목록입니다.
+const banUserList: Array<banUserType> = [
   {
     id: 'RandomUUid',
-    RoomName: '아비꼬',
-    chatList: chatInfos,
-    participants: chatUserInfos,
-    banList: banUserList
+    name: 'Naki',
+    profile_image: 'dog_stateBoard'
   },
   {
     id: 'RandomUUid',
-    RoomName: '압둘알리',
-    chatList: chatInfos,
-    participants: friendInfos,
-    banList: banUserList
-  },
+    name: 'sohlee',
+    profile_image: 'dog_stateBoard'
+  }
+];
+
+//f. 내가 차단한 유저의 목록입니다.
+const blockUserInfos: Array<blockUserType> = [
   {
     id: 'RandomUUid',
-    RoomName: '헬스는 사랑이다.',
-    chatList: chatInfos,
-    participants: friendInfos,
-    banList: banUserList
-  },
-  {
-    id: 'RandomUUid',
-    RoomName: '배드민턴',
-    chatList: chatInfos,
-    participants: friendInfos,
-    banList: banUserList
-  },
-  {
-    id: 'RandomUUid',
-    RoomName: '42정병',
-    chatList: chatInfos,
-    participants: friendInfos,
-    banList: banUserList
-  },
-  {
-    id: 'RandomUUid',
-    RoomName: '코딩.',
-    chatList: chatInfos,
-    participants: friendInfos,
-    banList: banUserList
-  },
-  {
-    id: 'RandomUUid',
-    RoomName: '축구선수',
-    chatList: chatInfos,
-    participants: friendInfos,
-    banList: banUserList
-  },
-  {
-    id: 'RandomUUid',
-    RoomName: '방 제목 제한은 8',
-    chatList: chatInfos,
-    participants: friendInfos,
-    banList: banUserList
-  },
-  {
-    id: 'RandomUUid',
-    RoomName: '서준님의 헬스사랑',
-    chatList: chatInfos,
-    participants: friendInfos,
-    banList: banUserList
-  },
-  {
-    id: 'RandomUUid',
-    RoomName: '찐의 배드민턴 사랑',
-    chatList: chatInfos,
-    participants: friendInfos,
-    banList: banUserList
+    name: 'Naki',
+    profile_image: 'dog_stateBoard'
   }
 ];
 
@@ -388,9 +358,9 @@ export default function Layout({children}: {children: React.ReactNode}) {
         value={{
           gameRequests,
           friendInfos,
-          chatInfos,
-          chatMyInfo,
-          chatRoomInfos,
+          channelList,
+          channelInfo,
+          banUserList,
           blockUserInfos
         }}
       >

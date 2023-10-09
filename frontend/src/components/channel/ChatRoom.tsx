@@ -5,7 +5,7 @@ import {cn} from '@/lib/utils';
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/shadcn/avatar';
 import {Button} from '@/components/shadcn/button';
 import {useContext, useRef, useEffect} from 'react';
-import {APIContext, type FriendInfoType} from '../Layout';
+import {APIContext, type FriendInfoType, type channelInfoType} from '../Layout';
 
 import {
   Card,
@@ -38,29 +38,29 @@ import {
 } from '@/components/shadcn/tooltip';
 import AvatarIcon from '../avatar/AvatarIcon';
 
-export function CardsChat() {
-  const {friendInfos, chatInfos, chatMyInfo} = useContext(APIContext);
+export function CardsChat({currentChannel}: {currentChannel: string}) {
+  const {channelInfo} = useContext(APIContext);
+  const {chatList, participants, myInfo} = channelInfo;
   const [open, setOpen] = React.useState(false);
   const [selectedUsers, setSelectedUsers] = React.useState<FriendInfoType[]>(
     []
   );
-  const [messages, setMessages] = React.useState(chatInfos);
+  const [messages, setMessages] = React.useState(chatList);
   const [input, setInput] = React.useState('');
   const inputLength = input.trim().length;
-
   const messageEndRef = useRef<HTMLDivElement>();
   useEffect(() => {
     messageEndRef.current.scrollIntoView({behavior: 'smooth'});
   }, [messages]);
   return (
-    <>
-      <Card className='w-full flex flex-col h-100'>
+    <div className='flex flex-col w-3/4'>
+      <Card>
         <CardHeader className='flex flex-row items-center '>
           <div className='flex items-center space-x-4'>
-            <div className='font-bold text-2xl'>채팅방 제목</div>
+            <div className='font-bold text-2xl'>{currentChannel}</div>
           </div>
           <TooltipProvider delayDuration={0}>
-            <Tooltip>
+            <Tooltip className='sticky top-0'>
               <TooltipTrigger asChild>
                 <Button
                   size='icon'
@@ -77,13 +77,13 @@ export function CardsChat() {
           </TooltipProvider>
         </CardHeader>
         <CardContent>
-          <div className='flex flex-col space-y-4 max-h-[800px] overflow-y-auto '>
+          <div className='flex flex-col space-y-4 max-h-[763px] overflow-y-auto '>
             {messages.map((message, index) => (
               <div
                 key={index}
                 className={cn(
                   'flex w-max max-w-[75%] rounded-lg px-3  text-sm',
-                  message.id === chatMyInfo.id
+                  message.id === myInfo.id
                     ? 'ml-auto bg-primary text-primary-foreground'
                     : 'bg-muted'
                 )}
@@ -107,7 +107,7 @@ export function CardsChat() {
               setMessages([
                 ...messages,
                 {
-                  ...chatMyInfo,
+                  ...myInfo,
                   contents: input
                 }
               ]);
@@ -130,6 +130,7 @@ export function CardsChat() {
           </form>
         </CardFooter>
       </Card>
+
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className='gap-0 p-0 outline-none bg-white'>
           <DialogHeader className='px-4 pb-4 pt-5'>
@@ -143,7 +144,7 @@ export function CardsChat() {
             <CommandList>
               <CommandEmpty>No users found.</CommandEmpty>
               <CommandGroup className='p-2'>
-                {friendInfos.map((user) => (
+                {participants.map((user) => (
                   <CommandItem
                     key={user.id}
                     className='flex items-center px-2'
@@ -155,7 +156,6 @@ export function CardsChat() {
                           )
                         );
                       }
-
                       return setSelectedUsers(
                         [...users].filter((u) =>
                           [...selectedUsers, user].includes(u)
@@ -212,6 +212,6 @@ export function CardsChat() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
 }
