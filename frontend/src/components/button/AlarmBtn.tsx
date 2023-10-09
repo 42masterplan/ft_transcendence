@@ -14,6 +14,7 @@ import {
   SheetTitle,
   SheetTrigger
 } from '@/components/shadcn/sheet';
+import {Key} from 'lucide-react';
 
 export default function AlarmBtn() {
   // 이건 일단 받아왔다고 생각하고 일단 진행 추후에는 직접 받아서 진행합니다.
@@ -36,8 +37,8 @@ export default function AlarmBtn() {
             >
               게임 요청
             </h1>
-            {gameRequests.map((item, idx) => (
-              <div key={idx}>
+            {gameRequests.map((item) => (
+              <div key={item.id}>
                 <GameRequest {...item} />
               </div>
             ))}
@@ -49,8 +50,8 @@ export default function AlarmBtn() {
             친구 요청
           </h1>
           <div className='flex flex-col gap-4 py-4'>
-            {friendInfos.map((item, idx) => (
-              <div key={idx}>
+            {friendInfos.map((item) => (
+              <div key={item.id}>
                 <FreindRequest {...item} />
               </div>
             ))}
