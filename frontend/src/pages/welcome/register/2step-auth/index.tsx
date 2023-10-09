@@ -1,4 +1,3 @@
-import Header from '@/components/Header';
 import LinkBtn from '@/components/button/LinkBtn';
 import {InputWithLabel} from '@/components/input/InputWithLabel';
 import {Button} from '@/components/shadcn/button';

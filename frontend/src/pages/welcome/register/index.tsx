@@ -1,6 +1,3 @@
-import Header from '@/components/Header';
-
-import {Button} from '@/components/shadcn/button';
 import LinkBtn from '@/components/button/LinkBtn';
 import SetUserInfo from '@/components/userInfo/SetUserInfo';
 

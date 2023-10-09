@@ -1,9 +1,12 @@
 import * as React from 'react';
-import {Check, Plus, Send} from 'lucide-react';
-import {type FriendInfo} from '@/components/alarm/FriendRequest';
+import {Check, Send} from 'lucide-react';
+import {LuUsers} from 'react-icons/lu';
 import {cn} from '@/lib/utils';
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/shadcn/avatar';
 import {Button} from '@/components/shadcn/button';
+import {useContext, useRef, useEffect} from 'react';
+import {APIContext, type FriendInfoType, type channelInfoType} from '../Layout';
+
 import {
   Card,
   CardContent,
@@ -35,82 +38,29 @@ import {
 } from '@/components/shadcn/tooltip';
 import AvatarIcon from '../avatar/AvatarIcon';
 
-const friendInfos = [
-  {
-    id: 'RandomUUid',
-    name: 'jjin',
-    profile_image: 'polarbear_ski',
-    introduction: 'I love badminton',
-    current_status: 'INGAME'
-  },
-  {
-    id: 'RandomUUid',
-    name: 'daejlee',
-    profile_image: 'rhino_health',
-    introduction: '난 대지리다!',
-    current_status: 'OFFLINE'
-  },
-  {
-    id: 'RandomUUid',
-    name: 'joushin',
-    profile_image: 'gorilla_baseBall',
-    introduction: '난 조신이다!',
-    current_status: 'OFFLINE'
-  },
-  {
-    id: 'uuid',
-    name: 'hkong',
-    profile_image: 'koala_health',
-    current_status: 'OFFLINE',
-    introduction: 'I love Swimming~'
-  },
-  {
-    id: 'uuid',
-    name: 'Seoyoo',
-    profile_image: 'shark_health',
-    current_status: 'ONLINE',
-    introduction: 'I love Health'
-  }
-] as const;
-
-export function CardsChat() {
+export function CardsChat({currentChannel}: {currentChannel: string}) {
+  const {channelInfo} = useContext(APIContext);
+  const {chatList, participants, myInfo} = channelInfo;
   const [open, setOpen] = React.useState(false);
-  const [selectedUsers, setSelectedUsers] = React.useState<FriendInfo[]>([]);
-
-  const [messages, setMessages] = React.useState([
-    {
-      role: 'agent',
-      content: 'Hi, how can I help you today?'
-    },
-    {
-      role: 'user',
-      content: "Hey, I'm having trouble with my account."
-    },
-    {
-      role: 'agent',
-      content: 'What seems to be the problem?'
-    },
-    {
-      role: 'user',
-      content: "I can't log in."
-    }
-  ]);
+  const [selectedUsers, setSelectedUsers] = React.useState<FriendInfoType[]>(
+    []
+  );
+  const [messages, setMessages] = React.useState(chatList);
   const [input, setInput] = React.useState('');
   const inputLength = input.trim().length;
-
+  const messageEndRef = useRef<HTMLDivElement>();
+  useEffect(() => {
+    messageEndRef.current.scrollIntoView({behavior: 'smooth'});
+  }, [messages]);
   return (
-    <>
+    <div className='flex flex-col w-3/4'>
       <Card>
-        <CardHeader className='flex flex-row items-center'>
+        <CardHeader className='flex flex-row items-center '>
           <div className='flex items-center space-x-4'>
-            <AvatarIcon avatarName='sloth_health' />
-            <div>
-              <p className='text-sm font-medium leading-none'>Sofia Davis</p>
-              <p className='text-sm text-muted-foreground'>m@example.com</p>
-            </div>
+            <div className='font-bold text-2xl'>{currentChannel}</div>
           </div>
           <TooltipProvider delayDuration={0}>
-            <Tooltip>
+            <Tooltip className='sticky top-0'>
               <TooltipTrigger asChild>
                 <Button
                   size='icon'
@@ -118,27 +68,33 @@ export function CardsChat() {
                   className='ml-auto rounded-full'
                   onClick={() => setOpen(true)}
                 >
-                  <Plus className='h-4 w-4' />
-                  <span className='sr-only'>New message</span>
+                  <LuUsers className='h-4 w-4' />
+                  <span className='sr-only'>참여 중 유저 목록</span>
                 </Button>
               </TooltipTrigger>
-              <TooltipContent sideOffset={10}>New message</TooltipContent>
+              <TooltipContent sideOffset={10}>참여 중 유저 목록</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </CardHeader>
         <CardContent>
-          <div className='space-y-4'>
+          <div className='flex flex-col space-y-4 max-h-[763px] overflow-y-auto '>
             {messages.map((message, index) => (
               <div
                 key={index}
                 className={cn(
-                  'flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm',
-                  message.role === 'user'
+                  'flex w-max max-w-[75%] rounded-lg px-3  text-sm',
+                  message.id === myInfo.id
                     ? 'ml-auto bg-primary text-primary-foreground'
                     : 'bg-muted'
                 )}
               >
-                {message.content}
+                <div className='text-center p-1'>
+                  <AvatarIcon size='small' avatarName={message.profile_image} />
+                  {message.name}
+                </div>
+                <div className='grid place-items-center' ref={messageEndRef}>
+                  {message.contents}
+                </div>
               </div>
             ))}
           </div>
@@ -151,8 +107,8 @@ export function CardsChat() {
               setMessages([
                 ...messages,
                 {
-                  role: 'user',
-                  content: input
+                  ...myInfo,
+                  contents: input
                 }
               ]);
               setInput('');
@@ -174,13 +130,13 @@ export function CardsChat() {
           </form>
         </CardFooter>
       </Card>
+
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className='gap-0 p-0 outline-none'>
+        <DialogContent className='gap-0 p-0 outline-none bg-white'>
           <DialogHeader className='px-4 pb-4 pt-5'>
-            <DialogTitle>New message</DialogTitle>
+            <DialogTitle>참여중인 유저 목록</DialogTitle>
             <DialogDescription>
-              Invite a user to this thread. This will create a new group
-              message.
+              현재 채팅방의 멤버를 보여줍니다.
             </DialogDescription>
           </DialogHeader>
           <Command className='overflow-hidden rounded-t-none border-t'>
@@ -188,9 +144,9 @@ export function CardsChat() {
             <CommandList>
               <CommandEmpty>No users found.</CommandEmpty>
               <CommandGroup className='p-2'>
-                {friendInfos.map((user) => (
+                {participants.map((user) => (
                   <CommandItem
-                    key={user.email}
+                    key={user.id}
                     className='flex items-center px-2'
                     onSelect={() => {
                       if (selectedUsers.includes(user)) {
@@ -200,7 +156,6 @@ export function CardsChat() {
                           )
                         );
                       }
-
                       return setSelectedUsers(
                         [...users].filter((u) =>
                           [...selectedUsers, user].includes(u)
@@ -209,7 +164,7 @@ export function CardsChat() {
                     }}
                   >
                     <Avatar>
-                      <AvatarImage src={user.avatar} alt='Image' />
+                      <AvatarIcon avatarName={user.profile_image} size='big' />
                       <AvatarFallback>{user.name[0]}</AvatarFallback>
                     </Avatar>
                     <div className='ml-2'>
@@ -217,7 +172,7 @@ export function CardsChat() {
                         {user.name}
                       </p>
                       <p className='text-sm text-muted-foreground'>
-                        {user.email}
+                        {user.introduction}
                       </p>
                     </div>
                     {selectedUsers.includes(user) ? (
@@ -233,10 +188,10 @@ export function CardsChat() {
               <div className='flex -space-x-2 overflow-hidden'>
                 {selectedUsers.map((user) => (
                   <Avatar
-                    key={user.email}
+                    key={user.id}
                     className='inline-block border-2 border-background'
                   >
-                    <AvatarImage src={user.avatar} />
+                    <AvatarImage src={user.profile_image} />
                     <AvatarFallback>{user.name[0]}</AvatarFallback>
                   </Avatar>
                 ))}
@@ -257,6 +212,6 @@ export function CardsChat() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
 }
