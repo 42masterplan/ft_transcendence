@@ -7,14 +7,6 @@ import {Toaster} from '@/components/shadcn/toaster';
 
 export const APIContext = createContext<GlobalVariable>();
 
-// 이거 빨간줄 못  고쳐요~
-export interface FriendInfoType {
-  id: string;
-  name: string;
-  profile_image: string;
-  current_status: string;
-  introduction: string;
-}
 export interface GameInfoType {
   id: string;
   name: string;
@@ -22,15 +14,38 @@ export interface GameInfoType {
   current_status: string;
   game_mode: string;
 }
-export interface ChatInfoType {
+
+export interface FriendInfoType {
   id: string;
   name: string;
   profile_image: string;
   current_status: string;
-  contents: string;
-  role: string;
+  introduction: string;
+}
+//0.채널방 목록
+interface channelType {
+  id: string; //random uuid
+  roomName: string; //채널방 이름
+  userSize: number; //현재 참여중인 유저 수
 }
 
+//1. 채널 방을 클릭하면 받아와야 하는 정보
+interface channelInfoType {
+  chatList: Array<chatInfoType>; // 저장되어있는 대화의 내용들입니다.
+  participants: Array<chatUserInfo>; // 현재 참여중인 유저들의 목록입니다.
+  myInfo: chatUserInfo; // 현재 채팅방에서 제 정보입니다.
+}
+
+//1-1채팅방에서 메세지가 오는 정보 하나씩..! (이걸 배열로 받아요!)
+// 이전 배열 정보도 이 배열로 받아옵니다.
+export interface chatInfoType {
+  id: string; //random uuid
+  name: string; //채팅을 보낸 사람의 이름
+  profile_image: string; //채팅을 보낸 사람의 프로필 사진
+  current_status: string; //채팅을 보낸 사람의 현재 상태
+  contents: string; //채팅 내용
+}
+// 1-2 현재 채팅방에서 참여중인 유저의 정보입니다.
 interface chatUserInfo {
   id: string;
   name: string;
@@ -40,32 +55,44 @@ interface chatUserInfo {
   role: string;
 }
 
-interface chatRoomInfoType {
-  id: string; //random uuid
-  RoomName: 'string';
-  chatList: ChatInfoType;
-  participants: Array<FriendInfoType>;
-  banList: Array<FriendInfoType>;
+//1-3.현재 채널에서 나의 정보 (chatMyInfo)
+interface chatMyInfoType {
+  id: string;
+  name: string;
+  profile_image: string;
+  role: string; // manager, admin, user
+}
+
+//2. 채널 방에서 금지된 유저의 정보
+interface banUserType {
+  id: string; //Random uuid
+  name: string; //userNickName
+  profile_image: string;
+}
+
+//3. 유저의 차단된 유저의 정보
+interface blockUserType {
+  id: string; //Random uuid
+  name: string; //userNickName
+  profile_image: string;
 }
 
 export interface GlobalVariable {
-  friendInfos: Array<FriendInfoType>;
-  gameRequests: Array<GameInfoType>;
-  chatInfos: Array<ChatInfoType>;
-  banUserList: Array<FriendInfoType>;
-  blockUserInfos: Array<FriendInfoType>;
-  chatMyInfo: ChatInfoType;
-  chatRoomInfos: chatRoomInfoType;
+  gameRequests: Array<GameInfoType>; //게임 요청이 올 때 정보
+  friendInfos: Array<FriendInfoType>; //친구 목록
+  channelList: Array<channelType>; //채널방 목록
+  channelInfo: channelInfoType; //채널 방을 클릭하면 받아와야 하는 정보
+  banUserList: Array<banUserType>; //현재 채팅방에서 금지된 유저의 정보
+  blockUserInfos: Array<blockUserType>; //내가 차단한 유저의 목록입니다.
 }
 
 //게임 요청이 올 때 정보
-const gameRequests = [
+const gameRequests: Array<GameInfoType> = [
   {
     id: 'uuid',
     name: 'Seoyoo',
     profile_image: 'shark_health',
     current_status: 'ONLINE',
-    introduction: 'I love Health',
     game_mode: 'health'
   },
   {
@@ -73,7 +100,6 @@ const gameRequests = [
     name: 'hkong',
     profile_image: 'koala_health',
     current_status: 'OFFLINE',
-    introduction: 'I love Swimming~',
     game_mode: 'swim'
   },
   {
@@ -81,7 +107,6 @@ const gameRequests = [
     name: 'hkong',
     profile_image: 'koala_health',
     current_status: 'OFFLINE',
-    introduction: 'I love Swimming~',
     game_mode: 'swim'
   }
 ];
