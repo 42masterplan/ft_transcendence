@@ -16,7 +16,7 @@ export default function Welcome() {
       >
         <LinkBtn name='Register' link='/welcome/register' />
         {/* 원래는 42auth로 리다이렉션 되어야 합니다. */}
-        <LinkBtn name='Login' link='/welcome/login' />
+        <LinkBtn name='Login' link='/welcome/loading' />
       </div>
     </div>
   );
