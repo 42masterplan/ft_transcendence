@@ -7,7 +7,7 @@ function channelListRender(currentChannel, setCurChannel) {
   const handleChannelClick = (idx: number) => {
     //채널방 클릭시 채널방 정보를 받아옵니다.
     console.log(`채널방 클릭시 ${idx}채널방 정보를 받아옵니다.`);
-    setCurChannel(channelList[idx].roomName);
+    setCurChannel(channelList[idx].channelName);
   };
   return (
     <div className='flex flex-col justify-start max-h-[950px]  border bg-primary w-1/4 overflow-y-scroll overflow-x-hidden rounded-l-xl h-screen'>
@@ -20,7 +20,7 @@ function channelListRender(currentChannel, setCurChannel) {
           key={idx}
         >
           <div className='font-bold text-2xl text-sky-300 '>
-            {channel.roomName}
+            {channel.channelName}
           </div>
           <div className='text-violet-400  text-2xl font-bold'>
             {channel.userSize}
