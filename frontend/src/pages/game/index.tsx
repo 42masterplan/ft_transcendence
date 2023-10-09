@@ -1,4 +1,4 @@
-import {MenubarDemo} from './Menu';
+import ChildTab from '../../components/game/ChildTab';
 import {Button} from '@/components/shadcn/button';
 import {
   Card,
@@ -16,7 +16,7 @@ import {
   TabsTrigger
 } from '@/components/shadcn/tabs';
 
-export function TabsDemo() {
+export default function Game() {
   return (
     <Tabs defaultValue='ladder' className='w-[400px]'>
       <TabsList className='grid w-full grid-cols-2'>
@@ -47,8 +47,8 @@ export function TabsDemo() {
               속도에 따라 정해진다고 합니다.
             </CardDescription>
           </CardHeader>
-          <CardContent className='space-y-2'>
-            <MenubarDemo />
+          <CardContent className='flex justify-center'>
+            <ChildTab />
           </CardContent>
           <CardFooter>
             <Button>Start the Game</Button>
@@ -56,13 +56,5 @@ export function TabsDemo() {
         </Card>
       </TabsContent>
     </Tabs>
-  );
-}
-
-export default function Game() {
-  return (
-    <div className='w-[560px] h-[440px] p-5 bg-slate-500 rounded-[20px] flex-col justify-center items-center inline-flex'>
-      <TabsDemo />
-    </div>
   );
 }
