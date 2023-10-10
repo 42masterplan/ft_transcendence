@@ -49,6 +49,84 @@ export function CardsChat({currentChannel}: {currentChannel: string}) {
   const [input, setInput] = React.useState('');
   const inputLength = input.trim().length;
   const messageEndRef = useRef<HTMLDivElement>();
+  const ParticipantsBtn = () => {
+    return (
+      <TooltipProvider delayDuration={0}>
+        <Tooltip className='sticky top-0'>
+          <TooltipTrigger asChild>
+            <Button
+              size='icon'
+              variant='outline'
+              className='ml-auto rounded-full'
+              onClick={() => setOpen(true)}
+            >
+              <LuUsers className='h-4 w-4' />
+              <span className='sr-only'>참여 중 유저 목록</span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent sideOffset={10}>참여 중 유저 목록</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  };
+  const ShowHistory = () => {
+    return (
+      <div className='flex flex-col space-y-4 max-h-[763px] overflow-y-auto '>
+        {messages.map((message, index) => (
+          <div
+            key={index}
+            className={cn(
+              'flex w-max max-w-[75%] rounded-lg px-3  text-sm',
+              message.id === myInfo.id
+                ? 'ml-auto bg-primary text-primary-foreground'
+                : 'bg-muted'
+            )}
+          >
+            <div className='text-center p-1'>
+              <AvatarIcon size='small' avatarName={message.profile_image} />
+              {message.name}
+            </div>
+            <div className='grid place-items-center' ref={messageEndRef}>
+              {message.contents}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+  const ChannelInput = () => {
+    return (
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          if (inputLength === 0) return;
+          setMessages([
+            ...messages,
+            {
+              ...myInfo,
+              contents: input
+            }
+          ]);
+          setInput('');
+        }}
+        className='flex w-full items-center space-x-2'
+      >
+        <Input
+          id='message'
+          placeholder='Type your message...'
+          className='flex-1'
+          autoComplete='off'
+          value={input}
+          onChange={(event) => setInput(event.target.value)}
+        />
+        <Button type='submit' size='icon' disabled={inputLength === 0}>
+          <Send className='h-4 w-4' />
+          <span className='sr-only'>Send</span>
+        </Button>
+      </form>
+    );
+  };
+
   useEffect(() => {
     messageEndRef.current.scrollIntoView({behavior: 'smooth'});
   }, [messages]);
@@ -59,76 +137,11 @@ export function CardsChat({currentChannel}: {currentChannel: string}) {
           <div className='flex items-center space-x-4'>
             <div className='font-bold text-2xl'>{currentChannel}</div>
           </div>
-          <TooltipProvider delayDuration={0}>
-            <Tooltip className='sticky top-0'>
-              <TooltipTrigger asChild>
-                <Button
-                  size='icon'
-                  variant='outline'
-                  className='ml-auto rounded-full'
-                  onClick={() => setOpen(true)}
-                >
-                  <LuUsers className='h-4 w-4' />
-                  <span className='sr-only'>참여 중 유저 목록</span>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent sideOffset={10}>참여 중 유저 목록</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          {ParticipantsBtn()}
+					{/** TODO :  */}
         </CardHeader>
-        <CardContent>
-          <div className='flex flex-col space-y-4 max-h-[763px] overflow-y-auto '>
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={cn(
-                  'flex w-max max-w-[75%] rounded-lg px-3  text-sm',
-                  message.id === myInfo.id
-                    ? 'ml-auto bg-primary text-primary-foreground'
-                    : 'bg-muted'
-                )}
-              >
-                <div className='text-center p-1'>
-                  <AvatarIcon size='small' avatarName={message.profile_image} />
-                  {message.name}
-                </div>
-                <div className='grid place-items-center' ref={messageEndRef}>
-                  {message.contents}
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-        <CardFooter>
-          <form
-            onSubmit={(event) => {
-              event.preventDefault();
-              if (inputLength === 0) return;
-              setMessages([
-                ...messages,
-                {
-                  ...myInfo,
-                  contents: input
-                }
-              ]);
-              setInput('');
-            }}
-            className='flex w-full items-center space-x-2'
-          >
-            <Input
-              id='message'
-              placeholder='Type your message...'
-              className='flex-1'
-              autoComplete='off'
-              value={input}
-              onChange={(event) => setInput(event.target.value)}
-            />
-            <Button type='submit' size='icon' disabled={inputLength === 0}>
-              <Send className='h-4 w-4' />
-              <span className='sr-only'>Send</span>
-            </Button>
-          </form>
-        </CardFooter>
+        <CardContent>{ShowHistory()}</CardContent>
+        <CardFooter>{ChannelInput()}</CardFooter>
       </Card>
 
       <Dialog open={open} onOpenChange={setOpen}>
