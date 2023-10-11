@@ -71,7 +71,7 @@ export function CardsChat({currentChannel}: {currentChannel: string}) {
   };
   const ShowHistory = () => {
     return (
-      <div className='flex flex-col space-y-4 max-h-[763px] overflow-y-auto '>
+      <div className='flex flex-col space-y-4 max-h-[685px] overflow-y-auto '>
         {messages.map((message, index) => (
           <div
             key={index}
@@ -131,14 +131,14 @@ export function CardsChat({currentChannel}: {currentChannel: string}) {
     messageEndRef.current.scrollIntoView({behavior: 'smooth'});
   }, [messages]);
   return (
-    <div className='flex flex-col w-3/4'>
-      <Card>
-        <CardHeader className='flex flex-row items-center '>
+    <div className='max-w-[600px] '>
+      <Card className='rounded-none'>
+        <CardHeader className='flex flex-row '>
           <div className='flex items-center space-x-4'>
             <div className='font-bold text-2xl'>{currentChannel}</div>
           </div>
           {ParticipantsBtn()}
-					{/** TODO :  */}
+          {/** TODO :  */}
         </CardHeader>
         <CardContent>{ShowHistory()}</CardContent>
         <CardFooter>{ChannelInput()}</CardFooter>

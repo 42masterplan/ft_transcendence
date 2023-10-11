@@ -10,7 +10,7 @@ function channelListRender(currentChannel, setCurChannel) {
     setCurChannel(channelList[idx].channelName);
   };
   return (
-    <div className='flex flex-col justify-start max-h-[950px]  border bg-primary w-1/4 overflow-y-scroll overflow-x-hidden rounded-l-xl h-screen'>
+    <div className='flex flex-col justify-start max-h-[950px]  border bg-primary overflow-y-scroll overflow-x-hidden rounded-l-xl h-screen min-w-[300px]'>
       <h1 className='text-3xl text-white text-center '>채널 목록</h1>
       {channelList.map((channel, idx) => (
         <Button

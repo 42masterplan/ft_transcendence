@@ -3,21 +3,23 @@ import ChannelList from '@/components/channel/ChannelList';
 import {Button} from '@/components/shadcn/button';
 import {useState, useContext, useRef, useEffect} from 'react';
 import {APIContext} from '@/components/Layout';
-
+import ChannelHeader from '@/components/channel/ChannelHeader';
 export default function Channel() {
   // const {channelInfo} = useContext(APIContext);
   // const [channelInfos, setChannelInfos] = useState(channelInfo);
   const [currentChannel, setCurChannel] = useState('채널이름');
   return (
-    <>
-      <div className='bg-red-500 h-2'></div>
-      <div className='flex flex-row min-w-[640px] max-h-[950px]'>
+    <div className='flex flex-row max-h-[950px] '>
+      <div>
         <ChannelList
           currentChannel={currentChannel}
           setCurChannel={setCurChannel}
         />
+      </div>
+      <div className='flex flex-col'>
+        <ChannelHeader />
         <CardsChat currentChannel={currentChannel} />
       </div>
-    </>
+    </div>
   );
 }
