@@ -18,13 +18,13 @@ export default function PublicRoomList() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className='rounded-full h-14'>
-          <LuGlobe2 className='h-8 w-8' />
-          <p className='text-xl'>공개 채널</p>
+        <Button className='rounded-full h-12 w-36 '>
+          <LuGlobe2 className='h-6 w-6' />
+          <p className='text-6'>공개 채널</p>
           <span className='sr-only'>Public Room List</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className='sm:max-w-[425px]'>
+      <DialogContent className='sm:max-w-[425px] bg-color_3'>
         <DialogHeader>
           <DialogTitle>Edit profile</DialogTitle>
           <DialogDescription>

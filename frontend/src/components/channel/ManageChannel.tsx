@@ -24,13 +24,13 @@ export default function ManageChannel() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className='ml-auto rounded-full h-14'>
-          <RiChatSettingsLine className='h-8 w-8' />
-          <p className='text-xl'>채널 관리</p>
+        <Button className='ml-auto rounded-full h-12 w-36'>
+          <RiChatSettingsLine className='h-6 w-6' />
+          <p className='text-6'>채널 관리</p>
           <span className='sr-only'>Public Room List</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className='sm:max-w-[425px]'>
+      <DialogContent className='sm:max-w-[425px] bg-color_3'>
         <DialogHeader>
           <DialogTitle>Edit profile</DialogTitle>
           <DialogDescription>

@@ -18,39 +18,35 @@ export default function CreateChannel() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className='rounded-full h-14'>
-          <RiChatNewLine className='h-8 w-8' />
-          <p className='text-xl'> 채널 생성</p>
+        <Button className='rounded-full h-12 w-36'>
+          <RiChatNewLine className='h-6 w-6' />
+          <p className='text-6'> 채널 생성</p>
           <span className='sr-only'>Public Room List</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className='sm:max-w-[425px]'>
+      <DialogContent className='sm:max-w-[425px] bg-color_4'>
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+          <DialogTitle>채널 생성</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
+            채널을 원하는대로 초대할 수 있습니다.
           </DialogDescription>
         </DialogHeader>
         <div className='grid gap-4 py-4'>
           <div className='grid grid-cols-4 items-center gap-4'>
             <Label htmlFor='name' className='text-right'>
-              Name
+              채널 명
             </Label>
             <Input
               id='name'
-              defaultValue='Pedro Duarte'
+              defaultValue='원하는 이름으로 입력해주세요'
               className='col-span-3'
             />
           </div>
           <div className='grid grid-cols-4 items-center gap-4'>
-            <Label htmlFor='username' className='text-right'>
-              Username
+            <Label htmlFor='passward' className='text-right'>
+              passward
             </Label>
-            <Input
-              id='username'
-              defaultValue='@peduarte'
-              className='col-span-3'
-            />
+            <Input id='passward' defaultValue='' className='col-span-3' />
           </div>
         </div>
         <DialogFooter>
