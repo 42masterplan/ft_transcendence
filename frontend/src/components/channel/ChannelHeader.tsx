@@ -4,7 +4,7 @@ import PublicRoomList from './PublicRoomList';
 
 export default function ChannelHeader() {
   return (
-    <div className='flex h-[100px] bg-white items-baseline justify-between space-y-5 '>
+    <div className='flex h-[100px] bg-white items-baseline space-y-5 '>
       <PublicRoomList />
       <CreateChannel />
       <ManageChannel />

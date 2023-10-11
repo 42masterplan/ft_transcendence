@@ -36,54 +36,35 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from '@/components/shadcn/tooltip';
-import AvatarIcon from '../avatar/AvatarIcon';
+import DropDownAvatarBtn from './DropDownAvatarBtn';
 
 export function CardsChat({currentChannel}: {currentChannel: string}) {
   const {channelInfo} = useContext(APIContext);
   const {chatList, participants, myInfo} = channelInfo;
   const [open, setOpen] = React.useState(false);
-  const [selectedUsers, setSelectedUsers] = React.useState<FriendInfoType[]>(
-    []
-  );
   const [messages, setMessages] = React.useState(chatList);
   const [input, setInput] = React.useState('');
   const inputLength = input.trim().length;
   const messageEndRef = useRef<HTMLDivElement>();
-  const ParticipantsBtn = () => {
-    return (
-      <TooltipProvider delayDuration={0}>
-        <Tooltip className='sticky top-0'>
-          <TooltipTrigger asChild>
-            <Button
-              size='icon'
-              variant='outline'
-              className='ml-auto rounded-full'
-              onClick={() => setOpen(true)}
-            >
-              <LuUsers className='h-4 w-4' />
-              <span className='sr-only'>참여 중 유저 목록</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent sideOffset={10}>참여 중 유저 목록</TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    );
-  };
+
   const ShowHistory = () => {
     return (
-      <div className='flex flex-col space-y-4 max-h-[685px] overflow-y-auto '>
+      <div className='flex flex-col space-y-5 max-h-[685px] overflow-y-auto '>
         {messages.map((message, index) => (
           <div
             key={index}
             className={cn(
-              'flex w-max max-w-[75%] rounded-lg px-3  text-sm',
+              'flex w-max max-w-[75%] rounded-lg px-3  text-sm ',
               message.id === myInfo.id
                 ? 'ml-auto bg-primary text-primary-foreground'
-                : 'bg-muted'
+                : 'bg-azure'
             )}
           >
-            <div className='text-center p-1'>
-              <AvatarIcon size='small' avatarName={message.profile_image} />
+            <div className='flex flex-col text-center h-min-[500px]'>
+              <DropDownAvatarBtn
+                profile_image={message.profile_image}
+                user_name={message.name}
+              />
               {message.name}
             </div>
             <div className='grid place-items-center' ref={messageEndRef}>
@@ -137,13 +118,16 @@ export function CardsChat({currentChannel}: {currentChannel: string}) {
           <div className='flex items-center space-x-4'>
             <div className='font-bold text-2xl'>{currentChannel}</div>
           </div>
-          {ParticipantsBtn()}
+          {/* {ParticipantsBtn()} */}
           {/** TODO :  */}
         </CardHeader>
         <CardContent>{ShowHistory()}</CardContent>
         <CardFooter>{ChannelInput()}</CardFooter>
       </Card>
-
+    </div>
+  );
+}
+/*
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className='gap-0 p-0 outline-none bg-white'>
           <DialogHeader className='px-4 pb-4 pt-5'>
@@ -225,6 +209,4 @@ export function CardsChat({currentChannel}: {currentChannel: string}) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
-  );
-}
+ */
