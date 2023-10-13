@@ -32,8 +32,8 @@ export function CardsChat({currentChannel}: {currentChannel: string}) {
             className={cn(
               'flex w-max max-w-[75%] rounded-lg px-3  text-sm ',
               message.id === myInfo.id
-                ? 'ml-auto bg-primary text-primary-foreground'
-                : 'bg-azure'
+                ? 'ml-auto bg-primary text-primary-foreground p-2'
+                : 'bg-azure p-2 border-cyan-300 border-2 '
             )}
           >
             <div className='flex flex-col text-center h-min-[500px]'>

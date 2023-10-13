@@ -24,7 +24,7 @@ import {
 
 const UserDropdownGroup = () => {
   return (
-    <DropdownMenuGroup>
+    <DropdownMenuGroup className=''>
       <DropdownMenuItem>
         <User className='mr-2 h-4 w-4' />
         <span>프로필 보기</span>
@@ -89,7 +89,7 @@ export default function DropdownAvatarBtn({
           <AvatarIcon size='small' avatarName={profile_image} />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className='w-56'>
+      <DropdownMenuContent>
         <DropdownMenuLabel>{user_name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {UserDropdownGroup()}
