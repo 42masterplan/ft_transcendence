@@ -73,10 +73,10 @@ export default function CreateChannel() {
           </div>
           {/**TODO : 친구 초대 */}
           <div className='grid grid-cols-4 items-center gap-4'>
-            <Label htmlFor='passward' className='text-right'>
-              passward
+            <Label htmlFor='password' className='text-right'>
+              password
             </Label>
-            <Input id='passward' defaultValue='' className='col-span-3' />
+            <Input id='password' defaultValue='' className='col-span-3' />
           </div>
         </div>
         <DialogFooter>
