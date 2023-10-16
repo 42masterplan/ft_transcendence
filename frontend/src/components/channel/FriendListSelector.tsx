@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/shadcn/dropdown-menu';
-type Checked = DropdownMenuCheckboxItemProps['checked'];
+
 interface RenderFriendProps {
   friendInfos: FriendInfoType[];
   selected: Array<Object>;
@@ -25,13 +25,13 @@ function renderFriendCheckBoxItems({
   const handleCheckedChange = (e) => {
     const new_array = selected.map((s) => {
       if (s.id == e.target.innerText)
+        //임시로 이렇게 두긴 했는데 바꾸긴 해야 할듯요
         return {
           ...s,
           is_selected: !s.is_selected
         };
       else return s;
     });
-    // console.log(e.target.value);
     console.log(e.target.innerText);
     console.log(new_array);
     setSelected(new_array);
