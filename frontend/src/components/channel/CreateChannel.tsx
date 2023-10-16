@@ -1,6 +1,6 @@
 import {RiChatNewLine} from 'react-icons/ri';
 import {Button} from '@/components/shadcn/button';
-
+import FriendListSelector from '@/components/channel/FriendListSelector';
 import {
   Dialog,
   DialogContent,
@@ -21,25 +21,25 @@ import {
   SelectValue
 } from '@/components/shadcn/select';
 
+import {Input} from '@/components/shadcn/input';
+import {Label} from '@/components/shadcn/label';
+
 function SelectRoom({id}: {id: string}) {
   return (
     <Select>
-      <SelectTrigger className='w-[275px] '>
+      <SelectTrigger className='w-[275px] bg-slate-200'>
         <SelectValue placeholder='채널 유형 선택' id={id} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
           <SelectLabel>채널 유형 선택</SelectLabel>
-          <SelectItem value='apple'>Public</SelectItem>
-          <SelectItem value='banana'>Private</SelectItem>
+          <SelectItem value='Public'>Public</SelectItem>
+          <SelectItem value='Private'>Private</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>
   );
 }
-
-import {Input} from '@/components/shadcn/input';
-import {Label} from '@/components/shadcn/label';
 
 export default function CreateChannel() {
   return (
@@ -71,7 +71,12 @@ export default function CreateChannel() {
             </Label>
             <Input id='name' className='col-span-3' />
           </div>
-          {/**TODO : 친구 초대 */}
+          <div className='grid grid-cols-4 items-center gap-4'>
+            <Label htmlFor='description' className='text-right'>
+              친구 초대
+            </Label>
+            <FriendListSelector />
+          </div>
           <div className='grid grid-cols-4 items-center gap-4'>
             <Label htmlFor='password' className='text-right'>
               password
