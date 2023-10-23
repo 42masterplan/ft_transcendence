@@ -1,5 +1,5 @@
 import ChildTab from '../../components/game/ChildTab';
-import {Button} from '@/components/shadcn/button';
+import MatchMakingBtn from '../../components/game/MatchMaking';
 import {
   Card,
   CardContent,
@@ -33,7 +33,7 @@ export default function Game() {
             </CardDescription>
           </CardHeader>
           <CardFooter>
-            <Button>Start the Game</Button>
+            <MatchMakingBtn />
           </CardFooter>
         </Card>
       </TabsContent>
@@ -51,7 +51,7 @@ export default function Game() {
             <ChildTab />
           </CardContent>
           <CardFooter>
-            <Button>Start the Game</Button>
+            <MatchMakingBtn />
           </CardFooter>
         </Card>
       </TabsContent>
