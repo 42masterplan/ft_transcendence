@@ -73,7 +73,7 @@ export interface Player {
   profile_image: string;
 }
 
-export const Player_1 = {
+export const PLAYER_DUMMY_1 = {
   id: 0,
   name: 'daejlee',
   profile_image: 'rhino_health'
