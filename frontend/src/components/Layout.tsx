@@ -40,7 +40,12 @@ export default function Layout({children}: {children: React.ReactNode}) {
           blockUserInfos
         }}
       >
-        <Header />
+        {router.pathname.match('/welcome') ||
+        router.pathname.match('/active') ? (
+          ''
+        ) : (
+          <Header />
+        )}
         <main className={style.motherContainer}>
           {/* main-left */}
           <section className={style.sideContainer}></section>
@@ -50,7 +55,11 @@ export default function Layout({children}: {children: React.ReactNode}) {
           <section className={style.sideContainer}></section>
         </main>
       </APIContext.Provider>
-      {router.pathname.match('/welcome') ? '' : <NavBar />}
+      {router.pathname.match('/welcome') || router.pathname.match('/active') ? (
+        ''
+      ) : (
+        <NavBar />
+      )}
       <Toaster />
     </>
   );
