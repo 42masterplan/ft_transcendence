@@ -1,5 +1,6 @@
 import LinkBtn from '@/components/button/LinkBtn';
 import SetUserInfo from '@/components/userInfo/SetUserInfo';
+import Title from '@/components/Title';
 
 export default function Register() {
   // let memberData = {
@@ -13,7 +14,8 @@ export default function Register() {
   // 유의할 점 : custom_avatar와  profile_image 중 하나만 올릴 수 있음..!
   return (
     <>
-      <div className='flex justify-center'>
+      <div className='flex-col justify-center'>
+        <Title />
         <div className='flex flex-col items-center w-[466px] h-auto rounded-lg overflow-y-auto p-6 bg-info_bg gap-3'>
           <h1
             className='font-roboto-mono text-4xl
