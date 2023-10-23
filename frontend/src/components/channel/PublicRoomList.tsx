@@ -26,15 +26,16 @@ export default function PublicRoomList() {
       </DialogTrigger>
       <DialogContent className='sm:max-w-[425px] bg-color_3'>
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+          <DialogTitle>공개 채널 목록</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
+            공개 된 채널들의 목록입니다.
+            <br /> Private Room은 나오지 않습니다.
           </DialogDescription>
         </DialogHeader>
         <div className='grid gap-4 py-4'>
           <div className='grid grid-cols-4 items-center gap-4'>
             <Label htmlFor='name' className='text-right'>
-              Name
+              WHat
             </Label>
             <Input
               id='name'

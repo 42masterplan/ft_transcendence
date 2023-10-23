@@ -57,7 +57,7 @@ const AdminDropdownGroup = () => {
           <DropdownMenuSubContent>
             <DropdownMenuItem>
               <LuSkull className='mr-2 h-4 w-4' />
-              <span>재명하기(BAN)</span>
+              <span>제명하기(BAN)</span>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <GiBootKick className='mr-2 h-4 w-4' />
