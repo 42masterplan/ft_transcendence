@@ -1,11 +1,12 @@
 import LinkBtn from '@/components/button/LinkBtn';
 import {InputWithLabel} from '@/components/input/InputWithLabel';
-import {Button} from '@/components/shadcn/button';
+import Title from '@/components/Title';
 
 export default function twoStepAuth() {
   return (
     <>
-      <div className='flex justify-center'>
+      <div className='flex-col justify-center'>
+        <Title />
         <div className='flex flex-col items-center w-[466px] h-auto rounded-lg p-6 bg-info_bg gap-3'>
           <h1
             className='font-roboto-mono text-4xl

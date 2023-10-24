@@ -67,6 +67,24 @@ export interface blockUserType {
   profile_image: string;
 }
 
+export interface Player {
+  id: number;
+  name: string;
+  profile_image: string;
+}
+
+export const PLAYER_DUMMY_1 = {
+  id: 0,
+  name: 'daejlee',
+  profile_image: 'rhino_health'
+};
+
+export const Player_2 = {
+  id: 0,
+  name: 'joushin',
+  profile_image: 'gorilla_baseBall'
+};
+
 //a. 게임 요청이 올 때 정보
 export const gameRequests: Array<GameInfoType> = [
   {

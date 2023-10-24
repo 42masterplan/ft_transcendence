@@ -1,5 +1,7 @@
-import ChildTab from '../../components/game/ChildTab';
 import {Button} from '@/components/shadcn/button';
+import LinkBtn from '@/components/button/LinkBtn';
+import ChildTab from '../../components/game/ChildTab';
+import MatchMakingBtn from '../../components/game/MatchMaking';
 import {
   Card,
   CardContent,
@@ -33,7 +35,7 @@ export default function Game() {
             </CardDescription>
           </CardHeader>
           <CardFooter>
-            <Button>Start the Game</Button>
+            <MatchMakingBtn />
           </CardFooter>
         </Card>
       </TabsContent>
@@ -51,7 +53,8 @@ export default function Game() {
             <ChildTab />
           </CardContent>
           <CardFooter>
-            <Button>Start the Game</Button>
+            <LinkBtn name='dummy match' link='/game/active' />
+            {/* 위 매치 메이킹 버튼은 추후 소셜페이지의 컴포넌트를 활용하여 만들면 좋을 것 같아 일단 냅두었습니다. */}
           </CardFooter>
         </Card>
       </TabsContent>
