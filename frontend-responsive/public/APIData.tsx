@@ -1,14 +1,12 @@
-// export interface GameInfoType {
-//   id: string;
-//   name: string;
-//   profile_image: string;
-//   current_status: string;
-//   game_mode: string;
-// }
-
 export interface GameInfoType {
-  
+  id: string;
+  name: string;
+  profile_image: string;
+  current_status: string;
+  game_mode: string;
 }
+
+
 
 export interface UserInfoType {
   id: string;

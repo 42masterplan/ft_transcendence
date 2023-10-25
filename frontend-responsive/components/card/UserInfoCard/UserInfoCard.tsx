@@ -1,39 +1,36 @@
 /**
  * UserInfoCard
  * This component is a card that displays a user's information.
+ * Mandatory props:
+ * - name: string
+ * - profileImage: string
+ * - currentStatus: string
+ * Optional props:
+ * - introduction: string -> if introduction is not empty, display introduction
+ * - side: "left" | "right" -> default is "left"
  */
 
+import * as types from "@/api/type"
 import { CardDescription, CardContent } from "@/components/shadcn/ui/card";
-
 import ResponsiveCard from "../ResponsiveCard";
-
 import AvatarWithStatus from "./AvatarWithStatus";
 
 type UserInfoCardProps = {
   name: string;
-  profile_image: string;
-  current_status: string;
+  profileImage: string;
+  currentStatus: string;
   introduction?: string;
   side?: "left" | "right";
 };
 
 export default function UserInfoCard({
   name,
-  profile_image,
-  current_status,
+  profileImage: profile_image,
+  currentStatus: current_status,
   introduction = "",
   side = "left",
 }: UserInfoCardProps) {
-  // TEST: Print all props
-  console.log(
-    "UserInfoCard props: ",
-    name,
-    profile_image,
-    current_status,
-    introduction,
-    side
-  );
-
+  
   // If the side is left, the user's name is aligned to the left.
   // If the side is right, the user's name is aligned to the right.
   let userNameAlign: string;

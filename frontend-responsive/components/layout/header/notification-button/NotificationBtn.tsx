@@ -1,40 +1,82 @@
+/**
+ * Notification Button
+ * What does this button do?
+ * - This button will show the numbers of notifications that the user has.
+ * - When user clicks this button, it will show the list of notifications
+ *
+ * How does this button work?
+ * - Before the button is clicked, it will show the number of notifications that the user has.
+ * - When the button is clicked, it will show the list of notifications.
+ *  - first it will show the list of friend requests
+ *  - then it will show the list of match requests
+ *
+ * How it will be implemented?
+ * - When this button starts to render, it will ask server for the notification count and pass it to the component.
+ *  - Before the data is fetched, it will not show the notification count.
+ *  - After the data is fetched, it will show the notification count.
+ *   - If the notification count is 0, it will not show the notification count.
+ *
+ * - When the button is clicked, it will ask server for the list of notifications(friend request, match request)
+ *  - Before the data is fetched, it will show the loading screen.
+ *  - After the data is fetched, it will show the list of notifications.
+ *   - If there is no notification, it will show the message that there is no notification.
+ */
+
+import { MatchRequest, FriendRequest } from "@/api/type";
 import { Bell } from "lucide-react";
-
 import { Button } from "@/components/shadcn/ui/button";
-import { type } from "os";
-import React from "react";
 import { LayoutResponsiveDesign } from "../../LayoutResponsiveDesign";
-
-import { gameRequests, friendRequests } from "@/public/APIData";  // TODO: change it to actual data from API
-
-import { Input } from "@/components/shadcn/ui/input";
-import { Label } from "@/components/shadcn/ui/label";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
-  SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/shadcn/ui/sheet";
-
+import { Separator } from "@/components/shadcn/ui/separator"
 import MatchRequestCard from "./MatchRequestCard";
+import FriendRequestCard from "./FriendRequestCard";
+import { useEffect, useState } from "react";
+import {
+  getDummyCurrentUserId,
+  getDummyFriendRequestList,
+  getDummyMatchRequestList,
+} from "@/api/DummyData";
 
-export default function NotificationBtn() {
+type NotificationBtnProps = {
+  notificationCount: number;
+};
 
-  function getGameRequests() {
-    // TODO: replace with actual data from API
-    return gameRequests;
-  }
+export default function NotificationBtn({
+  notificationCount,
+}: NotificationBtnProps) {
+  // fetch the list of friend requests
+  const [friendRequestList, setFriendRequestList] = useState<FriendRequest[]>(
+    []
+  );
+  const [isFriedRequestListLoading, setIsFriendRequestListLoading] =
+    useState<boolean>(true);
+  // fetch the list of match requests
+  const [matchRequestList, setMatchRequestList] = useState<MatchRequest[]>([]);
+  const [isMatchRequestListLoading, setIsMatchRequestListLoading] =
+    useState<boolean>(true);
 
-  function getFriendRequests() {
-    // TODO: replace with actual data from API
-    return friendRequests;
-  }
-
-  let notificationCount = gameRequests.length + friendRequests.length;
+  useEffect(() => {
+    async function getFriendRequestList() {
+      const currentUserId = await getDummyCurrentUserId();
+      setFriendRequestList(await getDummyFriendRequestList(currentUserId));
+    }
+    async function getMatchRequestList() {
+      const currentUserId = await getDummyCurrentUserId();
+      setMatchRequestList(await getDummyMatchRequestList(currentUserId));
+    }
+    getFriendRequestList().then(() => {
+      setIsFriendRequestListLoading(false);
+    });
+    getMatchRequestList().then(() => {
+      setIsMatchRequestListLoading(false);
+    });
+  }, [isFriedRequestListLoading, isMatchRequestListLoading]);
 
   return (
     <Sheet>
@@ -66,24 +108,32 @@ export default function NotificationBtn() {
         <SheetHeader>
           <SheetTitle>Notifications</SheetTitle>
         </SheetHeader>
+        <Separator className="my-4" />
         <SheetTitle className="text-sm">Friend Requests</SheetTitle>
-        {gameRequests.map((gameRequest) => (
-          <MatchRequestCard
-            key={gameRequest.id}
-            gameRequest={gameRequest}
-          ></MatchRequestCard>
-        ))}
+        {/* If Friend Request is loading, show loading screen. Else, render friend requests */}
+        {isFriedRequestListLoading ? (
+          <div>loading...</div> // TODO: change to loading object
+        ) : (
+          friendRequestList.map((friendRequest) => (
+            <FriendRequestCard
+              key={friendRequest.id}
+              friendRequest={friendRequest}
+            />
+          ))
+        )}
+        <Separator className="my-4"/>
         <SheetTitle className="text-sm">Match Requests</SheetTitle>
-        {friendRequests.map((friendRequest) => (
-          <MatchRequestCard
-            key={friendRequest.id}
-            gameRequest={friendRequest}
-          ></MatchRequestCard>
-        ))}
-
-        {/* <SheetClose asChild>
-            <Button type="submit">Save changes</Button>
-          </SheetClose> */}
+        {/* If Game Request is loading, show loading screen. Else, render game requests */}
+        {isMatchRequestListLoading ? (
+          <div>loading...</div> // TODO: change to loading object
+        ) : (
+          matchRequestList.map((matchRequest) => (
+            <MatchRequestCard
+              key={matchRequest.gameId}
+              matchRequest={matchRequest}
+            />
+          ))
+        )}
       </SheetContent>
     </Sheet>
   );
