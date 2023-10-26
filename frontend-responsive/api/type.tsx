@@ -20,7 +20,7 @@ export type GameInfo = {
 };
 
 export type MatchRequest = {
-  gameId: string;
+  id: string;
   challengerId: string;
   challengedId: string;
   requestTime: Date;

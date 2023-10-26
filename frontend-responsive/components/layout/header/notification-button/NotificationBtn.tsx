@@ -33,9 +33,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/shadcn/ui/sheet";
-import { Separator } from "@/components/shadcn/ui/separator"
-import MatchRequestCard from "./MatchRequestCard";
+import { Separator } from "@/components/shadcn/ui/separator";
 import FriendRequestCard from "./FriendRequestCard";
+import MatchRequestCard from "./MatchRequestCard";
 import { useEffect, useState } from "react";
 import {
   getDummyCurrentUserId,
@@ -50,33 +50,36 @@ type NotificationBtnProps = {
 export default function NotificationBtn({
   notificationCount,
 }: NotificationBtnProps) {
-  // fetch the list of friend requests
   const [friendRequestList, setFriendRequestList] = useState<FriendRequest[]>(
     []
   );
-  const [isFriedRequestListLoading, setIsFriendRequestListLoading] =
-    useState<boolean>(true);
-  // fetch the list of match requests
   const [matchRequestList, setMatchRequestList] = useState<MatchRequest[]>([]);
+  const [isFriedRequestListLoading, setIsFriendRequestListLoading] =
+    useState(true);
   const [isMatchRequestListLoading, setIsMatchRequestListLoading] =
-    useState<boolean>(true);
+    useState(true);
+
+  async function getFriendRequestList() {
+    const currentUserId = await getDummyCurrentUserId();
+    const friendRequestList = await getDummyFriendRequestList(currentUserId);
+    setFriendRequestList(friendRequestList);
+  }
+
+  async function getMatchRequestList() {
+    const currentUserId = await getDummyCurrentUserId();
+    const matchRequestList = await getDummyMatchRequestList(currentUserId);
+    setMatchRequestList(matchRequestList);
+  }
 
   useEffect(() => {
-    async function getFriendRequestList() {
-      const currentUserId = await getDummyCurrentUserId();
-      setFriendRequestList(await getDummyFriendRequestList(currentUserId));
-    }
-    async function getMatchRequestList() {
-      const currentUserId = await getDummyCurrentUserId();
-      setMatchRequestList(await getDummyMatchRequestList(currentUserId));
-    }
-    getFriendRequestList().then(() => {
-      setIsFriendRequestListLoading(false);
-    });
-    getMatchRequestList().then(() => {
-      setIsMatchRequestListLoading(false);
-    });
-  }, [isFriedRequestListLoading, isMatchRequestListLoading]);
+    getFriendRequestList();
+    setIsFriendRequestListLoading(false);
+  }, [isFriedRequestListLoading]);
+
+  useEffect(() => {
+    getMatchRequestList();
+    setIsMatchRequestListLoading(false);
+  }, [isMatchRequestListLoading]);
 
   return (
     <Sheet>
@@ -121,7 +124,7 @@ export default function NotificationBtn({
             />
           ))
         )}
-        <Separator className="my-4"/>
+        <Separator className="my-4" />
         <SheetTitle className="text-sm">Match Requests</SheetTitle>
         {/* If Game Request is loading, show loading screen. Else, render game requests */}
         {isMatchRequestListLoading ? (
@@ -129,7 +132,7 @@ export default function NotificationBtn({
         ) : (
           matchRequestList.map((matchRequest) => (
             <MatchRequestCard
-              key={matchRequest.gameId}
+              key={matchRequest.id}
               matchRequest={matchRequest}
             />
           ))

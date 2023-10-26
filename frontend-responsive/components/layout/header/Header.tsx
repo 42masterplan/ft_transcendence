@@ -15,13 +15,13 @@ export default function Header() {
 
   async function getNotificationCount() {
     const currentUserId = await getDummyCurrentUserId();
-    setNotificationCount(await getDummyNotificationCount(currentUserId));
+    const notificationCount = await getDummyNotificationCount(currentUserId);
+    setNotificationCount(notificationCount);
   }
 
   useEffect(() => {
-    getNotificationCount().then(() => {
-      setIsNotificationCountLoading(false);
-    });
+    getNotificationCount();
+    setIsNotificationCountLoading(false);
   }, [isNotificationCountLoading]);
 
   return (

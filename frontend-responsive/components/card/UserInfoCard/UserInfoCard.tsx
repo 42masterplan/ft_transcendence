@@ -44,7 +44,7 @@ export default function UserInfoCard({
 
   return (
     <>
-      <ResponsiveCard side={side} color="custom2">
+      <ResponsiveCard side={side} bgColor="custom2">
         <AvatarWithStatus status={current_status} avatarImage={profile_image} />
         <CardContent className="flex flex-col px-2 sm:px-3 py-0.5 sm:py-1 gap-1">
           <h1 className={userNameClassName}>{name}</h1>

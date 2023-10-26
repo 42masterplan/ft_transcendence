@@ -20,7 +20,7 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         // custom variants
         iconBtn: "bg-custom3 text-primary-foreground hover:bg-custom3/80",
-        requestBtn: "bg-custom2 text-primary-foreground hover:bg-custom2/80",
+        requestBtn: "bg-custom3 text-primary-foreground hover:bg-custom2/80",
       },
       size: {
         default: "h-10 px-4 py-2",

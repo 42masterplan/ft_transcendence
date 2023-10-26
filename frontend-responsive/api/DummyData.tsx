@@ -158,7 +158,7 @@ const dummyDB = {
   ],
 };
 
-const currentUserIndex = 1;
+const currentUserIndex = 3;
 const printCalledFunctionName = true;
 
 // async functions for fetching data from dummy database (1sec -> pass data)

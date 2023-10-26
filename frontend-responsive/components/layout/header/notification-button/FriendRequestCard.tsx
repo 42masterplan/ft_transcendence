@@ -6,6 +6,8 @@ import { getDummyUserInfo } from "@/api/DummyData";
 import { join } from "path";
 import { get } from "http";
 import { useState } from "react";
+import { UserPlus, UserX } from "lucide-react";
+import { LayoutResponsiveDesign } from "@/components/layout/LayoutResponsiveDesign";
 
 type FriendRequestCardProps = {
   friendRequest: FriendRequest;
@@ -14,7 +16,6 @@ type FriendRequestCardProps = {
 export default function FriendRequestCard({
   friendRequest,
 }: FriendRequestCardProps) {
-  
   const [name, setName] = useState<string>("");
   const [profileImage, setProfileImage] = useState<string>("");
   const [currentStatus, setCurrentStatus] = useState<string>("");
@@ -25,7 +26,7 @@ export default function FriendRequestCard({
     setProfileImage(userInfo.profileImage);
     setCurrentStatus(userInfo.currentStatus);
   }
-  
+
   function handleAcceptOnClick() {
     // TODO: Send accept request to server
     console.log("Accept friend request");
@@ -39,14 +40,20 @@ export default function FriendRequestCard({
   getUserInfo();
 
   return (
-    <ResponsiveCard color="custom2">
+    <ResponsiveCard>
       <UserInfoCard
         name={name}
         profileImage={profileImage}
         currentStatus={currentStatus}
       />
-      <Button variant="requestBtn" size="requestBtn" onClick={handleAcceptOnClick}>Accept</Button>
-      <Button variant="requestBtn" size="requestBtn" onClick={handleDeclineOnClick}>Decline</Button>
+      <div className="flex justify-around space-x-3">
+        <Button variant="iconBtn" size="icon" onClick={handleDeclineOnClick}>
+        <UserX className={LayoutResponsiveDesign.iconSize} />
+        </Button>
+        <Button variant="iconBtn" size="icon" onClick={handleAcceptOnClick}>
+          <UserPlus className={LayoutResponsiveDesign.iconSize} />
+        </Button>
+      </div>
     </ResponsiveCard>
   );
 }
