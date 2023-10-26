@@ -25,7 +25,7 @@ import {
 
 import ThemeSwitchBtn from "./ThemeSwitchBtn";
 import { type } from "os";
-import { LayoutResponsiveDesign } from "../LayoutResponsiveDesign";
+import { LayoutResponsiveDesign } from "../../../lib/LayoutResponsiveDesign";
 import Link from "next/link";
 
 export default function HeaderDropDownBtn() {

@@ -22,10 +22,10 @@
  *   - If there is no notification, it will show the message that there is no notification.
  */
 
-import { MatchRequest, FriendRequest } from "@/api/type";
+import { MatchRequest, FriendRequest } from "@/lib/type";
 import { Bell } from "lucide-react";
 import { Button } from "@/components/shadcn/ui/button";
-import { LayoutResponsiveDesign } from "../../LayoutResponsiveDesign";
+import { LayoutResponsiveDesign } from "../../../../lib/LayoutResponsiveDesign";
 import {
   Sheet,
   SheetContent,
@@ -34,14 +34,17 @@ import {
   SheetTrigger,
 } from "@/components/shadcn/ui/sheet";
 import { Separator } from "@/components/shadcn/ui/separator";
-import FriendRequestCard from "./FriendRequestCard";
-import MatchRequestCard from "./MatchRequestCard";
-import { useEffect, useState } from "react";
+
 import {
-  getDummyCurrentUserId,
-  getDummyFriendRequestList,
-  getDummyMatchRequestList,
-} from "@/api/DummyData";
+  getDummyCurrentUserIdSync,
+  getDummyFriendRequestsSync,
+  getDummyMatchRequestsSync,
+} from "@/DummyBackend/DummyAPI";
+
+import FriendRequestCard from "./request/FriendRequestCard";
+import MatchRequestCard from "./request/MatchRequestCard";
+import ResponsiveCard from "@/components/card/ResponsiveCard";
+import ScrollableCard from "@/components/card/ScrollableCard";
 
 type NotificationBtnProps = {
   notificationCount: number;
@@ -50,36 +53,21 @@ type NotificationBtnProps = {
 export default function NotificationBtn({
   notificationCount,
 }: NotificationBtnProps) {
-  const [friendRequestList, setFriendRequestList] = useState<FriendRequest[]>(
-    []
-  );
-  const [matchRequestList, setMatchRequestList] = useState<MatchRequest[]>([]);
-  const [isFriedRequestListLoading, setIsFriendRequestListLoading] =
-    useState(true);
-  const [isMatchRequestListLoading, setIsMatchRequestListLoading] =
-    useState(true);
+  // TODO: FIX: get MatchRequests and FriendRequests from server ---------------
 
-  async function getFriendRequestList() {
-    const currentUserId = await getDummyCurrentUserId();
-    const friendRequestList = await getDummyFriendRequestList(currentUserId);
-    setFriendRequestList(friendRequestList);
-  }
+  const currentUserId = getDummyCurrentUserIdSync();
 
-  async function getMatchRequestList() {
-    const currentUserId = await getDummyCurrentUserId();
-    const matchRequestList = await getDummyMatchRequestList(currentUserId);
-    setMatchRequestList(matchRequestList);
-  }
+  // get match requests from server
+  const matchRequests = getDummyMatchRequestsSync(
+    currentUserId
+  ) as MatchRequest[];
 
-  useEffect(() => {
-    getFriendRequestList();
-    setIsFriendRequestListLoading(false);
-  }, [isFriedRequestListLoading]);
+  // get friend requests from server
+  const friendRequests = getDummyFriendRequestsSync(
+    currentUserId
+  ) as FriendRequest[];
 
-  useEffect(() => {
-    getMatchRequestList();
-    setIsMatchRequestListLoading(false);
-  }, [isMatchRequestListLoading]);
+  // ---------------------------------------------------------------------------
 
   return (
     <Sheet>
@@ -98,7 +86,8 @@ export default function NotificationBtn({
               inline-flex items-center justify-center 
               px-1 py-1  sm:px-1.5 sm:py-0.5
               text-[0px] sm:text-xs 
-              font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full "
+              font-bold leading-none text-red-100 transform translate-x-1/2 
+              -translate-y-1/2 bg-red-600 rounded-full "
             >
               {notificationCount}
             </span>
@@ -107,37 +96,32 @@ export default function NotificationBtn({
         </Button>
         {/* Button for Notification with icon and count -------------------- */}
       </SheetTrigger>
-      <SheetContent>
-        <SheetHeader>
-          <SheetTitle>Notifications</SheetTitle>
-        </SheetHeader>
-        <Separator className="my-4" />
-        <SheetTitle className="text-sm">Friend Requests</SheetTitle>
-        {/* If Friend Request is loading, show loading screen. Else, render friend requests */}
-        {isFriedRequestListLoading ? (
-          <div>loading...</div> // TODO: change to loading object
-        ) : (
-          friendRequestList.map((friendRequest) => (
-            <FriendRequestCard
-              key={friendRequest.id}
-              friendRequest={friendRequest}
-            />
-          ))
-        )}
-        <Separator className="my-4" />
-        <SheetTitle className="text-sm">Match Requests</SheetTitle>
-        {/* If Game Request is loading, show loading screen. Else, render game requests */}
-        {isMatchRequestListLoading ? (
-          <div>loading...</div> // TODO: change to loading object
-        ) : (
-          matchRequestList.map((matchRequest) => (
-            <MatchRequestCard
-              key={matchRequest.id}
-              matchRequest={matchRequest}
-            />
-          ))
-        )}
-      </SheetContent>
+        <SheetContent>
+      <ScrollableCard>
+          <SheetHeader>
+            <SheetTitle>Notifications</SheetTitle>
+          </SheetHeader>
+          <Separator className="my-2" />
+          <SheetTitle className="text-sm my-2">Friend Requests</SheetTitle>
+          <div className="space-y-2">
+            {/* friend request list */}
+            {friendRequests.map((friendRequest) => (
+              <FriendRequestCard
+                key={friendRequest.id}
+                request={friendRequest}
+              />
+            ))}
+          </div>
+          <Separator className="my-2" />
+          <SheetTitle className="text-sm my-2">Match Requests</SheetTitle>
+          <div className="space-y-2">
+            {/* match request list */}
+            {matchRequests.map((matchRequest) => (
+              <MatchRequestCard key={matchRequest.id} request={matchRequest} />
+            ))}
+          </div>
+      </ScrollableCard>
+        </SheetContent>
     </Sheet>
   );
 }

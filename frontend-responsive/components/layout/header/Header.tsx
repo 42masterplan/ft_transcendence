@@ -1,37 +1,28 @@
+import ResponsiveCard from "@/components/card/ResponsiveCard";
 import HeaderDropDownBtn from "./HeaderDropDownBtn";
 import NotificationBtn from "./notification-button/NotificationBtn";
-import { useEffect, useState } from "react";
 import {
-  getDummyNotificationCount,
-  getDummyCurrentUserId,
-} from "@/api/DummyData";
-import { UserInfo } from "@/api/type";
-import { get } from "http";
+  getDummyNotificationCountSync,
+  getDummyCurrentUserIdSync,
+} from "@/DummyBackend/DummyAPI";
 
 export default function Header() {
-  const [notificationCount, setNotificationCount] = useState<number>(0);
-  const [isNotificationCountLoading, setIsNotificationCountLoading] =
-    useState<boolean>(true);
 
-  async function getNotificationCount() {
-    const currentUserId = await getDummyCurrentUserId();
-    const notificationCount = await getDummyNotificationCount(currentUserId);
-    setNotificationCount(notificationCount);
-  }
-
-  useEffect(() => {
-    getNotificationCount();
-    setIsNotificationCountLoading(false);
-  }, [isNotificationCountLoading]);
+  // TODO: FIX: get notification count from server -----------------------------
+  
+  const notificationCount = getDummyNotificationCountSync(getDummyCurrentUserIdSync());
+  // get notification count from server
 
   return (
     // <header className="fixed top-0 left-0 right-0 w-full flex flex-row items-center justify-between px-1 py-3">
     <header className="w-full flex flex-row items-center justify-between px-3 py-3">
+      <ResponsiveCard className="w-full justify-between ">
       <HeaderDropDownBtn />
-      <h1 className="font-mono text-custom3 font-bold tracking-[0.4rem] text-2xl sm:text-5xl text-center px-1">
+      <h1 className="font-mono text-custom3 font-bold tracking-[0.4rem] text-2xl sm:text-5xl text-center px-2 truncate">
         AMAZING PONG
       </h1>
       <NotificationBtn notificationCount={notificationCount} />
+      </ResponsiveCard>
     </header>
   );
 }

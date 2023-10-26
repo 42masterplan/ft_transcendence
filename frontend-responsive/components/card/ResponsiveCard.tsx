@@ -9,37 +9,26 @@ import { Card } from "../shadcn/ui/card";
 type ResponsiveCardProps = {
   children: React.ReactNode;
   bgColor?: string;
-  border?: string;
-  side?: "left" | "right" | "center";
   hoverEffect?: boolean;
+  className?: string;
 };
 
 export default function ResponsiveCard({
   children,
   bgColor = "",
-  border = "border-none",
-  side = "center",
   hoverEffect = false,
+  className = "",
 }: ResponsiveCardProps) {
-  // If the side is left, the user's name is aligned to the left.
-  let justifyDirection: string;
-  if (side === "left") {
-    justifyDirection = "flex-row justify-start";
-  } else if (side === "center") {
-    justifyDirection = "flex-row justify-center";
-  } else {
-    justifyDirection = " flex-row-reverse justify-end";
-  }
-
   // If hoverEffect is true, the card will have a hover effect.
   let hoverEffectClassName: string;
   if (hoverEffect && bgColor !== "") {
-    hoverEffectClassName = `hover:${bgColor}/90`;
+    hoverEffectClassName = `hover:bg-${bgColor}/90`;
   } else {
     hoverEffectClassName = "";
   }
 
-  const className = `flex ${justifyDirection} items-center p-0.5 sm:p-1 ${bgColor} ${border} ${hoverEffectClassName} w-full`;
+  const classNameString = `flex justify-center items-center min-w-fit p-0 m-0 
+  rounded-md sm:rounded-lg bg-${bgColor} ${hoverEffectClassName} ${className}`;
 
-  return <Card className={className}>{children}</Card>;
+  return <div className={classNameString}>{children}</div>;
 }

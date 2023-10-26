@@ -5,7 +5,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Header />
-      <main className="flex flex-col w-full">
+      <main className="flex justify-center items-center self-center max-w-[640px]">
         {children}
       </main>
       <Footer />

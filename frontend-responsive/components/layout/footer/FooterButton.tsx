@@ -1,7 +1,7 @@
 import { Gamepad2, MessagesSquare, Home, Trophy, Users } from "lucide-react";
 
 import { Button } from "@/components/shadcn/ui/button";
-import { LayoutResponsiveDesign } from "../LayoutResponsiveDesign";
+import { LayoutResponsiveDesign } from "../../../lib/LayoutResponsiveDesign";
 import Link from "next/link";
 
 // There are 5 types of buttons in the footer:
@@ -40,7 +40,7 @@ export default function FooterButton({ type }: FooterButtonProps) {
       break;
   }
   return (
-    <Link href={href} className="flex w-full">
+    <Link href={href} className="flex w-full h-12">
       <Button variant="iconBtn" size="footerBtn" className="w-full">
         {icon}
       </Button>
