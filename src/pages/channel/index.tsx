@@ -17,7 +17,7 @@ export default function Channel() {
         />
       </div>
       <div className='flex flex-col'>
-        <ChannelHeader />
+        <ChannelHeader channel_name={currentChannel} />
         <CardsChat currentChannel={currentChannel} />
       </div>
     </div>

@@ -85,7 +85,7 @@ export default function CreateChannel() {
           </div>
         </div>
         <DialogFooter>
-          <Button type='submit'>Save changes</Button>
+          <Button type='submit'>채널 생성하기</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
