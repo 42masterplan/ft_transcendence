@@ -20,7 +20,7 @@ import {
 import {Input} from '@/components/shadcn/input';
 import {Label} from '@/components/shadcn/label';
 
-export default function ManageChannel() {
+export default function ManageChannel({channel_name}: {channel_name: string}) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -32,29 +32,29 @@ export default function ManageChannel() {
       </DialogTrigger>
       <DialogContent className='sm:max-w-[425px] bg-color_3'>
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+          <DialogTitle>방장 전용 페이지</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
+            이곳에서 채널을 관리할 수 있습니다.
           </DialogDescription>
         </DialogHeader>
         <div className='grid gap-4 py-4'>
           <div className='grid grid-cols-4 items-center gap-4'>
             <Label htmlFor='name' className='text-right'>
-              Name
+              채널명 변경
             </Label>
             <Input
               id='name'
-              defaultValue='Pedro Duarte'
+              defaultValue={channel_name}
               className='col-span-3'
             />
           </div>
           <div className='grid grid-cols-4 items-center gap-4'>
-            <Label htmlFor='username' className='text-right'>
-              Username
+            <Label htmlFor='channel_password' className='text-right'>
+              비밀번호
             </Label>
             <Input
-              id='username'
-              defaultValue='@peduarte'
+              id='channel_password'
+              defaultValue={channel_name}
               className='col-span-3'
             />
           </div>
