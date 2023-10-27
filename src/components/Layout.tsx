@@ -4,6 +4,7 @@ import {useRouter} from 'next/router';
 import Header from './Header';
 import {createContext} from 'react';
 import {Toaster} from '@/components/shadcn/toaster';
+import {SessionProvider} from 'next-auth/react';
 import {
   gameRequests,
   friendInfos,
@@ -18,7 +19,6 @@ export const APIContext = createContext<GlobalVariable>();
 
 export default function Layout({children}: {children: React.ReactNode}) {
   const router = useRouter();
-  console.log(router.pathname);
 
   // styles for layout
   const style = {

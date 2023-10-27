@@ -14,6 +14,7 @@ export default function NavBtn({path, file, width, height}: NavBtnProps) {
   const router = useRouter();
   const currentPath = router.pathname;
   if (currentPath === path) {
+    console.log(path);
     return (
       <Button asChild variant='navBtnClicked' size='navBtn'>
         <div>
