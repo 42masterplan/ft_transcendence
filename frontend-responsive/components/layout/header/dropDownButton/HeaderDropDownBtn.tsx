@@ -20,7 +20,7 @@ import {
 } from "@/components/shadcn/ui/dropdown-menu";
 import { Dialog, DialogTrigger } from "@/components/shadcn/ui/dialog";
 import ThemeSwitchBtn from "../ThemeSwitchBtn";
-import { LayoutResponsiveDesign } from "../../../../lib/LayoutResponsiveDesign";
+import { ResponsiveDesign } from "../../../../lib/ResponsiveDesign";
 import Link from "next/link";
 import SettingsModal from "./SettingModal";
 import { useRouter } from "next/router";
@@ -64,7 +64,7 @@ export default function HeaderDropDownBtn() {
         <DropdownMenuTrigger asChild>
           <div className="flex relative flex-row justify-center items-center">
             <Button variant="iconBtn" size="headerBtn">
-              <Menu className={LayoutResponsiveDesign.iconSize} />
+              <Menu className={ResponsiveDesign.iconSize} />
             </Button>
           </div>
         </DropdownMenuTrigger>

@@ -25,7 +25,7 @@
 import { MatchRequest, FriendRequest } from "@/lib/type";
 import { Bell } from "lucide-react";
 import { Button } from "@/components/shadcn/ui/button";
-import { LayoutResponsiveDesign } from "../../../../lib/LayoutResponsiveDesign";
+import { ResponsiveDesign } from "../../../../lib/ResponsiveDesign";
 import {
   Sheet,
   SheetContent,
@@ -93,7 +93,7 @@ export default function NotificationBtn({
               {notificationCount}
             </span>
           )}
-          <Bell className={LayoutResponsiveDesign.iconSize} />
+          <Bell className={ResponsiveDesign.iconSize} />
         </Button>
         {/* Button for Notification with icon and count -------------------- */}
       </SheetTrigger>

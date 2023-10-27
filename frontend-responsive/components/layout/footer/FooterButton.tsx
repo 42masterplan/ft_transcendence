@@ -1,7 +1,7 @@
 import { Gamepad2, MessagesSquare, Home, Trophy, Users } from "lucide-react";
 
 import { Button } from "@/components/shadcn/ui/button";
-import { LayoutResponsiveDesign } from "../../../lib/LayoutResponsiveDesign";
+import { ResponsiveDesign } from "../../../lib/ResponsiveDesign";
 import Link from "next/link";
 
 // There are 5 types of buttons in the footer:
@@ -16,7 +16,7 @@ type FooterButtonProps = {
 export default function FooterButton({ type, currentUrl }: FooterButtonProps) {
   let href: string = "";
   let icon: any = null;
-  const iconSize = LayoutResponsiveDesign.iconSize;
+  const iconSize = ResponsiveDesign.iconSize;
 
   switch (type) {
     case "game":
