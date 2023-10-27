@@ -20,6 +20,8 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         // custom variants
         iconBtn: "bg-custom3 text-primary-foreground hover:bg-custom3/80",
+        footerBtn: "bg-custom3 text-primary-foreground hover:bg-custom3/80",
+        footerBtnClicked: "bg-custom3/60 text-primary-foreground",
         requestAcceptBtn: "bg-custom3 text-primary-foreground hover:bg-custom3/80",
         requestRejectBtn: "bg-custom2 text-primary-foreground hover:bg-custom2/80",
       },
@@ -29,7 +31,7 @@ const buttonVariants = cva(
         lg: "h-11 rounded-md px-8",
         icon: "h-10 w-10",
         // custom sizes
-        footerBtn: "w-[18vw] px-2 py-1",
+        footerBtn: "w-full px-2 py-1",
         headerBtn: "h-8 w-8 sm:h-12 sm:w-12 p-2 rounded-xl",
         requestBtn: "h-8 w-8 sm:h-12 sm:w-12 p-2 rounded-xl",
       },

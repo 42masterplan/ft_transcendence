@@ -10,9 +10,8 @@
  * - side: "left" | "right" -> default is "left"
  */
 
-import * as types from "@/lib/type"
 import { CardDescription, CardContent } from "@/components/shadcn/ui/card";
-import ResponsiveCard from "../ResponsiveCard";
+import ResponsiveContainer from "../../container/ResponsiveContainer";
 import AvatarWithStatus from "./AvatarWithStatus";
 import { UserInfo } from "@/lib/type";
 
@@ -21,6 +20,7 @@ type UserInfoCardProps = {
   side?: "left" | "right";
   bgColor?: string;
   printIntro?: boolean;
+  showStatus?: boolean;
 };
 
 export default function UserInfoCard({
@@ -28,13 +28,14 @@ export default function UserInfoCard({
   side = "left",
   bgColor = "",
   printIntro = false,
+  showStatus = true,
 }: UserInfoCardProps) {
-  // If the side is left, the user's name is aligned to the left.
-  // If the side is right, the user's name is aligned to the right.
   let userNameAlign: string;
   if (side === "left") {
+    // If the side is left, the user's name is aligned to the left.
     userNameAlign = "text-left";
   } else {
+    // If the side is right, the user's name is aligned to the right.
     userNameAlign = "text-right";
   }
 
@@ -42,16 +43,18 @@ export default function UserInfoCard({
 
   return (
     <>
-      <ResponsiveCard side={side} bgColor={bgColor}>
-        <AvatarWithStatus status={userInfo.currentStatus} avatarImage={userInfo.profileImage} />
-        <CardContent className="flex flex-col px-2 sm:px-3 py-0.5 sm:py-1 gap-1">
+      <ResponsiveContainer bgColor={bgColor}>
+        <AvatarWithStatus
+          status={userInfo.currentStatus}
+          avatarImage={userInfo.profileImage}
+        />
+        <ResponsiveContainer className="px-2 sm:px-3 py-0.5 sm:py-1 gap-1">
           <h1 className={userNameClassName}>{userInfo.name}</h1>
-          {/* if introduction is not empty, display introduction */}
           {printIntro ? (
             <CardDescription>{userInfo.introduction}</CardDescription>
           ) : null}
-        </CardContent>
-      </ResponsiveCard>
+        </ResponsiveContainer>
+      </ResponsiveContainer>
     </>
   );
 }

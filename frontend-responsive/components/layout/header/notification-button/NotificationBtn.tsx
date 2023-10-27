@@ -43,8 +43,9 @@ import {
 
 import FriendRequestCard from "./request/FriendRequestCard";
 import MatchRequestCard from "./request/MatchRequestCard";
-import ResponsiveCard from "@/components/card/ResponsiveCard";
-import ScrollableCard from "@/components/card/ScrollableCard";
+import ResponsiveContainer from "@/components/container/ResponsiveContainer";
+import ScrollableContainer from "@/components/container/ScrollableContainer";
+import ComponentListContainer from "@/components/container/ComponentListContainer";
 
 type NotificationBtnProps = {
   notificationCount: number;
@@ -97,13 +98,13 @@ export default function NotificationBtn({
         {/* Button for Notification with icon and count -------------------- */}
       </SheetTrigger>
         <SheetContent>
-      <ScrollableCard>
+      <ScrollableContainer>
           <SheetHeader>
             <SheetTitle>Notifications</SheetTitle>
           </SheetHeader>
           <Separator className="my-2" />
           <SheetTitle className="text-sm my-2">Friend Requests</SheetTitle>
-          <div className="space-y-2">
+          <div className="w-full space-y-2">
             {/* friend request list */}
             {friendRequests.map((friendRequest) => (
               <FriendRequestCard
@@ -114,13 +115,13 @@ export default function NotificationBtn({
           </div>
           <Separator className="my-2" />
           <SheetTitle className="text-sm my-2">Match Requests</SheetTitle>
-          <div className="space-y-2">
+          <div className="w-full space-y-2">
             {/* match request list */}
             {matchRequests.map((matchRequest) => (
               <MatchRequestCard key={matchRequest.id} request={matchRequest} />
             ))}
           </div>
-      </ScrollableCard>
+      </ScrollableContainer>
         </SheetContent>
     </Sheet>
   );

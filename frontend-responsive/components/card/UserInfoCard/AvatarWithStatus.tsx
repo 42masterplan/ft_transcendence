@@ -10,39 +10,46 @@ import {
   AvatarImage,
 } from "@/components/shadcn/ui/avatar";
 
+import { userStatus } from "@/lib/type";
+
 type AvatarWithStatusProps = {
-  status: string;
+  status: userStatus;
   avatarImage: string;
+  showStatus?: boolean;
 };
 
 export default function AvatarWithStatus({
   status,
   avatarImage,
+  showStatus = true,
 }: AvatarWithStatusProps) {
   const altImage = "@/public/avatars/picapica.jpg";
 
   let statusColor: string;
 
   switch (status) {
-    case "ONLINE":
+    case "Online":
       statusColor = "bg-green-500";
       break;
-    case "OFFLINE":
+    case "Offline":
       statusColor = "bg-gray-500";
       break;
-    case "INGAME":
+    case "InGame":
       statusColor = "bg-blue-500";
+      break;
+    case "AFK":
+      statusColor = "bg-yellow-500";
       break;
     default:
       statusColor = "bg-yellow-500";
       break;
   }
 
-  const statusStyle = `absolute top-1 right-1 sm:top-1.5 sm:right-1.5 px-1 py-1 sm:px-1.5 sm:py-1.5 z-10 rounded-full ${statusColor}`;
+  const statusStyle = `absolute top-0.5 right-0.5 sm:top-1 sm:right-1 px-1 py-1 sm:px-1.5 sm:py-1.5 z-10 rounded-full ${statusColor}`;
 
   return (
     <div className="relative flex justify-center items-center h-min">
-      <div className={statusStyle}></div>
+      {showStatus ? <div className={statusStyle}></div> : null}
       <Avatar className="h-10 w-10 sm:h-16 sm:w-16">
         <AvatarImage src={avatarImage} alt={altImage} />
         <AvatarFallback>😜</AvatarFallback>

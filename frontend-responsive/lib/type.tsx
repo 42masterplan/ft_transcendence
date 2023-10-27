@@ -1,17 +1,23 @@
+export type userStatus = "Online" | "Offline" | "InGame" | "AFK";
+
 export type UserInfo = {
   id: string; // UUID
   name: string; // max 10 characters
   profileImage: string;
-  currentStatus: "Online" | "Offline" | "InGame" | "AFK";
+  currentStatus: userStatus;
   introduction: string; // max 50 characters
   friendList: string[]; // userId[]
   blockList: string[]; // userId[]
 };
 
+export type gameType = "Ladder" | "NonLadder";
+
+export type gameStatus = "Waiting" | "Playing" | "Finished" | "Cancelled";
+
 export type GameInfo = {
   id: string; // UUID
-  type: "Ladder" | "NonLadder";
-  status: "Waiting" | "Playing" | "Finished" | "Cancelled";
+  type: gameType;
+  status: gameStatus;
   playerScorePairs: [string, number][]; // playerId, score
   startTime: Date;
   endTime: Date;
@@ -26,10 +32,12 @@ export type MatchRequest = {
   requestTime: Date;
 };
 
+export type MatchRequestStatus = "Pending" | "Accepted" | "Rejected";
+
 export type FriendRequest = {
   id: string;  // UUID
   from: string;  // userId
   to: string;  // userId
   requestTime: Date;
-  status: "Pending" | "Accepted" | "Rejected";
+  status: MatchRequestStatus;
 };

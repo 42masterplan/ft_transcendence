@@ -1,8 +1,8 @@
 import { FriendRequest } from "@/lib/type";
-import UserInfoCard from "@/components/card/UserInfoCard/UserInfoCard";
+import UserInfoCard from "@/components/card/userInfoCard/UserInfoCard";
 import { getDummyUserInfoSync } from "@/DummyBackend/DummyAPI";
 import RequestButton from "./RequestButton";
-import ResponsiveCard from "@/components/card/ResponsiveCard";
+import ResponsiveContainer from "@/components/container/ResponsiveContainer";
 
 type NotificationCardProps = {
   request: FriendRequest;
@@ -28,7 +28,7 @@ export default function NotificationCard({ request }: NotificationCardProps) {
   };
 
   return (
-    <ResponsiveCard
+    <ResponsiveContainer
       bgColor={bgColor}
       hoverEffect={true}
       className="justify-between px-2 sm:px-3 py-1.5 sm:py-2"
@@ -39,6 +39,6 @@ export default function NotificationCard({ request }: NotificationCardProps) {
         onAccept={handleAccept}
         onReject={handleReject}
       />
-    </ResponsiveCard>
+    </ResponsiveContainer>
   );
 }

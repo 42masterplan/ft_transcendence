@@ -1,6 +1,6 @@
 import { Button } from "@/components/shadcn/ui/button";
 import { UserPlus, UserX, Swords, X } from "lucide-react";
-import ResponsiveCard from "@/components/card/ResponsiveCard";
+import ResponsiveContainer from "@/components/container/ResponsiveContainer";
 import {
   Tooltip,
   TooltipContent,
@@ -37,7 +37,7 @@ export default function RequestButton({
 
 
   return (
-    <ResponsiveCard className="space-x-2">
+    <ResponsiveContainer className="space-x-2">
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
@@ -69,6 +69,6 @@ export default function RequestButton({
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
-    </ResponsiveCard>
+    </ResponsiveContainer>
   );
 }

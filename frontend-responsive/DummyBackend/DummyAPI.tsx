@@ -3,13 +3,14 @@ import { UserInfo, GameInfo, MatchRequest, FriendRequest } from "@/lib/type";
 import { dummyDB } from "@/DummyBackend/DummyDB";
 
 const currentUserIndex = 1;
+const delay = 2000;
 const printCalledFunctionName = true;
 
 // getDummyUserInfo : userId -> UserInfo ---------------------------------------
 
 export async function getDummyUserInfoAsync(userId: string): Promise<UserInfo> {
   // wait for 1 sec
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, delay));
   const user = dummyDB.users.find((user) => user.id === userId) as UserInfo;
   if (!user) throw new Error("User not found");
   if (printCalledFunctionName)
@@ -28,7 +29,7 @@ export function getDummyUserInfoSync(userId: string): UserInfo {
 // getDummyGameInfo : gameId -> GameInfo ---------------------------------------
 
 export async function getDummyGameInfoAsync(gameId: string): Promise<GameInfo> {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, delay));
   const game = dummyDB.games.find((game) => game.id === gameId) as GameInfo;
   if (!game) throw new Error("Game not found");
   if (printCalledFunctionName)
@@ -49,7 +50,7 @@ export function getDummyGameInfoSync(gameId: string): GameInfo {
 export async function getDummyMatchRequestsAsync(
   challengeId: string
 ): Promise<MatchRequest[]> {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, delay));
   const matchRequests = dummyDB.matchRequests.filter(
     (matchRequest) => matchRequest.challengedId === challengeId
   ) as MatchRequest[];
@@ -72,7 +73,7 @@ export function getDummyMatchRequestsSync(userId: string): MatchRequest[] {
 export async function getDummyFriendRequestsAsync(
   userId: string
 ): Promise<FriendRequest[]> {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, delay));
   const friendRequests = dummyDB.friendRequests.filter(
     (friendRequest) => friendRequest.to === userId
   ) as FriendRequest[];
@@ -95,7 +96,7 @@ export function getDummyFriendRequestsSync(userId: string): FriendRequest[] {
 export async function getDummyNotificationCountAsync(
   userId: string
 ): Promise<number> {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, delay));
   const matchRequestCount = dummyDB.matchRequests.filter(
     (matchRequest) => matchRequest.challengedId === userId
   ).length;
@@ -122,7 +123,7 @@ export function getDummyNotificationCountSync(userId: string): number {
 // getDummyCurrentUser : () -> UserInfo ----------------------------------------
 
 export async function getDummyCurrentUserAsync(): Promise<UserInfo> {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, delay));
   const user = dummyDB.users[currentUserIndex] as UserInfo;
   if (!user) throw new Error("User not found");
   if (printCalledFunctionName) console.log(`getDummyCurrentUserAsync() called`);
@@ -139,7 +140,7 @@ export function getDummyCurrentUserSync(): UserInfo {
 // getDummyCurrentUserId : () -> string ----------------------------------------
 
 export async function getDummyCurrentUserIdAsync(): Promise<string> {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, delay));
   const user = dummyDB.users[currentUserIndex] as UserInfo;
   if (!user) throw new Error("User not found");
   if (printCalledFunctionName)
@@ -160,7 +161,7 @@ export function getDummyCurrentUserIdSync(): string {
 export async function getDummyFriendListAsync(
   userId: string
 ): Promise<UserInfo[]> {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, delay));
   const friendList = dummyDB.users[currentUserIndex].friendList.map(
     (friendId) => dummyDB.users.find((user) => user.id === friendId) as UserInfo
   );
@@ -183,7 +184,7 @@ export function getDummyFriendListSync(userId: string): UserInfo[] {
 export async function getDummyBlockListAsync(
   userId: string
 ): Promise<UserInfo[]> {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, delay));
   const blockList = dummyDB.users[currentUserIndex].blockList.map(
     (blockId) => dummyDB.users.find((user) => user.id === blockId) as UserInfo
   );
@@ -206,7 +207,7 @@ export function getDummyBlockListSync(userId: string): UserInfo[] {
 export async function getDummyParticipatedGameListAsync(
   userId: string
 ): Promise<GameInfo[]> {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, delay));
   const participatedGameList = dummyDB.games.filter((game) =>
     game.playerScorePairs.some((pair) => pair[0] === userId)
   ) as GameInfo[];

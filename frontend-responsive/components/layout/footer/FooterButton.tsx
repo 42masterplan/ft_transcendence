@@ -10,9 +10,10 @@ import Link from "next/link";
 // Footer button props
 type FooterButtonProps = {
   type: "game" | "channel" | "myPage" | "social" | "rank";
+  currentUrl: string;
 };
 
-export default function FooterButton({ type }: FooterButtonProps) {
+export default function FooterButton({ type, currentUrl }: FooterButtonProps) {
   let href: string = "";
   let icon: any = null;
   const iconSize = LayoutResponsiveDesign.iconSize;
@@ -39,11 +40,19 @@ export default function FooterButton({ type }: FooterButtonProps) {
       icon = <Trophy className={iconSize} />;
       break;
   }
+
   return (
-    <Link href={href} className="flex w-full h-12">
-      <Button variant="iconBtn" size="footerBtn" className="w-full">
+    <Link href={href} className="flex w-full justify-center h-12">
+      {/* if currentUrl === href, use variant: footerBtnClicked */}
+      <Button
+        variant={
+          currentUrl === href ? "footerBtnClicked" : "footerBtn"
+        }
+        size="footerBtn"
+      >
         {icon}
       </Button>
+      
     </Link>
   );
 }

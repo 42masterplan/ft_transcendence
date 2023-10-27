@@ -4,8 +4,6 @@
  *  stretch to the full width of the container.
  */
 
-import { Card } from "../shadcn/ui/card";
-
 type ResponsiveCardProps = {
   children: React.ReactNode;
   bgColor?: string;
@@ -13,22 +11,31 @@ type ResponsiveCardProps = {
   className?: string;
 };
 
-export default function ResponsiveCard({
+// TODO: Forwarding ref, cn function component
+
+export default function ResponsiveContainer({
   children,
   bgColor = "",
   hoverEffect = false,
   className = "",
 }: ResponsiveCardProps) {
   // If hoverEffect is true, the card will have a hover effect.
+  let colorClassName: string;
+  if (bgColor !== "") {
+    colorClassName = `bg-${bgColor}`;
+  } else {
+    colorClassName = "";
+  }
+
   let hoverEffectClassName: string;
   if (hoverEffect && bgColor !== "") {
-    hoverEffectClassName = `hover:bg-${bgColor}/90`;
+    hoverEffectClassName = `hover:${colorClassName}/90`;
   } else {
     hoverEffectClassName = "";
   }
 
-  const classNameString = `flex justify-center items-center min-w-fit p-0 m-0 
-  rounded-md sm:rounded-lg bg-${bgColor} ${hoverEffectClassName} ${className}`;
+  const classNameString = `flex items-center min-w-fit p-0 m-0 
+  rounded-md sm:rounded-lg ${colorClassName} ${hoverEffectClassName} ${className}`;
 
   return <div className={classNameString}>{children}</div>;
 }
