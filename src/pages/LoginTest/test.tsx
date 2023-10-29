@@ -1,5 +1,5 @@
 import {getServerSession} from 'next-auth/next';
-import {authOptions} from '../auth/[...nextauth]';
+import {authOptions} from '../api/auth/[...nextauth]';
 
 export default async function listMovies(req, res) {
   const session = await getServerSession(req, res, authOptions);
