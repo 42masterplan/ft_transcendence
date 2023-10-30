@@ -1,43 +1,92 @@
-import {useEffect, useRef} from 'react';
+import React from 'react';
+import Ball from './Ball';
 
 interface PlayerProps {
+  x: number;
+  y: number;
+  width?: number;
+  height?: number;
+  color?: string;
+  dx?: number;
+  c: CanvasRenderingContext2D;
+}
+
+interface PlayerState {
   x: number;
   y: number;
   width: number;
   height: number;
   color: string;
   dx: number;
-  c: CanvasRenderingContext2D;
 }
 
-export default function Player({
-  x,
-  y,
-  width = 150,
-  height = 15,
-  color = 'rgba(217, 217, 217, 1)',
-  dx = 0,
-  c
-}: PlayerProps) {
-  // 참조를 사용하여 값들을 저장합니다.
-  const x_ = useRef(x);
-  const y_ = useRef(y);
-  const width_ = useRef(width);
-  const height_ = useRef(height);
-  const color_ = useRef(color);
-  const dx_ = useRef(dx);
+export default class Player extends React.Component<PlayerProps, PlayerState> {
+  constructor(props: PlayerProps) {
+    super(props);
+    this.state = {
+      x: props.x,
+      y: props.y,
+      width: props.width || 150,
+      height: props.height || 15,
+      color: props.color || 'rgba(217, 217, 217, 1)',
+      dx: props.dx || 0
+    };
+  }
+  isACollided(ball: Ball) {
+    const offsetX = ball.state.x - this.state.x + ball.state.radius;
+    const offsetY = ball.state.y - this.state.y + ball.state.radius;
+    if (
+      offsetX < this.state.width + 4 &&
+      offsetX > 0 &&
+      offsetY <= 10 &&
+      offsetY >= -10
+    )
+      return true;
+    return false;
+  }
+  isBVollided(ball: Ball) {
+    const offsetX = ball.state.x - this.state.x + ball.state.radius;
+    const offsetY =
+      this.state.y - ball.state.y + this.state.height + ball.state.radius;
+    if (
+      offsetX < this.state.width + 4 &&
+      offsetX > 0 &&
+      offsetY >= -10 &&
+      offsetY <= 10
+    )
+      return true;
+    return false;
+  }
+  applySpin(ball: Ball) {
+    const spinFactor = 0.4;
+    ball.state.velocity.x += this.state.dx * spinFactor;
+    const speed = Math.sqrt(
+      ball.state.velocity.x * ball.state.velocity.x +
+        ball.state.velocity.y * ball.state.velocity.y
+    );
+    // 5 is the speed of the ball
+    ball.state.velocity.x = 5 * (ball.state.velocity.x / speed);
+    ball.state.velocity.y = 5 * (ball.state.velocity.y / speed);
+  }
+  handleCollision(ball: Ball, now: number) {
+    ball.setState({lastCollision: now});
+    const reflectedAngle = Math.atan2(
+      ball.state.velocity.y,
+      ball.state.velocity.x
+    );
+    ball.setState({
+      x: Math.cos(reflectedAngle) * 5,
+      y: Math.sin(reflectedAngle) * 5
+    });
+    this.applySpin(ball);
+  }
+  draw() {
+    const {c} = this.props;
+    const {x, y, width, height, color} = this.state;
 
-  // 이 함수는 캔버스에 플레이어를 그리는 역할을 합니다.
-  const draw = () => {
     c.beginPath();
-    c.rect(x_.current, y_.current, width_.current, height_.current);
-    c.fillStyle = color_.current;
+    c.rect(x, y, width, height);
+    c.fillStyle = color;
     c.fill();
-  };
-
-  useEffect(() => {
-    draw(); // 컴포넌트가 마운트되면, 혹은 업데이트될 때마다 그리기 함수를 호출합니다.
-  }, [draw]); // 의존성 배열에 draw를 넣음으로써 draw 함수 내부에서 참조하는 값이 변경될 때만 리렌더링이 발생하도록 합니다.
-
-  return null; // 이 컴포넌트는 실제 DOM 요소를 렌더링하지 않습니다.
+  }
 }

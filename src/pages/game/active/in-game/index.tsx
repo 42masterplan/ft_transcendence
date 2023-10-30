@@ -2,38 +2,123 @@ import Player from './Player';
 import Ball from './Ball';
 import {useEffect, useRef} from 'react';
 
+function bounceIfCollided(ball: Ball, playerA: Player, playerB: Player) {
+  const debouncingTime = 10;
+  const now = Date.now();
+  if (
+    ball.state.lastCollision &&
+    now - ball.state.lastCollision < debouncingTime
+  )
+    return;
+  if (playerA.isACollided(ball)) playerA.handleCollision(ball, now);
+  else if (playerB.isBVollided(ball)) playerB.handleCollision(ball, now);
+}
+
+function handleKeyDowns(
+  keysPressed: {[key: string]: boolean},
+  playerA: Player,
+  playerB: Player,
+  canvas: HTMLCanvasElement,
+  paddleOffset: number
+) {
+  if (keysPressed['a'] || keysPressed['A']) {
+    if (playerA.state.x > 0) {
+      playerA.setState({x: playerA.state.x - paddleOffset});
+      playerA.setState({x: playerA.state.dx - paddleOffset});
+    }
+  }
+  if (keysPressed['d'] || keysPressed['D']) {
+    if (playerA.state.x < canvas.width - playerA.state.width) {
+      playerA.setState({x: playerA.state.x + paddleOffset});
+      playerA.setState({x: playerA.state.dx + paddleOffset});
+    }
+  }
+  if (keysPressed['w'] || keysPressed['W'])
+    playerA.setState({y: playerA.state.y - paddleOffset / 2});
+  if (keysPressed['s'] || keysPressed['S'])
+    playerA.setState({y: playerA.state.y + paddleOffset / 2});
+  if (keysPressed['ArrowLeft'])
+    if (playerB.state.x > 0) {
+      if (playerB.state.x > 0) {
+        playerB.setState({x: playerB.state.x - paddleOffset});
+        playerB.setState({x: playerB.state.dx - paddleOffset});
+      }
+    }
+  if (keysPressed['ArrowRight'])
+    if (playerB.state.x < canvas.width - playerB.state.width) {
+      if (playerB.state.x < canvas.width - playerB.state.width) {
+        playerB.setState({x: playerB.state.x + paddleOffset});
+        playerB.setState({x: playerB.state.dx + paddleOffset});
+      }
+    }
+  if (keysPressed['ArrowUp'])
+    playerB.setState({y: playerB.state.y - paddleOffset / 2});
+  if (keysPressed['ArrowDown'])
+    playerB.setState({y: playerB.state.y + paddleOffset / 2});
+}
+
 export default function Game() {
-  const canvasRef = useRef(null);
-  // 상태 설정 예: const [player, setPlayer] = useState({ x: 0, y: 0, color: 'blue' });
-  // 게임 루프나 이벤트 핸들러에서 player 상태를 업데이트할 수 있습니다.
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const contextRef = useRef<CanvasRenderingContext2D | null>(null);
+  const keysPressed = useRef<{[key: string]: boolean}>({});
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
+    if (!canvas) return;
+    const c = canvas.getContext('2d');
+    if (!c) return;
+    contextRef.current = c;
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
 
-    // 게임 루프 설정
+    const playerA = new Player({
+      x: canvas.width / 2 - 75,
+      y: canvas.height - 30,
+      color: 'rgba(217, 217, 217, 1)',
+      c
+    });
+    const playerB = new Player({
+      x: canvas.width / 2 - 75,
+      y: 15,
+      color: 'rgba(217, 217, 217, 1)',
+      c
+    });
+    const ball = new Ball({
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      radius: 10,
+      color: 'white',
+      velocity: {x: 5, y: 5},
+      c,
+      lastCollision: 0
+    });
+    addEventListener(
+      'keydown',
+      (event) => (keysPressed.current[event.key] = true)
+    );
+    addEventListener('keyup', (event) => delete keysPressed.current[event.key]);
     const gameLoop = () => {
-      // canvas 지우기
-      context.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Player, Ball 등의 컴포넌트에서 제공하는 'draw' 메서드 호출
-      // 예: player.draw(context);
-
+      c.fillStyle = 'rgba(15, 23, 42, 0.8)';
+      c.fillRect(0, 0, canvas.width, canvas.height);
+      handleKeyDowns(
+        keysPressed.current,
+        playerA,
+        playerB,
+        canvas,
+        canvas.width / 100
+      );
+      playerA.draw();
+      playerB.draw();
+      ball.update();
+      bounceIfCollided(ball, playerA, playerB);
       requestAnimationFrame(gameLoop);
     };
-
-    // canvas 크기 설정
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
-
     requestAnimationFrame(gameLoop);
-  }, []); // 의존성 배열은 필요에 따라 조정하세요.
+  }, []);
 
   return (
     <div>
-      <canvas ref={canvasRef} /* 설정 필요 */ />
-      {/* 여기에 Player, Ball 등의 컴포넌트를 위치시키고, 필요한 props를 전달합니다. */}
-      {/* 예: <Player x={player.x} y={player.y} color={player.color} /> */}
+      <canvas ref={canvasRef} />
     </div>
   );
 }
