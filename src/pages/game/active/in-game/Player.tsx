@@ -11,82 +11,56 @@ interface PlayerProps {
   c: CanvasRenderingContext2D;
 }
 
-interface PlayerState {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  color: string;
-  dx: number;
-}
+class Player extends React.Component<PlayerProps> {
+  x: number = this.props.x;
+  y: number = this.props.y;
+  width: number = this.props.width || 150;
+  height: number = this.props.height || 15;
+  color: string = this.props.color || 'rgba(217, 217, 217, 1)';
+  dx: number = this.props.dx || 0;
 
-export default class Player extends React.Component<PlayerProps, PlayerState> {
-  constructor(props: PlayerProps) {
-    super(props);
-    this.state = {
-      x: props.x,
-      y: props.y,
-      width: props.width || 150,
-      height: props.height || 15,
-      color: props.color || 'rgba(217, 217, 217, 1)',
-      dx: props.dx || 0
-    };
-  }
   isACollided(ball: Ball) {
-    const offsetX = ball.state.x - this.state.x + ball.state.radius;
-    const offsetY = ball.state.y - this.state.y + ball.state.radius;
-    if (
-      offsetX < this.state.width + 4 &&
-      offsetX > 0 &&
-      offsetY <= 10 &&
-      offsetY >= -10
-    )
-      return true;
-    return false;
+    const offsetX = ball.x - this.x + ball.radius;
+    const offsetY = ball.y - this.y + ball.radius;
+    return (
+      offsetX < this.width + 4 && offsetX > 0 && offsetY <= 10 && offsetY >= -10
+    );
   }
+
   isBVollided(ball: Ball) {
-    const offsetX = ball.state.x - this.state.x + ball.state.radius;
-    const offsetY =
-      this.state.y - ball.state.y + this.state.height + ball.state.radius;
-    if (
-      offsetX < this.state.width + 4 &&
-      offsetX > 0 &&
-      offsetY >= -10 &&
-      offsetY <= 10
-    )
-      return true;
-    return false;
+    const offsetX = ball.x - this.x + ball.radius;
+    const offsetY = this.y - ball.y + this.height + ball.radius;
+    return (
+      offsetX < this.width + 4 && offsetX > 0 && offsetY >= -10 && offsetY <= 10
+    );
   }
+
   applySpin(ball: Ball) {
     const spinFactor = 0.4;
-    ball.state.velocity.x += this.state.dx * spinFactor;
+    ball.velocity.x += this.dx * spinFactor;
     const speed = Math.sqrt(
-      ball.state.velocity.x * ball.state.velocity.x +
-        ball.state.velocity.y * ball.state.velocity.y
+      ball.velocity.x * ball.velocity.x + ball.velocity.y * ball.velocity.y
     );
-    // 5 is the speed of the ball
-    ball.state.velocity.x = 5 * (ball.state.velocity.x / speed);
-    ball.state.velocity.y = 5 * (ball.state.velocity.y / speed);
+    ball.velocity.x = 5 * (ball.velocity.x / speed);
+    ball.velocity.y = 5 * (ball.velocity.y / speed);
   }
+
   handleCollision(ball: Ball, now: number) {
-    ball.setState({lastCollision: now});
-    const reflectedAngle = Math.atan2(
-      ball.state.velocity.y,
-      ball.state.velocity.x
-    );
-    ball.setState({
-      x: Math.cos(reflectedAngle) * 5,
-      y: Math.sin(reflectedAngle) * 5
-    });
+    ball.lastCollision = now;
+    const reflectedAngle = Math.atan2(ball.velocity.y, ball.velocity.x);
+    ball.velocity.x = Math.cos(reflectedAngle) * 5;
+    ball.velocity.y = Math.sin(reflectedAngle) * 5;
     this.applySpin(ball);
   }
+
   draw() {
     const {c} = this.props;
-    const {x, y, width, height, color} = this.state;
 
     c.beginPath();
-    c.rect(x, y, width, height);
-    c.fillStyle = color;
+    c.rect(this.x, this.y, this.width, this.height);
+    c.fillStyle = this.color;
     c.fill();
   }
 }
+
+export default Player;

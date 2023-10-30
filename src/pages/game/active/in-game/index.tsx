@@ -5,11 +5,7 @@ import {useEffect, useRef} from 'react';
 function bounceIfCollided(ball: Ball, playerA: Player, playerB: Player) {
   const debouncingTime = 10;
   const now = Date.now();
-  if (
-    ball.state.lastCollision &&
-    now - ball.state.lastCollision < debouncingTime
-  )
-    return;
+  if (ball.lastCollision && now - ball.lastCollision < debouncingTime) return;
   if (playerA.isACollided(ball)) playerA.handleCollision(ball, now);
   else if (playerB.isBVollided(ball)) playerB.handleCollision(ball, now);
 }
@@ -22,39 +18,32 @@ function handleKeyDowns(
   paddleOffset: number
 ) {
   if (keysPressed['a'] || keysPressed['A']) {
-    if (playerA.state.x > 0) {
-      playerA.setState({x: playerA.state.x - paddleOffset});
-      playerA.setState({x: playerA.state.dx - paddleOffset});
+    if (playerA.x > 0) {
+      playerA.x -= paddleOffset;
+      playerA.dx -= paddleOffset;
     }
   }
   if (keysPressed['d'] || keysPressed['D']) {
-    if (playerA.state.x < canvas.width - playerA.state.width) {
-      playerA.setState({x: playerA.state.x + paddleOffset});
-      playerA.setState({x: playerA.state.dx + paddleOffset});
+    if (playerA.x < canvas.width - playerA.width) {
+      playerA.x += paddleOffset;
+      playerA.dx += paddleOffset;
     }
   }
-  if (keysPressed['w'] || keysPressed['W'])
-    playerA.setState({y: playerA.state.y - paddleOffset / 2});
-  if (keysPressed['s'] || keysPressed['S'])
-    playerA.setState({y: playerA.state.y + paddleOffset / 2});
-  if (keysPressed['ArrowLeft'])
-    if (playerB.state.x > 0) {
-      if (playerB.state.x > 0) {
-        playerB.setState({x: playerB.state.x - paddleOffset});
-        playerB.setState({x: playerB.state.dx - paddleOffset});
-      }
-    }
-  if (keysPressed['ArrowRight'])
-    if (playerB.state.x < canvas.width - playerB.state.width) {
-      if (playerB.state.x < canvas.width - playerB.state.width) {
-        playerB.setState({x: playerB.state.x + paddleOffset});
-        playerB.setState({x: playerB.state.dx + paddleOffset});
-      }
-    }
-  if (keysPressed['ArrowUp'])
-    playerB.setState({y: playerB.state.y - paddleOffset / 2});
-  if (keysPressed['ArrowDown'])
-    playerB.setState({y: playerB.state.y + paddleOffset / 2});
+  if (keysPressed['w'] || keysPressed['W']) playerA.y -= paddleOffset / 2;
+  if (keysPressed['s'] || keysPressed['S']) playerA.y += paddleOffset / 2;
+
+  if (keysPressed['ArrowLeft'] && playerB.x > 0) {
+    playerB.x -= paddleOffset;
+    playerB.dx -= paddleOffset;
+  }
+
+  if (keysPressed['ArrowRight'] && playerB.x < canvas.width - playerB.width) {
+    playerB.x += paddleOffset;
+    playerB.dx += paddleOffset;
+  }
+
+  if (keysPressed['ArrowUp']) playerB.y -= paddleOffset / 2;
+  if (keysPressed['ArrowDown']) playerB.y += paddleOffset / 2;
 }
 
 export default function Game() {
@@ -88,7 +77,7 @@ export default function Game() {
       y: canvas.height / 2,
       radius: 10,
       color: 'white',
-      velocity: {x: 5, y: 5},
+      velocity: {x: 3, y: 5},
       c,
       lastCollision: 0
     });
