@@ -7,8 +7,8 @@ import FortyTwo from '@auth/core/providers/42-school';
 //   const response = await Auth(request, {
 //     providers: [
 //       FortyTwo({
-//         clientId: process.env.FortyTwo_SCHOOL_CLIENT_ID,
-//         clientSecret: process.env.FortyTwo_SCHOOL_CLIENT_SECRET
+//         clientId: process.env.FortyTwo_CLIENT_ID,
+//         clientSecret: process.env.FortyTwo_SECRET
 //       })
 //     ]
 //   });
