@@ -3,11 +3,11 @@ import Ball from './Ball';
 import {useEffect, useRef} from 'react';
 
 function bounceIfCollided(ball: Ball, playerA: Player, playerB: Player) {
-  const debouncingTime = 10;
+  const debouncingTime = 300;
   const now = Date.now();
   if (ball.lastCollision && now - ball.lastCollision < debouncingTime) return;
   if (playerA.isACollided(ball)) playerA.handleCollision(ball, now);
-  else if (playerB.isBVollided(ball)) playerB.handleCollision(ball, now);
+  else if (playerB.isBCollided(ball)) playerB.handleCollision(ball, now);
 }
 
 function handleKeyDowns(
@@ -20,13 +20,13 @@ function handleKeyDowns(
   if (keysPressed['a'] || keysPressed['A']) {
     if (playerA.x > 0) {
       playerA.x -= paddleOffset;
-      playerA.dx -= paddleOffset;
+      playerA.dx = paddleOffset;
     }
   }
   if (keysPressed['d'] || keysPressed['D']) {
     if (playerA.x < canvas.width - playerA.width) {
       playerA.x += paddleOffset;
-      playerA.dx += paddleOffset;
+      playerA.dx = paddleOffset;
     }
   }
   if (keysPressed['w'] || keysPressed['W']) playerA.y -= paddleOffset / 2;
@@ -34,12 +34,12 @@ function handleKeyDowns(
 
   if (keysPressed['ArrowLeft'] && playerB.x > 0) {
     playerB.x -= paddleOffset;
-    playerB.dx -= paddleOffset;
+    playerB.dx = paddleOffset;
   }
 
   if (keysPressed['ArrowRight'] && playerB.x < canvas.width - playerB.width) {
     playerB.x += paddleOffset;
-    playerB.dx += paddleOffset;
+    playerB.dx = paddleOffset;
   }
 
   if (keysPressed['ArrowUp']) playerB.y -= paddleOffset / 2;
@@ -69,15 +69,15 @@ export default function Game() {
     const playerB = new Player({
       x: canvas.width / 2 - 75,
       y: 15,
-      color: 'rgba(217, 217, 217, 1)',
+      color: 'rgba(0, 133, 255, 1)',
       c
     });
     const ball = new Ball({
       x: canvas.width / 2,
       y: canvas.height / 2,
-      radius: 10,
+      radius: 5,
       color: 'white',
-      velocity: {x: 3, y: 5},
+      velocity: {x: 2.718965863435734, y: -4.196096356552262},
       c,
       lastCollision: 0
     });
@@ -94,11 +94,13 @@ export default function Game() {
         playerA,
         playerB,
         canvas,
-        canvas.width / 100
+        canvas.width / 200
       );
       playerA.draw();
       playerB.draw();
       ball.update();
+      if (ball.x < 0 || ball.x > canvas.width) ball.velocity.x *= -1;
+      if (ball.y < 0 || ball.y > canvas.height) ball.velocity.y *= -1;
       bounceIfCollided(ball, playerA, playerB);
       requestAnimationFrame(gameLoop);
     };
