@@ -37,9 +37,7 @@ class Player extends React.Component<PlayerProps> {
 
   applySpin(ball: Ball) {
     const spinFactor = 0.4;
-    console.log(ball.velocity.x);
     ball.velocity.x += this.dx * spinFactor;
-    console.log(ball.velocity.x);
     const speed = Math.sqrt(
       ball.velocity.x * ball.velocity.x + ball.velocity.y * ball.velocity.y
     );
@@ -52,7 +50,7 @@ class Player extends React.Component<PlayerProps> {
     const reflectedAngle = -Math.atan2(ball.velocity.y, ball.velocity.x);
     ball.velocity.x = Math.cos(reflectedAngle) * 5;
     ball.velocity.y = Math.sin(reflectedAngle) * 5;
-    // this.applySpin(ball);
+    this.applySpin(ball);
   }
 
   draw() {
