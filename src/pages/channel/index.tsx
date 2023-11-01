@@ -9,13 +9,11 @@ export default function Channel() {
   // const [channelInfos, setChannelInfos] = useState(channelInfo);
   const [currentChannel, setCurChannel] = useState('채널이름');
   return (
-    <div className='flex flex-row max-h-[950px] '>
-      <div>
-        <ChannelList
-          currentChannel={currentChannel}
-          setCurChannel={setCurChannel}
-        />
-      </div>
+    <div className='flex max-h-[950px] '>
+      <ChannelList
+        currentChannel={currentChannel}
+        setCurChannel={setCurChannel}
+      />
       <div className='flex flex-col'>
         <ChannelHeader channel_name={currentChannel} />
         <CardsChat currentChannel={currentChannel} />
