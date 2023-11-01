@@ -1,5 +1,5 @@
 import LinkBtn from '@/components/button/LinkBtn';
-import LoginBtn from '@/components/button/logBtn';
+import LoginBtn from '@/components/button/LogInBtn';
 export default function Welcome() {
   return (
     <div className='flex flex-col justify-center items-center h-screen'>
