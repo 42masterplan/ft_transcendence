@@ -1,6 +1,4 @@
 import LinkBtn from '@/components/button/LinkBtn';
-import Auth from '@auth/core';
-import FortyTwoProvider from '@auth/core/providers/42-school';
 import LoginBtn from '@/components/button/logBtn';
 export default function Welcome() {
   return (
@@ -17,7 +15,6 @@ export default function Welcome() {
       shadow-md flex justify-between items-center mt-12 space-x-12'
       >
         <LinkBtn name='Register' link='/welcome/register' />
-        {/* 원래는 42auth로 리다이렉션 되어야 합니다. */}
         <LoginBtn />
       </div>
     </div>
