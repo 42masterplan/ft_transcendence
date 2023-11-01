@@ -5,5 +5,6 @@ export default function Redirect() {
   console.log(router);
   const auth_code = router.query.code || [];
   console.log(auth_code);
+  // useEffect()
   return <div></div>;
 }

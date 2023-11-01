@@ -1,23 +1,23 @@
-import {Button} from '../shadcn/button';
 import Link from 'next/link';
-import axios from 'axios';
+import {Button} from '@/components/shadcn/button';
 export default function LoginBtn() {
+  const client_id = process.env.NEXT_PUBLIC_FORTY_TWO_CLIENT_ID;
+  const redirect_uri = process.env.NEXT_PUBLIC_REDIRECT_URI;
+
   return (
-    <Button
-      variant='default'
-      size='lg'
-      onClick={() => {
-        axios
-          .get('https://api.intra.42.fr/oauth/authorize')
-          .then(() => {
-            console.log('성공');
-          })
-          .catch(() => {
-            console.log('실패');
-          });
+    <Link
+      href={{
+        pathname: 'https://api.intra.42.fr/oauth/authorize',
+        query: {
+          client_id: client_id,
+          redirect_uri: redirect_uri,
+          response_type: 'code'
+        }
       }}
     >
-      LOGIN
-    </Button>
+      <Button variant='default' size='lg'>
+        login
+      </Button>
+    </Link>
   );
 }
