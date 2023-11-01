@@ -2,6 +2,7 @@ import Player from './Player';
 import Ball from './Ball';
 import {useEffect, useRef, useState} from 'react';
 import {bounceIfCollided, handleKeyDowns, handleKeyUps} from './util';
+import ScoreBoard from './ScoreBoard';
 
 export default function Game() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -16,8 +17,8 @@ export default function Game() {
     const c = canvas.getContext('2d');
     if (!c) return;
     contextRef.current = c;
-    canvas.width = innerWidth;
-    canvas.height = innerHeight;
+    canvas.width = 430;
+    canvas.height = 600;
 
     const playerA = new Player({
       x: canvas.width / 2 - 75,
@@ -53,7 +54,7 @@ export default function Game() {
         playerA,
         playerB,
         canvas,
-        canvas.width / 200
+        canvas.width / 100
       );
       handleKeyUps(keysPressed.current, playerA, playerB);
       playerA.draw();
@@ -63,14 +64,12 @@ export default function Game() {
       if (ball.y < 0) {
         setScore((prev) => {
           const updatedScore = {...prev, playerA: prev.playerA + 1};
-          console.log(updatedScore);
           return updatedScore;
         });
         ball.resetPosition();
       } else if (ball.y > canvas.height) {
         setScore((prev) => {
           const updatedScore = {...prev, playerB: prev.playerB + 1};
-          console.log(updatedScore);
           return updatedScore;
         });
         ball.resetPosition();
@@ -82,5 +81,10 @@ export default function Game() {
     return () => cancelAnimationFrame(animationId);
   }, []);
 
-  return <canvas ref={canvasRef} />;
+  return (
+    <div className='relative w-[430px] h-[600px] mx-auto mt-12'>
+      <canvas ref={canvasRef} className='absolute top-0 left-0 z-10' />
+      <ScoreBoard AScore={score.playerA} BScore={score.playerB} />
+    </div>
+  );
 }

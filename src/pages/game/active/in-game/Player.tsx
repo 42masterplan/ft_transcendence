@@ -14,7 +14,7 @@ interface PlayerProps {
 class Player extends React.Component<PlayerProps> {
   x: number = this.props.x;
   y: number = this.props.y;
-  width: number = this.props.width || 150;
+  width: number = this.props.width || 75;
   height: number = this.props.height || 15;
   color: string = this.props.color || 'rgba(217, 217, 217, 1)';
   dx: number = this.props.dx || 0;
