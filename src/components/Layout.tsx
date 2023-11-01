@@ -18,7 +18,6 @@ export const APIContext = createContext<GlobalVariable>();
 
 export default function Layout({children}: {children: React.ReactNode}) {
   const router = useRouter();
-  console.log(router.pathname);
 
   // styles for layout
   const style = {
