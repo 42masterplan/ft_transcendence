@@ -31,4 +31,9 @@ export default class Ball extends React.Component<BallProps> {
     this.y += this.velocity.y;
     this.draw();
   }
+
+  resetPosition() {
+    this.x = this.props.x;
+    this.y = this.props.y;
+  }
 }
