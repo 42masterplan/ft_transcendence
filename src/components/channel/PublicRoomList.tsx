@@ -4,8 +4,10 @@ import PublicRoomCard from './PublicRoomCard';
 import {Dialog, DialogContent, DialogTrigger} from '@/components/shadcn/dialog';
 import {Input} from '@/components/shadcn/input';
 import {Label} from '@/components/shadcn/label';
-
+import {useContext} from 'react';
+import {APIContext} from '../Layout';
 export default function PublicRoomList() {
+	const {PublicRoomList} = useContext(APIContext);
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -30,11 +32,12 @@ export default function PublicRoomList() {
           />
         </div>
         <div className='grid grid-col-4 items-center gap-4'>
-          <PublicRoomCard
-            channelName='개굴개굴 개구리'
-            userCount={100}
-            isLocked={false}
-          />
+					{PublicRoomList.map((public_room)=>{
+						return ( <PublicRoomCard channelName={public_room.channelName}
+							userCount={public_room.userCount}
+							isLocked={public_room.isLocked}
+						/>)
+					})}
         </div>
       </DialogContent>
     </Dialog>

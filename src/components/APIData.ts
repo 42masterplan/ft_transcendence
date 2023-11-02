@@ -73,6 +73,12 @@ export interface Player {
   profile_image: string;
 }
 
+export interface PublicRoomType{
+	channelName:string,
+	userCount: number,
+	isLocked: boolean
+}
+
 export const PLAYER_DUMMY_1 = {
   id: 0,
   name: 'daejlee',
@@ -340,6 +346,40 @@ export const blockUserInfos: Array<blockUserType> = [
   }
 ];
 
+export const PublicRoomList:
+Array<PublicRoomType> = [
+	{
+		channelName:'개굴개굴 개구리',
+		userCount: 100,
+		isLocked:false
+	},
+	{
+		channelName:'굴개 굴개 개구리',
+		userCount: 100,
+		isLocked:false
+	},
+	{
+		channelName:'뭘봐 이놈아',
+		userCount: 100,
+		isLocked:false
+	},
+	{
+		channelName:'내일 코테인데',
+		userCount: 100,
+		isLocked:true
+	},
+	{
+		channelName:'잘 볼 수 있을까?',
+		userCount: 100,
+		isLocked:false
+	},
+	{
+		channelName:'기적 같이 맥북 따고 싶다.',
+		userCount: 100,
+		isLocked:true
+	}
+]
+
 export interface GlobalVariable {
   gameRequests: Array<GameInfoType>; //게임 요청이 올 때 정보
   friendInfos: Array<FriendInfoType>; //친구 목록
@@ -347,4 +387,5 @@ export interface GlobalVariable {
   channelInfo: channelInfoType; //채널 방을 클릭하면 받아와야 하는 정보
   banUserList: Array<banUserType>; //현재 채팅방에서 금지된 유저의 정보
   blockUserInfos: Array<blockUserType>; //내가 차단한 유저의 목록입니다.
+	PublicRoomList: Array<PublicRoomType>;
 }
