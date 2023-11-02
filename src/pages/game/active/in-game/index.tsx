@@ -1,14 +1,16 @@
-import Player from './Player';
-import Ball from './Ball';
+import Player from '../../../../classes/Player';
+import Ball from '../../../../classes/Ball';
 import {useEffect, useRef, useState} from 'react';
 import {bounceIfCollided, handleKeyDowns, handleKeyUps} from './util';
-import ScoreBoard from './ScoreBoard';
+import ScoreBoard from '../../../../components/game/ScoreBoard';
+import GameStatus from '../../../../components/game/GameStatus';
 
 export default function Game() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const keysPressed = useRef<{[key: string]: boolean}>({});
   const [score, setScore] = useState({playerA: 0, playerB: 0});
+  const [gameover, setGameOver] = useState(false);
 
   useEffect(() => {
     let animationId: number;
@@ -21,13 +23,13 @@ export default function Game() {
     canvas.height = 600;
 
     const playerA = new Player({
-      x: canvas.width / 2 - 75,
+      x: canvas.width / 2 - 50,
       y: canvas.height - 30,
       color: 'rgba(217, 217, 217, 1)',
       c
     });
     const playerB = new Player({
-      x: canvas.width / 2 - 75,
+      x: canvas.width / 2 - 50,
       y: 15,
       color: 'rgba(0, 133, 255, 1)',
       c
@@ -64,12 +66,14 @@ export default function Game() {
       if (ball.y < 0) {
         setScore((prev) => {
           const updatedScore = {...prev, playerA: prev.playerA + 1};
+          if (updatedScore.playerA === 10) setGameOver(true);
           return updatedScore;
         });
         ball.resetPosition();
       } else if (ball.y > canvas.height) {
         setScore((prev) => {
           const updatedScore = {...prev, playerB: prev.playerB + 1};
+          if (updatedScore.playerB === 10) setGameOver(true);
           return updatedScore;
         });
         ball.resetPosition();
@@ -82,9 +86,21 @@ export default function Game() {
   }, []);
 
   return (
-    <div className='relative w-[430px] h-[600px] mx-auto mt-12'>
-      <canvas ref={canvasRef} className='absolute top-0 left-0 z-10' />
-      <ScoreBoard AScore={score.playerA} BScore={score.playerB} />
+    <div className='relative min-h-screen flex justify-center items-center'>
+      <canvas ref={canvasRef} className='z-10 absolute' />
+
+      {gameover ? (
+        <div className='absolute z-20 text-white text-4xl font-bold'>
+          GameOver
+        </div>
+      ) : (
+        <>
+          <div className='absolute left-[calc(50%+217px)] '>
+            <GameStatus gameover={gameover} setGameOver={setGameOver} />
+          </div>
+          <ScoreBoard AScore={score.playerA} BScore={score.playerB} />
+        </>
+      )}
     </div>
   );
 }

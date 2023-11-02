@@ -1,5 +1,5 @@
-import Ball from './Ball';
-import Player from './Player';
+import Ball from '../../../../classes/Ball';
+import Player from '../../../../classes/Player';
 
 export function bounceIfCollided(ball: Ball, playerA: Player, playerB: Player) {
   const debouncingTime = 300;
