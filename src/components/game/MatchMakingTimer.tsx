@@ -1,9 +1,9 @@
-import * as React from 'react';
+import {useEffect, useState} from 'react';
 
 export default function MatchMakingTimer() {
-  const [TimeNum, setTimeNum] = React.useState(0);
+  const [TimeNum, setTimeNum] = useState(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const id = setInterval(() => {
       setTimeNum((c) => c + 1);
     }, 1000);

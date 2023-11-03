@@ -85,7 +85,7 @@ export const PLAYER_DUMMY_1 = {
   profile_image: 'rhino_health'
 };
 
-export const Player_2 = {
+export const PLAYER_DUMMY_2 = {
   id: 0,
   name: 'joushin',
   profile_image: 'gorilla_baseBall'
