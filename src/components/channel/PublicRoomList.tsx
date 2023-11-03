@@ -4,10 +4,11 @@ import PublicRoomCard from './PublicRoomCard';
 import {Dialog, DialogContent, DialogTrigger} from '@/components/shadcn/dialog';
 import {Input} from '@/components/shadcn/input';
 import {Label} from '@/components/shadcn/label';
-import {useContext} from 'react';
+import {useContext, useState} from 'react';
 import {APIContext} from '../Layout';
 export default function PublicRoomList() {
-	const {PublicRoomList} = useContext(APIContext);
+  const {PublicRoomList} = useContext(APIContext);
+  const [search, setSearch] = useState('');
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -29,15 +30,22 @@ export default function PublicRoomList() {
             id='name'
             placeholder='공개 방을 검색하세요.'
             className='col-span-3'
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
         </div>
         <div className='grid grid-col-4 items-center gap-4'>
-					{PublicRoomList.map((public_room)=>{
-						return ( <PublicRoomCard channelName={public_room.channelName}
-							userCount={public_room.userCount}
-							isLocked={public_room.isLocked}
-						/>)
-					})}
+          {PublicRoomList.map((public_room) => {
+            return public_room.channelName.startsWith(search) ? (
+              <PublicRoomCard
+                channelName={public_room.channelName}
+                userCount={public_room.userCount}
+                isLocked={public_room.isLocked}
+              />
+            ) : (
+              ''
+            );
+          })}
         </div>
       </DialogContent>
     </Dialog>
