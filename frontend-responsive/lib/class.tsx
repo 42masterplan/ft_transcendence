@@ -1,6 +1,6 @@
-export type userStatus = "Online" | "Offline" | "InGame" | "AFK";
+import { gameStatus, gameType, userStatus } from "@/lib/type";
 
-export type UserInfo = {
+export class User {
   id: string; // UUID
   name: string; // max 10 characters
   profileImage: string;
@@ -8,13 +8,18 @@ export type UserInfo = {
   introduction: string; // max 50 characters
   friendList: string[]; // userId[]
   blockList: string[]; // userId[]
-};
+  constructor() {
+    this.id = "";
+    this.name = "";
+    this.profileImage = "";
+    this.currentStatus = "Offline";
+    this.introduction = "";
+    this.friendList = [];
+    this.blockList = [];
+  }
+}
 
-export type gameType = "Ladder" | "NonLadder";
-
-export type gameStatus = "Waiting" | "Playing" | "Finished" | "Cancelled";
-
-export type GameInfo = {
+export class Game {
   id: string; // UUID
   type: gameType;
   status: gameStatus;
@@ -28,21 +33,17 @@ export type GameInfo = {
   endTime: Date | null;
   // title: string; // TODO: Decide: Do we really need this?
   // mode: "mode1" | "mode2" | "mode3" // TODO: Decide: Do we really need this?
-};
-
-export type MatchRequest = {
-  id: string;
-  challengerId: string;
-  challengedId: string;
-  requestTime: Date;
-};
-
-export type MatchRequestStatus = "Pending" | "Accepted" | "Rejected";
-
-export type FriendRequest = {
-  id: string; // UUID
-  from: string; // userId
-  to: string; // userId
-  requestTime: Date;
-  status: MatchRequestStatus;
-};
+  constructor() {
+    this.id = "";
+    this.type = "Ladder";
+    this.status = "Waiting";
+    this.player1Id = "";
+    this.player1Name = "";
+    this.player1Score = 0;
+    this.player2Id = "";
+    this.player2Name = "";
+    this.player2Score = 0;
+    this.startTime = null;
+    this.endTime = null;
+  }
+}

@@ -17,7 +17,7 @@ export const dummyDB = {
       name: "User1",
       profileImage: "https://www.w3schools.com/howto/img_avatar.png",
       currentStatus: "Online",
-      introduction: "Hello, I am User1",
+      introduction: "Hello, I am User1 and I am a very very very very long long long long long long introduction. ",
       friendList: ["2", "3"],
       blockList: ["4"],
     },
@@ -165,6 +165,232 @@ export const dummyDB = {
       ],
       startTime: new Date(),
       endTime: new Date(),
+    },
+    {
+      id: "1",
+      type: "Ladder",
+      status: "Waiting",
+      playerScorePairs: [
+        ["1", 0],
+        ["2", 0],
+      ],
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+    {
+      id: "2",
+      type: "Ladder",
+      status: "Playing",
+      playerScorePairs: [
+        ["3", 10],
+        ["4", 20],
+      ],
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+    {
+      id: "3",
+      type: "NonLadder",
+      status: "Finished",
+      playerScorePairs: [
+        ["1", 0],
+        ["2", 0],
+      ],
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+    {
+      id: "4",
+      type: "NonLadder",
+      status: "Cancelled",
+      playerScorePairs: [
+        ["1", 0],
+        ["2", 0],
+      ],
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+    {
+      id: "5",
+      type: "Ladder",
+      status: "Waiting",
+      playerScorePairs: [
+        ["1", 0],
+        ["2", 0],
+      ],
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+    {
+      id: "6",
+      type: "Ladder",
+      status: "Playing",
+      playerScorePairs: [
+        ["3", 10],
+        ["4", 20],
+      ],
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+    {
+      id: "7",
+      type: "NonLadder",
+      status: "Finished",
+      playerScorePairs: [
+        ["1", 0],
+        ["2", 0],
+      ],
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+    {
+      id: "8",
+      type: "NonLadder",
+      status: "Cancelled",
+      playerScorePairs: [
+        ["1", 0],
+        ["2", 0],
+      ],
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+    {
+      id: "9",
+      type: "Ladder",
+      status: "Waiting",
+      playerScorePairs: [
+        ["1", 0],
+        ["2", 0],
+      ],
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+    {
+      id: "10",
+      type: "Ladder",
+      status: "Playing",
+      playerScorePairs: [
+        ["3", 10],
+        ["4", 20],
+      ],
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+    {
+      id: "11",
+      type: "NonLadder",
+      status: "Finished",
+      playerScorePairs: [
+        ["1", 0],
+        ["2", 0],
+      ],
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+    {
+      id: "12",
+      type: "NonLadder",
+      status: "Cancelled",
+      playerScorePairs: [
+        ["1", 0],
+        ["2", 0],
+      ],
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+    {
+      id: "13",
+      type: "Ladder",
+      status: "Waiting",
+      playerScorePairs: [
+        ["1", 0],
+        ["2", 0],
+      ],
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+
+    {
+      id: "14",
+      type: "Ladder",
+      status: "Playing",
+      playerScorePairs: [
+        ["3", 10],
+        ["4", 20],
+      ],
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+    {
+      id: "15",
+      type: "NonLadder",
+      status: "Finished",
+      playerScorePairs: [
+        ["1", 0],
+        ["2", 0],
+      ],
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+
+    {
+      id: "16",
+      type: "NonLadder",
+      status: "Cancelled",
+      playerScorePairs: [
+        ["1", 0],
+        ["2", 0],
+      ],
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+
+    {
+      id: "17",
+      type: "Ladder",
+      status: "Waiting",
+      playerScorePairs: [
+        ["1", 0],
+        ["2", 0],
+      ],
+      startTime: new Date(),
+      endTime: null,
+    },
+
+    {
+      id: "18",
+      type: "Ladder",
+      status: "Playing",
+      playerScorePairs: [
+        ["3", 10],
+        ["4", 20],
+      ],
+      startTime: new Date(),
+      endTime: null,
+    },
+
+    {
+      id: "19",
+      type: "NonLadder",
+      status: "Finished",
+      playerScorePairs: [
+        ["1", 0],
+        ["2", 0],
+      ],
+      startTime: new Date(),
+      endTime: null,
+    },
+
+    {
+      id: "20",
+      type: "NonLadder",
+      status: "Cancelled",
+      playerScorePairs: [
+        ["1", 0],
+        ["2", 0],
+      ],
+      startTime: new Date(),
+      endTime: null,
     },
   ],
   matchRequests: [

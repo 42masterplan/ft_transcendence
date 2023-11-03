@@ -22,7 +22,6 @@
  *   - If there is no notification, it will show the message that there is no notification.
  */
 
-import { MatchRequest, FriendRequest } from "@/lib/type";
 import { Bell } from "lucide-react";
 import { Button } from "@/components/shadcn/ui/button";
 import { ResponsiveDesign } from "../../../../lib/ResponsiveDesign";
@@ -35,38 +34,25 @@ import {
 } from "@/components/shadcn/ui/sheet";
 import { Separator } from "@/components/shadcn/ui/separator";
 
-import {
-  getDummyCurrentUserIdSync,
-  getDummyFriendRequestsSync,
-  getDummyMatchRequestsSync,
-} from "@/DummyBackend/DummyAPI";
+// import {
+//   getDummyCurrentUserIdSync,
+//   getDummyFriendRequestsSync,
+//   getDummyMatchRequestsSync,
+// } from "@/DummyBackend/outdated/DummyAPI";
+
+import * as dummyAPI from "@/DummyBackend/new/notificationAPI";
 
 import FriendRequestCard from "./request/FriendRequestCard";
 import MatchRequestCard from "./request/MatchRequestCard";
-import ResponsiveContainer from "@/components/container/ResponsiveContainer";
 import ScrollableContainer from "@/components/container/ScrollableContainer";
-import ComponentListContainer from "@/components/container/ComponentListContainer";
 
-type NotificationBtnProps = {
-  notificationCount: number;
-};
 
-export default function NotificationBtn({
-  notificationCount,
-}: NotificationBtnProps) {
+export default function NotificationBtn(){
   // TODO: FIX: get MatchRequests and FriendRequests from server ---------------
 
-  const currentUserId = getDummyCurrentUserIdSync();
-
-  // get match requests from server
-  const matchRequests = getDummyMatchRequestsSync(
-    currentUserId
-  ) as MatchRequest[];
-
-  // get friend requests from server
-  const friendRequests = getDummyFriendRequestsSync(
-    currentUserId
-  ) as FriendRequest[];
+  const matchRequests = dummyAPI.notification__getMatchRequests();
+  const friendRequests = dummyAPI.notification__getFriendRequests();
+  const notificationCount = matchRequests.length + friendRequests.length;
 
   // ---------------------------------------------------------------------------
 
@@ -97,8 +83,8 @@ export default function NotificationBtn({
         </Button>
         {/* Button for Notification with icon and count -------------------- */}
       </SheetTrigger>
-        <SheetContent>
-      <ScrollableContainer>
+      <SheetContent>
+        <ScrollableContainer>
           <SheetHeader>
             <SheetTitle>Notifications</SheetTitle>
           </SheetHeader>
@@ -118,11 +104,11 @@ export default function NotificationBtn({
           <div className="w-full space-y-2">
             {/* match request list */}
             {matchRequests.map((matchRequest) => (
-              <MatchRequestCard key={matchRequest.id} request={matchRequest} />
+              <MatchRequestCard key={matchRequest.game_id} request={matchRequest} />
             ))}
           </div>
-      </ScrollableContainer>
-        </SheetContent>
+        </ScrollableContainer>
+      </SheetContent>
     </Sheet>
   );
 }

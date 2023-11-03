@@ -1,22 +1,23 @@
-import { FriendRequest } from "@/lib/type";
 import UserInfoCard from "@/components/card/userInfoCard/UserInfoCard";
-import { getDummyUserInfoSync } from "@/DummyBackend/DummyAPI";
 import RequestButton from "./RequestButton";
 import ResponsiveContainer from "@/components/container/ResponsiveContainer";
+import * as dummyAPI from "@/DummyBackend/new/notificationAPI";
+import * as Type from "@/lib/type"
+import * as Class from "@/lib/class"
 
-type NotificationCardProps = {
-  request: FriendRequest;
-};
+interface FriendRequestCardProps {
+  request: dummyAPI.friendRequest;
+}
 
-export default function NotificationCard({ request }: NotificationCardProps) {
-  const bgColor = "custom1";
 
-  // TODO: Fix: fetch data from actual server ----------------------------------
+export default function FriendRequestCard({
+  request,
+}: FriendRequestCardProps) {
 
-  const notificationShooterId = request.from;
-  const notificationShooter = getDummyUserInfoSync(notificationShooterId);
-
-  // ---------------------------------------------------------------------------
+  const notificationShooter: Type.UserInfo  = new Class.User();
+  notificationShooter.name = request.id;
+  // notificationShooter.introduction = request.introduction; // TODO: do we need this? this will ruin the design
+  notificationShooter.profileImage = request.profileImage;
 
   // TODO: implement this
   const handleAccept = () => {
@@ -28,12 +29,8 @@ export default function NotificationCard({ request }: NotificationCardProps) {
   };
 
   return (
-    <ResponsiveContainer
-      bgColor={bgColor}
-      hoverEffect={true}
-      className="justify-between px-2 sm:px-3 py-1.5 sm:py-2"
-    >
-      <UserInfoCard userInfo={notificationShooter} />
+    <ResponsiveContainer className="flex-row justify-between items-center">
+      <UserInfoCard userInfo={notificationShooter} showStatus={false} size="sm" />
       <RequestButton
         requestType="friend"
         onAccept={handleAccept}

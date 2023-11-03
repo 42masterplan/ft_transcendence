@@ -1,22 +1,24 @@
 import { MatchRequest } from "@/lib/type";
 import UserInfoCard from "@/components/card/userInfoCard/UserInfoCard";
-import { getDummyUserInfoSync } from "@/DummyBackend/DummyAPI";
+import { getDummyUserInfoSync } from "@/DummyBackend/outdated/DummyAPI";
 import RequestButton from "./RequestButton";
 import ResponsiveContainer from "@/components/container/ResponsiveContainer";
+import * as dummyAPI from "@/DummyBackend/new/notificationAPI";
+import * as Type from "@/lib/type"
+import * as Class from "@/lib/class"
 
 type NotificationCardProps = {
-  request: MatchRequest;
+  request: dummyAPI.matchRequest;
 };
 
-export default function NotificationCard({ request }: NotificationCardProps) {
-  const bgColor = "custom1";
+export default function MatchRequestCard({ request }: NotificationCardProps) {
 
-  // TODO: Fix: fetch data from actual server ----------------------------------
-
-  const notificationShooterId = request.challengerId;
-  const notificationShooter = getDummyUserInfoSync(notificationShooterId);
-
-  // ---------------------------------------------------------------------------
+  const newMatch: Type.GameInfo = new Class.Game();
+  const notificationShooter: Type.UserInfo  = new Class.User();
+  notificationShooter.name = request.friend_id;
+  notificationShooter.profileImage = request.profile_image;
+  newMatch.id = request.game_id;
+  // TODO: add game type
 
   // TODO: implement this
   const handleAccept = () => {
@@ -29,11 +31,8 @@ export default function NotificationCard({ request }: NotificationCardProps) {
 
   return (
     <ResponsiveContainer
-      bgColor={bgColor}
-      hoverEffect={true}
-      className="justify-between px-2 sm:px-3 py-1.5 sm:py-2"
-    >
-      <UserInfoCard userInfo={notificationShooter}/>
+    className="flex-row justify-between items-center">
+      <UserInfoCard userInfo={notificationShooter} showStatus={false} size="sm"/>
       <RequestButton
         requestType="match"
         onAccept={handleAccept}

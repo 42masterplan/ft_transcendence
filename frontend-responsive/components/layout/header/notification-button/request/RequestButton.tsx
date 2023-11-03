@@ -7,6 +7,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/shadcn/ui/tooltip";
+import { ToastAction } from "@/components/shadcn/ui/toast";
+import { useToast } from "@/components/shadcn/ui/use-toast";
 
 type RequestButtonProps = {
   requestType: "match" | "friend";
@@ -19,26 +21,37 @@ export default function RequestButton({
   onAccept,
   onReject,
 }: RequestButtonProps) {
-  // const friendAcceptTooltip = "Accept friend request";
-  // const friendRejectTooltip = "Reject friend request";
-  // const matchAcceptTooltip = "Accept match request";
-  // const matchRejectTooltip = "Reject match request";
-
+  const { toast } = useToast()
   let acceptTooltip: string;
   let rejectTooltip: string;
   if (requestType === "match") {
     acceptTooltip = "Accept match request";
     rejectTooltip = "Reject match request";
-  }
-  else {
+  } else {
     acceptTooltip = "Accept friend request";
     rejectTooltip = "Reject friend request";
   }
 
+  let toastTitle: string;
+  if (requestType === "match") {
+    toastTitle = "Are you sure you want to accept this match request?";
+  } else if (requestType === "friend") {
+    toastTitle = "Are you sure you want to accept this friend request?";
+  }
+
+  let toastDescription: string;
+  if (requestType === "match") {
+    toastDescription =
+      "Click the button to accept the match request."
+  } else if (requestType === "friend") {
+    toastDescription =
+      "Click the button to accept the friend request.";
+  }
 
   return (
-    <ResponsiveContainer className="space-x-2">
+    <ResponsiveContainer className="space-x-2 items-center">
       <TooltipProvider>
+        {/* request reject button */}
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -54,12 +67,21 @@ export default function RequestButton({
           </TooltipContent>
         </Tooltip>
 
+        {/* request accept button */}
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
               variant="requestAcceptBtn"
               size="requestBtn"
-              onClick={onAccept}
+              onClick={() => {
+                toast({
+                  title: toastTitle,
+                  description: toastDescription,
+                  action: (
+                    <ToastAction altText="Accept" onClick={onAccept}>Accept</ToastAction>
+                  ),
+                });
+              }}
             >
               {requestType === "match" ? <Swords /> : <UserPlus />}
             </Button>

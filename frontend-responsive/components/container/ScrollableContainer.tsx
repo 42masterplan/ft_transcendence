@@ -6,12 +6,14 @@ export type orientationType = "horizontal" | "vertical";
 type ScrollableCardProps = {
   children: React.ReactNode;
   orientation?: orientationType;
+  rounded?: boolean;
   className?: string;
 };
 
 export default function ScrollableContainer({
   children,
   orientation = "vertical",
+  rounded = true,
   className = "",
 }: ScrollableCardProps) {
   let flexOrientation: string = "";
@@ -20,9 +22,15 @@ export default function ScrollableContainer({
   } else if (orientation === "vertical") {
     flexOrientation = "flex-col";
   }
+  let roundedClassName: string;
+  if (rounded) {
+    roundedClassName = "rounded-md sm:rounded-lg";
+  } else {
+    roundedClassName = "";
+  }
   return (
-    <ScrollArea className={"w-full h-full rounded-md px-4 py-1 " + className}>
-      <ResponsiveContainer className={"flex " + flexOrientation}>{children}</ResponsiveContainer>
+    <ScrollArea className={`w-full h-full ${roundedClassName} ${className}`}>
+      <ResponsiveContainer className={`flex ${flexOrientation}`}>{children}</ResponsiveContainer>
       <ScrollBar orientation={orientation} />
     </ScrollArea>
   );

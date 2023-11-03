@@ -1,8 +1,8 @@
 import { UserInfo, GameInfo, MatchRequest, FriendRequest } from "@/lib/type";
 
-import { dummyDB } from "@/DummyBackend/DummyDB";
+import { dummyDB } from "@/DummyBackend/outdated/DummyDB";
 
-const currentUserIndex = 1;
+const currentUserIndex = 0;
 const delay = 2000;
 const printCalledFunctionName = true;
 

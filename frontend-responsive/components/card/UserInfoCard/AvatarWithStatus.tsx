@@ -11,22 +11,25 @@ import {
 } from "@/components/shadcn/ui/avatar";
 
 import { userStatus } from "@/lib/type";
+import { sizeType } from "@/lib/ResponsiveDesign";
 
 type AvatarWithStatusProps = {
-  status: userStatus;
-  avatarImage: string;
+  image: string;
+  size: sizeType;
+  status?: userStatus | null;
   showStatus?: boolean;
 };
 
+
 export default function AvatarWithStatus({
-  status,
-  avatarImage,
+  image: avatarImage,
+  size: avatarSize,
   showStatus = true,
+  status = null,
 }: AvatarWithStatusProps) {
   const altImage = "@/public/avatars/picapica.jpg";
 
   let statusColor: string;
-
   switch (status) {
     case "Online":
       statusColor = "bg-green-500";
@@ -41,16 +44,43 @@ export default function AvatarWithStatus({
       statusColor = "bg-yellow-500";
       break;
     default:
-      statusColor = "bg-yellow-500";
+      statusColor = "bg-red-500";
       break;
   }
 
-  const statusStyle = `absolute top-0.5 right-0.5 sm:top-1 sm:right-1 px-1 py-1 sm:px-1.5 sm:py-1.5 z-10 rounded-full ${statusColor}`;
+  let avatarSizeStyle: string;
+  let statusSizeStyle: string;
+  let statusPositionStyle: string;
+  switch (avatarSize) {
+    case "sm":
+      avatarSizeStyle = "h-10 w-10 sm:h-16 sm:w-16";
+      statusSizeStyle = "p-1 sm:p-1.5";
+      statusPositionStyle = "top-0.5 right-0.5 sm:top-1 sm:right-1"
+      break;
+    case "md":
+      avatarSizeStyle = "h-16 w-16 sm:h-24 sm:w-24";
+      statusSizeStyle = "p-1.5 sm:p-2";
+      statusPositionStyle = "top-1 right-1 sm:top-1.5 sm:right-1.5"
+      break;
+    case "lg":
+      avatarSizeStyle = "h-32 w-32 sm:h-40 sm:w-40";
+      statusSizeStyle = "p-2 sm:p-2.5";
+      statusPositionStyle = "top-3 right-3 sm:top-3.5 sm:right-3.5"
+      break;
+    default:
+      // small size
+      avatarSizeStyle = "h-10 w-10 sm:h-16 sm:w-16";
+      statusSizeStyle = "p-1 sm:p-1.5";
+      statusPositionStyle = "top-0.5 right-0.5 sm:top-1 sm:right-1"
+      break;
+  }
+
+  const statusStyle = `absolute ${statusSizeStyle} ${statusPositionStyle} z-10 rounded-full ${statusColor}`;
 
   return (
     <div className="relative flex justify-center items-center h-min">
       {showStatus ? <div className={statusStyle}></div> : null}
-      <Avatar className="h-10 w-10 sm:h-16 sm:w-16">
+      <Avatar className={avatarSizeStyle}>
         <AvatarImage src={avatarImage} alt={altImage} />
         <AvatarFallback>😜</AvatarFallback>
       </Avatar>

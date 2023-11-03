@@ -4,10 +4,11 @@
  *  stretch to the full width of the container.
  */
 
-type ResponsiveCardProps = {
+type ResponsiveContainerProps = {
   children: React.ReactNode;
   bgColor?: string;
   hoverEffect?: boolean;
+  rounded?: boolean;
   className?: string;
 };
 
@@ -17,8 +18,9 @@ export default function ResponsiveContainer({
   children,
   bgColor = "",
   hoverEffect = false,
+  rounded = false,
   className = "",
-}: ResponsiveCardProps) {
+}: ResponsiveContainerProps) {
   // If hoverEffect is true, the card will have a hover effect.
   let colorClassName: string;
   if (bgColor !== "") {
@@ -34,8 +36,14 @@ export default function ResponsiveContainer({
     hoverEffectClassName = "";
   }
 
-  const classNameString = `flex items-center min-w-fit p-0 m-0 
-  rounded-md sm:rounded-lg ${colorClassName} ${hoverEffectClassName} ${className}`;
+  let roundedClassName: string;
+  if (rounded) {
+    roundedClassName = "rounded-md sm:rounded-lg";
+  } else {
+    roundedClassName = "";
+  }
+
+  const classNameString = `box-border flex min-w-fit p-0 m-0 ${roundedClassName} ${colorClassName} ${hoverEffectClassName} ${className}`;
 
   return <div className={classNameString}>{children}</div>;
 }
