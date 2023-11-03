@@ -1,5 +1,5 @@
 import LinkBtn from '@/components/button/LinkBtn';
-
+import LoginBtn from '@/components/button/LogInBtn';
 export default function Welcome() {
   return (
     <div className='flex flex-col justify-center items-center h-screen'>
@@ -15,8 +15,7 @@ export default function Welcome() {
       shadow-md flex justify-between items-center mt-12 space-x-12'
       >
         <LinkBtn name='Register' link='/welcome/register' />
-        {/* 원래는 42auth로 리다이렉션 되어야 합니다. */}
-        <LinkBtn name='Login' link='/welcome/loading' />
+        <LoginBtn />
       </div>
     </div>
   );
