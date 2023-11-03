@@ -1,9 +1,11 @@
 import {useEffect} from 'react';
 import {useRouter} from 'next/router';
 import Http from '@/api';
-
+import {useSetRecoilState} from 'recoil';
+import {LoginState} from '@/States/LoginState';
 export default function Redirect() {
   const router = useRouter();
+  const setLogin = useSetRecoilState(LoginState);
   async function login(auth_code: string) {
     await Http.post('/user/login', auth_code, {
       withCredentials: true
@@ -12,7 +14,9 @@ export default function Redirect() {
         console.log('>>> [LOGIN] ✅ SUCCESS', res.data);
         if (res.status === 200) {
           //여기서 토큰 받는 로직 작성
-          const access_token = res.data.token;
+          const access_token = res.data.access_token;
+          const refresh_token = res.data.refresh_token;
+          setLogin(true);
           if (res.data.isRegisted) {
             router.replace('/');
           } else {
@@ -22,7 +26,7 @@ export default function Redirect() {
       })
       .catch((err) => {
         console.warn('>>> [LOGIN] 🤬 ERROR', err.message);
-        router.replace('/error');
+        router.replace('/welcome');
       });
   }
   console.log(router);
