@@ -12,7 +12,6 @@
  * - className: string -> className of the card. Default is "".
  */
 
-import { CardDescription } from "@/components/shadcn/ui/card";
 import ResponsiveContainer from "../../container/ResponsiveContainer";
 import AvatarWithStatus from "./AvatarWithStatus";
 import { UserInfo } from "@/lib/type";
@@ -22,7 +21,6 @@ type UserInfoCardProps = {
   userInfo: UserInfo;
   size?: sizeType;
   side?: "left" | "right";
-  bgColor?: string;
   printIntro?: boolean;
   showStatus?: boolean;
   stretch?: boolean;
@@ -34,7 +32,6 @@ export default function UserInfoCard({
   userInfo,
   size = "md",
   side = "left",
-  bgColor = "",
   printIntro = false,
   showStatus = true,
   stretch = false,
@@ -134,7 +131,9 @@ export default function UserInfoCard({
       >
         <h1 className={`${nameFontSize} font-bold`}>{name}</h1>
         {printIntro && (
-          <div className={`${introFontSize} ${introWidthFit} break-words overflow-hidden`}>
+          <div
+            className={`${introFontSize} ${introWidthFit} break-words overflow-hidden`}
+          >
             {intro}
           </div>
         )}
@@ -145,9 +144,7 @@ export default function UserInfoCard({
   return (
     <>
       <ResponsiveContainer
-        bgColor={bgColor}
-        rounded
-        className={`p-1 sm:p-2 ${widthFit} ${flexAlign} ${className}`}
+        className={`${widthFit} ${flexAlign} ${className} rounded-xl p-1 sm:p-2`}
       >
         <AvatarWithStatus
           status={userInfo.currentStatus}

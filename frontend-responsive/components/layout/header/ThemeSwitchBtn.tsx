@@ -1,5 +1,4 @@
 import { Switch } from "@/components/shadcn/ui/switch";
-import { Label } from "@/components/shadcn/ui/label";
 import { useTheme } from "next-themes";
 import { Moon, Sun } from "lucide-react";
 
@@ -11,9 +10,6 @@ export default function ThemeSwitchBtn() {
   // return a switch button that toggles between light and dark mode
   return (
     <div className="flex items-center">
-      {/* <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-        {isDark ? "Dark" : "Light"}
-      </span> */}
       <span>{modeIcon}</span>
       <Switch
         checked={theme === "dark"}
