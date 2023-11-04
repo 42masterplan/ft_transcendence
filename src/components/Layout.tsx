@@ -11,6 +11,7 @@ import {
   channelInfo,
   banUserList,
   blockUserInfos,
+	PublicRoomList,
   type GlobalVariable
 } from './APIData';
 
@@ -36,7 +37,8 @@ export default function Layout({children}: {children: React.ReactNode}) {
           channelList,
           channelInfo,
           banUserList,
-          blockUserInfos
+          blockUserInfos,
+					PublicRoomList
         }}
       >
         {router.pathname.match('/welcome') ||

@@ -35,7 +35,7 @@ const buttonVariants = cva(
         submit: 'h8  px-4 py-2',
         HeaderBtn: 'w-[70px] h-[70px]',
         mini: 'h-6 w-20',
-        channel: 'justify-between z-10 pr-5 pl-2 py-2 h-20'
+        channel: 'justify-between z-10 pr-5 pl-2 py-2 h-20 w-[170px]'
       }
     },
     defaultVariants: {

@@ -10,8 +10,8 @@ function channelListRender(currentChannel, setCurChannel) {
     setCurChannel(channelList[idx].channelName);
   };
   return (
-    <div className='flex flex-col justify-start max-h-[550px]  border bg-primary overflow-y-scroll overflow-x-hidden rounded-l-xl h-screen min-w-[300px]'>
-      <div className='flex flex-col text-3xl text-white text-center h-20 justify-center  content-center'>
+    <div className='flex flex-col max-h-[550px] border bg-primary overflow-y-scroll overflow-x-hidden rounded-l-xl h-screen'>
+      <div className='min-h-[40px] text-xl text-white text-center sticky top-0 z-20 bg-black'>
         채널 목록
       </div>
       {channelList.map((channel, idx) => (
@@ -21,12 +21,10 @@ function channelListRender(currentChannel, setCurChannel) {
           onClick={() => handleChannelClick(idx)}
           key={idx}
         >
-          <div className='font-bold text-2xl text-sky-300 '>
-            {channel.channelName}
-          </div>
-          <div className='text-violet-400  text-2xl font-bold'>
+          <span className='text-base text-sky-300 '>{channel.channelName}</span>
+          <span className='text-violet-400  text-xs font-bold'>
             {channel.userSize}
-          </div>
+          </span>
         </Button>
       ))}
     </div>
