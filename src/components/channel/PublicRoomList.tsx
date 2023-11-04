@@ -36,7 +36,7 @@ export default function PublicRoomList() {
         </div>
         <div className='grid grid-col-4 items-center gap-4'>
           {PublicRoomList.map((public_room) => {
-            return public_room.channelName.startsWith(search) ? (
+            return public_room.channelName.includes(search) ? (
               <PublicRoomCard
                 channelName={public_room.channelName}
                 userCount={public_room.userCount}
