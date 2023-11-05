@@ -28,9 +28,10 @@ export default class Particle extends React.Component<ParticleProps> {
   }
 
   update() {
+    this.draw();
     this.x += this.velocity.x;
     this.y += this.velocity.y;
+    if (this.alpha <= 0.01) return;
     this.alpha -= 0.01;
-    this.draw();
   }
 }
