@@ -9,7 +9,7 @@ import {
   BALL_COLOR,
   BALL_VELOCITY,
   BALL_SPEED
-} from '../../pages/game/active/in-game/macros';
+} from '../game/macros';
 
 interface BallProps {
   x: number;

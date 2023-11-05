@@ -6,12 +6,16 @@ import {
   PLAYER_B_COLOR,
   BACKGROUND_COLOR,
   SCORE_LIMIT
-} from './macros';
+} from '../../../../lib/game/macros';
 import Player from '@/lib/classes/Player';
 import Ball from '@/lib/classes/Ball';
 import Particle from '@/lib/classes/Particle';
 import {useEffect, useRef, useState} from 'react';
-import {bounceIfCollided, handleKeyDowns, handleKeyUps} from './util';
+import {
+  bounceIfCollided,
+  handleKeyDowns,
+  handleKeyUps
+} from '../../../../lib/game/util';
 import ScoreBoard from '../../../../components/game/ScoreBoard';
 import GameStatus from '../../../../components/game/GameStatus';
 
