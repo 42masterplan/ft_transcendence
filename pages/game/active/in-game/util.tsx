@@ -1,21 +1,6 @@
 import Ball from '@/lib/classes/Ball';
 import Player from '@/lib/classes/Player';
-import {
-  SCREEN_WIDTH,
-  SCREEN_HEIGHT,
-  PLAYER_WIDTH,
-  PLAYER_HEIGHT,
-  PLAYER_A_COLOR,
-  PLAYER_B_COLOR,
-  BACKGROUND_COLOR,
-  BALL_RADIUS,
-  BALL_COLOR,
-  BALL_VELOCITY,
-  BALL_SPEED,
-  PADDLE_OFFSET,
-  SCORE_LIMIT,
-  GAME_TIME_LIMIT
-} from './macros';
+import {SCREEN_WIDTH, SCREEN_HEIGHT, PADDLE_OFFSET} from './macros';
 
 export function bounceIfCollided(ball: Ball, playerA: Player, playerB: Player) {
   const debouncingTime = 300;

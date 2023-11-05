@@ -1,20 +1,14 @@
 import React from 'react';
 import Player from './Player';
+import Particle from './Particle';
 import {
   SCREEN_WIDTH,
   SCREEN_HEIGHT,
   PLAYER_WIDTH,
-  PLAYER_HEIGHT,
-  PLAYER_A_COLOR,
-  PLAYER_B_COLOR,
-  BACKGROUND_COLOR,
   BALL_RADIUS,
   BALL_COLOR,
   BALL_VELOCITY,
-  BALL_SPEED,
-  PADDLE_OFFSET,
-  SCORE_LIMIT,
-  GAME_TIME_LIMIT
+  BALL_SPEED
 } from '../../pages/game/active/in-game/macros';
 
 interface BallProps {
@@ -58,11 +52,12 @@ export default class Ball extends React.Component<BallProps> {
     this.draw();
   }
 
-  resetPosition(player: Player) {
+  resetPosition(player: Player, particles: Particle[]) {
+    for (let i = 0; i < 16; i++)
+      particles.push(new Particle({x: this.x, y: this.y, c: this.props.c}));
     this.velocity = {x: 0, y: 0};
     this.x = this.props.x;
     this.y = this.props.y;
-    console.log(player.x, player.y);
     setTimeout(() => {
       this.velocity = calcBallVelocity(player.x + PLAYER_WIDTH / 2, player.y);
     }, 3000);
