@@ -1,8 +1,5 @@
 import axios from 'axios';
 
 export default axios.create({
-  baseURL: 'http://localhost:5000',
-  header: {
-    Authorization: 'bearer accessKey'
-  }
+  baseURL: 'http://localhost:8080'
 });

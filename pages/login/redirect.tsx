@@ -1,27 +1,23 @@
 import {useEffect} from 'react';
 import {useRouter} from 'next/router';
-import Http from '@/api';
-import {useSetRecoilState} from 'recoil';
-import {LoginState} from '@/States/LoginState';
+import Axios from '@/api';
+
 export default function Redirect() {
   const router = useRouter();
-  const setLogin = useSetRecoilState(LoginState);
-  async function login(auth_code: string) {
-    await Http.post('/user/login', auth_code, {
-      withCredentials: true
-    })
+  async function login(auth_code: string | string[]) {
+    await Axios.get('/user/auth-callback', {params: {auth_code: auth_code}})
       .then((res) => {
         console.log('>>> [LOGIN] ✅ SUCCESS', res.data);
         if (res.status === 200) {
-          //여기서 토큰 받는 로직 작성
-          const access_token = res.data.access_token;
-          const refresh_token = res.data.refresh_token;
-          setLogin(true);
-          if (res.data.isRegisted) {
-            router.replace('/');
+          if (res.data.hasAccount) {
+            if (res.data.isTwoFactorEnabled === true) router.replace('/');
+            else router.replace('/welcome/register/2step-auth/validation');
           } else {
             router.replace('/welcome/register');
           }
+        } else if (res.status === 401) {
+          console.warn('It is auth_code Error');
+          router.replace('/welcome');
         }
       })
       .catch((err) => {
@@ -29,14 +25,14 @@ export default function Redirect() {
         router.replace('/welcome');
       });
   }
-  console.log(router);
   useEffect(() => {
     const auth_code = router.query.code;
-    console.log(auth_code);
-    //login(auth_code);
-    // router.replace('/');
-    router.replace('/welcome/register');
-  }, []);
+    if (auth_code) {
+      console.log(auth_code);
+      console.log('>>> [LOGIN] 🚀 auth_code:', auth_code);
+      login(auth_code);
+    }
+  }, [router]);
 
-  return <div></div>;
+  return <div> this is not for you!</div>;
 }
