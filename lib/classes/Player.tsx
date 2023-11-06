@@ -55,7 +55,6 @@ class Player extends React.Component<PlayerProps> {
 
   draw() {
     const {c} = this.props;
-
     c.beginPath();
     c.rect(this.x, this.y, this.width, this.height);
     c.fillStyle = this.color;

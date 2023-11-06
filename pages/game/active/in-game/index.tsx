@@ -1,7 +1,21 @@
+import {
+  SCREEN_WIDTH,
+  SCREEN_HEIGHT,
+  PLAYER_WIDTH,
+  PLAYER_A_COLOR,
+  PLAYER_B_COLOR,
+  BACKGROUND_COLOR,
+  SCORE_LIMIT
+} from '../../../../lib/game/macros';
 import Player from '@/lib/classes/Player';
 import Ball from '@/lib/classes/Ball';
+import Particle from '@/lib/classes/Particle';
 import {useEffect, useRef, useState} from 'react';
-import {bounceIfCollided, handleKeyDowns, handleKeyUps} from './util';
+import {
+  bounceIfCollided,
+  handleKeyDowns,
+  handleKeyUps
+} from '../../../../lib/game/util';
 import ScoreBoard from '../../../../components/game/ScoreBoard';
 import GameStatus from '../../../../components/game/GameStatus';
 
@@ -19,27 +33,25 @@ export default function Game() {
     const c = canvas.getContext('2d');
     if (!c) return;
     contextRef.current = c;
-    canvas.width = 430;
-    canvas.height = 600;
+    canvas.width = SCREEN_WIDTH;
+    canvas.height = SCREEN_HEIGHT;
+    const particles = [] as Particle[];
 
     const playerA = new Player({
-      x: canvas.width / 2 - 50,
-      y: canvas.height - 30,
-      color: 'rgba(217, 217, 217, 1)',
+      x: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
+      y: SCREEN_HEIGHT - 45,
+      color: PLAYER_A_COLOR,
       c
     });
     const playerB = new Player({
-      x: canvas.width / 2 - 50,
-      y: 15,
-      color: 'rgba(0, 133, 255, 1)',
+      x: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
+      y: 30,
+      color: PLAYER_B_COLOR,
       c
     });
     const ball = new Ball({
-      x: canvas.width / 2,
-      y: canvas.height / 2,
-      radius: 5,
-      color: 'white',
-      velocity: {x: 2.5, y: -4.3}, //temp
+      x: SCREEN_WIDTH / 2,
+      y: SCREEN_HEIGHT / 2,
       c,
       lastCollision: 0
     });
@@ -49,35 +61,35 @@ export default function Game() {
     );
     addEventListener('keyup', (event) => delete keysPressed.current[event.key]);
     const gameLoop = () => {
-      c.fillStyle = 'rgba(15, 23, 42, 0.8)';
-      c.fillRect(0, 0, canvas.width, canvas.height);
-      handleKeyDowns(
-        keysPressed.current,
-        playerA,
-        playerB,
-        canvas,
-        canvas.width / 100
-      );
+      c.fillStyle = BACKGROUND_COLOR;
+      c.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+      handleKeyDowns(keysPressed.current, playerA, playerB);
       handleKeyUps(keysPressed.current, playerA, playerB);
       playerA.draw();
       playerB.draw();
       ball.update();
-      if (ball.x < 0 || ball.x > canvas.width) ball.velocity.x *= -1;
+      if (ball.x - ball.radius < 0 || ball.x + ball.radius > SCREEN_WIDTH)
+        ball.velocity.x *= -1;
       if (ball.y < 0) {
         setScore((prev) => {
           const updatedScore = {...prev, playerA: prev.playerA + 1};
-          if (updatedScore.playerA === 10) setGameOver(true);
+          if (updatedScore.playerA === SCORE_LIMIT) setGameOver(true);
           return updatedScore;
         });
-        ball.resetPosition();
-      } else if (ball.y > canvas.height) {
+        ball.resetPosition(playerB, particles);
+      } else if (ball.y > SCREEN_HEIGHT) {
         setScore((prev) => {
           const updatedScore = {...prev, playerB: prev.playerB + 1};
-          if (updatedScore.playerB === 10) setGameOver(true);
+          if (updatedScore.playerB === SCORE_LIMIT) setGameOver(true);
           return updatedScore;
         });
-        ball.resetPosition();
+        ball.resetPosition(playerA, particles);
       }
+      particles.forEach((particle) => {
+        if (particle.alpha <= 0) {
+          particles.splice(particles.indexOf(particle), 1);
+        } else particle.update();
+      });
       bounceIfCollided(ball, playerA, playerB);
       animationId = requestAnimationFrame(gameLoop);
     };
@@ -87,14 +99,13 @@ export default function Game() {
 
   return (
     <div className='relative min-h-screen flex justify-center items-center'>
-      <canvas ref={canvasRef} className='z-10 absolute' />
-
       {gameover ? (
         <div className='absolute z-20 text-white text-4xl font-bold'>
           GameOver
         </div>
       ) : (
         <>
+          <canvas ref={canvasRef} className='z-10 absolute' />
           <div className='absolute left-[calc(50%+217px)] '>
             <GameStatus gameover={gameover} setGameOver={setGameOver} />
           </div>
