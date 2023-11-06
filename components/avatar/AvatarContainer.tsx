@@ -72,6 +72,9 @@ export default function AvatarContainer() {
         className='forUpload hidden'
         accept='image/*'
         required
+        onChange={(e) => {
+          console.log(e.target.files);
+        }}
       ></input>
       <RadioGroup defaultValue='1' className='grid gap-4'>
         {renderAvatarContainer()}
