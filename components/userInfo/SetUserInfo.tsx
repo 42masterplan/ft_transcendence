@@ -1,18 +1,26 @@
-import {InputForm} from '@/components/input/InputForm';
 import AvatarContainer from '@/components/avatar/AvatarContainer';
 import {InputWithLabel} from '@/components/input/InputWithLabel';
+import {useState} from 'react';
+import {Input} from '../shadcn/ui/input';
+import {Button} from '../shadcn/ui/button';
+import Axios from '@/api';
+import {Dispatch, SetStateAction} from 'react';
+import SetUserName from './SetUserName';
+
 export default function SetUserInfo() {
-  // kind == 'modal' ?
+  const [nickname, setNickname] = useState('');
+  const [isValidName, setIsValidName] = useState(false);
   return (
-    <div className='grid place-content-center  grid-rows-1 gap-2 '>
-      <InputForm
-        label='닉네임'
-        placeholder='당신의 창의성을 믿어봐요'
-        buttonLabel='중복확인'
+    <div className='flex flex-col gap-y-2'>
+      <SetUserName
+        nickname={nickname}
+        setNickname={setNickname}
+        isValidName={isValidName}
+        setIsValidName={setIsValidName}
       />
       <h1
         className='font-roboto-mono text-1xl
-		font-semibold leading-10 tracking-normal text-center'
+		font-semibold leading-10 tracking-normal text-center text-custom4'
       >
         아바타 선택
       </h1>
