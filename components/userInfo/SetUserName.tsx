@@ -65,7 +65,6 @@ export default function SetUserName({
           }}
         />
         <Button
-          className='bg-custom4'
           disabled={isValidName}
           onClick={() => {
             checkNickname(nickname, setIsValidName);

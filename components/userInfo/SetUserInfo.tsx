@@ -6,12 +6,36 @@ import {Button} from '../shadcn/ui/button';
 import Axios from '@/api';
 import SetUserName from './SetUserName';
 import LinkBtn from '@/components/button/LinkBtn';
+import {useRouter} from 'next/router';
 export default function SetUserInfo() {
   const [nickname, setNickname] = useState('');
   const [isValidName, setIsValidName] = useState(false);
   const [statusMsg, setStatusMsg] = useState('');
+  const [profileImage, setProfileImage] = useState(
+    process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI1 || ''
+  );
+  const router = useRouter();
+  const handleSubmit = async () => {
+    try {
+      await Axios.post('/users', {
+        name: nickname,
+        profileImage: profileImage,
+        introduction: statusMsg,
+        is2faEnabled: false
+      });
+      router.push('/welcome/register/2step-auth');
+    } catch (err) {
+      alert('회원가입 실패');
+    }
+  };
   return (
-    <div className='flex flex-col gap-y-2 items-center'>
+    <div className='flex flex-col items-center max-w-100 h-auto rounded-lg overflow-y-auto p-6 bg-custom2/70 gap-3'>
+      <h1
+        className='font-roboto-mono text-4xl
+            font-semibold leading-10 tracking-normal text-custom4 m-3'
+      >
+        회원 정보 설정
+      </h1>
       <SetUserName
         nickname={nickname}
         setNickname={setNickname}
@@ -19,7 +43,7 @@ export default function SetUserInfo() {
         setIsValidName={setIsValidName}
       />
 
-      <SetAvatar />
+      <SetAvatar setProfileImage={setProfileImage} />
       {/* <InputFile /> */}
       <label
         htmlFor='statusMsg'
@@ -30,16 +54,29 @@ export default function SetUserInfo() {
       <Input
         id='statusMsg'
         value={statusMsg}
-        onChange={(e) => setStatusMsg(e.target.value)}
+        onChange={(e) => {
+          if (e.target.value.length > 20) {
+            alert('20자 이하로 입력해주세요.');
+            return;
+          }
+          setStatusMsg(e.target.value);
+        }}
         placeholder='여러분을 표현해봐요'
       />
-      <LinkBtn
+      <p className='text-custom4 text-xs'>
+        상태 메시지는 최대 20자까지 입력 가능합니다.
+      </p>
+      {/* <LinkBtn
         link='/welcome/register/2step-auth'
         className='bg-custom4 '
         disabled={isValidName !== true}
+        onClick={() => {}}
       >
         계속하기
-      </LinkBtn>
+      </LinkBtn> */}
+      <Button disabled={isValidName !== true} onClick={handleSubmit}>
+        계속하기
+      </Button>
     </div>
   );
 }

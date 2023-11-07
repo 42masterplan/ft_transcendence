@@ -9,7 +9,7 @@ import Axios from '@/api';
 //   // const res = await SendDataFile('/users/profile', file);
 //   console.log(res);
 // }
-export default function SetAvatar() {
+export default function SetAvatar({setProfileImage}: {setProfileImage: any}) {
   const [selected, Setselected] = useState(0);
   const AvatarList: Array<string> = [
     process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI1 || '',
@@ -41,7 +41,7 @@ export default function SetAvatar() {
       //이거 윈도우문제인지 알길이 없어서 일단 넘어갈께요.
       console.log(res.data);
       console.log(res.data.profileImage);
-      return res.data.profileImage;
+      setProfileImage(res.data.profileImage);
     } catch (err) {
       console.log(err);
       alert('업로드 실패');
@@ -52,7 +52,10 @@ export default function SetAvatar() {
       // 숨겨진 태그 선택
       const hiddenInput = document.getElementById(`fileUpload-${id}`);
       if (hiddenInput) hiddenInput.click();
-    } else Setselected(parseInt(id));
+    } else {
+      Setselected(parseInt(id));
+      setProfileImage(AvatarList[parseInt(id)]);
+    }
   }
 
   const renderAvatarContainer = () => {

@@ -6,13 +6,15 @@ interface LinkBtnProps {
   children: React.ReactNode;
   className?: string;
   disabled: boolean;
+  onClick?: () => void;
 }
 
 export default function LinkBtn({
   link,
   className = '',
   children,
-  disabled = false
+  disabled = false,
+  onClick = () => {}
 }: LinkBtnProps) {
   if (disabled == true) return <></>;
   return (
@@ -22,6 +24,7 @@ export default function LinkBtn({
         size='lg'
         className={className}
         disabled={disabled}
+        onClick={onClick}
       >
         {children}
       </Button>
