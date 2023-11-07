@@ -4,22 +4,22 @@ import {RadioGroup, RadioGroupItem} from '@/components/shadcn/ui/radio-group';
 
 export default function AvatarContainer() {
   const AvatarList = [
-    'cat_kickBoard',
-    'crocodile_health',
-    'dog_body',
-    'dog_boxing',
-    'dog_stateBoard',
-    'gorilla_baseBall',
-    'kangaroo_boxing',
-    'koala_health',
-    'mouse_health',
-    'panda_health',
-    'polarbear_ski',
-    'rhino_health',
-    'rhino_skateBoard',
-    'shark_health',
-    'sloth_health',
-    ''
+    process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI1,
+    process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI2,
+    process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI3,
+    process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI4,
+    process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI5,
+    process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI6,
+    process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI7,
+    process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI8,
+    process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI9,
+    process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI10,
+    process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI11,
+    process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI12,
+    process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI13,
+    process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI14,
+    process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI15,
+    process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI16
   ];
 
   function uploadHandler(id: string) {

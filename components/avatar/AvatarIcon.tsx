@@ -10,14 +10,17 @@ interface AvatarType {
 }
 
 export default function AvatarIcon({avatarName, size}: AvatarType) {
+  console.log(avatarName);
   return (
     <Avatar className={size}>
       {avatarName == '' ? (
         '' // 추후에 이곳에 업로드한 아바타 이미지가 올 수 있도록 업데이트
       ) : (
-        <AvatarImage className={size} src={`/character/${avatarName}.svg`} />
+        <AvatarImage className={size} src={avatarName} />
       )}
-      <AvatarFallback>CN</AvatarFallback>
+      <AvatarFallback className='text-center text-xs text-custom4 bg-custom2'>
+        custom avatar
+      </AvatarFallback>
     </Avatar>
   );
 }
