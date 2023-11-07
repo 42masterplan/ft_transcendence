@@ -31,28 +31,27 @@ export default function SetAvatar() {
   ];
   async function uploadAvatar(file: File) {
     const formData = new FormData();
-
-    formData.set('image', file);
+    formData.set('name', file);
     try {
-      const res = await Axios.post('/users/profile', formData, {
+      const res = await Axios.post('/users/profile-image', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-      console.log('?');
+      //이거 윈도우문제인지 알길이 없어서 일단 넘어갈께요.
       console.log(res.data);
-      console.log('?');
+      console.log(res.data.profileImage);
+      return res.data.profileImage;
     } catch (err) {
       console.log(err);
+      alert('업로드 실패');
     }
   }
   function clickHandler(id: string) {
     if (id === '15') {
       // 숨겨진 태그 선택
       const hiddenInput = document.getElementById(`fileUpload-${id}`);
-      if (hiddenInput) {
-        hiddenInput.click();
-      }
+      if (hiddenInput) hiddenInput.click();
     } else Setselected(parseInt(id));
   }
 
@@ -91,28 +90,36 @@ export default function SetAvatar() {
     return rows;
   };
   return (
-    <div className=' flex place-content-center'>
-      <label htmlFor='profile-upload' />
-      <form>
-        <input
-          type='file'
-          id={'fileUpload-15'}
-          className='forUpload hidden'
-          accept='image/*'
-          required
-          onChange={(e) => {
-            if (e.target.files === null || e.target.files[0] === null) return;
-            else {
-              console.log('uploading..To Server');
-              uploadAvatar(e.target.files[0]);
-              console.log('끝?');
-            }
-          }}
-        ></input>
-      </form>
-      <RadioGroup defaultValue='0' className='grid gap-4'>
-        {renderAvatarContainer()}
-      </RadioGroup>
-    </div>
+    <>
+      <h1
+        className='font-roboto-mono text-1xl
+font-semibold leading-10 tracking-normal text-custom4'
+      >
+        아바타 선택
+      </h1>
+      <div className=' flex place-content-center'>
+        <label htmlFor='profile-upload' />
+        <form>
+          <input
+            type='file'
+            id={'fileUpload-15'}
+            className='forUpload hidden'
+            accept='image/*'
+            required
+            onChange={(e) => {
+              if (e.target.files === null || e.target.files[0] === null) return;
+              else {
+                console.log('uploading..To Server');
+                uploadAvatar(e.target.files[0]);
+                console.log('끝?');
+              }
+            }}
+          ></input>
+        </form>
+        <RadioGroup defaultValue='0' className='grid gap-4'>
+          {renderAvatarContainer()}
+        </RadioGroup>
+      </div>
+    </>
   );
 }
