@@ -10,7 +10,6 @@ interface AvatarType {
 }
 
 export default function AvatarIcon({avatarName, size}: AvatarType) {
-  console.log(avatarName);
   return (
     <Avatar className={size}>
       {avatarName == '' ? (

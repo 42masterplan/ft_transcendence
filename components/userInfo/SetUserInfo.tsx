@@ -1,4 +1,4 @@
-import AvatarContainer from '@/components/avatar/AvatarContainer';
+import SetAvatar from '@/components/avatar/SetAvatar';
 import {InputWithLabel} from '@/components/input/InputWithLabel';
 import {useState} from 'react';
 import {Input} from '../shadcn/ui/input';
@@ -24,7 +24,7 @@ export default function SetUserInfo() {
       >
         아바타 선택
       </h1>
-      <AvatarContainer />
+      <SetAvatar />
       {/* <InputFile /> */}
       <InputWithLabel header='상태메시지' placeholder='type what you want' />
     </div>

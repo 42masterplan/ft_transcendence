@@ -2,8 +2,14 @@ import AvatarIcon from '@/components/avatar/AvatarIcon';
 import {Label} from '@/components/shadcn/ui/label';
 import {RadioGroup, RadioGroupItem} from '@/components/shadcn/ui/radio-group';
 import {useState} from 'react';
+import Axios from '@/api';
 
-export default function AvatarContainer() {
+// import SendDataFile from '@/api/SendData';
+// async function uploadAvatar(file: File) {
+//   // const res = await SendDataFile('/users/profile', file);
+//   console.log(res);
+// }
+export default function SetAvatar() {
   const [selected, Setselected] = useState(0);
   const AvatarList: Array<string> = [
     process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI1 || '',
@@ -23,16 +29,31 @@ export default function AvatarContainer() {
     process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI15 || ''
     // process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI16 || ''
   ];
+  async function uploadAvatar(file: File) {
+    const formData = new FormData();
 
+    formData.set('image', file);
+    try {
+      const res = await Axios.post('/users/profile', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      console.log('?');
+      console.log(res.data);
+      console.log('?');
+    } catch (err) {
+      console.log(err);
+    }
+  }
   function clickHandler(id: string) {
-    Setselected(parseInt(id));
     if (id === '15') {
       // 숨겨진 태그 선택
       const hiddenInput = document.getElementById(`fileUpload-${id}`);
       if (hiddenInput) {
         hiddenInput.click();
       }
-    }
+    } else Setselected(parseInt(id));
   }
 
   const renderAvatarContainer = () => {
@@ -71,17 +92,25 @@ export default function AvatarContainer() {
   };
   return (
     <div className=' flex place-content-center'>
-      <input
-        type='file'
-        id={'fileUpload-15'}
-        className='forUpload hidden'
-        accept='image/*'
-        required
-        onChange={(e) => {
-          console.log(e.target.files);
-        }}
-      ></input>
-      <RadioGroup defaultValue='1' className='grid gap-4'>
+      <label htmlFor='profile-upload' />
+      <form>
+        <input
+          type='file'
+          id={'fileUpload-15'}
+          className='forUpload hidden'
+          accept='image/*'
+          required
+          onChange={(e) => {
+            if (e.target.files === null || e.target.files[0] === null) return;
+            else {
+              console.log('uploading..To Server');
+              uploadAvatar(e.target.files[0]);
+              console.log('끝?');
+            }
+          }}
+        ></input>
+      </form>
+      <RadioGroup defaultValue='0' className='grid gap-4'>
         {renderAvatarContainer()}
       </RadioGroup>
     </div>
