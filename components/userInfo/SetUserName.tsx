@@ -35,6 +35,7 @@ async function checkNickname(
     .catch((err) => {
       console.log(err);
       setIsValidName(false);
+      alert('네트워크 에러');
     });
 }
 export default function SetUserName({
