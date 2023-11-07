@@ -18,9 +18,7 @@ export default function AvatarIcon({avatarName, size}: AvatarType) {
       ) : (
         <AvatarImage className={size} src={avatarName} />
       )}
-      <AvatarFallback className='text-center text-xs text-custom4 bg-custom2'>
-        custom avatar
-      </AvatarFallback>
+      <AvatarFallback className='text-custom4'>CN</AvatarFallback>
     </Avatar>
   );
 }
