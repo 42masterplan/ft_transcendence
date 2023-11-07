@@ -18,7 +18,7 @@ export default function SetUserInfo() {
         isValidName={isValidName}
         setIsValidName={setIsValidName}
       />
-     
+
       <SetAvatar />
       {/* <InputFile /> */}
       <label
@@ -33,7 +33,11 @@ export default function SetUserInfo() {
         onChange={(e) => setStatusMsg(e.target.value)}
         placeholder='여러분을 표현해봐요'
       />
-      <LinkBtn link='/welcome/register/2step-auth' className='bg-custom4 ' disable>
+      <LinkBtn
+        link='/welcome/register/2step-auth'
+        className='bg-custom4 '
+        disabled={isValidName !== true}
+      >
         계속하기
       </LinkBtn>
     </div>
