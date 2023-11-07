@@ -1,20 +1,22 @@
 import Link from 'next/link';
-import {Button} from '@/components/shadcn/ui/button';
+import {Button, ButtonProps} from '@/components/shadcn/ui/button';
 
 interface LinkBtnProps {
   link: string;
   children: React.ReactNode;
   className?: string;
+  props: ButtonProps;
 }
 
 export default function LinkBtn({
   link,
   className = '',
-  children
+  children,
+  props
 }: LinkBtnProps) {
   return (
     <Link href={link}>
-      <Button variant='default' size='lg' className={className}>
+      <Button variant='default' size='lg' className={className} {...props}>
         {children}
       </Button>
     </Link>
