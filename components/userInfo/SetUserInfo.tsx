@@ -1,11 +1,9 @@
 import SetAvatar from '@/components/avatar/SetAvatar';
-import {InputWithLabel} from '@/components/input/InputWithLabel';
 import {useState} from 'react';
 import {Input} from '../shadcn/ui/input';
 import {Button} from '../shadcn/ui/button';
 import Axios from '@/api';
 import SetUserName from './SetUserName';
-import LinkBtn from '@/components/button/LinkBtn';
 import {useRouter} from 'next/router';
 export default function SetUserInfo() {
   const [nickname, setNickname] = useState('');

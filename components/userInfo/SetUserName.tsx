@@ -17,8 +17,7 @@ async function checkNickname(
       params: {name: nickname}
     });
     console.log(res);
-    if (nickname !== 'joushin' && res.data == true) {
-      //test위해서 가입할 때 joushin이 아니면 중복된 닉네임이라고 뜨게 했습니다.
+    if (res.data == true) {
       alert('중복된 닉네임입니다.');
       setIsValidName(false);
     } else {

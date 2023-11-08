@@ -11,6 +11,7 @@ import Axios from '@/api';
 // }
 export default function SetAvatar({setProfileImage}: {setProfileImage: any}) {
   const [selected, Setselected] = useState(0);
+  const [customAvatar, setCustomAvatar] = useState('');
   const AvatarList: Array<string> = [
     process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI1 || '',
     process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI2 || '',
@@ -31,17 +32,15 @@ export default function SetAvatar({setProfileImage}: {setProfileImage: any}) {
   ];
   async function uploadAvatar(file: File) {
     const formData = new FormData();
-    formData.set('name', file);
+    formData.set('profileImage', file);
     try {
-      const res = await Axios.post('/users/profile-image', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
+      const res = await Axios.post('/users/profile-image', formData);
       //이거 윈도우문제인지 알길이 없어서 일단 넘어갈께요.
       console.log(res.data);
       console.log(res.data.profileImage);
       setProfileImage(res.data.profileImage);
+      Setselected(15);
+      AvatarList[15] = res.data.profileImage;
     } catch (err) {
       console.log(err);
       alert('업로드 실패');
@@ -79,7 +78,11 @@ export default function SetAvatar({setProfileImage}: {setProfileImage: any}) {
               htmlFor={idx.toString()}
               className='flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-1 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary'
             >
-              <AvatarIcon key={id} size='' avatarName={AvatarList[idx]} />
+              {id !== '15' ? (
+                <AvatarIcon key={id} size='' avatarName={AvatarList[idx]} />
+              ) : (
+                <AvatarIcon key={id} size='' avatarName={customAvatar} />
+              )}
             </Label>
           </div>
         );
