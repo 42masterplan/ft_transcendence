@@ -19,6 +19,7 @@ import {
 import ScoreBoard from '../../../../components/game/ScoreBoard';
 import GameStatus from '../../../../components/game/GameStatus';
 
+import io from 'socket.io-client';
 export default function Game() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
@@ -27,6 +28,7 @@ export default function Game() {
   const [gameover, setGameOver] = useState(false);
 
   useEffect(() => {
+    const socket = io('http://localhost:4242');
     let animationId: number;
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -36,18 +38,43 @@ export default function Game() {
     canvas.width = SCREEN_WIDTH;
     canvas.height = SCREEN_HEIGHT;
     const particles = [] as Particle[];
-
+    let startFlag = true;
     const playerA = new Player({
+      id: 'null',
       x: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
       y: SCREEN_HEIGHT - 45,
       color: PLAYER_A_COLOR,
       c
     });
     const playerB = new Player({
+      id: 'null',
       x: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
       y: 30,
       color: PLAYER_B_COLOR,
       c
+    });
+
+    socket.on('connect', () => {
+      console.log('connected to server');
+    });
+    socket.on('updatePlayers', (backendPlayers) => {
+      if (startFlag) {
+        playerA.id = backendPlayers[0].id;
+        playerB.id = backendPlayers[1].id;
+      }
+      startFlag = false;
+      playerA.x = backendPlayers[0].x;
+      playerA.y = backendPlayers[0].y;
+      playerB.x = backendPlayers[1].x;
+      playerB.y = backendPlayers[1].y;
+      //we need to delete players that are not in backend
+      if (!(playerA.id in backendPlayers)) delete backendPlayers[playerA.id];
+      if (!(playerB.id in backendPlayers)) delete backendPlayers[playerB.id];
+      // if we refresh so fast then we wont have enough time to delete the player
+      // so we apply timeout with quicker refresh rate
+    });
+    socket.on('disconnect', () => {
+      console.log('disconnected from server');
     });
     const ball = new Ball({
       x: SCREEN_WIDTH / 2,
@@ -94,7 +121,12 @@ export default function Game() {
       animationId = requestAnimationFrame(gameLoop);
     };
     gameLoop();
-    return () => cancelAnimationFrame(animationId);
+    return () => {
+      cancelAnimationFrame(animationId);
+      socket.off('connect');
+      socket.off('disconnect');
+      socket.disconnect();
+    };
   }, []);
 
   return (

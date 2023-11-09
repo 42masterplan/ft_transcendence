@@ -2,6 +2,7 @@ import React from 'react';
 import Ball from './Ball';
 
 interface PlayerProps {
+  id: string;
   x: number;
   y: number;
   width?: number;
@@ -12,6 +13,7 @@ interface PlayerProps {
 }
 
 class Player extends React.Component<PlayerProps> {
+  id: string = this.props.id;
   x: number = this.props.x;
   y: number = this.props.y;
   width: number = this.props.width || 100;
