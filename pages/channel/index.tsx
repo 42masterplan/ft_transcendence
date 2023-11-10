@@ -7,13 +7,11 @@
 // }
 import {CardsChat} from '@/components/channel/ChatRoom';
 import ChannelList from '@/components/channel/ChannelList';
-import {useState, useContext, useRef, useEffect} from 'react';
+import {useState} from 'react';
 import ChannelHeader from '@/components/channel/ChannelHeader';
 import Image from 'next/image';
 import WaitImage from '@/public/postcss.config.png';
 export default function ChannelPage() {
-  // const {channelInfo} = useContext(APIContext);
-  // const [channelInfos, setChannelInfos] = useState(channelInfo);
   const [currentChannel, setCurChannel] = useState('');
   return (
     <div className='flex h-fit'>
