@@ -16,7 +16,11 @@ export default function LoginBtn() {
         }
       }}
     >
-      <Button variant='default' size='lg'>
+      <Button
+        variant='default'
+        size='lg'
+        className='bg-custom3/50 font-semibold'
+      >
         login
       </Button>
     </Link>
