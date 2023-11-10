@@ -15,7 +15,7 @@ export default function ChannelPage() {
   // const [channelInfos, setChannelInfos] = useState(channelInfo);
   const [currentChannel, setCurChannel] = useState('채널이름');
   return (
-    <div className='flex max-h-[950px] '>
+    <div className='flex w-full'>
       <ChannelList
         currentChannel={currentChannel}
         setCurChannel={setCurChannel}

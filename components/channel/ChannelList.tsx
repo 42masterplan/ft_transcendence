@@ -10,13 +10,13 @@ function channelListRender(setCurChannel: (idx: string) => void) {
     setCurChannel(channelList[idx].channelName);
   };
   return (
-    <div className='flex flex-col max-h-[550px] border bg-primary overflow-y-scroll overflow-x-hidden rounded-l-xl h-screen'>
-      <div className='min-h-[40px] text-xl text-white text-center sticky top-0 z-20 bg-black'>
-        채널 목록
+    <div className='flex flex-col max-h-[550px] border overflow-y-scroll rounded-l-xl bg-custom2'>
+      <div className='min-h-[40px] text-l text-custom4 text-center sticky top-0 z-20 bg-custom2'>
+        참여중인 채널 목록
       </div>
       {channelList.map((channel, idx) => (
         <Button
-          variant='ghost'
+          className='bg-custom2 hover:bg-custom3 border-b'
           onClick={() => handleChannelClick(idx)}
           key={idx}
         >

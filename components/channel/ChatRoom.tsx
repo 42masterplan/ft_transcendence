@@ -25,7 +25,7 @@ export function CardsChat({currentChannel}: {currentChannel: string}) {
 
   const ShowHistory = () => {
     return (
-      <div className='flex flex-col space-y-5 max-h-[310px] overflow-y-auto '>
+      <div className='flex flex-col space-y-5 max-h-[310px] overflow-y-auto bg-custom3'>
         {messages.map((message, index) => (
           <div
             key={index}
@@ -33,7 +33,7 @@ export function CardsChat({currentChannel}: {currentChannel: string}) {
               'flex w-max max-w-[75%] rounded-lg px-3  text-sm ',
               message.id === myInfo.id
                 ? 'ml-auto bg-primary text-primary-foreground p-2'
-                : 'bg-azure p-2 border-cyan-300 border-2 '
+                : 'p-2 border-cyan-300 border-2 '
             )}
           >
             <div className='flex flex-col text-center h-min-[500px]'>
@@ -88,13 +88,12 @@ export function CardsChat({currentChannel}: {currentChannel: string}) {
     messageEndRef.current?.scrollIntoView({behavior: 'smooth'});
   }, [messages]);
   return (
-    <div className='max-w-[500px] '>
-      <Card className='rounded-none'>
+    <div className='max-w-prose'>
+      <Card className='rounded-none bg-custom2'>
         <CardHeader className='flex flex-row '>
           <div className='flex items-center space-x-4'>
             <div className='font-bold text-2xl'>{currentChannel}</div>
           </div>
-          {/** TODO :  */}
         </CardHeader>
         <CardContent>{ShowHistory()}</CardContent>
         <CardFooter>{ChannelInput()}</CardFooter>

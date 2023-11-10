@@ -18,7 +18,7 @@ export default function ManageChannel({channel_name}: {channel_name: string}) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className='ml-auto rounded-full h-12 w-36'>
+        <Button className='rounded-full'>
           <RiChatSettingsLine className='h-6 w-6' />
           <p className='text-6'>채널 관리</p>
           <span className='sr-only'>Public Room List</span>
