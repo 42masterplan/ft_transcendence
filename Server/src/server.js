@@ -2,12 +2,9 @@ import http from 'http';
 import {Server} from 'socket.io';
 import {instrument} from '@socket.io/admin-ui';
 import express from 'express';
-// import socket from './socket';
 
-const port = 4001;
-const host = 'localhost';
-const corsOrigin = 'http://localhost:3000';
-//서버 실행
+const corsOrigin = 'http://localhost:4001';
+//---------------서버 실행----------------
 const app = express();
 
 const httpServer = http.createServer(app);
@@ -21,10 +18,11 @@ const wsServer = new Server(httpServer, {
 instrument(wsServer, {
   auth: false
 });
-//port 4001번으로 서버 실행
-httpServer.listen(port, host, () => {
-  // socket({io});
-});
+
+const handleListen = () => console.log(`Listening on http://localhost:4001`);
+httpServer.listen(4001, handleListen);
+
+//-------------서버 실행 -----------
 
 function publicRooms() {
   const {
@@ -79,6 +77,3 @@ wsServer.on('connection', (socket) => {
   });
   socket.on('nickname', (nickname) => (socket['nickname'] = nickname));
 });
-
-const handleListen = () => console.log(`Listening on http://localhost:3000`);
-httpServer.listen(3000, handleListen);
