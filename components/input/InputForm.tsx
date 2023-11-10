@@ -33,6 +33,7 @@ export function InputForm({label, placeholder, buttonLabel}: InputFormProps) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema)
   });
+<<<<<<< Updated upstream:components/input/InputForm.tsx
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     toast({
@@ -43,6 +44,32 @@ export function InputForm({label, placeholder, buttonLabel}: InputFormProps) {
         </pre>
       )
     });
+=======
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    console.log(data);
+    try {
+      const response = await fetch('/users/hasDuplicateName', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        form.setError('username', {
+          type: 'manual',
+          message: '이미 사용중인 이름입니다.'
+        });
+      }
+    } catch (error) {
+      console.error('Error during the fetch operation:', error);
+      form.setError('username', {
+        type: 'manual',
+        message: '서버 에러가 발생했습니다.'
+      });
+    }
+>>>>>>> Stashed changes:frontend/src/components/input/InputForm.tsx
   }
 
   return (

@@ -20,6 +20,7 @@ import ScoreBoard from '../../../../components/game/ScoreBoard';
 import GameStatus from '../../../../components/game/GameStatus';
 
 import io from 'socket.io-client';
+import {set} from 'react-hook-form';
 export default function Game() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
@@ -34,11 +35,15 @@ export default function Game() {
     if (!canvas) return;
     const c = canvas.getContext('2d');
     if (!c) return;
+    //for better resolution
+    const devicePixelRatio = window.devicePixelRatio || 1;
     contextRef.current = c;
-    canvas.width = SCREEN_WIDTH;
-    canvas.height = SCREEN_HEIGHT;
+    canvas.width = SCREEN_WIDTH * devicePixelRatio;
+    canvas.height = SCREEN_HEIGHT * devicePixelRatio;
+    canvas.style.width = `${SCREEN_WIDTH}px`;
+    canvas.style.height = `${SCREEN_HEIGHT}px`;
+    c.scale(devicePixelRatio, devicePixelRatio);
     const particles = [] as Particle[];
-    let startFlag = true;
     const playerA = new Player({
       id: 'null',
       x: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
@@ -53,20 +58,19 @@ export default function Game() {
       color: PLAYER_B_COLOR,
       c
     });
-
     socket.on('connect', () => {
       console.log('connected to server');
     });
     socket.on('updatePlayers', (backendPlayers) => {
-      if (startFlag) {
-        playerA.id = backendPlayers[0].id;
-        playerB.id = backendPlayers[1].id;
-      }
-      startFlag = false;
+      if (backendPlayers.length < 2) return;
+      playerA.id = backendPlayers[0].id;
+      playerB.id = backendPlayers[1].id;
       playerA.x = backendPlayers[0].x;
       playerA.y = backendPlayers[0].y;
       playerB.x = backendPlayers[1].x;
       playerB.y = backendPlayers[1].y;
+      playerA.dx = backendPlayers[0].dx;
+      playerB.dx = backendPlayers[1].dx;
       //we need to delete players that are not in backend
       if (!(playerA.id in backendPlayers)) delete backendPlayers[playerA.id];
       if (!(playerB.id in backendPlayers)) delete backendPlayers[playerB.id];
@@ -82,6 +86,18 @@ export default function Game() {
       c,
       lastCollision: 0
     });
+    setInterval(() => {
+      if (keysPressed.current) {
+        if (socket.id == playerA.id) {
+          handleKeyDowns(keysPressed.current, playerA, socket);
+          handleKeyUps(keysPressed.current, playerA, socket);
+        }
+        if (socket.id == playerB.id) {
+          handleKeyDowns(keysPressed.current, playerB, socket);
+          handleKeyUps(keysPressed.current, playerB, socket);
+        }
+      }
+    }, 15);
     addEventListener(
       'keydown',
       (event) => (keysPressed.current[event.key] = true)
@@ -90,8 +106,13 @@ export default function Game() {
     const gameLoop = () => {
       c.fillStyle = BACKGROUND_COLOR;
       c.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-      handleKeyDowns(keysPressed.current, playerA, playerB);
-      handleKeyUps(keysPressed.current, playerA, playerB);
+      if (socket.id == playerA.id) {
+        handleKeyDowns(keysPressed.current, playerA, socket);
+        handleKeyUps(keysPressed.current, playerA, socket);
+      } else if (socket.id == playerB.id) {
+        handleKeyDowns(keysPressed.current, playerB, socket);
+        handleKeyUps(keysPressed.current, playerB, socket);
+      }
       playerA.draw();
       playerB.draw();
       ball.update();
