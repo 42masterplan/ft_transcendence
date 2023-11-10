@@ -105,3 +105,11 @@ body {
   flex-direction: column;
   height: 100vh;
 }
+
+.min-h-inherit {
+  min-height: inherit;
+}
+
+.h-inherit {
+  height: inherit;
+}
