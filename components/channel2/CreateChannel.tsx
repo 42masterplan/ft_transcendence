@@ -52,33 +52,33 @@ export default function CreateChannel() {
           <span className='sr-only'>Public Room List</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className='h-1/3 bg-custom1'>
+      <DialogContent className='bg-custom1'>
         <DialogHeader>
           <DialogTitle className='text-center'>채널 생성</DialogTitle>
           <DialogDescription className='text-center'>
-            채널을 원하는대로 초대할 수 있습니다.
+            채널을 원하는대로 만들 수 있습니다.
           </DialogDescription>
         </DialogHeader>
-        <div className='grid gap-4 py-4'>
-          <div className='grid grid-cols-4 items-center gap-4'>
+        <div className='grid gap-6 py-4'>
+          <div className='grid grid-cols-4 items-center gap-6'>
             <Label htmlFor='channel_type' className='text-right'>
               채널 유형
             </Label>
             <SelectRoom id='channel_type' />
           </div>
-          <div className='grid grid-cols-4 items-center gap-4'>
+          <div className='grid grid-cols-4 items-center gap-6'>
             <Label htmlFor='name' className='text-right'>
               채널 명
             </Label>
             <Input id='name' className='col-span-3' />
           </div>
-          <div className='grid grid-cols-4 items-center gap-4'>
+          <div className='grid grid-cols-4 items-center gap-6'>
             <Label htmlFor='description' className='text-right'>
               친구 초대
             </Label>
             <FriendListSelector>친구 초대</FriendListSelector>
           </div>
-          <div className='grid grid-cols-4 items-center gap-4'>
+          <div className='grid grid-cols-4 items-center gap-6'>
             <Label htmlFor='password' className='text-right'>
               password
             </Label>

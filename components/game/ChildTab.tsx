@@ -15,9 +15,7 @@ export default function ChildTab() {
         <TabsTrigger value='theme3'>Theme3</TabsTrigger>
         <TabsTrigger value='theme4'>Theme4</TabsTrigger>
       </TabsList>
-      <TabsContent value='theme1'>
-        <Options />
-      </TabsContent>
+      <TabsContent value='theme1' />
       <TabsContent value='theme2'>
         <Options />
       </TabsContent>

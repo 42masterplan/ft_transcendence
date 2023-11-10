@@ -82,13 +82,13 @@ export interface PublicRoomType {
 export const PLAYER_DUMMY_1 = {
   id: 0,
   name: 'daejlee',
-  profile_image: 'rhino_health'
+  profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI4 || ''
 };
 
 export const PLAYER_DUMMY_2 = {
   id: 0,
   name: 'joushin',
-  profile_image: 'gorilla_baseBall'
+  profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI5 || ''
 };
 
 //a. 게임 요청이 올 때 정보
@@ -96,21 +96,21 @@ export const gameRequests: Array<GameInfoType> = [
   {
     id: 'Seoyoo',
     name: 'Seoyoo',
-    profile_image: 'shark_health',
+    profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI6 || '',
     current_status: 'ONLINE',
     game_mode: 'health'
   },
   {
     id: 'hkong',
     name: 'hkong',
-    profile_image: 'koala_health',
+    profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI11 || '',
     current_status: 'OFFLINE',
     game_mode: 'swim'
   },
   {
     id: 'hkong',
     name: 'hkong',
-    profile_image: 'koala_health',
+    profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI11 || '',
     current_status: 'OFFLINE',
     game_mode: 'swim'
   }
@@ -119,37 +119,37 @@ export const gameRequests: Array<GameInfoType> = [
 //b.친구 목록입니다.
 export const friendInfos: Array<FriendInfoType> = [
   {
-    id: 'jjin',
-    name: 'jjin',
-    profile_image: 'polarbear_ski',
+    id: 'yejinam',
+    name: 'yejinam',
+    profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI3 || '',
     introduction: 'I love badminton',
     current_status: 'INGAME'
   },
   {
     id: 'daejlee',
     name: 'daejlee',
-    profile_image: 'rhino_health',
+    profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI4 || '',
     introduction: '난 대지리다!',
     current_status: 'OFFLINE'
   },
   {
     id: 'joushin',
     name: 'joushin',
-    profile_image: 'gorilla_baseBall',
+    profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI5 || '',
     introduction: '난 조신이다!',
     current_status: 'OFFLINE'
   },
   {
     id: 'hkong',
     name: 'hkong',
-    profile_image: 'koala_health',
+    profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI11 || '',
     current_status: 'OFFLINE',
     introduction: 'I love Swimming~'
   },
   {
     id: 'Seoyoo',
     name: 'Seoyoo',
-    profile_image: 'shark_health',
+    profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI6 || '',
     current_status: 'ONLINE',
     introduction: 'I love Health'
   }
@@ -212,45 +212,45 @@ export const channelList: Array<channelType> = [
 //d-1. 채팅 할 때 메세지가 오는 정보를 나타냅니다.
 const chatInfos: Array<chatInfoType> = [
   {
-    id: 'jjin',
-    name: 'jjin',
-    profile_image: 'polarbear_ski',
+    id: 'yejinam',
+    name: 'yejinam',
+    profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI3 || '',
     contents: 'Do you want build snow man?'
   },
   {
     id: 'daejlee',
     name: 'daejlee',
-    profile_image: 'rhino_health',
+    profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI4 || '',
     contents: '라이노는 코뿔소 들이 박아버려 다 겁을 줘~~'
   },
   {
     id: 'MY_ID',
     name: 'joushin',
-    profile_image: 'gorilla_baseBall',
+    profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI5 || '',
     contents: '고릴라를 무시하지 마라'
   },
   {
     id: 'joshin',
     name: 'joshin',
-    profile_image: 'gorilla_baseBall',
+    profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI5 || '',
     contents: '고릴라를 무시하지 마라'
   },
   {
     id: 'hkong',
     name: 'hkong',
-    profile_image: 'koala_health',
+    profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI11 || '',
     contents: '수영 꿀잼~~'
   },
   {
     id: 'Seoyoo',
     name: 'Seoyoo',
-    profile_image: 'shark_health',
+    profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI6 || '',
     contents: '무게가 가볍다?? 근손실 안돼!!'
   },
   {
     id: 'Seoyoo',
     name: 'Seoyoo',
-    profile_image: 'shark_health',
+    profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI6 || '',
     contents:
       '아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트'
   }
@@ -260,8 +260,8 @@ const chatInfos: Array<chatInfoType> = [
 export const channelUserList = [
   {
     id: 'RandomUUid',
-    name: 'jjin',
-    profile_image: 'polarbear_ski',
+    name: 'yejinam',
+    profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI3 || '',
     current_status: 'INGAME',
     introduction: 'Do you want build snow man?',
     role: 'admin'
@@ -269,7 +269,7 @@ export const channelUserList = [
   {
     id: 'RandomUUid',
     name: 'daejlee',
-    profile_image: 'rhino_health',
+    profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI4 || '',
     current_status: 'OFFLINE',
     introduction: '라이노는 코뿔소 들이 박아버려 다 겁을 줘~~',
     role: 'admin'
@@ -277,7 +277,7 @@ export const channelUserList = [
   {
     id: 'MY_ID',
     name: 'joushin',
-    profile_image: 'gorilla_baseBall',
+    profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI5 || '',
     current_status: 'OFFLINE',
     introduction: '고릴라를 무시하지 마라',
     role: 'manager'
@@ -285,7 +285,7 @@ export const channelUserList = [
   {
     id: 'RandomUUid',
     name: 'joshin',
-    profile_image: 'gorilla_baseBall',
+    profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI5 || '',
     current_status: 'OFFLINE',
     introduction: '고릴라를 무시하지 마라',
     role: 'admin'
@@ -293,7 +293,7 @@ export const channelUserList = [
   {
     id: 'uuid',
     name: 'hkong',
-    profile_image: 'koala_health',
+    profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI11 || '',
     current_status: 'OFFLINE',
     introduction: '수영 꿀잼~~',
     role: 'user'
@@ -301,7 +301,7 @@ export const channelUserList = [
   {
     id: 'uuid',
     name: 'Seoyoo',
-    profile_image: 'shark_health',
+    profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI6 || '',
     current_status: 'ONLINE',
     introduction: 'I love Health',
     role: 'user'
@@ -312,7 +312,7 @@ export const channelUserList = [
 export const chatMyInfo: chatMyInfoType = {
   id: 'MY_ID',
   name: 'joushin',
-  profile_image: 'gorilla_baseBall',
+  profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI5 || '',
   role: 'manager'
 };
 
@@ -328,12 +328,12 @@ export const banUserList: Array<banUserType> = [
   {
     id: 'RandomUUid',
     name: 'Naki',
-    profile_image: 'dog_stateBoard'
+    profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI10 || ''
   },
   {
     id: 'RandomUUid',
     name: 'sohlee',
-    profile_image: 'dog_stateBoard'
+    profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI10 || ''
   }
 ];
 
@@ -342,7 +342,7 @@ export const blockUserInfos: Array<blockUserType> = [
   {
     id: 'RandomUUid',
     name: 'Naki',
-    profile_image: 'dog_stateBoard'
+    profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI10 || ''
   }
 ];
 

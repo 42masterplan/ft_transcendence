@@ -18,7 +18,7 @@ export default function twoStepAuth() {
             header='2단계 인증에 필요한 Email'
             placeholder='당신의 Email이 필요해요'
           />
-          <LinkBtn link='/welcome/register/2step-auth/validation'>
+          <LinkBtn link='/welcome/2step-auth/validation'>
             인증 코드 받기
           </LinkBtn>
         </div>

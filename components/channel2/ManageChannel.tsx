@@ -24,17 +24,19 @@ export default function ManageChannel({channel_name}: {channel_name: string}) {
           <span className='sr-only'>Public Room List</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className='sm:max-w-[425px] bg-color_3'>
+      <DialogContent className=' bg-custom1'>
         <DialogHeader>
-          <DialogTitle>방장 전용 페이지</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className='text-center'>방장 전용 페이지</DialogTitle>
+          <DialogDescription className='text-center'>
             이곳에서 채널을 관리할 수 있습니다.
+            <br />
+            오직 방장만이 이 버튼을 누를 수 있습니다.
           </DialogDescription>
         </DialogHeader>
-        <div className='grid gap-4 py-4'>
-          <div className='grid grid-cols-4 items-center gap-4'>
+        <div className='grid gap-6 py-6 '>
+          <div className='grid grid-cols-4 items-center gap-6'>
             <Label htmlFor='description' className='text-right'>
-              밴(금지)유저 목록
+              BAN 유저 목록
             </Label>
             <FriendListSelector>밴(금지)유저 목록</FriendListSelector>
             <Label htmlFor='description' className='text-right'>
@@ -62,7 +64,9 @@ export default function ManageChannel({channel_name}: {channel_name: string}) {
           </div>
         </div>
         <DialogFooter>
-          <Button type='submit'>Save changes</Button>
+          <Button type='submit' className='w-full'>
+            Save changes
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
