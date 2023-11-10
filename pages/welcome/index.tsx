@@ -12,15 +12,9 @@ export default function Welcome() {
         Welcome to Amazing Pong
       </h1>
       <div
-        className='w-6/12 h-1/4 p-10 px-30 rounded-lg bg-btn_container
-      shadow-md flex justify-between items-center mt-12 space-x-12'
+        className='w-1/3 h-1/5 p-10 px-30 rounded-lg bg-custom2/30
+      shadow-md flex justify-center items-center mt-12 space-x-12'
       >
-        <LinkBtn
-          link='/welcome/register'
-          className='bg-custom3/50 font-semibold'
-        >
-          Register
-        </LinkBtn>
         <LoginBtn />
       </div>
     </div>

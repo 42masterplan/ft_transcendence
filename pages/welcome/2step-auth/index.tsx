@@ -7,10 +7,10 @@ export default function twoStepAuth() {
     <>
       <div className='flex-col justify-center'>
         <Title />
-        <div className='flex flex-col items-center w-[466px] h-auto rounded-lg p-6 bg-info_bg gap-3'>
+        <div className='flex flex-col items-center w-[466px] h-auto rounded-lg p-6 bg-custom2 gap-3'>
           <h1
             className='font-roboto-mono text-4xl
-            font-semibold leading-10 tracking-normal text-center m-3'
+            font-semibold leading-10 tracking-normal text-center m-3 '
           >
             2단계 인증
           </h1>
