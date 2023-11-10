@@ -38,7 +38,8 @@ export default function ManageChannel({channel_name}: {channel_name: string}) {
             </Label>
             <FriendListSelector>밴(금지)유저 목록</FriendListSelector>
             <Label htmlFor='description' className='text-right'>
-              관리자 수정            </Label>
+              관리자 수정{' '}
+            </Label>
             <FriendListSelector>현재 채널 유저 목록</FriendListSelector>
             <Label htmlFor='name' className='text-right'>
               채널명 변경

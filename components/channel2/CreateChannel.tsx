@@ -28,7 +28,7 @@ import {Label} from '@/components/shadcn/ui/label';
 function SelectRoom({id}: {id: string}) {
   return (
     <Select>
-      <SelectTrigger className=' bg-custom2'>
+      <SelectTrigger className=' bg-custom2 w-[342px]'>
         <SelectValue placeholder='채널 유형 선택' id={id} />
       </SelectTrigger>
       <SelectContent>
@@ -52,10 +52,10 @@ export default function CreateChannel() {
           <span className='sr-only'>Public Room List</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className='sm:max-w-[700px] h-5/6 bg-custom1'>
+      <DialogContent className='h-1/3 bg-custom1'>
         <DialogHeader>
-          <DialogTitle>채널 생성</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className='text-center'>채널 생성</DialogTitle>
+          <DialogDescription className='text-center'>
             채널을 원하는대로 초대할 수 있습니다.
           </DialogDescription>
         </DialogHeader>
@@ -76,9 +76,7 @@ export default function CreateChannel() {
             <Label htmlFor='description' className='text-right'>
               친구 초대
             </Label>
-            <FriendListSelector>
-							친구 초대
-						</FriendListSelector>
+            <FriendListSelector>친구 초대</FriendListSelector>
           </div>
           <div className='grid grid-cols-4 items-center gap-4'>
             <Label htmlFor='password' className='text-right'>
@@ -88,7 +86,9 @@ export default function CreateChannel() {
           </div>
         </div>
         <DialogFooter>
-          <Button type='submit'>채널 생성하기</Button>
+          <Button type='submit' className='w-full'>
+            채널 생성하기
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
