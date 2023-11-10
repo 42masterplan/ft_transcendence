@@ -22,7 +22,7 @@ export default function PublicRoomList() {
           <span className='sr-only'>Public Room List</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className='sm:max-w-[700px] h-5/6 bg-color_3 flex flex-col'>
+      <DialogContent className='sm:max-w-[700px] h-5/6 bg-custom1 flex flex-col'>
         <div className='text-center text-xl font-semibold'>
           Public Room List
         </div>
@@ -45,6 +45,7 @@ export default function PublicRoomList() {
                 channelName={public_room.channelName}
                 userCount={public_room.userCount}
                 isLocked={public_room.isLocked}
+                key={public_room.channelName}
               />
             ) : (
               ''

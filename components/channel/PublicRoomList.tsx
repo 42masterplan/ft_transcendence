@@ -45,6 +45,7 @@ export default function PublicRoomList() {
                 channelName={public_room.channelName}
                 userCount={public_room.userCount}
                 isLocked={public_room.isLocked}
+                key={public_room.channelName}
               />
             ) : (
               ''

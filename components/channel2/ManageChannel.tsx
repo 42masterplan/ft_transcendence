@@ -1,6 +1,6 @@
 import {RiChatSettingsLine} from 'react-icons/ri';
 import {Button} from '@/components/shadcn/ui/button';
-
+import FriendListSelector from '@/components/channel/FriendListSelector';
 import {
   Dialog,
   DialogContent,
@@ -33,6 +33,13 @@ export default function ManageChannel({channel_name}: {channel_name: string}) {
         </DialogHeader>
         <div className='grid gap-4 py-4'>
           <div className='grid grid-cols-4 items-center gap-4'>
+            <Label htmlFor='description' className='text-right'>
+              밴(금지)유저 목록
+            </Label>
+            <FriendListSelector>밴(금지)유저 목록</FriendListSelector>
+            <Label htmlFor='description' className='text-right'>
+              관리자 수정            </Label>
+            <FriendListSelector>현재 채널 유저 목록</FriendListSelector>
             <Label htmlFor='name' className='text-right'>
               채널명 변경
             </Label>

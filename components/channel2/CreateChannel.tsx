@@ -28,7 +28,7 @@ import {Label} from '@/components/shadcn/ui/label';
 function SelectRoom({id}: {id: string}) {
   return (
     <Select>
-      <SelectTrigger className='w-[275px] bg-slate-200'>
+      <SelectTrigger className=' bg-custom2'>
         <SelectValue placeholder='채널 유형 선택' id={id} />
       </SelectTrigger>
       <SelectContent>
@@ -52,7 +52,7 @@ export default function CreateChannel() {
           <span className='sr-only'>Public Room List</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className='sm:max-w-[425px] bg-color_4'>
+      <DialogContent className='sm:max-w-[700px] h-5/6 bg-custom1'>
         <DialogHeader>
           <DialogTitle>채널 생성</DialogTitle>
           <DialogDescription>
@@ -76,7 +76,9 @@ export default function CreateChannel() {
             <Label htmlFor='description' className='text-right'>
               친구 초대
             </Label>
-            <FriendListSelector />
+            <FriendListSelector>
+							친구 초대
+						</FriendListSelector>
           </div>
           <div className='grid grid-cols-4 items-center gap-4'>
             <Label htmlFor='password' className='text-right'>

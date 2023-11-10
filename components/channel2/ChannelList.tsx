@@ -4,6 +4,8 @@ import {Button} from '@/components/shadcn/ui/button';
 
 function channelListRender(setCurChannel: (idx: string) => void) {
   const {channelList} = useContext(APIContext);
+  //이거 socket.io에서 정보 알 수 있음.
+
   const handleChannelClick = (idx: number) => {
     //채널방 클릭시 채널방 정보를 받아옵니다.
     console.log(`채널방 클릭시 ${idx}채널방 정보를 받아옵니다.`);

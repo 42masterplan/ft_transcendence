@@ -20,7 +20,6 @@ instrument(wsServer, {
 });
 
 const handleListen = () => console.log(`Listening on http://localhost:4001`);
-httpServer.listen(4001, handleListen);
 
 //-------------서버 실행 -----------
 
@@ -77,3 +76,5 @@ wsServer.on('connection', (socket) => {
   });
   socket.on('nickname', (nickname) => (socket['nickname'] = nickname));
 });
+
+httpServer.listen(4001, handleListen);
