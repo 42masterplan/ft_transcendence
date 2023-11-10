@@ -46,7 +46,7 @@ export default function CreateChannel() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className='rounded-full'>
+        <Button className='rounded-full bg-custom1 text-custom4'>
           <MessageSquarePlus className='h-6 w-6' />
           <p className='text-6'> 채널 생성</p>
           <span className='sr-only'>Public Room List</span>

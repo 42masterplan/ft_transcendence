@@ -13,7 +13,7 @@ import {
 } from '@/components/shadcn/ui/card';
 import {Input} from '@/components/shadcn/ui/input';
 
-import DropDownAvatarBtn from './DropDownAvatarBtn';
+import DropDownAvatarBtn from '../avatar/DropDownAvatarBtn';
 
 export function CardsChat({currentChannel}: {currentChannel: string}) {
   const {channelInfo} = useContext(APIContext);
@@ -25,12 +25,12 @@ export function CardsChat({currentChannel}: {currentChannel: string}) {
 
   const ShowHistory = () => {
     return (
-      <div className='flex flex-col space-y-5 max-h-[310px] overflow-y-auto bg-custom3'>
+      <div className='flex flex-col overflow-y-auto max-h-[70vh] bg-custom3'>
         {messages.map((message, index) => (
           <div
             key={index}
             className={cn(
-              'flex w-max max-w-[75%] rounded-lg px-3  text-sm ',
+              'flex w-max max-w-[90%] rounded-lg px-3  text-sm ',
               message.id === myInfo.id
                 ? 'ml-auto bg-primary text-primary-foreground p-2'
                 : 'p-2 border-cyan-300 border-2 '

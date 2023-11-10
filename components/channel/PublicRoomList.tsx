@@ -16,7 +16,7 @@ export default function PublicRoomList() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className='rounded-full'>
+        <Button className='rounded-full bg-custom1 text-custom4'>
           <LuGlobe2 className='h-6 w-6' />
           <p className='text-6'>공개 채널</p>
           <span className='sr-only'>Public Room List</span>
