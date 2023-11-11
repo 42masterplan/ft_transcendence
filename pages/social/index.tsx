@@ -1,117 +1,94 @@
 import ResponsiveContainer from '@/components/container/ResponsiveContainer';
-import ScrollableContainer from '@/components/container/ScrollableContainer';
 import {Button} from '@/components/shadcn/ui/button';
 import {Input} from '@/components/shadcn/ui/input';
 import {Switch} from '@/components/shadcn/ui/switch';
 import {Search} from 'lucide-react';
 import * as API from '@/DummyBackend/socialAPI';
-import {signal, effect} from '@preact/signals-react';
-import {Label} from '@/components/shadcn/ui/label';
-import {RadioGroup, RadioGroupItem} from '@/components/shadcn/ui/radio-group';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/shadcn/ui/select';
-
-import {userStatus} from '@/lib/types';
-import {Value} from '@radix-ui/react-select';
+import {signal, effect, Signal} from '@preact/signals-react';
+import SocialCard from '@/components/card/cardUsedInSocialPage/SocialCard';
 
 import * as React from 'react';
-import {Check, ChevronsUpDown} from 'lucide-react';
-
-import {cn} from '@/lib/utils';
+import ScrollableContainer from '@/components/container/ScrollableContainer';
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem
-} from '@/components/shadcn/ui/command';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from '@/components/shadcn/ui/popover';
+  target,
+  status,
+  SocialPageNavBar
+} from '@/components/social/SocialPageNavBar';
 
-// type target = 'friend' | 'all users';
-// const searchTarget = signal<target>('friend');
-// type status = 'Online' | 'Offline' | 'In Game' | 'All';
-// const searchTargetStatus = signal<status>('All');
+const searchTarget = signal<target>('friend');
+const searchTargetStatus = signal<status>('All');
+const searchTargetInput = signal<string>('');
 
-// interface SocialPageNavBarProps {
-//   className?: string;
-// }
+interface UserCardSectionProps {
+  users: API.user[];
+  className?: string;
+}
 
-// function SocialPageNavBar({className}: SocialPageNavBarProps) {
-//   return (
-//     <ResponsiveContainer
-//       className={`flex flex-col sm:flex-row w-full justify-between items-center gap-5 py-3 bg-custom2 rounded-2xl ${className}`}
-//     >
-//       <div className='flex w-full items-center justify-between sm:justify-normal gap-6'>
-//         <div className='flex items-center gap-3 hover:scale-[120%] transition-transform px-3'>
-//           <Switch
-//             className=''
-//             id='search-target'
-//             onCheckedChange={() => {
-//               searchTarget.value =
-//                 searchTarget.value === 'friend' ? 'all users' : 'friend';
-//             }}
-//           />
-//           <p>{searchTarget.value.toUpperCase()}</p>
-//         </div>
+function filterUsers(users: API.user[]): API.user[] {
+  // filter friends
+  if (searchTarget.value === 'friend') {
+    users = users.filter((user) => user.isFriend);
+  }
+  // filter status
+  if (searchTargetStatus.value === 'Online') {
+    users = users.filter((user) => user.currentStatus === 'Online');
+  } else if (searchTargetStatus.value === 'Offline') {
+    users = users.filter((user) => user.currentStatus === 'Offline');
+  } else if (searchTargetStatus.value === 'InGame') {
+    users = users.filter((user) => user.currentStatus === 'InGame');
+  }
+  // filter input
+  if (searchTargetInput.value !== '') {
+    users = users.filter((user) =>
+      user.name.toLowerCase().includes(searchTargetInput.value.toLowerCase())
+    );
+  }
+  return users;
+}
 
-//         <Select
-//           onValueChange={() => {
-//             console.log('searchTargetStatus: ' + searchTargetStatus.value);
-//           }}
-//           defaultValue='All'
-//         >
-//           <SelectTrigger className='w-32'>
-//             <SelectValue placeholder='Select' />
-//           </SelectTrigger>
-//           <SelectContent>
-//             <SelectItem
-//               value='All'
-//               onSelect={() => {
-//                 console.log("select 'All'");
-//                 searchTargetStatus.value = 'All';
-//               }}
-//             >
-//               All
-//             </SelectItem>
-//             <SelectItem
-//               value='Online'
-//               onSelect={() => {
-//                 searchTargetStatus.value = 'Online';
-//               }}
-//             >
-//               Online
-//             </SelectItem>
-//             <SelectItem value='Offline'>Offline</SelectItem>
-//             <SelectItem value='InGame'>In Game</SelectItem>
-//           </SelectContent>
-//         </Select>
-//       </div>
-//       <div className='flex flex-row items-center w-full sm:w-96 gap-3'>
-//         <Input type='text' placeholder='user name' className='h-11' />
-//         <Button variant='iconBtn' size='icon' className='p-2'>
-//           <Search />
-//         </Button>
-//       </div>
-//     </ResponsiveContainer>
-//   );
-// }
+function UserCardSection({users, className = ''}: UserCardSectionProps) {
+  let filteredUsers = filterUsers(users);
+  effect(() => {
+    console.log(
+      `searchTarget: ${searchTarget.value}, \nsearchTargetStatus: ${searchTargetStatus.value}, \nsearchTargetInput: ${searchTargetInput.value}`
+    ); // TEST
+    filteredUsers = filterUsers(users);
+    console.log(filteredUsers); // TEST
+  });
+  return (
+    <ScrollableContainer>
+      <ResponsiveContainer
+        className={`flex flex-col gap-5 w-full px-3 py-3 ${className}`}
+      >
+        <div></div>
+        {filteredUsers.map((user) => (
+          <SocialCard
+            id={user.id}
+            profileImage={user.profileImage}
+            name={user.name}
+            currentStatus={user.currentStatus}
+            introduction={user.introduction}
+            isFriend={user.isFriend}
+            isBlocked={user.isBlocked}
+          />
+        ))}
+      </ResponsiveContainer>
+    </ScrollableContainer>
+  );
+}
 
 export default function SocialPage() {
+  console.log('render social page');
+  // get users from backend
   const users = API.social__getUsers();
-  // TODO: modify user list depends on the switch
   return (
     <>
-      {/* <SocialPageNavBar className='px-5' /> */}
-      <SocialPageNavBar />
+      <SocialPageNavBar
+        searchTarget={searchTarget}
+        searchTargetStatus={searchTargetStatus}
+        searchTargetInput={searchTargetInput}
+      />
+      <UserCardSection users={users} />
     </>
   );
 }

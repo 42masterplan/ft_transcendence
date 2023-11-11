@@ -38,7 +38,7 @@ const dummyUsers: user[] = [
     name: 'User2',
     currentStatus: 'Offline',
     introduction: "Hello, I'm User2. Nice to meet you!",
-    isFriend: false,
+    isFriend: true,
     isBlocked: false
   },
   {
