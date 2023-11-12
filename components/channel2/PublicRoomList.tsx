@@ -28,7 +28,7 @@ interface PublicRoom {
 // isPassword: false,
 // channelId: '1'
 
-const DiaTrigger = ({socket}: any) => {
+const DialogBtn = ({socket}: any) => {
   return (
     <DialogTrigger asChild>
       <Button
@@ -53,7 +53,7 @@ export default function PublicRoomList() {
   });
   return (
     <Dialog>
-      <DiaTrigger socket={socket} />
+      <DialogBtn socket={socket} />
       <DialogContent className='sm:max-w-[700px] h-5/6 bg-custom1 flex flex-col'>
         <div className='text-center text-xl font-semibold'>
           Public Room List
