@@ -1,7 +1,8 @@
 import {MessageSquarePlus} from 'lucide-react';
 
 import {Button} from '@/components/shadcn/ui/button';
-import FriendListSelector from '@/components/channel/FriendListSelector';
+import FriendListSelector from '@/components/channel2/FriendListSelector';
+
 import {
   Dialog,
   DialogContent,
@@ -21,30 +22,18 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/shadcn/ui/select';
-
+import {useState} from 'react';
 import {Input} from '@/components/shadcn/ui/input';
 import {Label} from '@/components/shadcn/ui/label';
 
-function SelectRoom({id}: {id: string}) {
-  return (
-    <Select>
-      <SelectTrigger className=' bg-custom2 w-[342px]'>
-        <SelectValue placeholder='채널 유형 선택' id={id} />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>채널 유형 선택</SelectLabel>
-          <SelectItem value='Public'>Public</SelectItem>
-          <SelectItem value='Private'>Private</SelectItem>
-        </SelectGroup>
-      </SelectContent>
-    </Select>
-  );
-}
-
 export default function CreateChannel() {
-  return (
-    <Dialog>
+  const [channelName, setChannelName] = useState('');
+  const [channelType, setChannelType] = useState('');
+  const [password, setPassword] = useState('');
+  const [inviteFriendList, setInviteFriendList] = useState([]);
+
+  const DialogBtn = () => {
+    return (
       <DialogTrigger asChild>
         <Button className='rounded-full bg-custom1 text-custom4'>
           <MessageSquarePlus className='h-6 w-6' />
@@ -52,6 +41,37 @@ export default function CreateChannel() {
           <span className='sr-only'>Public Room List</span>
         </Button>
       </DialogTrigger>
+    );
+  };
+  const ChannelTypeSelector = () => {
+    return (
+      <div className='grid grid-cols-4 items-center gap-6'>
+        <Label htmlFor='channel_type' className='text-right'>
+          채널 유형
+        </Label>
+        <Select>
+          <SelectTrigger className=' bg-custom2 w-[342px]'>
+            <SelectValue placeholder='채널 유형 선택' id='channel_type' />
+          </SelectTrigger>
+          <SelectContent
+          // onChange={() => {
+          //   setChannelName(value);
+          //   console.log(value);
+          // }}
+          >
+            <SelectGroup>
+              <SelectLabel>채널 유형 선택</SelectLabel>
+              <SelectItem value='Public'>Public</SelectItem>
+              <SelectItem value='Private'>Private</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
+    );
+  };
+  return (
+    <Dialog>
+      <DialogBtn />
       <DialogContent className='bg-custom1'>
         <DialogHeader>
           <DialogTitle className='text-center'>채널 생성</DialogTitle>
@@ -60,12 +80,7 @@ export default function CreateChannel() {
           </DialogDescription>
         </DialogHeader>
         <div className='grid gap-6 py-4'>
-          <div className='grid grid-cols-4 items-center gap-6'>
-            <Label htmlFor='channel_type' className='text-right'>
-              채널 유형
-            </Label>
-            <SelectRoom id='channel_type' />
-          </div>
+          <ChannelTypeSelector />
           <div className='grid grid-cols-4 items-center gap-6'>
             <Label htmlFor='name' className='text-right'>
               채널 명

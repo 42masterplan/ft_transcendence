@@ -49,7 +49,7 @@ function renderFriendCheckBoxItems({
   });
 }
 
-export default function FriendListSelector() {
+export default function FriendListSelector({children}) {
   const {friendInfos} = useContext(APIContext);
   const selectedFriends = friendInfos.map((friend) => {
     return {
@@ -63,12 +63,12 @@ export default function FriendListSelector() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant='outline' className='col-span-3 bg-white'>
-          친구 초대
+        <Button variant='outline' className='col-span-3 bg-custom2'>
+          {children}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-[280px] max-h-[300px] overflow-auto'>
-        <DropdownMenuLabel>전체 친구 목록</DropdownMenuLabel>
+        <DropdownMenuLabel>{children}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {renderFriendCheckBoxItems({friendInfos, selected, setSelected})}
       </DropdownMenuContent>
