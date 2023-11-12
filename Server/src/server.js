@@ -2,6 +2,7 @@ import http from 'http';
 import {Server} from 'socket.io';
 import {instrument} from '@socket.io/admin-ui';
 import express from 'express';
+import {PublicRoomList} from './dummy.js';
 
 const corsOrigin = 'http://localhost:3000';
 //---------------서버 실행----------------
@@ -46,6 +47,9 @@ wsServer.on('connection', (socket) => {
   socket.onAny((event) => {
     console.log(`Socket Event: ${event}`);
   });
+  socket.on('allPublicChannel', () => {
+    socket.emit('allPublicChannel', PublicRoomList);
+  });
 
   socket.on('enter_room', (roomName, done) => {
     socket.join(roomName);
@@ -69,7 +73,7 @@ wsServer.on('connection', (socket) => {
 
   //인자에 어떤 Room인지 방 이름 들어감
   socket.on('message', (msg, done) => {
-    console.log(wsServer.sockets.adapter);
+    // console.log(wsServer.sockets.adapter);
     socket.emit('message', `${socket.nickname}: ${msg}`);
     done();
   });

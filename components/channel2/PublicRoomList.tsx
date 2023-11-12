@@ -10,33 +10,50 @@ import {
 } from '@/components/shadcn/ui/dialog';
 import {Input} from '@/components/shadcn/ui/input';
 import {Label} from '@/components/shadcn/ui/label';
-import {useContext, useState} from 'react';
-import {APIContext} from '@/DummyBackend/APIData';
+import {useState} from 'react';
 
-console.log(process.env.NEXT_PUBLIC_CHAT_SOCKET);
+// console.log(process.env.NEXT_PUBLIC_CHAT_SOCKET);
 
-function handlePublicRoomList(socket: any) {
-  socket.emit('message', 'hi I am joushin', () => alert('hi I am joushin'));
-  // const socket = io();
-  // socket.emit('message', 'hi I am joushin');
+function handlePublicRoomList(socket: any) {}
+
+interface PublicRoom {
+  channelName: string;
+  userCount: number;
+  isPassword: boolean;
+  channelId: string;
 }
+
+// channelName: '개굴개굴 개구리',
+// userCount: 10,
+// isPassword: false,
+// channelId: '1'
+
+const DiaTrigger = ({socket}: any) => {
+  return (
+    <DialogTrigger asChild>
+      <Button
+        className='rounded-full bg-custom1 text-custom4'
+        onClick={() => socket.emit('allPublicChannel')} //추후 처음 들어올 때만 요청하도록 변경예정
+      >
+        <LuGlobe2 className='h-6 w-6' />
+        <p className='text-6'>공개 채널</p>
+        <span className='sr-only'>Public Room List</span>
+      </Button>
+    </DialogTrigger>
+  );
+};
 
 export default function PublicRoomList() {
   const [socket, disconnect] = useChatSocket('channel');
-  const {PublicRoomList} = useContext(APIContext);
   const [search, setSearch] = useState('');
+  const [publicRooms, setPublicRooms] = useState([] as PublicRoom[]);
+  socket.on('allPublicChannel', (rooms) => {
+    setPublicRooms(rooms);
+    console.log(rooms);
+  });
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button
-          className='rounded-full bg-custom1 text-custom4'
-          onClick={() => handlePublicRoomList(socket)}
-        >
-          <LuGlobe2 className='h-6 w-6' />
-          <p className='text-6'>공개 채널</p>
-          <span className='sr-only'>Public Room List</span>
-        </Button>
-      </DialogTrigger>
+      <DiaTrigger socket={socket} />
       <DialogContent className='sm:max-w-[700px] h-5/6 bg-custom1 flex flex-col'>
         <div className='text-center text-xl font-semibold'>
           Public Room List
@@ -54,12 +71,12 @@ export default function PublicRoomList() {
           />
         </div>
         <div className='grid grid-col-4 items-center gap-4'>
-          {PublicRoomList.map((public_room) => {
+          {publicRooms.map((public_room) => {
             return public_room.channelName.includes(search) ? (
               <PublicRoomCard
                 channelName={public_room.channelName}
                 userCount={public_room.userCount}
-                isLocked={public_room.isLocked}
+                isLocked={public_room.isPassword}
                 key={public_room.channelName}
               />
             ) : (
