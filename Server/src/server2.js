@@ -3,7 +3,7 @@ import {Server} from 'socket.io';
 import {instrument} from '@socket.io/admin-ui';
 import express from 'express';
 
-const corsOrigin = 'http://localhost:3000';
+const corsOrigin = 'http://localhost:4001';
 //---------------서버 실행----------------
 const app = express();
 
@@ -68,9 +68,9 @@ wsServer.on('connection', (socket) => {
   });
 
   //인자에 어떤 Room인지 방 이름 들어감
-  socket.on('message', (msg, done) => {
+  socket.on('new_message', (msg, room, done) => {
     console.log(wsServer.sockets.adapter);
-    socket.emit('message', `${socket.nickname}: ${msg}`);
+    socket.to(room).emit('new_message', `${socket.nickname}: ${msg}`);
     done();
   });
   socket.on('nickname', (nickname) => (socket['nickname'] = nickname));

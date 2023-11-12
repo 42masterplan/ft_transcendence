@@ -43,18 +43,10 @@ export default function ManageChannel({channel_name}: {channel_name: string}) {
               관리자 수정{' '}
             </Label>
             <FriendListSelector>현재 채널 유저 목록</FriendListSelector>
-            <Label htmlFor='name' className='text-right'>
-              채널명 변경
-            </Label>
-            <Input
-              id='name'
-              defaultValue={channel_name}
-              className='col-span-3'
-            />
           </div>
           <div className='grid grid-cols-4 items-center gap-4'>
             <Label htmlFor='channel_password' className='text-right'>
-              비밀번호
+              비밀번호 변경
             </Label>
             <Input
               id='channel_password'

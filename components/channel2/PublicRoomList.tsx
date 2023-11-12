@@ -1,6 +1,8 @@
 import {LuGlobe2} from 'react-icons/lu';
 import {Button} from '@/components/shadcn/ui/button';
 import PublicRoomCard from './PublicRoomCard';
+import useChatSocket from '@/hooks/useChatSocket';
+// import io from 'socket.io-client';
 import {
   Dialog,
   DialogContent,
@@ -10,13 +12,26 @@ import {Input} from '@/components/shadcn/ui/input';
 import {Label} from '@/components/shadcn/ui/label';
 import {useContext, useState} from 'react';
 import {APIContext} from '@/DummyBackend/APIData';
+
+console.log(process.env.NEXT_PUBLIC_CHAT_SOCKET);
+
+function handlePublicRoomList(socket: any) {
+  socket.emit('message', 'hi I am joushin', () => alert('hi I am joushin'));
+  // const socket = io();
+  // socket.emit('message', 'hi I am joushin');
+}
+
 export default function PublicRoomList() {
+  const [socket, disconnect] = useChatSocket('channel');
   const {PublicRoomList} = useContext(APIContext);
   const [search, setSearch] = useState('');
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className='rounded-full bg-custom1 text-custom4'>
+        <Button
+          className='rounded-full bg-custom1 text-custom4'
+          onClick={() => handlePublicRoomList(socket)}
+        >
           <LuGlobe2 className='h-6 w-6' />
           <p className='text-6'>공개 채널</p>
           <span className='sr-only'>Public Room List</span>
