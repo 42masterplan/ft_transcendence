@@ -1,9 +1,7 @@
-import * as React from 'react';
 import {Send} from 'lucide-react';
 import {cn} from '@/lib/utils';
 import {Button} from '@/components/shadcn/ui/button';
-import {useContext, useRef, useEffect} from 'react';
-import {APIContext} from '@/DummyBackend/APIData';
+import {useState, useRef, useEffect, Dispatch, SetStateAction} from 'react';
 
 import {
   Card,
@@ -12,45 +10,55 @@ import {
   CardHeader
 } from '@/components/shadcn/ui/card';
 import {Input} from '@/components/shadcn/ui/input';
-
+import {ChannelHistoryType} from '@/types/channel';
 import DropDownAvatarBtn from '../avatar/DropDownAvatarBtn';
 
-export function CardsChat({currentChannel}: {currentChannel: string}) {
-  const {channelInfo} = useContext(APIContext);
-  const {chatList, participants, myInfo} = channelInfo;
-  const [messages, setMessages] = React.useState(chatList);
-  const [input, setInput] = React.useState('');
+export function ChannelBody({
+  currentChannel,
+  messages,
+  setMessages
+}: {
+  currentChannel: string;
+  messages: ChannelHistoryType[];
+  setMessages: Dispatch<SetStateAction<ChannelHistoryType[]>>;
+}) {
+  const [input, setInput] = useState('');
   const inputLength = input.trim().length;
   const messageEndRef = useRef<HTMLDivElement>();
 
   const ShowHistory = () => {
     return (
-      <div className='flex flex-col overflow-y-auto max-h-[70vh] bg-custom3'>
-        {messages.map((message, index) => (
+      <div className='flex flex-col overflow-y-auto max-h-[70vh] bg-custom3 w-[60vw]'>
+        {messages.map((message, idx) => (
           <div
-            key={index}
+            key={idx}
             className={cn(
+              'flex w-max max-w-[90%] rounded-lg px-3  text-sm ',
+              'p-2 border-cyan-300 border-2 '
+            )}
+          >
+            {/* className={cn(
               'flex w-max max-w-[90%] rounded-lg px-3  text-sm ',
               message.id === myInfo.id
                 ? 'ml-auto bg-primary text-primary-foreground p-2'
                 : 'p-2 border-cyan-300 border-2 '
-            )}
-          >
+            )} */}
             <div className='flex flex-col text-center h-min-[500px]'>
               <DropDownAvatarBtn
-                profile_image={message.profile_image}
+                profile_image={message.profileImage}
                 user_name={message.name}
               />
               {message.name}
             </div>
             <div className='grid place-items-center' ref={messageEndRef as any}>
-              {message.contents}
+              {message.content}
             </div>
           </div>
         ))}
       </div>
     );
   };
+
   const ChannelInput = () => {
     return (
       <form
@@ -96,7 +104,7 @@ export function CardsChat({currentChannel}: {currentChannel: string}) {
           </div>
         </CardHeader>
         <CardContent>{ShowHistory()}</CardContent>
-        <CardFooter>{ChannelInput()}</CardFooter>
+        {/* <CardFooter>{ChannelInput()}</CardFooter> */}
       </Card>
     </div>
   );
