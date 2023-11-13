@@ -29,10 +29,10 @@ const DialogBtn = ({socket}: any) => {
 };
 
 export default function PublicRoomList() {
-  const [socket, disconnect] = useChatSocket('channel');
+  const [socket] = useChatSocket('channel');
   const [search, setSearch] = useState('');
   const [publicRooms, setPublicRooms] = useState([] as PublicRoom[]);
-  socket.on('allPublicChannel', (rooms) => {
+  socket.once('allPublicChannel', (rooms) => {
     setPublicRooms(rooms);
     console.log(rooms);
   });

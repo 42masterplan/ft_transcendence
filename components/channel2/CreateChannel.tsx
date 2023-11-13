@@ -162,7 +162,6 @@ export default function CreateChannel() {
     [] as selectUserType[]
   );
   const [socket] = useChatSocket('channel');
-
   const fetchUserInfos = async () => {
     try {
       const {data}: {data: userType[]} = await Axios.get(`/users/friends`, {
@@ -206,6 +205,9 @@ export default function CreateChannel() {
         });
       }
     );
+    socket.once('error_exist', (error: string) => {
+      alert(error);
+    });
   };
 
   return (
