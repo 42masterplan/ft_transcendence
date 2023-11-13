@@ -11,22 +11,7 @@ import {
 import {Input} from '@/components/shadcn/ui/input';
 import {Label} from '@/components/shadcn/ui/label';
 import {useState} from 'react';
-
-// console.log(process.env.NEXT_PUBLIC_CHAT_SOCKET);
-
-function handlePublicRoomList(socket: any) {}
-
-interface PublicRoom {
-  channelName: string;
-  userCount: number;
-  isPassword: boolean;
-  channelId: string;
-}
-
-// channelName: '개굴개굴 개구리',
-// userCount: 10,
-// isPassword: false,
-// channelId: '1'
+import {PublicRoom} from '@/types/channel';
 
 const DialogBtn = ({socket}: any) => {
   return (

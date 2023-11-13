@@ -1,7 +1,3 @@
-import {MessageSquarePlus} from 'lucide-react';
-
-import {Button} from '@/components/shadcn/ui/button';
-import Axios from '@/api';
 import {
   Dialog,
   DialogContent,
@@ -11,7 +7,6 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/shadcn/ui/dialog';
-
 import {
   Select,
   SelectContent,
@@ -29,14 +24,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/shadcn/ui/dropdown-menu';
-
-import {Dispatch, SetStateAction} from 'react';
-
-import {useState} from 'react';
+import {Button} from '@/components/shadcn/ui/button';
 import {Input} from '@/components/shadcn/ui/input';
 import {Label} from '@/components/shadcn/ui/label';
-
-const SelectChannelType = ({channelType, setChannelType}) => {
+import {MessageSquarePlus} from 'lucide-react';
+import Axios from '@/api';
+import {Dispatch, SetStateAction, useState} from 'react';
+import {userType, selectUserType} from '@/types/user';
+import useChatSocket from '@/hooks/useChatSocket';
+const SelectChannelType = ({
+  channelType,
+  setChannelType
+}: {
+  channelType: string;
+  setChannelType: Dispatch<SetStateAction<string>>;
+}) => {
   return (
     <div className='grid grid-cols-4 items-center gap-6'>
       <Label htmlFor='channel_type' className='text-right'>
@@ -64,7 +66,13 @@ const SelectChannelType = ({channelType, setChannelType}) => {
   );
 };
 
-const ChannelNameInput = ({channelName, setChannelName}) => {
+const ChannelNameInput = ({
+  channelName,
+  setChannelName
+}: {
+  channelName: string;
+  setChannelName: Dispatch<SetStateAction<string>>;
+}) => {
   return (
     <div className='grid grid-cols-4 items-center gap-6'>
       <Label htmlFor='channel_name' className='text-right'>
@@ -79,7 +87,13 @@ const ChannelNameInput = ({channelName, setChannelName}) => {
   );
 };
 
-const InviteFriendSelector = ({inviteFriendList, setInviteFriendList}) => {
+const InviteFriendSelector = ({
+  inviteFriendList,
+  setInviteFriendList
+}: {
+  inviteFriendList: selectUserType[];
+  setInviteFriendList: Dispatch<SetStateAction<selectUserType[]>>;
+}) => {
   return (
     <div className='grid grid-cols-4 items-center gap-6'>
       <Label htmlFor='description' className='text-right'>
@@ -136,18 +150,20 @@ const PasswordInput = ({
 };
 
 export default function CreateChannel() {
-  // const [friendInfos, setFriendInfos] = useState([] as any);
   const [channelName, setChannelName] = useState('');
   const [channelType, setChannelType] = useState('');
   const [password, setPassword] = useState('');
-  const [inviteFriendList, setInviteFriendList] = useState([]);
+  const [inviteFriendList, setInviteFriendList] = useState(
+    [] as selectUserType[]
+  );
+  const [socket] = useChatSocket('channel');
   const fetchUserInfos = async () => {
     try {
-      const {data} = await Axios.get(`/users/friends`, {
+      const {data}: {data: userType[]} = await Axios.get(`/users/friends`, {
         params: {id: 'user_id'}
       });
       console.log(data);
-      const results = [];
+      const results = [] as any;
       data.forEach((value) => {
         results.push({
           name: value.name,
@@ -155,11 +171,31 @@ export default function CreateChannel() {
           checked: false
         });
       });
-      setInviteFriendList(results || []);
+      setInviteFriendList(results);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
+  const createChannel = async () => {
+    try {
+      const {data}: {data: userType[]} = await Axios.post(`/channels`, {
+        params: {id: 'user_id'}
+      });
+      console.log(data);
+      const results = [] as any;
+      data.forEach((value) => {
+        results.push({
+          name: value.name,
+          id: value.id,
+          checked: false
+        });
+      });
+      setInviteFriendList(results);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -197,7 +233,7 @@ export default function CreateChannel() {
           <PasswordInput password={password} setPassword={setPassword} />
         </div>
         <DialogFooter>
-          <Button type='submit' className='w-full'>
+          <Button type='submit' className='w-full' onClick={createChannel}>
             채널 생성하기
           </Button>
         </DialogFooter>
