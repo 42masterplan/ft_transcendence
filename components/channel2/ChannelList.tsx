@@ -17,16 +17,12 @@ export default function ChannelList({
   const [engagedChannels, setEngagedChannels] = useState(
     [] as EngagedChannelType[]
   );
-  // const {channelList} = useContext(APIContext);
-  //이거 socket.io에서 정보 알 수 있음.
   const [socket] = useChatSocket('channel');
   useEffect(() => {
     socket.on('myChannels', (data) => {
-      // console.log('채널리스트 변경');
-      // console.log(data);
       setEngagedChannels(data);
     });
-  }, [engagedChannels]);
+  }, []);
   const handleChannelClick = (id: string) => {
     //채널방 클릭시 채널방 정보를 받아옵니다.
     console.log(`채널방 클릭시 '${id}'채널방 정보를 받아옵니다.`);

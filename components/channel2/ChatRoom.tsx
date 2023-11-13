@@ -13,7 +13,7 @@ import {Input} from '@/components/shadcn/ui/input';
 import {ChannelHistoryType} from '@/types/channel';
 import DropDownAvatarBtn from '../avatar/DropDownAvatarBtn';
 
-export function CardsChat({
+export function ChannelBody({
   currentChannel,
   messages,
   setMessages
@@ -28,7 +28,7 @@ export function CardsChat({
 
   const ShowHistory = () => {
     return (
-      <div className='flex flex-col overflow-y-auto max-h-[70vh] bg-custom3'>
+      <div className='flex flex-col overflow-y-auto max-h-[70vh] bg-custom3 w-[60vw]'>
         {messages.map((message, idx) => (
           <div
             key={idx}
@@ -59,38 +59,38 @@ export function CardsChat({
     );
   };
 
-  // const ChannelInput = () => {
-  //   return (
-  //     <form
-  //       onSubmit={(event) => {
-  //         event.preventDefault();
-  //         if (inputLength === 0) return;
-  //         setMessages([
-  //           ...messages,
-  //           {
-  //             ...myInfo,
-  //             contents: input
-  //           }
-  //         ]);
-  //         setInput('');
-  //       }}
-  //       className='flex w-full items-center space-x-2'
-  //     >
-  //       <Input
-  //         id='message'
-  //         placeholder='Type your message...'
-  //         className='flex-1'
-  //         autoComplete='off'
-  //         value={input}
-  //         onChange={(event) => setInput(event.target.value)}
-  //       />
-  //       <Button type='submit' size='icon' disabled={inputLength === 0}>
-  //         <Send className='h-4 w-4' />
-  //         <span className='sr-only'>Send</span>
-  //       </Button>
-  //     </form>
-  //   );
-  // };
+  const ChannelInput = () => {
+    return (
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          if (inputLength === 0) return;
+          setMessages([
+            ...messages,
+            {
+              ...myInfo,
+              contents: input
+            }
+          ]);
+          setInput('');
+        }}
+        className='flex w-full items-center space-x-2'
+      >
+        <Input
+          id='message'
+          placeholder='Type your message...'
+          className='flex-1'
+          autoComplete='off'
+          value={input}
+          onChange={(event) => setInput(event.target.value)}
+        />
+        <Button type='submit' size='icon' disabled={inputLength === 0}>
+          <Send className='h-4 w-4' />
+          <span className='sr-only'>Send</span>
+        </Button>
+      </form>
+    );
+  };
 
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({behavior: 'smooth'});

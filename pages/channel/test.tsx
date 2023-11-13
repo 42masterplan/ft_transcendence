@@ -1,4 +1,4 @@
-import {CardsChat} from '@/components/channel2/ChatRoom';
+import {ChannelBody} from '@/components/channel2/ChatRoom';
 import ChannelList from '@/components/channel2/ChannelList';
 import {useState} from 'react';
 import ChannelHeader from '@/components/channel2/ChannelHeader';
@@ -14,10 +14,6 @@ export default function ChannelPage() {
   //여기서는 채널 페이지를 들어올 때 처음 소켓 연결을 수립하지만, 실제로는 모든 페이지에서 socket을 연결한 채로 유지해야만 한다.
   const [socket] = useChatSocket('channel');
   const [messages, setMessages] = useState([] as ChannelHistoryType[]);
-  socket.emit('myChannels');
-  // socket.emit('enter_room', 'RoomNameTest', () => {
-  //   console.log('socket connected');
-  // });
   useEffect(() => {
     socket.emit('myChannels', () => {
       console.log('참여중인 채널 리스트 요청');
@@ -42,11 +38,11 @@ export default function ChannelPage() {
       ) : (
         <div className='flex flex-col'>
           <ChannelHeader channel_name={currentChannel} />
-          {/* <CardsChat
+          <ChannelBody
             currentChannel={currentChannel}
             messages={messages}
             setMessages={setMessages}
-          /> */}
+          />
         </div>
       )}
     </div>
