@@ -27,13 +27,6 @@ class Player {
   isACollided(ball) {
     const offsetX = ball.x - this.x + ball.radius;
     const offsetY = ball.y - this.y + ball.radius;
-    console.log(
-      offsetX < this.width + 4 &&
-        offsetX > 0 &&
-        offsetY <= 10 &&
-        offsetY >= -10,
-      "A's collision"
-    );
     return (
       offsetX < this.width + 4 && offsetX > 0 && offsetY <= 10 && offsetY >= -10
     );
@@ -42,13 +35,7 @@ class Player {
   isBCollided(ball) {
     const offsetX = ball.x - this.x + ball.radius;
     const offsetY = this.y - ball.y + this.height + ball.radius;
-    console.log(
-      offsetX < this.width + 4 &&
-        offsetX > 0 &&
-        offsetY >= -10 &&
-        offsetY <= 10,
-      "B's collision"
-    );
+    console.log(this.y, ball.y, this.height, ball.radius)
     return (
       offsetX < this.width + 4 && offsetX > 0 && offsetY >= -10 && offsetY <= 10
     );
@@ -60,15 +47,16 @@ class Player {
     const speed = Math.sqrt(
       ball.velocity.x * ball.velocity.x + ball.velocity.y * ball.velocity.y
     );
-    ball.velocity.x = 5 * (ball.velocity.x / speed);
-    ball.velocity.y = 5 * (ball.velocity.y / speed);
+    ball.velocity.x = BALL_SPEED * (ball.velocity.x / speed);
+    ball.velocity.y = BALL_SPEED * (ball.velocity.y / speed);
   }
 
   handleCollision(ball, now) {
     ball.lastCollision = now;
     const reflectedAngle = -Math.atan2(ball.velocity.y, ball.velocity.x);
-    ball.velocity.x = Math.cos(reflectedAngle) * 5;
-    ball.velocity.y = Math.sin(reflectedAngle) * 5;
+    ball.velocity.x = Math.cos(reflectedAngle) * BALL_SPEED;
+    ball.velocity.y = Math.sin(reflectedAngle) * BALL_SPEED;
+    console.log('handlecollision')
     this.applySpin(ball);
   }
 
@@ -84,6 +72,7 @@ const express = require('express');
 const next = require('next');
 const http = require('http');
 const socketIO = require('socket.io');
+const { CloudSnow } = require('lucide-react');
 const port = 4242;
 const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({dev});
@@ -117,7 +106,6 @@ nextApp.prepare().then(() => {
         socket.id,
         SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
         flag ? SCREEN_HEIGHT - 45 : 30,
-        0,
         PLAYER_WIDTH,
         PLAYER_HEIGHT,
         players.length === 0 ? PLAYER_A_COLOR : PLAYER_B_COLOR //A : B 첫 번째로 추가되는 플레이어가 A다
@@ -200,7 +188,6 @@ nextApp.prepare().then(() => {
         let ret_x = (dx / speed) * BALL_SPEED;
         let ret_y = (dy / speed) * BALL_SPEED;
         ball.velocity = {x: ret_x, y: ret_y};
-        console.log(ball.velocity);
         io.emit('updateBall', ball);
       }, 3000);
     });
@@ -209,6 +196,7 @@ nextApp.prepare().then(() => {
       const now = Date.now();
       if (ball.lastCollision && now - ball.lastCollision < debouncingTime)
         return;
+      console.log('ballBounce')
       if (players[0].isACollided(ball)) players[0].handleCollision(ball, now);
       else if (players[1].isBCollided(ball))
         players[1].handleCollision(ball, now);

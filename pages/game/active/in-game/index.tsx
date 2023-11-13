@@ -47,14 +47,16 @@ export default function Game() {
       x: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
       y: SCREEN_HEIGHT - 45,
       color: PLAYER_A_COLOR,
-      c
+      c,
+      socket
     });
     const playerB = new Player({
       id: 'null',
       x: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
       y: 30,
       color: PLAYER_B_COLOR,
-      c
+      c,
+      socket
     });
     const ball = new Ball({
       x: SCREEN_WIDTH / 2,
