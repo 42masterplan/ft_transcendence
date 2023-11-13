@@ -14,32 +14,36 @@ export function bounceIfCollided(ball: Ball, player: Player, playerB: Player) {
 export function handleKeyDowns(
   keysPressed: {[key: string]: boolean},
   player: Player,
-  socket: Socket
+  socket: Socket,
+  isA: boolean
 ) {
   if (!player) return;
-  //we dont want to edit values on frontend, only on backend so we emit
   if (keysPressed['a'] || keysPressed['A']) {
     if (player.x > 0) {
       player.x -= PADDLE_OFFSET;
-      // player.dx = PADDLE_OFFSET;
+      player.dx = PADDLE_OFFSET;
       socket.emit('keyDown', 'a');
     }
   }
   if (keysPressed['d'] || keysPressed['D']) {
     if (player.x < SCREEN_WIDTH - player.width) {
       player.x += PADDLE_OFFSET;
-      // player.dx = PADDLE_OFFSET;
+      player.dx = PADDLE_OFFSET;
       socket.emit('keyDown', 'd');
     }
   }
   if (keysPressed['w'] || keysPressed['W']) {
-    // if (player.y > (SCREEN_HEIGHT / 3) * 2 - player.height)
-    player.y -= PADDLE_OFFSET / 2;
+    if (isA && player.y > 0) player.y -= PADDLE_OFFSET / 2;
+    else if (!isA && player.y > (SCREEN_HEIGHT / 3) * 2 - player.height)
+      player.y -= PADDLE_OFFSET / 2;
     socket.emit('keyDown', 'w');
   }
   if (keysPressed['s'] || keysPressed['S']) {
-    // if (player.y < SCREEN_HEIGHT - player.height)
-    player.y += PADDLE_OFFSET / 2;
+    if (isA && player.y < SCREEN_HEIGHT / 3 - player.height) {
+      player.y += PADDLE_OFFSET / 2;
+    } else if (!isA && player.y < SCREEN_HEIGHT - player.height) {
+      player.y += PADDLE_OFFSET / 2;
+    }
     socket.emit('keyDown', 's');
   }
 }

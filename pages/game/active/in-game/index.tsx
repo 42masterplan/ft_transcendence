@@ -89,11 +89,11 @@ export default function Game() {
     setInterval(() => {
       if (keysPressed.current) {
         if (socket.id == playerA.id) {
-          handleKeyDowns(keysPressed.current, playerA, socket);
+          handleKeyDowns(keysPressed.current, playerA, socket, true);
           handleKeyUps(keysPressed.current, playerA, socket);
         }
         if (socket.id == playerB.id) {
-          handleKeyDowns(keysPressed.current, playerB, socket);
+          handleKeyDowns(keysPressed.current, playerB, socket, false);
           handleKeyUps(keysPressed.current, playerB, socket);
         }
       }
@@ -107,10 +107,10 @@ export default function Game() {
       c.fillStyle = BACKGROUND_COLOR;
       c.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
       if (socket.id == playerA.id) {
-        handleKeyDowns(keysPressed.current, playerA, socket);
+        handleKeyDowns(keysPressed.current, playerA, socket, true);
         handleKeyUps(keysPressed.current, playerA, socket);
       } else if (socket.id == playerB.id) {
-        handleKeyDowns(keysPressed.current, playerB, socket);
+        handleKeyDowns(keysPressed.current, playerB, socket, false);
         handleKeyUps(keysPressed.current, playerB, socket);
       }
       playerA.draw();

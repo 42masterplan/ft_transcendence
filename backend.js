@@ -59,7 +59,6 @@ nextApp.prepare().then(() => {
       io.emit('updatePlayers', players);
       console.log('after deletion: ', players);
     });
-    //if we emit everytime a player moves, it will be too much traffic so we use ticker
     socket.on('keyDown', (keycode) => {
       const targetPlayer = players.find((player) => player.id === socket.id);
       if (!targetPlayer) return;
@@ -89,18 +88,12 @@ nextApp.prepare().then(() => {
           break;
         }
         case 's': {
-          if (isA) {
-            console.log('im a');
-            console.log(
-              targetPlayer.y,
-              targetPlayer.y < SCREEN_HEIGHT / 3 - targetPlayer.height
-            );
-          } else {
-            console.log('im b');
-          }
-          if (isA && targetPlayer.y < SCREEN_HEIGHT / 3 - targetPlayer.height)
+          if (isA && targetPlayer.y < SCREEN_HEIGHT / 3 - targetPlayer.height) {
             targetPlayer.y += PADDLE_OFFSET / 2;
-          else if (!isA && targetPlayer.y < SCREEN_HEIGHT - targetPlayer.height)
+          } else if (
+            !isA &&
+            targetPlayer.y < SCREEN_HEIGHT - targetPlayer.height
+          )
             targetPlayer.y += PADDLE_OFFSET / 2;
           break;
         }
@@ -116,7 +109,6 @@ nextApp.prepare().then(() => {
   setInterval(() => {
     io.emit('updatePlayers', players);
   }, 15);
-  //this creates 66.6666 frames per second its valve's standard
 
   app.use(express.static('public'));
   app.get('*', (req, res) => {
