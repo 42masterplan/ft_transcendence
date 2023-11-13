@@ -1,4 +1,3 @@
-import ResponsiveContainer from '@/components/container/ResponsiveContainer';
 import {Button} from '@/components/shadcn/ui/button';
 import {Input} from '@/components/shadcn/ui/input';
 import {Switch} from '@/components/shadcn/ui/switch';
@@ -36,7 +35,7 @@ export function SocialPageNavBar({
     searchTargetInput.value = e.target.value;
   };
   return (
-    <ResponsiveContainer
+    <div
       className={`flex flex-col sm:flex-row w-full justify-between items-center gap-5 px-3 py-3 bg-custom2 rounded-2xl ${className}`}
     >
       <div className='flex w-full items-center justify-between sm:justify-normal gap-6'>
@@ -79,6 +78,6 @@ export function SocialPageNavBar({
           <Search />
         </Button> */}
       </div>
-    </ResponsiveContainer>
+    </div>
   );
 }

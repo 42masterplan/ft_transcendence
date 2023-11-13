@@ -12,7 +12,6 @@
  * - className: string -> className of the card. Default is "".
  */
 
-import ResponsiveContainer from '../../container/ResponsiveContainer';
 import AvatarWithStatus from './AvatarWithStatus';
 import {UserInfo} from '@/lib/types';
 import {sizeType} from '@/lib/ResponsiveDesign';
@@ -126,25 +125,25 @@ export default function UserInfoCard({
 
   function UserInfoTextContainer({name, intro}: UserInfoTextContainerProps) {
     return (
-      <ResponsiveContainer
-        className={`${textAlign} w-full flex-col justify-center gap-1 px-2 sm:px-3`}
+      <div
+        className={`flex ${textAlign} w-full flex-col justify-center gap-1 px-2 sm:px-3`}
       >
         <h1 className={`${nameFontSize} font-bold`}>{name}</h1>
         {printIntro && (
           <div
-            className={`${introFontSize} ${introWidthFit} break-words overflow-hidden`}
+            className={`flex ${introFontSize} ${introWidthFit} break-words overflow-hidden`}
           >
             {intro}
           </div>
         )}
-      </ResponsiveContainer>
+      </div>
     );
   }
 
   return (
     <>
-      <ResponsiveContainer
-        className={`${widthFit} ${flexAlign} ${className} rounded-xl p-1 sm:p-2`}
+      <div
+        className={`flex ${widthFit} ${flexAlign} ${className} rounded-xl p-1 sm:p-2`}
       >
         <AvatarWithStatus
           status={userInfo.currentStatus}
@@ -156,7 +155,7 @@ export default function UserInfoCard({
           name={userInfo.name}
           intro={intro}
         ></UserInfoTextContainer>
-      </ResponsiveContainer>
+      </div>
     </>
   );
 }

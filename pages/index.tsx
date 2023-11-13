@@ -1,6 +1,5 @@
 import ScrollableContainer from '@/components/container/ScrollableContainer';
 import UserInfoCard from '@/components/card/userInfoCard/UserInfoCard';
-import ResponsiveContainer from '@/components/container/ResponsiveContainer';
 import {User} from '@/lib/classes/User';
 import * as Type from '@/lib/types';
 import * as API from '@/DummyBackend/mainAPI';
@@ -47,7 +46,7 @@ export default function HomePage() {
 
   function AchievementsSection({achievements}: AchievementsSectionProps) {
     return (
-      <Card className='m-2 hover:scale-[1.02] duration-200 hover:-translate-y-1'>
+      <Card className='m-2 hover:scale-[1.02] duration-200 hover:-translate-y-1 h-96 sm:h-full'>
         <CardHeader>
           <CardTitle>Achievements</CardTitle>
         </CardHeader>
@@ -107,7 +106,7 @@ export default function HomePage() {
 
   return (
     <>
-      <ScrollableContainer className='w-full py-0 sm:py-3'>
+      <ScrollableContainer className='py-0 sm:py-3'>
         <UserInfoCard
           userInfo={currentUser}
           size='lg'
@@ -115,17 +114,17 @@ export default function HomePage() {
           stretch
           className='m-2 hover:scale-[1.02] duration-200 hover:-translate-y-1'
         />
-        <ResponsiveContainer className='flex-col sm:flex-row gap-2 sm:gap-0 max-h-96'>
-          <ResponsiveContainer className='flex-col flex-1 gap-2'>
+        <div className='flex flex-col sm:flex-row gap-2 sm:gap-0 h-full'>
+          <div className='flex flex-col flex-1 h-full justify-evenly'>
             {/* left side */}
             <GameStatsCard rank={rank} />
             <AchievementsSection achievements={achievements} />
-          </ResponsiveContainer>
-          <ResponsiveContainer className='flex-col flex-1'>
+          </div>
+          <div className='flex flex-col flex-1 h-full'>
             {/* right side */}
             <MatchHistorySection />
-          </ResponsiveContainer>
-        </ResponsiveContainer>
+          </div>
+        </div>
       </ScrollableContainer>
     </>
   );

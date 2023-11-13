@@ -1,19 +1,14 @@
-import ResponsiveContainer from '@/components/container/ResponsiveContainer';
-import {Button} from '@/components/shadcn/ui/button';
-import {Input} from '@/components/shadcn/ui/input';
-import {Switch} from '@/components/shadcn/ui/switch';
-import {Search} from 'lucide-react';
 import * as API from '@/DummyBackend/socialAPI';
 import {signal, effect, Signal} from '@preact/signals-react';
 import SocialCard from '@/components/card/cardUsedInSocialPage/SocialCard';
 
 import * as React from 'react';
-import ScrollableContainer from '@/components/container/ScrollableContainer';
 import {
   target,
   status,
   SocialPageNavBar
 } from '@/components/social/SocialPageNavBar';
+import {ScrollArea} from '@/components/shadcn/ui/scroll-area';
 
 const searchTarget = signal<target>('friend');
 const searchTargetStatus = signal<status>('All');
@@ -56,24 +51,30 @@ function UserCardSection({users, className = ''}: UserCardSectionProps) {
     console.log(filteredUsers); // TEST
   });
   return (
-    <ScrollableContainer>
-      <ResponsiveContainer
-        className={`flex flex-col gap-5 w-full px-3 py-3 ${className}`}
-      >
-        <div></div>
-        {filteredUsers.map((user) => (
-          <SocialCard
-            id={user.id}
-            profileImage={user.profileImage}
-            name={user.name}
-            currentStatus={user.currentStatus}
-            introduction={user.introduction}
-            isFriend={user.isFriend}
-            isBlocked={user.isBlocked}
-          />
-        ))}
-      </ResponsiveContainer>
-    </ScrollableContainer>
+    <ScrollArea
+      className={`h-[200px] w-[350px] rounded-md border p-4 ${className}`}
+    >
+      {filteredUsers.map((user) => (
+        <SocialCard
+          key={user.id}
+          id={user.id}
+          profileImage={user.profileImage}
+          name={user.name}
+          currentStatus={user.currentStatus}
+          introduction={user.introduction}
+          isFriend={user.isFriend}
+          isBlocked={user.isBlocked}
+        />
+      ))}
+    </ScrollArea>
+  );
+}
+
+function DMSection() {
+  return (
+    <div>
+      <p>This is DM Section</p>
+    </div>
   );
 }
 
@@ -88,7 +89,10 @@ export default function SocialPage() {
         searchTargetStatus={searchTargetStatus}
         searchTargetInput={searchTargetInput}
       />
-      <UserCardSection users={users} />
+      <div className='flex flex-row w-full'>
+        <UserCardSection users={users} />
+        <DMSection />
+      </div>
     </>
   );
 }

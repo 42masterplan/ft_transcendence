@@ -1,5 +1,4 @@
 import {ScrollArea, ScrollBar} from '@/components/shadcn/ui/scroll-area';
-import ResponsiveContainer from './ResponsiveContainer';
 
 export type orientationType = 'horizontal' | 'vertical';
 
