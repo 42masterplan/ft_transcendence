@@ -1,6 +1,5 @@
 import React from 'react';
 import Ball from './Ball';
-
 interface PlayerProps {
   id: string;
   x: number;
@@ -48,6 +47,7 @@ class Player extends React.Component<PlayerProps> {
   }
 
   handleCollision(ball: Ball, now: number) {
+    // socket.emit('collision', this.id);
     ball.lastCollision = now;
     const reflectedAngle = -Math.atan2(ball.velocity.y, ball.velocity.x);
     ball.velocity.x = Math.cos(reflectedAngle) * 5;

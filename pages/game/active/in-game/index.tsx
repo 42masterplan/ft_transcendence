@@ -20,7 +20,6 @@ import ScoreBoard from '../../../../components/game/ScoreBoard';
 import GameStatus from '../../../../components/game/GameStatus';
 
 import io from 'socket.io-client';
-import {set} from 'react-hook-form';
 export default function Game() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
@@ -58,6 +57,12 @@ export default function Game() {
       color: PLAYER_B_COLOR,
       c
     });
+    const ball = new Ball({
+      x: SCREEN_WIDTH / 2,
+      y: SCREEN_HEIGHT / 2,
+      c,
+      lastCollision: 0
+    });
     socket.on('connect', () => {
       console.log('connected to server');
     });
@@ -71,20 +76,17 @@ export default function Game() {
       playerB.y = backendPlayers[1].y;
       playerA.dx = backendPlayers[0].dx;
       playerB.dx = backendPlayers[1].dx;
-      //we need to delete players that are not in backend
       if (!(playerA.id in backendPlayers)) delete backendPlayers[playerA.id];
       if (!(playerB.id in backendPlayers)) delete backendPlayers[playerB.id];
-      // if we refresh so fast then we wont have enough time to delete the player
-      // so we apply timeout with quicker refresh rate
     });
     socket.on('disconnect', () => {
       console.log('disconnected from server');
     });
-    const ball = new Ball({
-      x: SCREEN_WIDTH / 2,
-      y: SCREEN_HEIGHT / 2,
-      c,
-      lastCollision: 0
+    socket.on('updateBall', (backendBall) => {
+      ball.x = backendBall.x;
+      ball.y = backendBall.y;
+      ball.velocity = backendBall.velocity;
+      ball.lastCollision = backendBall.lastCollision;
     });
     setInterval(() => {
       if (keysPressed.current) {
@@ -97,7 +99,7 @@ export default function Game() {
           handleKeyUps(keysPressed.current, playerB, socket);
         }
       }
-    }, 15);
+    }, 30);
     addEventListener(
       'keydown',
       (event) => (keysPressed.current[event.key] = true)
@@ -116,22 +118,27 @@ export default function Game() {
       playerA.draw();
       playerB.draw();
       ball.update();
-      if (ball.x - ball.radius < 0 || ball.x + ball.radius > SCREEN_WIDTH)
+      socket.emit('updateBallPosition', ball);
+      if (ball.x - ball.radius < 0 || ball.x + ball.radius > SCREEN_WIDTH) {
         ball.velocity.x *= -1;
+        socket.emit('ballHitSideWalls');
+      }
       if (ball.y < 0) {
         setScore((prev) => {
           const updatedScore = {...prev, playerA: prev.playerA + 1};
           if (updatedScore.playerA === SCORE_LIMIT) setGameOver(true);
           return updatedScore;
         });
-        ball.resetPosition(playerB, particles);
+        ball.resetPosition(particles);
+        socket.emit('resetBall', false);
       } else if (ball.y > SCREEN_HEIGHT) {
         setScore((prev) => {
           const updatedScore = {...prev, playerB: prev.playerB + 1};
           if (updatedScore.playerB === SCORE_LIMIT) setGameOver(true);
           return updatedScore;
         });
-        ball.resetPosition(playerA, particles);
+        ball.resetPosition(particles);
+        socket.emit('resetBall', true);
       }
       particles.forEach((particle) => {
         if (particle.alpha <= 0) {
