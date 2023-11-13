@@ -7,9 +7,9 @@ const PLAYER_B_COLOR = 'rgba(0, 133, 255, 1)';
 const BACKGROUND_COLOR = 'rgba(15, 23, 42, 0.8)';
 const BALL_RADIUS = 5;
 const BALL_COLOR = 'white';
-const BALL_SPEED = 5;
-const BALL_VELOCITY = {x: 2.51, y: -4.32};
-const PADDLE_OFFSET = SCREEN_WIDTH / 100;
+const BALL_SPEED = 5 / 2;
+const BALL_VELOCITY = {x: 2.51 / 2, y: -4.32 / 2};
+const PADDLE_OFFSET = SCREEN_WIDTH / 200;
 const SCORE_LIMIT = 10;
 const GAME_TIME_LIMIT = 120;
 
@@ -218,7 +218,7 @@ nextApp.prepare().then(() => {
   setInterval(() => {
     io.emit('updatePlayers', players);
     io.emit('updateBall', ball);
-  }, 30);
+  }, 15);
   app.use(express.static('public'));
   app.get('*', (req, res) => {
     return nextHandler(req, res);

@@ -34,7 +34,6 @@ export default function Game() {
     if (!canvas) return;
     const c = canvas.getContext('2d');
     if (!c) return;
-    //for better resolution
     const devicePixelRatio = window.devicePixelRatio || 1;
     contextRef.current = c;
     canvas.width = SCREEN_WIDTH * devicePixelRatio;
@@ -99,7 +98,7 @@ export default function Game() {
           handleKeyUps(keysPressed.current, playerB, socket);
         }
       }
-    }, 30);
+    }, 15);
     addEventListener(
       'keydown',
       (event) => (keysPressed.current[event.key] = true)
@@ -141,7 +140,7 @@ export default function Game() {
         socket.emit('resetBall', true);
       }
       particles.forEach((particle) => {
-        if (particle.alpha <= 0) {
+        if (particle.alpha <= 0.01) {
           particles.splice(particles.indexOf(particle), 1);
         } else particle.update();
       });
