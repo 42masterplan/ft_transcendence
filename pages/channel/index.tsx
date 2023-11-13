@@ -11,12 +11,18 @@ import {ChannelHistoryType} from '@/types/channel';
 // const socket = io('http://localhost:4001');
 export default function ChannelPage() {
   const [currentChannel, setCurChannel] = useState('');
+  const [channelId, setChannelId] = useState('');
+  const [role, setRole] = useState('');
   //여기서는 채널 페이지를 들어올 때 처음 소켓 연결을 수립하지만, 실제로는 모든 페이지에서 socket을 연결한 채로 유지해야만 한다.
   const [socket] = useChatSocket('channel');
   const [messages, setMessages] = useState([] as ChannelHistoryType[]);
   useEffect(() => {
     socket.emit('myChannels', () => {
       console.log('참여중인 채널 리스트 요청');
+    });
+    socket.on('myRole', (data) => {
+      console.log('권한 설정', data);
+      setRole(data.role);
     });
   }, []);
   return (
@@ -25,6 +31,7 @@ export default function ChannelPage() {
         currentChannel={currentChannel}
         setCurChannel={setCurChannel}
         setMessages={setMessages}
+        setChannelId={setChannelId}
       />
       {currentChannel === '' ? (
         <div className='flex flex-col items-center h-[60vh] '>
@@ -42,6 +49,8 @@ export default function ChannelPage() {
             currentChannel={currentChannel}
             messages={messages}
             setMessages={setMessages}
+            channelId={channelId}
+            role={role}
           />
         </div>
       )}

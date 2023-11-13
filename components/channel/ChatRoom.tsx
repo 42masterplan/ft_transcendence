@@ -16,11 +16,15 @@ import DropDownAvatarBtn from '../avatar/DropDownAvatarBtn';
 export function ChannelBody({
   currentChannel,
   messages,
-  setMessages
+  setMessages,
+  channelId,
+  role
 }: {
   currentChannel: string;
   messages: ChannelHistoryType[];
   setMessages: Dispatch<SetStateAction<ChannelHistoryType[]>>;
+  channelId: string;
+  role: string;
 }) {
   const [input, setInput] = useState('');
   const inputLength = input.trim().length;
@@ -47,6 +51,8 @@ export function ChannelBody({
               <DropDownAvatarBtn
                 profile_image={message.profileImage}
                 user_name={message.name}
+                channel_id={channelId}
+                role={role}
               />
               {message.name}
             </div>
@@ -104,7 +110,7 @@ export function ChannelBody({
           </div>
         </CardHeader>
         <CardContent>{ShowHistory()}</CardContent>
-        {/* <CardFooter>{ChannelInput()}</CardFooter> */}
+        <CardFooter>{ChannelInput()}</CardFooter>
       </Card>
     </div>
   );
