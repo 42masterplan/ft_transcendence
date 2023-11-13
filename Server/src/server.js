@@ -4,7 +4,12 @@ import {instrument} from '@socket.io/admin-ui';
 import express from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
-import {PublicRoomList, EngagedChannels, ChaanelHistorys} from './dummy.js';
+import {
+  PublicRoomList,
+  EngagedChannels,
+  ChaanelHistorys,
+  myRoles
+} from './dummy.js';
 
 const corsOrigin = 'http://localhost:3000';
 //---------------서버 실행----------------
@@ -23,26 +28,7 @@ instrument(wsServer, {
 const handleListen = () => console.log(`Listening on http://localhost:4001`);
 httpServer.listen(4001, handleListen);
 
-//-------------서버 실행 -----------
-
-// function publicRooms() {
-//   const {
-//     sockets: {
-//       adapter: {sids, rooms}
-//     }
-//   } = wsServer;
-//   const publicRooms = [];
-//   rooms.forEach((_, key) => {
-//     if (sids.get(key) === undefined) {
-//       publicRooms.push(key);
-//     }
-//   });
-//   return publicRooms;
-// }
-
-function countRoom(roomName) {
-  return wsServer.sockets.adapter.rooms.get(roomName)?.size;
-}
+//-------------서버 실행 -----------------
 
 wsServer.on('connection', (socket) => {
   socket['nickname'] = 'Anon';
@@ -63,7 +49,6 @@ wsServer.on('connection', (socket) => {
         return socket.emit('error_exist', '방 이름을 입력해주세요.');
       socket.join(channelName);
       //초대된 모든 유저들을 전부 join으로 넣어줘야합니다!
-
       //현재 참여 중인 채널목록 업데이트
       //여기서 하는게 옳은건 아닌데 backend 코드 추가하면서 변경해주세요.
       EngagedChannels.push({
@@ -119,19 +104,12 @@ wsServer.on('connection', (socket) => {
     console.log(ChaanelHistorys[roomid]);
     socket.emit('channelHistory', ChaanelHistorys[roomid]);
   });
-  //끊기기 직전에 발생하는 이벤트
-  // socket.on('disconnecting', () => {
-  //   socket.rooms.forEach((room) =>
-  //     socket.to(room).emit('bye', socket.nickname, countRoom(room) - 1)
-  //   );
-  // });
 
-  //진짜 끊겼을떄
-  // socket.on('disconnect', () => {
-  //   wsServer.sockets.emit('room_change', publicRooms());
-  // });
+  //해당 채널에서 나의 역활
+  socket.on('myRole', (roomid) => {
+    socket.emit('myRole', myRoles[roomid]);
+  });
 
-  //인자에 어떤 Room인지 방 이름 들어감
   socket.on('message', (msg, done) => {
     // console.log(wsServer.sockets.adapter);
     socket.emit('message', `${socket.nickname}: ${msg}`);

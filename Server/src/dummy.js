@@ -123,3 +123,18 @@ export const ChaanelHistorys = {
   '42정병': [],
   '헬스는 사랑이다.': []
 };
+
+export const myRoles = {
+  아비꼬: {
+    role: 'user'
+  },
+  압둘알리: {
+    role: 'owner'
+  },
+  '42정병': {
+    role: 'admin'
+  },
+  '헬스는 사랑이다.': {
+    role: 'user'
+  }
+};
