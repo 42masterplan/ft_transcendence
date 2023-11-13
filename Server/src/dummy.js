@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 export const PublicRoomList = [
   {
     channelName: '개굴개굴 개구리',
@@ -57,39 +60,66 @@ export const EngagedChannels = [
     isUnread: true
   },
   {
-    id: '배드민턴',
-    channelName: '배드민턴',
-    userCount: 12,
-    isUnread: false
-  },
-  {
     id: '42정병',
     channelName: '42정병',
-    userCount: 15,
-    isUnread: false
-  },
-  {
-    id: '코딩.',
-    channelName: '코딩.',
-    userCount: 2,
-    isUnread: false
-  },
-  {
-    id: '축구선수',
-    channelName: '축구선수',
-    userCount: 3,
-    isUnread: false
-  },
-  {
-    id: '방 제목 제한은 8',
-    channelName: '방 제목 제한은 8',
-    userCount: 5,
-    isUnread: false
-  },
-  {
-    id: '서준님의 헬스사랑',
-    channelName: '서준님의 헬스사랑',
-    userCount: 2,
+    userCount: 12,
     isUnread: false
   }
 ];
+
+export const ChaanelHistorys = {
+  아비꼬: [
+    {
+      id: 'yejinam',
+      createdAt: '2021-06-01T14:48:00.000Z',
+      name: 'yejinam',
+      //채팅을 보낸 사람의 이름
+      profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI3 || '', //채팅을 보낸 사람의 프로필 사진
+      content: '나는 남예지다.?', //채팅 내용
+      isBlocked: false //차단 여부
+    },
+    {
+      id: 'daejlee',
+      createdAt: '2021-06-01T14:48:00.000Z',
+      name: 'daejlee',
+      profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI4 || '',
+      content: '라이노는 코뿔소 들이 박아버려 다 겁을 줘~~',
+      isBlocked: false //차단 여부
+    },
+    {
+      id: 'hkong',
+      name: 'hkong',
+      profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI11 || '',
+      content: '수영 꿀잼~~',
+      isBlocked: true //차단 여부
+    }
+  ],
+  압둘알리: [
+    {
+      id: 'yejinam2',
+      createdAt: '2021-06-01T14:48:00.000Z',
+      name: 'yejinam2',
+      //채팅을 보낸 사람의 이름
+      profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI4 || '', //채팅을 보낸 사람의 프로필 사진
+      content: '나는 남예지다. ? ㄴ미ㅏㅇ;', //채팅 내용
+      isBlocked: false //차단 여부
+    },
+    {
+      id: 'daejlee2',
+      createdAt: '2021-06-01T14:48:00.000Z',
+      name: 'daejlee2',
+      profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI4 || '',
+      content: 'ㅇ,익스프레스',
+      isBlocked: true //차단 여부
+    },
+    {
+      id: 'hkong2',
+      name: 'hkong2',
+      profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI11 || '',
+      content: '수영 꿀잼~~ㅁㄴㅇㅁㄴㅇ',
+      isBlocked: false //차단 여부
+    }
+  ],
+  '42정병': [],
+  '헬스는 사랑이다.': []
+};

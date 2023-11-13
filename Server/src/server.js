@@ -2,7 +2,9 @@ import http from 'http';
 import {Server} from 'socket.io';
 import {instrument} from '@socket.io/admin-ui';
 import express from 'express';
-import {PublicRoomList, EngagedChannels} from './dummy.js';
+import dotenv from 'dotenv';
+dotenv.config();
+import {PublicRoomList, EngagedChannels, ChaanelHistorys} from './dummy.js';
 
 const corsOrigin = 'http://localhost:3000';
 //---------------서버 실행----------------
@@ -101,6 +103,26 @@ wsServer.on('connection', (socket) => {
   //현재 참여중인 채널을 보내주는 이벤트
   socket.on('myChannels', () => {
     socket.emit('myChannels', EngagedChannels);
+  });
+  //public Channel 에 참여하는 경우
+  socket.on('joinChannel', ({channelId, password}, done) => {
+    socket.join(channelId);
+    done();
+    //참여중 채널 목록 업데이트
+    EngagedChannels.push(
+      PublicRoomList.find((room) => room.channelId === channelId)
+    );
+    socket.emit('myChannels', EngagedChannels);
+  });
+  socket.on('channelHistory', ({roomid}) => {
+    // const channelHistory = ChaanelHistorys[roomid]
+    //   ? ChaanelHistorys[roomid][roomid]
+    //   : [];
+    // console.log(ChaanelHistorys.at(roomid));
+    // console.log(ChaanelHistorys.at(roomid)[roomid]);
+    console.log(roomid);
+    console.log(ChaanelHistorys[roomid]);
+    socket.emit('channelHistory', ChaanelHistorys[roomid]);
   });
   //끊기기 직전에 발생하는 이벤트
   // socket.on('disconnecting', () => {

@@ -220,7 +220,7 @@ const chatInfos: Array<chatInfoType> = [
     id: 'yejinam',
     name: 'yejinam',
     profile_image: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI3 || '',
-    contents: 'Do you want build snow man?'
+    contents: '나는 남예지다.?'
   },
   {
     id: 'daejlee',
