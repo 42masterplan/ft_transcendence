@@ -20,14 +20,14 @@ export default function ChannelPage() {
     });
   }, []);
   return (
-    <div className='flex h-fit'>
+    <div className='flex h-[60vh]'>
       <ChannelList
         currentChannel={currentChannel}
         setCurChannel={setCurChannel}
         setMessages={setMessages}
       />
       {currentChannel === '' ? (
-        <div className='flex flex-col items-center '>
+        <div className='flex flex-col items-center h-[60vh] '>
           <ChannelHeader channel_name={currentChannel} />
           <Image
             src={WaitImage}
@@ -36,7 +36,7 @@ export default function ChannelPage() {
           ></Image>
         </div>
       ) : (
-        <div className='flex flex-col'>
+        <div className='flex flex-col '>
           <ChannelHeader channel_name={currentChannel} />
           <ChannelBody
             currentChannel={currentChannel}

@@ -28,7 +28,7 @@ export function ChannelBody({
 
   const ShowHistory = () => {
     return (
-      <div className='flex flex-col overflow-y-auto max-h-[70vh] bg-custom3 w-[60vw]'>
+      <div className='flex flex-col overflow-y-auto  bg-custom3'>
         {messages.map((message, idx) => (
           <div
             key={idx}
@@ -96,8 +96,8 @@ export function ChannelBody({
     messageEndRef.current?.scrollIntoView({behavior: 'smooth'});
   }, [messages]);
   return (
-    <div className='max-w-prose'>
-      <Card className='rounded-none bg-custom2'>
+    <div className=' w-[70vw] max-w-[600px] min-w-[230px]'>
+      <Card className='rounded-none bg-custom2 h-[57vh] '>
         <CardHeader className='flex flex-row '>
           <div className='flex items-center space-x-4'>
             <div className='font-bold text-2xl'>{currentChannel}</div>

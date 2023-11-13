@@ -34,7 +34,7 @@ export default function ChannelList({
     setCurChannel(id);
   };
   return (
-    <div className='flex flex-col min-w-[100px] h-full border overflow-y-scroll rounded-l-xl bg-custom2'>
+    <div className='flex flex-col min-w-[100px] h-full border overflow-y-scroll rounded-l-xl bg-custom2 w-[20vw] max-w-[300px]'>
       <div className='min-h-[40px] text-l text-custom4 text-center sticky top-0 z-20 bg-custom2'>
         참여중인 채널 목록
       </div>
