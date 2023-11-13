@@ -115,11 +115,6 @@ wsServer.on('connection', (socket) => {
     socket.emit('myChannels', EngagedChannels);
   });
   socket.on('channelHistory', ({roomid}) => {
-    // const channelHistory = ChaanelHistorys[roomid]
-    //   ? ChaanelHistorys[roomid][roomid]
-    //   : [];
-    // console.log(ChaanelHistorys.at(roomid));
-    // console.log(ChaanelHistorys.at(roomid)[roomid]);
     console.log(roomid);
     console.log(ChaanelHistorys[roomid]);
     socket.emit('channelHistory', ChaanelHistorys[roomid]);
