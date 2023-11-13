@@ -29,7 +29,7 @@ import {Input} from '@/components/shadcn/ui/input';
 import {Label} from '@/components/shadcn/ui/label';
 import {MessageSquarePlus} from 'lucide-react';
 import Axios from '@/api';
-import {Dispatch, SetStateAction, useState} from 'react';
+import {Dispatch, SetStateAction, useEffect, useState} from 'react';
 import {userType, selectUserType} from '@/types/user';
 import useChatSocket from '@/hooks/useChatSocket';
 const SelectChannelType = ({
@@ -144,7 +144,12 @@ const PasswordInput = ({
       <Label htmlFor='password' className='text-right'>
         password
       </Label>
-      <Input id='password' defaultValue='' className='col-span-3' />
+      <Input
+        id='password'
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        className='col-span-3'
+      />
     </div>
   );
 };
@@ -157,6 +162,7 @@ export default function CreateChannel() {
     [] as selectUserType[]
   );
   const [socket] = useChatSocket('channel');
+
   const fetchUserInfos = async () => {
     try {
       const {data}: {data: userType[]} = await Axios.get(`/users/friends`, {
@@ -176,24 +182,30 @@ export default function CreateChannel() {
       console.error('Error fetching data:', error);
     }
   };
-  const createChannel = async () => {
-    try {
-      const {data}: {data: userType[]} = await Axios.post(`/channels`, {
-        params: {id: 'user_id'}
-      });
-      console.log(data);
-      const results = [] as any;
-      data.forEach((value) => {
-        results.push({
-          name: value.name,
-          id: value.id,
-          checked: false
+  const createChannel = () => {
+    const inviteUsers = inviteFriendList.map((friendInfo) => {
+      if (friendInfo.checked) {
+        return friendInfo.id;
+      }
+    });
+    socket.emit(
+      'createChannel',
+      {
+        channelName: channelName,
+        password: password,
+        invitedFriendIds: inviteUsers,
+        type: channelType
+      },
+      () => {
+        alert('채널이 생성되었습니다.');
+        console.log({
+          channelName: channelName,
+          password: password,
+          invitedFriendIds: inviteUsers,
+          type: channelType
         });
-      });
-      setInviteFriendList(results);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
+      }
+    );
   };
 
   return (

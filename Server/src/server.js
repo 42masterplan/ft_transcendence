@@ -51,13 +51,18 @@ wsServer.on('connection', (socket) => {
     socket.emit('allPublicChannel', PublicRoomList);
   });
 
-  socket.on('enter_room', (roomName, done) => {
-    socket.join(roomName);
-    done();
-    socket.to(roomName).emit('welcome', socket.nickname, countRoom(roomName));
-    wsServer.sockets.emit('room_change', publicRooms()); //모든 유저에게 보내는 board casting
-    //이걸로 채팅방 알림 구현 가능할듯.
-  });
+  socket.on(
+    'createChannel',
+    ({channelName, password, invitedFriendIds, type}, done) => {
+      socket.join(channelName);
+      done();
+      // socket
+      //   .to(channelName)
+      //   .emit('welcome', socket.nickname, countRoom(roomName));
+      // wsServer.sockets.emit('room_change', publicRooms()); //모든 유저에게 보내는 board casting
+      //이걸로 채팅방 알림 구현 가능할듯.
+    }
+  );
 
   //이건 끊기기 직전에 발생하는 이벤트
   socket.on('disconnecting', () => {
