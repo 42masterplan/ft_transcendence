@@ -2,7 +2,7 @@ import http from 'http';
 import {Server} from 'socket.io';
 import {instrument} from '@socket.io/admin-ui';
 import express from 'express';
-import {PublicRoomList} from './dummy.js';
+import {PublicRoomList, EngagedChannels} from './dummy.js';
 
 const corsOrigin = 'http://localhost:3000';
 //---------------서버 실행----------------
@@ -52,13 +52,24 @@ wsServer.on('connection', (socket) => {
   socket.on('allPublicChannel', () => {
     socket.emit('allPublicChannel', PublicRoomList);
   });
+
+  //채널이 생성된 순간 이벤트
   socket.on(
     'createChannel',
     ({channelName, password, invitedFriendIds, type}, done) => {
       if (channelName === '')
         return socket.emit('error_exist', '방 이름을 입력해주세요.');
       socket.join(channelName);
-      //추후 초대된 모든 유저들을 전부 join으로 넣어줘야하고, private 방도 처리해줘야함
+      //초대된 모든 유저들을 전부 join으로 넣어줘야합니다!
+
+      //현재 참여 중인 채널목록 업데이트
+      //여기서 하는게 옳은건 아닌데 backend 코드 추가하면서 변경해주세요.
+      EngagedChannels.push({
+        id: channelName,
+        channelName: channelName,
+        userCount: invitedFriendIds.length + 1,
+        isUnread: false
+      });
       if (type === 'Public') {
         if (!PublicRoomList.find((room) => room.channelName === channelName)) {
           //공개 방이고 존재하지 않는 방이면
@@ -69,6 +80,8 @@ wsServer.on('connection', (socket) => {
             channelId: channelName
           });
           done(); //똑바로 끝나서 클라이언트 콜백 함수 호출
+          //참여중 채널 목록 업데이트
+          socket.emit('myChannels', EngagedChannels);
         } else {
           //이미 존재하는 방이면 에러 출력
           socket.emit('error_exist', '이미 존재하는 방입니다.');
@@ -77,23 +90,29 @@ wsServer.on('connection', (socket) => {
           ).userCount += 1;
         }
       } else {
-        //비공개 방이면
+        //비공개 방이면 => 여기서 private room도 에러 처리해주세요
         done();
+        //참여중 채널 목록 업데이트
+        socket.emit('myChannels', EngagedChannels);
       }
     }
   );
 
-  //끊기기 직전에 발생하는 이벤트
-  socket.on('disconnecting', () => {
-    socket.rooms.forEach((room) =>
-      socket.to(room).emit('bye', socket.nickname, countRoom(room) - 1)
-    );
+  //현재 참여중인 채널을 보내주는 이벤트
+  socket.on('myChannels', () => {
+    socket.emit('myChannels', EngagedChannels);
   });
+  //끊기기 직전에 발생하는 이벤트
+  // socket.on('disconnecting', () => {
+  //   socket.rooms.forEach((room) =>
+  //     socket.to(room).emit('bye', socket.nickname, countRoom(room) - 1)
+  //   );
+  // });
 
   //진짜 끊겼을떄
-  socket.on('disconnect', () => {
-    wsServer.sockets.emit('room_change', publicRooms());
-  });
+  // socket.on('disconnect', () => {
+  //   wsServer.sockets.emit('room_change', publicRooms());
+  // });
 
   //인자에 어떤 Room인지 방 이름 들어감
   socket.on('message', (msg, done) => {

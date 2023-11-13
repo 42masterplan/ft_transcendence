@@ -11,7 +11,7 @@ import {
 import {Input} from '@/components/shadcn/ui/input';
 import {Label} from '@/components/shadcn/ui/label';
 import {useState} from 'react';
-import {PublicRoom} from '@/types/channel';
+import {PublicRoomType} from '@/types/channel';
 
 const DialogBtn = ({socket}: any) => {
   return (
@@ -31,7 +31,7 @@ const DialogBtn = ({socket}: any) => {
 export default function PublicRoomList() {
   const [socket] = useChatSocket('channel');
   const [search, setSearch] = useState('');
-  const [publicRooms, setPublicRooms] = useState([] as PublicRoom[]);
+  const [publicRooms, setPublicRooms] = useState([] as PublicRoomType[]);
   socket.once('allPublicChannel', (rooms) => {
     setPublicRooms(rooms);
     console.log(rooms);
