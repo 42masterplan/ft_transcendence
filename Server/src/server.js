@@ -31,14 +31,49 @@ httpServer.listen(4001, handleListen);
 //-------------서버 실행 -----------------
 
 wsServer.on('connection', (socket) => {
-  socket['nickname'] = 'Anon';
+  socket['username'] = 'Anon';
 
   socket.onAny((event) => {
     console.log(`Socket Event: ${event}`);
   });
+
+  //현재 참여중인 채널을 보내주는 이벤트
+  socket.on('myChannels', () => {
+    socket.emit('myChannels', EngagedChannels);
+  });
+
+  socket.on('channelHistory', ({roomid}) => {
+    console.log(roomid);
+    console.log(ChaanelHistorys[roomid]);
+    socket.emit('channelHistory', ChaanelHistorys[roomid]);
+  });
+
+  //해당 채널에서 나의 역활
+  socket.on('myRole', (roomid) => {
+    socket.emit('myRole', myRoles[roomid]);
+  });
+
+  socket.on('new_message', (msg, done) => {
+    socket.emit('new_message', `${socket.username}: ${msg}`);
+    done();
+  });
+
+  socket.on('username', (username) => (socket['username'] = username));
+
   // 모든 public channel 을 보내주는 이벤트
   socket.on('allPublicChannel', () => {
     socket.emit('allPublicChannel', PublicRoomList);
+  });
+
+  //public Channel 에 참여하는 경우
+  socket.on('joinChannel', ({channelId, password}, done) => {
+    socket.join(channelId);
+    done();
+    //참여중 채널 목록 업데이트
+    EngagedChannels.push(
+      PublicRoomList.find((room) => room.channelId === channelId)
+    );
+    socket.emit('myChannels', EngagedChannels);
   });
 
   //채널이 생성된 순간 이벤트
@@ -84,36 +119,4 @@ wsServer.on('connection', (socket) => {
       }
     }
   );
-
-  //현재 참여중인 채널을 보내주는 이벤트
-  socket.on('myChannels', () => {
-    socket.emit('myChannels', EngagedChannels);
-  });
-  //public Channel 에 참여하는 경우
-  socket.on('joinChannel', ({channelId, password}, done) => {
-    socket.join(channelId);
-    done();
-    //참여중 채널 목록 업데이트
-    EngagedChannels.push(
-      PublicRoomList.find((room) => room.channelId === channelId)
-    );
-    socket.emit('myChannels', EngagedChannels);
-  });
-  socket.on('channelHistory', ({roomid}) => {
-    console.log(roomid);
-    console.log(ChaanelHistorys[roomid]);
-    socket.emit('channelHistory', ChaanelHistorys[roomid]);
-  });
-
-  //해당 채널에서 나의 역활
-  socket.on('myRole', (roomid) => {
-    socket.emit('myRole', myRoles[roomid]);
-  });
-
-  socket.on('message', (msg, done) => {
-    // console.log(wsServer.sockets.adapter);
-    socket.emit('message', `${socket.nickname}: ${msg}`);
-    done();
-  });
-  socket.on('nickname', (nickname) => (socket['nickname'] = nickname));
 });

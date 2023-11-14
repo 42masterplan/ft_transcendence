@@ -1,5 +1,3 @@
-import {boolean} from 'zod';
-
 export interface PublicRoomType {
   channelName: string;
   userCount: number;
