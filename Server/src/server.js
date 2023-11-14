@@ -49,8 +49,6 @@ wsServer.on('connection', (socket) => {
   });
 
   socket.on('channelHistory', ({roomid}) => {
-    console.log(roomid);
-    console.log(channelHistory[roomid]);
     socket.emit('channelHistory', channelHistory[roomid]);
   });
 
@@ -60,15 +58,13 @@ wsServer.on('connection', (socket) => {
   });
 
   socket.on('newMessage', (msg, roomid, done) => {
-    // console.log(wsServer.sockets.adapter);
-    // console.log('메시지와 방이름', msg, roomid);
     channelHistory[roomid].push({
       id: socket.userId,
       name: socket.username,
       profileImage: socket.profileImage,
       content: msg
     });
-    socket.to(roomid).emit('newMessage', {
+    socket.to(roomid).emit('newMessage', roomid, {
       id: socket.userId,
       name: socket.username,
       profileImage: socket.profileImage,
@@ -78,7 +74,6 @@ wsServer.on('connection', (socket) => {
   });
 
   socket.on('setUserInfo', ({username, userId, profileImage}) => {
-    // console.log(socket);
     socket['username'] = username;
     socket['userId'] = userId;
     socket['profileImage'] = profileImage;

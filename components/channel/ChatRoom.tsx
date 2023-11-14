@@ -102,7 +102,8 @@ export function ChannelBody({
       </form>
     );
   };
-  socket.on('newMessage', ({id, name, profileImage, content}) => {
+  socket.on('newMessage', (roomid, {id, name, profileImage, content}) => {
+    if (roomid !== channelId) return;
     console.log('새로운 메시지', id, name, profileImage, content);
     setMessages([
       ...messages,
