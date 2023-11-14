@@ -1,16 +1,12 @@
 import * as Type from '@/lib/types';
 import {User} from '@/lib/classes/User';
 import UserInfoCard from '../userInfoCard/UserInfoCard';
-
-interface SocialCardProps {
-  id: string;
-  profileImage: string;
-  name: string;
-  currentStatus: Type.userStatus | string;
-  introduction: string;
-  isFriend: boolean;
-  isBlocked: boolean;
-}
+import ButtonGroup from './buttonGroup/ButtonGroup';
+import {AccordionItem} from '@radix-ui/react-accordion';
+import {
+  AccordionContent,
+  AccordionTrigger
+} from '@/components/shadcn/ui/accordion';
 
 function userPropsToUserClass(props: SocialCardProps): Type.UserInfo {
   const userClass = new User();
@@ -20,6 +16,16 @@ function userPropsToUserClass(props: SocialCardProps): Type.UserInfo {
   userClass.currentStatus = props.currentStatus as Type.userStatus;
   userClass.introduction = props.introduction;
   return userClass as Type.UserInfo;
+}
+
+interface SocialCardProps {
+  id: string;
+  profileImage: string;
+  name: string;
+  currentStatus: Type.userStatus | string;
+  introduction: string;
+  isFriend: boolean;
+  isBlocked: boolean;
 }
 
 export default function SocialCard(props: SocialCardProps) {
@@ -44,23 +50,32 @@ export default function SocialCard(props: SocialCardProps) {
   } else {
     // Error: invalid user status
     cardColor = 'bg-rose-900';
-    console.log('invalid user status');
     printIntro = true;
     insteadOfIntro =
       'This should not happen - ERROR: Followed and Blocked at the same time';
   }
 
   return (
-    <div
-      className={`flex flex-row w-full justify-between p-3 rounded-xl hover:scale-[1.02] duration-200 ${cardColor} `}
+    <AccordionItem
+      value={props.id}
+      className={`flex flex-col w-fit px-3 justify-between items-center gap-2 rounded-xl hover:scale-[1.02] duration-200 ${cardColor} `}
     >
-      <UserInfoCard
-        userInfo={user}
-        size='md'
-        printIntro={printIntro}
-        stretch={false}
-        insteadOfIntro={insteadOfIntro}
-      />
-    </div>
+      <AccordionTrigger>
+        <UserInfoCard
+          userInfo={user}
+          size='md'
+          printIntro={printIntro}
+          stretch={false}
+          insteadOfIntro={insteadOfIntro}
+        />
+      </AccordionTrigger>
+      <AccordionContent>
+        <ButtonGroup
+          userId={props.id}
+          isFriend={props.isFriend}
+          isBlocked={props.isBlocked}
+        />
+      </AccordionContent>
+    </AccordionItem>
   );
 }

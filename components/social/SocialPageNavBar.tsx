@@ -15,8 +15,10 @@ import {
 import * as React from 'react';
 import ScrollableContainer from '@/components/container/ScrollableContainer';
 
-export type target = 'friend' | 'all users';
-export type status = 'Online' | 'Offline' | 'InGame' | 'All';
+import {
+  socialPageTargetUser as target,
+  socialPageUserStatus as status
+} from '@/lib/types';
 
 interface SocialPageNavBarProps {
   searchTarget: Signal<target>;
@@ -36,7 +38,7 @@ export function SocialPageNavBar({
   };
   return (
     <div
-      className={`flex flex-col sm:flex-row w-full justify-between items-center gap-5 px-3 py-3 bg-custom2 rounded-2xl ${className}`}
+      className={`flex flex-col sm:flex-row w-full h-32s justify-between items-center gap-5 px-3 py-3 bg-custom2 rounded-2xl ${className}`}
     >
       <div className='flex w-full items-center justify-between sm:justify-normal gap-6'>
         <div className='flex items-center gap-3 hover:scale-[110%] transition-transform px-3'>
@@ -74,9 +76,6 @@ export function SocialPageNavBar({
           className='h-11'
           onInput={handleInputChange}
         />
-        {/* <Button variant='iconBtn' size='icon' className='p-2'>
-          <Search />
-        </Button> */}
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
         className={`flex flex-row w-full items-center justify-between px-3 sm:px-4 h-[5vh] sm:h-[7vh]`}
       />
       <main
-        className={`flex flex-col h-[95vh] sm:h-[86vh] w-full sm:max-w-5xl bg-slate-500`}
+        className={`flex flex-col h-[95vh] sm:h-[86vh] w-full sm:max-w-5xl`}
       >
         {children}
       </main>

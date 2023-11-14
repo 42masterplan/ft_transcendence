@@ -46,3 +46,6 @@ export type FriendRequest = {
   requestTime: Date;
   status: MatchRequestStatus;
 };
+
+export type socialPageTargetUser = 'friend' | 'all users';
+export type socialPageUserStatus = 'Online' | 'Offline' | 'InGame' | 'All';
