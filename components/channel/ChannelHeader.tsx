@@ -11,9 +11,9 @@ export default function ChannelHeader({channel_name}: {channel_name: string}) {
       <div>
         <CreateChannel />
       </div>
-      <div>
+      {/* <div>
         <ManageChannel channel_name={channel_name} />
-      </div>
+      </div> */}
     </div>
   );
 }

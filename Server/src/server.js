@@ -100,6 +100,8 @@ wsServer.on('connection', (socket) => {
       if (channelName === '')
         return socket.emit('error_exist', '방 이름을 입력해주세요.');
       socket.join(channelName);
+      myRoles[channelName] = 'owner';
+      channelHistory[channelName] = [];
       //초대된 모든 유저들을 전부 join으로 넣어줘야합니다!
       //현재 참여 중인 채널목록 업데이트
       //여기서 하는게 옳은건 아닌데 backend 코드 추가하면서 변경해주세요.
