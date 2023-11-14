@@ -12,7 +12,7 @@ export default function ChannelList({
   setChannelId
 }: {
   currentChannel: string;
-  setCurChannel: (id: string) => void;
+  setCurChannel: Dispatch<SetStateAction<string>>;
   setMessages: Dispatch<SetStateAction<ChannelHistoryType[]>>;
   setChannelId: Dispatch<SetStateAction<string>>;
 }) {
@@ -34,7 +34,7 @@ export default function ChannelList({
       console.log(data);
       setMessages(data);
     });
-    setCurChannel(channel.channel_name);
+    setCurChannel(channel.channelName);
     setChannelId(channel.id);
   };
   return (
