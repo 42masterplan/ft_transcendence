@@ -74,12 +74,12 @@ export function ChannelBody({
               {
                 id: 'joushin',
                 name: 'joushin',
-                profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI4,
+                profileImage:
+                  process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI4 || '',
                 content: input
               }
             ]);
           });
-
           setInput('');
         }}
         className='flex w-full items-center space-x-2'
@@ -102,14 +102,20 @@ export function ChannelBody({
       </form>
     );
   };
-  socket.on('newMessage', (id, name, profileImage, content) => {
+  socket.on('newMessage', ({id, name, profileImage, content}) => {
+    //id, name, profileImage, content
+    // console.log(data);
     console.log('새로운 메시지', id, name, profileImage, content);
+    setMessages([
+      ...messages,
+      {id: id, name: name, profileImage: profileImage, content: content}
+    ]);
   });
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({behavior: 'smooth'});
   }, [messages]);
   return (
-    <div className=' w-[70vw] max-w-[600px] min-w-[230px]'>
+    <div className=' w-[70vw] max-w-[600px] min-w-[230px] overflow-y-auto'>
       <Card className='rounded-none bg-custom2 h-[57vh] '>
         <CardHeader className='flex flex-row '>
           <div className='flex items-center space-x-4'>

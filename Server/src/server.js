@@ -7,7 +7,7 @@ dotenv.config();
 import {
   PublicRoomList,
   EngagedChannels,
-  ChaanelHistorys,
+  channelHistory,
   myRoles
 } from './dummy.js';
 
@@ -34,11 +34,13 @@ wsServer.on('connection', (socket) => {
   socket['username'] = 'Anon';
   socket['userId'] = 'Anon';
   socket['profileImage'] = 'Anon';
-
+  //처음 들어오면 이미 join된 상태인 room에 join해줍니다.
+  socket.join(EngagedChannels.map((channel) => channel.id));
   //연결 되자마자 유저 정보를 얻어옵니다.
-  socket.emit('setUserInfo');
+  // socket.emit('setUserInfo');
   socket.onAny((event) => {
     console.log(`Socket Event: ${event}`);
+    socket.emit('setUserInfo');
   });
 
   //현재 참여중인 채널을 보내주는 이벤트
@@ -48,8 +50,8 @@ wsServer.on('connection', (socket) => {
 
   socket.on('channelHistory', ({roomid}) => {
     console.log(roomid);
-    console.log(ChaanelHistorys[roomid]);
-    socket.emit('channelHistory', ChaanelHistorys[roomid]);
+    console.log(channelHistory[roomid]);
+    socket.emit('channelHistory', channelHistory[roomid]);
   });
 
   //해당 채널에서 나의 역활
@@ -59,6 +61,13 @@ wsServer.on('connection', (socket) => {
 
   socket.on('newMessage', (msg, roomid, done) => {
     // console.log(wsServer.sockets.adapter);
+    // console.log('메시지와 방이름', msg, roomid);
+    channelHistory[roomid].push({
+      id: socket.userId,
+      name: socket.username,
+      profileImage: socket.profileImage,
+      content: msg
+    });
     socket.to(roomid).emit('newMessage', {
       id: socket.userId,
       name: socket.username,
@@ -81,13 +90,11 @@ wsServer.on('connection', (socket) => {
   });
 
   //public Channel 에 참여하는 경우
-  socket.on('joinChannel', ({channelId, password}, done) => {
-    socket.join(channelId);
+  socket.on('joinChannel', ({id, password}, done) => {
+    socket.join(id);
     done();
     //참여중 채널 목록 업데이트
-    EngagedChannels.push(
-      PublicRoomList.find((room) => room.channelId === channelId)
-    );
+    EngagedChannels.push(PublicRoomList.find((room) => room.id === id));
     socket.emit('myChannels', EngagedChannels);
   });
 
@@ -114,7 +121,7 @@ wsServer.on('connection', (socket) => {
             channelName: channelName,
             userCount: invitedFriendIds.length + 1, //나까지 포함해서 +1
             isPassword: password !== '',
-            channelId: channelName
+            id: channelName
           });
           done(); //똑바로 끝나서 클라이언트 콜백 함수 호출
           //참여중 채널 목록 업데이트
