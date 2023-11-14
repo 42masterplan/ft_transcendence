@@ -103,8 +103,6 @@ export function ChannelBody({
     );
   };
   socket.on('newMessage', ({id, name, profileImage, content}) => {
-    //id, name, profileImage, content
-    // console.log(data);
     console.log('새로운 메시지', id, name, profileImage, content);
     setMessages([
       ...messages,
