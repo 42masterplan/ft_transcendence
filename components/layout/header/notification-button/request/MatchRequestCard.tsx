@@ -14,7 +14,7 @@ export default function MatchRequestCard({request}: NotificationCardProps) {
   const newMatch: Type.GameInfo = new Game();
   const notificationShooter: Type.UserInfo = new User();
   notificationShooter.name = request.friend_id;
-  notificationShooter.profileImage = request.profile_image;
+  notificationShooter.profileImage = request.profileImage;
   newMatch.id = request.game_id;
   // TODO: add game type
 

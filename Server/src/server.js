@@ -32,7 +32,11 @@ httpServer.listen(4001, handleListen);
 
 wsServer.on('connection', (socket) => {
   socket['username'] = 'Anon';
+  socket['userId'] = 'Anon';
+  socket['profileImage'] = 'Anon';
 
+  //연결 되자마자 유저 정보를 얻어옵니다.
+  socket.emit('setUserInfo');
   socket.onAny((event) => {
     console.log(`Socket Event: ${event}`);
   });
@@ -53,12 +57,23 @@ wsServer.on('connection', (socket) => {
     socket.emit('myRole', myRoles[roomid]);
   });
 
-  socket.on('new_message', (msg, done) => {
-    socket.emit('new_message', `${socket.username}: ${msg}`);
+  socket.on('newMessage', (msg, roomid, done) => {
+    // console.log(wsServer.sockets.adapter);
+    socket.to(roomid).emit('newMessage', {
+      id: socket.userId,
+      name: socket.username,
+      profileImage: socket.profileImage,
+      content: msg
+    });
     done();
   });
 
-  socket.on('username', (username) => (socket['username'] = username));
+  socket.on('setUserInfo', ({username, userId, profileImage}) => {
+    // console.log(socket);
+    socket['username'] = username;
+    socket['userId'] = userId;
+    socket['profileImage'] = profileImage;
+  });
 
   // 모든 public channel 을 보내주는 이벤트
   socket.on('allPublicChannel', () => {

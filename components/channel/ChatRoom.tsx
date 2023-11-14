@@ -12,7 +12,7 @@ import {
 import {Input} from '@/components/shadcn/ui/input';
 import {ChannelHistoryType} from '@/types/channel';
 import DropDownAvatarBtn from '../avatar/DropDownAvatarBtn';
-
+import useChatSocket from '@/hooks/useChatSocket';
 export function ChannelBody({
   currentChannel,
   messages,
@@ -29,27 +29,24 @@ export function ChannelBody({
   const [input, setInput] = useState('');
   const inputLength = input.trim().length;
   const messageEndRef = useRef<HTMLDivElement>();
-
+  const [socket] = useChatSocket('channel');
   const ShowHistory = () => {
     return (
       <div className='flex flex-col overflow-y-auto  bg-custom3'>
         {messages.map((message, idx) => (
           <div
             key={idx}
+            //이 부분도 추후 리코일로 관리 하는 유저 정보로 확인 예정
             className={cn(
               'flex w-max max-w-[90%] rounded-lg px-3  text-sm ',
-              'p-2 border-cyan-300 border-2 '
-            )}
-          >
-            {/* className={cn(
-              'flex w-max max-w-[90%] rounded-lg px-3  text-sm ',
-              message.id === myInfo.id
+              message.id === 'joushin'
                 ? 'ml-auto bg-primary text-primary-foreground p-2'
                 : 'p-2 border-cyan-300 border-2 '
-            )} */}
+            )}
+          >
             <div className='flex flex-col text-center h-min-[500px]'>
               <DropDownAvatarBtn
-                profile_image={message.profileImage}
+                profileImage={message.profileImage}
                 user_name={message.name}
                 channel_id={channelId}
                 role={role}
@@ -71,13 +68,18 @@ export function ChannelBody({
         onSubmit={(event) => {
           event.preventDefault();
           if (inputLength === 0) return;
-          setMessages([
-            ...messages,
-            {
-              ...myInfo,
-              contents: input
-            }
-          ]);
+          socket.emit('newMessage', input, channelId, () => {
+            setMessages([
+              ...messages,
+              {
+                id: 'joushin',
+                name: 'joushin',
+                profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI4,
+                content: input
+              }
+            ]);
+          });
+
           setInput('');
         }}
         className='flex w-full items-center space-x-2'
@@ -88,7 +90,10 @@ export function ChannelBody({
           className='flex-1'
           autoComplete='off'
           value={input}
-          onChange={(event) => setInput(event.target.value)}
+          onChange={(event) => {
+            if (input.length > 500) return;
+            setInput(event.target.value);
+          }}
         />
         <Button type='submit' size='icon' disabled={inputLength === 0}>
           <Send className='h-4 w-4' />
@@ -97,7 +102,9 @@ export function ChannelBody({
       </form>
     );
   };
-
+  socket.on('newMessage', (id, name, profileImage, content) => {
+    console.log('새로운 메시지', id, name, profileImage, content);
+  });
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({behavior: 'smooth'});
   }, [messages]);

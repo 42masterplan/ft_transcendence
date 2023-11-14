@@ -4,7 +4,6 @@ import {useState} from 'react';
 import ChannelHeader from '@/components/channel/ChannelHeader';
 import Image from 'next/image';
 import WaitImage from '@/public/postcss.config.png';
-import io from 'socket.io-client';
 import {useEffect} from 'react';
 import useChatSocket from '@/hooks/useChatSocket';
 import {ChannelHistoryType} from '@/types/channel';
@@ -24,7 +23,13 @@ export default function ChannelPage() {
       console.log('권한 설정', data);
       setRole(data.role);
     });
-    socket.emit('username', 'joushin'); //추후 recoil로 닉네임을 가져오고 관리하도록 수정np
+    socket.once('setUserInfo', () => {
+      socket.emit('setUserInfo', {
+        username: 'joushin',
+        userId: 'joushin',
+        profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI4
+      }); //추후 recoil로 유저 정보 관리할 예정인데, 일단은 임시로 넣어둠
+    });
   }, []);
   return (
     <div className='flex h-[60vh]'>
@@ -40,7 +45,7 @@ export default function ChannelPage() {
           <Image
             src={WaitImage}
             alt='채널에 참여해주세요'
-            className='bg-custom4'
+            className='bg-custom4 h-[56vh] w-[60vw]'
           ></Image>
         </div>
       ) : (

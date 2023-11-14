@@ -78,12 +78,12 @@ const AdminDropdownGroup = () => {
 };
 
 export default function DropdownAvatarBtn({
-  profile_image,
+  profileImage,
   user_name,
   channel_id,
   role
 }: {
-  profile_image: string;
+  profileImage: string;
   user_name: string;
   channel_id: string;
   role: string;
@@ -98,11 +98,7 @@ export default function DropdownAvatarBtn({
             socket.emit('myRole', channel_id);
           }}
         >
-          <AvatarWithStatus
-            size='sm'
-            image={profile_image}
-            showStatus={false}
-          />
+          <AvatarWithStatus size='sm' image={profileImage} showStatus={false} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
