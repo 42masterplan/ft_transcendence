@@ -24,6 +24,7 @@ export default function ChannelPage() {
       console.log('권한 설정', data);
       setRole(data.role);
     });
+    socket.emit('username', 'joushin'); //추후 recoil로 닉네임을 가져오고 관리하도록 수정np
   }, []);
   return (
     <div className='flex h-[60vh]'>
