@@ -1,9 +1,6 @@
 import {Button} from '@/components/shadcn/ui/button';
 import {Input} from '@/components/shadcn/ui/input';
 import {Switch} from '@/components/shadcn/ui/switch';
-import {Search} from 'lucide-react';
-import * as API from '@/DummyBackend/socialAPI';
-import {signal, effect, Signal} from '@preact/signals-react';
 import {
   Select,
   SelectContent,
@@ -13,28 +10,34 @@ import {
 } from '@/components/shadcn/ui/select';
 
 import * as React from 'react';
-import ScrollableContainer from '@/components/container/ScrollableContainer';
 
 import {
   socialPageTargetUser as target,
   socialPageUserStatus as status
 } from '@/lib/types';
+import {set} from 'react-hook-form';
 
 interface SocialPageNavBarProps {
-  searchTarget: Signal<target>;
-  searchTargetStatus: Signal<status>;
-  searchTargetInput: Signal<string>;
+  searchTarget: target;
+  setSearchTarget: React.Dispatch<React.SetStateAction<target>>;
+  searchTargetStatus: status;
+  setSearchTargetStatus: React.Dispatch<React.SetStateAction<status>>;
+  searchTargetInput: string;
+  setSearchTargetInput: React.Dispatch<React.SetStateAction<string>>;
   className?: string;
 }
 
 export function SocialPageNavBar({
-  className,
   searchTarget,
+  setSearchTarget,
   searchTargetStatus,
-  searchTargetInput
+  setSearchTargetStatus,
+  searchTargetInput,
+  setSearchTargetInput,
+  className = ''
 }: SocialPageNavBarProps) {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    searchTargetInput.value = e.target.value;
+    setSearchTargetInput(e.target.value);
   };
   return (
     <div
@@ -46,16 +49,17 @@ export function SocialPageNavBar({
             className=''
             id='search-target'
             onCheckedChange={() => {
-              searchTarget.value =
-                searchTarget.value === 'friend' ? 'all users' : 'friend';
+              setSearchTarget(
+                searchTarget === 'friend' ? 'all users' : 'friend'
+              );
             }}
           />
-          <p>{searchTarget.value.toUpperCase()}</p>
+          <p>{searchTarget.toUpperCase()}</p>
         </div>
         <Select
           defaultValue='All'
           onValueChange={(value) => {
-            searchTargetStatus.value = value as status;
+            setSearchTargetStatus(value as status);
           }}
         >
           <SelectTrigger className='w-32'>
