@@ -81,15 +81,19 @@ export default function DropdownAvatarBtn({
   profileImage,
   user_name,
   channel_id,
-  role
+  role,
+  isMe
 }: {
   profileImage: string;
   user_name: string;
   channel_id: string;
   role: string;
+  isMe: boolean;
 }) {
   const [socket] = useChatSocket('channel');
-  return (
+  return isMe ? (
+    <AvatarWithStatus size='sm' image={profileImage} showStatus={false} />
+  ) : (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button

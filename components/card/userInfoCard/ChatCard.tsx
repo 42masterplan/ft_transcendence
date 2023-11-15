@@ -25,6 +25,7 @@ type ChatMessageProps = {
   channelId: string;
   role: string;
   message: string;
+  isMe: boolean;
 };
 
 export default React.forwardRef(function ChatMessage(
@@ -37,7 +38,8 @@ export default React.forwardRef(function ChatMessage(
     profileImage = '',
     channelId = '',
     role = '',
-    message = ''
+    message = '',
+    isMe
   }: ChatMessageProps,
   ref: any
 ) {
@@ -100,7 +102,7 @@ export default React.forwardRef(function ChatMessage(
       break;
     case 'md':
       avatarSize = 'md';
-      nameFontSize = 'text-2xl sm:text-3xl px-2';
+      nameFontSize = 'text-l sm:text-xl px-2';
       introFontSize = 'text-base sm:text-lg px-2';
       break;
     case 'lg':
@@ -150,6 +152,7 @@ export default React.forwardRef(function ChatMessage(
           user_name={user_name}
           channel_id={channelId}
           role={role}
+          isMe={isMe}
         />
       </div>
       <UserInfoTextContainer

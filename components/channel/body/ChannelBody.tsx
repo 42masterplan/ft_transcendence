@@ -34,9 +34,10 @@ export function ChannelBody({
           >
             {message.id === 'joushin' ? (
               <ChatMessage
+                isMe={true}
                 size='md'
                 message={message.content}
-                side='left'
+                side='right'
                 className='m-2 hover:scale-[1.02] duration-200 hover:-translate-y-1 bg-custom4'
                 ref={messageEndRef as any}
                 profileImage={message.profileImage}
@@ -46,6 +47,7 @@ export function ChannelBody({
               />
             ) : (
               <ChatMessage
+                isMe={false}
                 size='md'
                 message={message.content}
                 side='left'
