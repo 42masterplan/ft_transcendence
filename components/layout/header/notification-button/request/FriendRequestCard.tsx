@@ -1,6 +1,5 @@
 import UserInfoCard from '@/components/card/userInfoCard/UserInfoCard';
 import RequestButton from './RequestButton';
-import ResponsiveContainer from '@/components/container/ResponsiveContainer';
 import * as dummyAPI from '@/DummyBackend/notificationAPI';
 import * as Type from '@/lib/types';
 import {User} from '@/lib/classes/User';
@@ -25,7 +24,7 @@ export default function FriendRequestCard({request}: FriendRequestCardProps) {
   };
 
   return (
-    <ResponsiveContainer className='flex-row justify-between items-center'>
+    <div className='flex flex-row justify-between items-center'>
       <UserInfoCard
         userInfo={notificationShooter}
         showStatus={false}
@@ -36,6 +35,6 @@ export default function FriendRequestCard({request}: FriendRequestCardProps) {
         onAccept={handleAccept}
         onReject={handleReject}
       />
-    </ResponsiveContainer>
+    </div>
   );
 }

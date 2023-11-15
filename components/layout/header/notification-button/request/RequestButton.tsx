@@ -1,6 +1,5 @@
 import {Button} from '@/components/shadcn/ui/button';
 import {UserPlus, UserX, Swords, X} from 'lucide-react';
-import ResponsiveContainer from '@/components/container/ResponsiveContainer';
 import {
   Tooltip,
   TooltipContent,
@@ -47,7 +46,7 @@ export default function RequestButton({
   }
 
   return (
-    <ResponsiveContainer className='space-x-2 items-center'>
+    <div className='flex space-x-2 items-center'>
       <TooltipProvider>
         {/* request reject button */}
         <Tooltip>
@@ -91,6 +90,6 @@ export default function RequestButton({
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
-    </ResponsiveContainer>
+    </div>
   );
 }

@@ -10,7 +10,6 @@ import {
 import {Input} from '@/components/shadcn/ui/input';
 import {Label} from '@/components/shadcn/ui/label';
 import ScrollableContainer from '@/components/container/ScrollableContainer';
-import ResponsiveContainer from '@/components/container/ResponsiveContainer';
 
 export default function SettingsModal() {
   return (
@@ -35,7 +34,7 @@ function SettingContentContainer({children}: {children: React.ReactNode}) {
 
 function SettingModalContents() {
   return (
-    <ResponsiveContainer className='flex-col w-full p-1'>
+    <div className='flex-col w-full p-1'>
       <ul className='flex flex-col'>
         <SettingContentContainer>
           <Input
@@ -58,6 +57,6 @@ function SettingModalContents() {
         })}
         {/* -----------------------------------------------------------------*/}
       </ul>
-    </ResponsiveContainer>
+    </div>
   );
 }

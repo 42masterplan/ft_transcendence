@@ -1,17 +1,12 @@
 import * as Type from '@/lib/types';
-import {Game} from '@/lib/classes/Game';
 import {User} from '@/lib/classes/User';
-interface SocialCardProps {
-  id: string;
-  profileImage: string;
-  name: string;
-  currentStatus: Type.userStatus | string;
-  introduction: string;
-  isFriend: boolean;
-  isBlocked: boolean;
-}
-
 import UserInfoCard from '../userInfoCard/UserInfoCard';
+import ButtonGroup from './buttonGroup/ButtonGroup';
+import {AccordionItem} from '@radix-ui/react-accordion';
+import {
+  AccordionContent,
+  AccordionTrigger
+} from '@/components/shadcn/ui/accordion';
 
 function userPropsToUserClass(props: SocialCardProps): Type.UserInfo {
   const userClass = new User();
@@ -23,47 +18,64 @@ function userPropsToUserClass(props: SocialCardProps): Type.UserInfo {
   return userClass as Type.UserInfo;
 }
 
+interface SocialCardProps {
+  id: string;
+  profileImage: string;
+  name: string;
+  currentStatus: Type.userStatus | string;
+  introduction: string;
+  isFriend: boolean;
+  isBlocked: boolean;
+}
+
 export default function SocialCard(props: SocialCardProps) {
   const user = userPropsToUserClass(props);
-  if (props.isBlocked && !props.isFriend) {
-    return (
-      <UserInfoCard
-        userInfo={user}
-        size='md'
-        printIntro={true}
-        stretch={false}
-        insteadOfIntro="Current user is blocked. You can't see this user's intro."
-      />
-    );
-  } else if (props.isFriend && !props.isBlocked) {
-    return (
-      <UserInfoCard
-        userInfo={user}
-        size='md'
-        printIntro={true}
-        stretch={false}
-      />
-    );
+  let cardColor: string;
+  let printIntro: boolean;
+  let insteadOfIntro: string = '';
+  if (props.isFriend && !props.isBlocked) {
+    // friend
+    cardColor = 'bg-custom3/50';
+    printIntro = true;
   } else if (!props.isFriend && !props.isBlocked) {
-    return (
-      <UserInfoCard
-        userInfo={user}
-        size='md'
-        printIntro={true}
-        stretch={false}
-        insteadOfIntro="Current user is blocked. You can't see this user's intro."
-      />
-    );
+    // not friend and not blocked
+    cardColor = 'bg-custom2/50';
+    printIntro = true;
+  } else if (props.isBlocked && !props.isFriend) {
+    // blocked
+    cardColor = 'bg-custom4/40';
+    printIntro = true;
+    insteadOfIntro =
+      "Current user is blocked. You can't see this user's intro.";
   } else {
-    // throw new Error("invalid user status");
-    return (
-      <UserInfoCard
-        userInfo={user}
-        size='md'
-        printIntro={true}
-        stretch={false}
-        insteadOfIntro='This should not happen - ERROR: Followed and Blocked at the same time'
-      />
-    );
+    // Error: invalid user status
+    cardColor = 'bg-rose-900';
+    printIntro = true;
+    insteadOfIntro =
+      'This should not happen - ERROR: Followed and Blocked at the same time';
   }
+
+  return (
+    <AccordionItem
+      value={props.id}
+      className={`flex flex-col w-fit px-3 justify-between items-center gap-2 rounded-xl hover:scale-[1.02] duration-200 ${cardColor} `}
+    >
+      <AccordionTrigger>
+        <UserInfoCard
+          userInfo={user}
+          size='md'
+          printIntro={printIntro}
+          stretch={false}
+          insteadOfIntro={insteadOfIntro}
+        />
+      </AccordionTrigger>
+      <AccordionContent>
+        <ButtonGroup
+          userId={props.id}
+          isFriend={props.isFriend}
+          isBlocked={props.isBlocked}
+        />
+      </AccordionContent>
+    </AccordionItem>
+  );
 }
