@@ -1,32 +1,25 @@
-const SCREEN_WIDTH = 430;
-const SCREEN_HEIGHT = 600;
-const PLAYER_WIDTH = 100;
-const PLAYER_HEIGHT = 15;
-const PLAYER_A_COLOR = 'rgba(217, 217, 217, 1)';
-const PLAYER_B_COLOR = 'rgba(0, 133, 255, 1)';
-const BACKGROUND_COLOR = 'rgba(15, 23, 42, 0.8)';
-const BALL_RADIUS = 5;
-const BALL_COLOR = 'white';
-const BALL_SPEED = 5 / 2;
-const BALL_VELOCITY = {x: 2.51 / 2, y: -4.32 / 2};
-const PADDLE_OFFSET = SCREEN_WIDTH / 200;
-const SCORE_LIMIT = 10;
-const GAME_TIME_LIMIT = 120;
-
 class Player {
-  constructor(id, x, y, width, height, color, dx) {
+  constructor({
+    id,
+    x,
+    y,
+    width = PLAYER_WIDTH,
+    height = PLAYER_HEIGHT,
+    color,
+    dx = 0
+  }) {
     this.id = id;
     this.x = x;
     this.y = y;
-    this.width = width || 100;
-    this.height = height || 15;
-    this.color = color || 'rgba(217, 217, 217, 1)';
-    this.dx = dx || 0;
+    this.width = width;
+    this.height = height;
+    this.color = color;
+    this.dx = dx;
   }
 
   isACollided(ball) {
     const offsetX = ball.x - this.x + ball.radius;
-    const offsetY = ball.y - this.y + ball.radius;
+    const offsetY = ball.y - this.y + ball.radius - this.height;
     return (
       offsetX < this.width + 4 && offsetX > 0 && offsetY <= 10 && offsetY >= -10
     );
@@ -34,8 +27,7 @@ class Player {
 
   isBCollided(ball) {
     const offsetX = ball.x - this.x + ball.radius;
-    const offsetY = this.y - ball.y + this.height + ball.radius;
-    console.log(this.y, ball.y, this.height, ball.radius)
+    const offsetY = this.y - ball.y - ball.radius + this.height;
     return (
       offsetX < this.width + 4 && offsetX > 0 && offsetY >= -10 && offsetY <= 10
     );
@@ -56,8 +48,8 @@ class Player {
     const reflectedAngle = -Math.atan2(ball.velocity.y, ball.velocity.x);
     ball.velocity.x = Math.cos(reflectedAngle) * BALL_SPEED;
     ball.velocity.y = Math.sin(reflectedAngle) * BALL_SPEED;
-    console.log('handlecollision')
     this.applySpin(ball);
+    console.log('Ball hit');
   }
 
   draw() {
@@ -67,12 +59,26 @@ class Player {
     this.c.fill();
   }
 }
+const SCREEN_WIDTH = 430;
+const SCREEN_HEIGHT = 600;
+const PLAYER_WIDTH = 100;
+const PLAYER_HEIGHT = 15;
+const PLAYER_A_COLOR = 'rgba(217, 217, 217, 1)';
+const PLAYER_B_COLOR = 'rgba(0, 133, 255, 1)';
+const BACKGROUND_COLOR = 'rgba(15, 23, 42, 0.8)';
+const BALL_RADIUS = 5;
+const BALL_COLOR = 'white';
+const BALL_SPEED = 5 / 2;
+const BALL_VELOCITY = {x: 2.51 / 2, y: -4.32 / 2};
+const PADDLE_OFFSET = SCREEN_WIDTH / 200;
+const SCORE_LIMIT = 10;
+const GAME_TIME_LIMIT = 120;
+const DEBOUNCINGTIME = 500;
 
 const express = require('express');
 const next = require('next');
 const http = require('http');
 const socketIO = require('socket.io');
-const { CloudSnow } = require('lucide-react');
 const port = 4242;
 const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({dev});
@@ -88,13 +94,12 @@ const ball = {
 };
 
 nextApp.prepare().then(() => {
-  console.log('launched');
   const app = express();
   const server = http.createServer(app);
-  let flag = false;
+  let firstConnection = true;
   const io = socketIO(server, {
-    pingInterval: 2000,
-    pingTimeout: 5000,
+    pingInterval: 2000, //need to check it this thing actually works
+    pingTimeout: 5000, //this as well
     cors: {
       origin: 'http://localhost:3000',
       methods: ['GET', 'POST']
@@ -102,16 +107,14 @@ nextApp.prepare().then(() => {
   });
   io.on('connection', (socket) => {
     players.push(
-      new Player(
-        socket.id,
-        SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
-        flag ? SCREEN_HEIGHT - 45 : 30,
-        PLAYER_WIDTH,
-        PLAYER_HEIGHT,
-        players.length === 0 ? PLAYER_A_COLOR : PLAYER_B_COLOR //A : B 첫 번째로 추가되는 플레이어가 A다
-      )
+      new Player({
+        id: socket.id,
+        x: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
+        y: firstConnection ? SCREEN_HEIGHT - 45 : 30,
+        color: firstConnection ? PLAYER_A_COLOR : PLAYER_B_COLOR //A : B 첫 번째로 추가되는 플레이어가 A다
+      })
     );
-    flag = true;
+    firstConnection = false;
     io.emit('updatePlayers', players);
     io.emit('updateBall', ball);
     socket.on('disconnect', (reason) => {
@@ -119,9 +122,6 @@ nextApp.prepare().then(() => {
       const index = players.findIndex((player) => player.id === socket.id);
       if (index === -1) return;
       players.splice(index, 1);
-      //player will be deleted on backend but not frontend so we emit
-      io.emit('updatePlayers', players);
-      console.log('after deletion: ', players);
     });
     socket.on('keyDown', (keycode) => {
       const targetPlayer = players.find((player) => player.id === socket.id);
@@ -132,8 +132,8 @@ nextApp.prepare().then(() => {
           if (targetPlayer.x > 0) {
             targetPlayer.x -= PADDLE_OFFSET;
             targetPlayer.dx = PADDLE_OFFSET;
-            break;
           }
+          break;
         }
         case 'd': {
           if (targetPlayer.x < SCREEN_WIDTH - targetPlayer.width) {
@@ -168,11 +168,12 @@ nextApp.prepare().then(() => {
       if (!targetPlayer) return;
       targetPlayer.dx = 0;
     });
-    socket.on('updateBallPosition', () => {
+    socket.on('ballPostionUpdate', () => {
       ball.x += ball.velocity.x;
       ball.y += ball.velocity.y;
     });
     socket.on('ballHitSideWalls', () => {
+      //do we need to update ball's last collision? for now, no.
       ball.velocity.x *= -1;
     });
     socket.on('resetBall', (isA) => {
@@ -182,27 +183,24 @@ nextApp.prepare().then(() => {
       setTimeout(() => {
         x = isA ? players[0].x : players[1].x;
         y = isA ? players[0].y : players[1].y;
-        let dx = x - SCREEN_WIDTH / 2;
-        let dy = y - SCREEN_HEIGHT / 2;
+        const dx = x - ball.x;
+        const dy = y - ball.y;
         const speed = Math.sqrt(dx * dx + dy * dy);
-        let ret_x = (dx / speed) * BALL_SPEED;
-        let ret_y = (dy / speed) * BALL_SPEED;
+        const ret_x = (dx / speed) * BALL_SPEED;
+        const ret_y = (dy / speed) * BALL_SPEED;
         ball.velocity = {x: ret_x, y: ret_y};
         io.emit('updateBall', ball);
       }, 3000);
     });
     socket.on('ballBounce', () => {
-      const debouncingTime = 300;
       const now = Date.now();
-      if (ball.lastCollision && now - ball.lastCollision < debouncingTime)
+      if (ball.lastCollision && now - ball.lastCollision < DEBOUNCINGTIME)
         return;
-      console.log('ballBounce')
       if (players[0].isACollided(ball)) players[0].handleCollision(ball, now);
       else if (players[1].isBCollided(ball))
         players[1].handleCollision(ball, now);
     });
   });
-
   setInterval(() => {
     io.emit('updatePlayers', players);
     io.emit('updateBall', ball);

@@ -54,11 +54,11 @@ class Player extends React.Component<PlayerProps> {
 
   handleCollision(ball: Ball, now: number) {
     this.socket.emit('ballBounce', this.id);
-    ball.lastCollision = now;
-    const reflectedAngle = -Math.atan2(ball.velocity.y, ball.velocity.x);
-    ball.velocity.x = Math.cos(reflectedAngle) * BALL_SPEED;
-    ball.velocity.y = Math.sin(reflectedAngle) * BALL_SPEED;
-    this.applySpin(ball);
+    // ball.lastCollision = now;
+    // const reflectedAngle = -Math.atan2(ball.velocity.y, ball.velocity.x);
+    // ball.velocity.x = Math.cos(reflectedAngle) * BALL_SPEED;
+    // ball.velocity.y = Math.sin(reflectedAngle) * BALL_SPEED;
+    // this.applySpin(ball);
   }
 
   draw() {

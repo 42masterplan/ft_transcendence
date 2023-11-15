@@ -5,21 +5,19 @@ import {
   PLAYER_A_COLOR,
   PLAYER_B_COLOR,
   BACKGROUND_COLOR,
-  SCORE_LIMIT
-} from '../../../../lib/game/macros';
+  SCORE_LIMIT,
+  RENDERING_RATE,
+  DEBOUNCINGTIME
+} from '@/lib/game/macros';
 import Player from '@/lib/classes/Player';
 import Ball from '@/lib/classes/Ball';
 import Particle from '@/lib/classes/Particle';
 import {useEffect, useRef, useState} from 'react';
-import {
-  bounceIfCollided,
-  handleKeyDowns,
-  handleKeyUps
-} from '../../../../lib/game/util';
-import ScoreBoard from '../../../../components/game/ScoreBoard';
-import GameStatus from '../../../../components/game/GameStatus';
-
+import {bounceIfCollided, handleKeyDowns, handleKeyUps} from '@/lib/game/util';
+import ScoreBoard from '@/components/game/ScoreBoard';
+import GameStatus from '@/components/game/GameStatus';
 import io from 'socket.io-client';
+
 export default function Game() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
@@ -43,7 +41,7 @@ export default function Game() {
     c.scale(devicePixelRatio, devicePixelRatio);
     const particles = [] as Particle[];
     const playerA = new Player({
-      id: 'null',
+      id: '',
       x: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
       y: SCREEN_HEIGHT - 45,
       color: PLAYER_A_COLOR,
@@ -51,7 +49,7 @@ export default function Game() {
       socket
     });
     const playerB = new Player({
-      id: 'null',
+      id: '',
       x: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
       y: 30,
       color: PLAYER_B_COLOR,
@@ -64,13 +62,10 @@ export default function Game() {
       c,
       lastCollision: 0
     });
-    socket.on('connect', () => {
-      console.log('connected to server');
-    });
     socket.on('updatePlayers', (backendPlayers) => {
       if (backendPlayers.length < 2) return;
-      playerA.id = backendPlayers[0].id;
-      playerB.id = backendPlayers[1].id;
+      if (!playerA.id) playerA.id = backendPlayers[0].id;
+      if (!playerB.id) playerB.id = backendPlayers[1].id;
       playerA.x = backendPlayers[0].x;
       playerA.y = backendPlayers[0].y;
       playerB.x = backendPlayers[1].x;
@@ -79,9 +74,6 @@ export default function Game() {
       playerB.dx = backendPlayers[1].dx;
       if (!(playerA.id in backendPlayers)) delete backendPlayers[playerA.id];
       if (!(playerB.id in backendPlayers)) delete backendPlayers[playerB.id];
-    });
-    socket.on('disconnect', () => {
-      console.log('disconnected from server');
     });
     socket.on('updateBall', (backendBall) => {
       ball.x = backendBall.x;
@@ -100,30 +92,25 @@ export default function Game() {
           handleKeyUps(keysPressed.current, playerB, socket);
         }
       }
-    }, 15);
+    }, RENDERING_RATE);
     addEventListener(
       'keydown',
       (event) => (keysPressed.current[event.key] = true)
     );
     addEventListener('keyup', (event) => delete keysPressed.current[event.key]);
+
     const gameLoop = () => {
       c.fillStyle = BACKGROUND_COLOR;
       c.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-      if (socket.id == playerA.id) {
-        handleKeyDowns(keysPressed.current, playerA, socket, true);
-        handleKeyUps(keysPressed.current, playerA, socket);
-      } else if (socket.id == playerB.id) {
-        handleKeyDowns(keysPressed.current, playerB, socket, false);
-        handleKeyUps(keysPressed.current, playerB, socket);
-      }
       playerA.draw();
       playerB.draw();
-      ball.update();
-      socket.emit('updateBallPosition', ball);
-      if (ball.x - ball.radius < 0 || ball.x + ball.radius > SCREEN_WIDTH) {
-        ball.velocity.x *= -1;
+      ball.update(); //client-side prediction
+      if (
+        ball.x - ball.radius <= 10 ||
+        ball.x + ball.radius >= SCREEN_WIDTH - 10
+      )
+        //for latency padding, 10px
         socket.emit('ballHitSideWalls');
-      }
       if (ball.y < 0) {
         setScore((prev) => {
           const updatedScore = {...prev, playerA: prev.playerA + 1};
@@ -141,12 +128,17 @@ export default function Game() {
         ball.resetPosition(particles);
         socket.emit('resetBall', true);
       }
+      socket.emit('ballPostionUpdate');
+      const now = Date.now();
+      // if (ball.lastCollision && now - ball.lastCollision < DEBOUNCINGTIME)
+      //   return; //this exits the whole loop, so the ball won't be drawn
+      if (playerA.isACollided(ball) || playerB.isBCollided(ball))
+        socket.emit('ballBounce');
       particles.forEach((particle) => {
         if (particle.alpha <= 0.01) {
           particles.splice(particles.indexOf(particle), 1);
         } else particle.update();
       });
-      bounceIfCollided(ball, playerA, playerB);
       animationId = requestAnimationFrame(gameLoop);
     };
     gameLoop();
