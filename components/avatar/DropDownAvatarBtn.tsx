@@ -6,7 +6,7 @@ import {MdOutlineManageAccounts} from 'react-icons/md';
 import {IoVolumeMuteOutline} from 'react-icons/io5';
 import {PiPaperPlaneTiltBold, PiSmileyAngry} from 'react-icons/pi';
 // 여기까진 아이콘 임포트
-
+import {Dispatch, SetStateAction} from 'react';
 import AvatarWithStatus from '../card/userInfoCard/AvatarWithStatus';
 import {Button} from '@/components/shadcn/ui/button';
 import {
@@ -22,6 +22,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from '@/components/shadcn/ui/dropdown-menu';
+import useChatSocket from '@/hooks/useChatSocket';
 
 const UserDropdownGroup = () => {
   return (
@@ -77,22 +78,27 @@ const AdminDropdownGroup = () => {
 };
 
 export default function DropdownAvatarBtn({
-  profile_image,
-  user_name
+  profileImage,
+  user_name,
+  channel_id,
+  role
 }: {
-  profile_image: string;
+  profileImage: string;
   user_name: string;
+  channel_id: string;
+  role: string;
 }) {
+  const [socket] = useChatSocket('channel');
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className='w-14 h-14 rounded-full'>
-          {/* <AvatarIcon size="small" avatarName={profile_image} /> */}
-          <AvatarWithStatus
-            size='sm'
-            image={profile_image}
-            showStatus={false}
-          />
+        <Button
+          className='w-14 h-14 rounded-full'
+          onClick={() => {
+            socket.emit('myRole', channel_id);
+          }}
+        >
+          <AvatarWithStatus size='sm' image={profileImage} showStatus={false} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
@@ -100,7 +106,7 @@ export default function DropdownAvatarBtn({
         <DropdownMenuSeparator />
         {UserDropdownGroup()}
         <DropdownMenuSeparator />
-        {AdminDropdownGroup()}
+        {role === 'admin' || role == 'owner' ? AdminDropdownGroup() : null}
       </DropdownMenuContent>
     </DropdownMenu>
   );

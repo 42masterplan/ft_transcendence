@@ -5,7 +5,7 @@ import Axios from '@/api';
 export default function Redirect() {
   const router = useRouter();
   async function login(auth_code: string | string[]) {
-    await Axios.get('/user/auth-callback', {params: {auth_code: auth_code}})
+    await Axios.get('/auth/callback', {params: {code: auth_code}})
       .then((res) => {
         console.log('>>> [LOGIN] ✅ SUCCESS', res.data);
         if (res.status === 200) {

@@ -3,56 +3,56 @@ const dummyMatchRequestsData = [
   //     game_id: string,
   //     game_mode: string,
   //     friend_id: string,
-  //     profile_image: string,
+  //     profileImage: string,
   //   },
   //   {
   //     game_id: string,
   //     game_mode: string,
   //     friend_id: string,
-  //     profile_image: string,
+  //     profileImage: string,
   //   },
   //   ...
   {
     game_id: '1',
     game_mode: 'single',
     friend_id: '2',
-    profile_image: 'https://www.w3schools.com/howto/img_avatar.png'
+    profileImage: 'https://www.w3schools.com/howto/img_avatar.png'
   },
   {
     game_id: '2',
     game_mode: 'single',
     friend_id: '3',
-    profile_image: 'https://www.w3schools.com/howto/img_avatar.png'
+    profileImage: 'https://www.w3schools.com/howto/img_avatar.png'
   },
   {
     game_id: '3',
     game_mode: 'single',
     friend_id: '4',
-    profile_image: 'https://www.w3schools.com/howto/img_avatar.png'
+    profileImage: 'https://www.w3schools.com/howto/img_avatar.png'
   },
   {
     game_id: '4',
     game_mode: 'single',
     friend_id: '5',
-    profile_image: 'https://www.w3schools.com/howto/img_avatar.png'
+    profileImage: 'https://www.w3schools.com/howto/img_avatar.png'
   },
   {
     game_id: '5',
     game_mode: 'single',
     friend_id: '6',
-    profile_image: 'https://www.w3schools.com/howto/img_avatar.png'
+    profileImage: 'https://www.w3schools.com/howto/img_avatar.png'
   },
   {
     game_id: '6',
     game_mode: 'single',
     friend_id: '7',
-    profile_image: 'https://www.w3schools.com/howto/img_avatar.png'
+    profileImage: 'https://www.w3schools.com/howto/img_avatar.png'
   },
   {
     game_id: '7',
     game_mode: 'single',
     friend_id: '8',
-    profile_image: 'https://www.w3schools.com/howto/img_avatar.png'
+    profileImage: 'https://www.w3schools.com/howto/img_avatar.png'
   }
 ];
 
@@ -139,5 +139,5 @@ export interface matchRequest {
   game_id: string;
   game_mode: string;
   friend_id: string;
-  profile_image: string;
+  profileImage: string;
 }

@@ -10,7 +10,7 @@ export default function validation() {
         </h1>
         <div
           className='flex flex-col items-center w-[466px] h-auto rounded-l
-         p-6 bg-info_bg gap-3'
+         p-6 bg-custom2 gap-3'
         >
           <h1
             className='font-roboto-mono text-4xl

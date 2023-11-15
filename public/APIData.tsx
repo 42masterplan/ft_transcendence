@@ -1,7 +1,7 @@
 export interface GameInfoType {
   id: string;
   name: string;
-  profile_image: string;
+  profileImage: string;
   current_status: string;
   game_mode: string;
 }
@@ -9,7 +9,7 @@ export interface GameInfoType {
 export interface UserInfoType {
   id: string;
   name: string;
-  profile_image: string;
+  profileImage: string;
   current_status: string;
   introduction: string;
 }
@@ -32,14 +32,14 @@ export interface channelInfoType {
 export interface chatInfoType {
   id: string; //random uuid
   name: string; //채팅을 보낸 사람의 이름
-  profile_image: string; //채팅을 보낸 사람의 프로필 사진
+  profileImage: string; //채팅을 보낸 사람의 프로필 사진
   contents: string; //채팅 내용
 }
 // 1-2 현재 채팅방에서 참여중인 유저의 정보입니다.
 export interface chatUserInfo {
   id: string;
   name: string;
-  profile_image: string;
+  profileImage: string;
   current_status: string;
   introduction: string;
   role: string;
@@ -49,7 +49,7 @@ export interface chatUserInfo {
 export interface chatMyInfoType {
   id: string;
   name: string;
-  profile_image: string;
+  profileImage: string;
   role: string; // manager, admin, user
 }
 
@@ -57,14 +57,14 @@ export interface chatMyInfoType {
 export interface banUserType {
   id: string; //Random uuid
   name: string; //userNickName
-  profile_image: string;
+  profileImage: string;
 }
 
 //3. 유저의 차단된 유저의 정보
 export interface blockUserType {
   id: string; //Random uuid
   name: string; //userNickName
-  profile_image: string;
+  profileImage: string;
 }
 
 //a-1. 게임 요청이 올 때 정보
@@ -72,21 +72,21 @@ export const gameRequests: Array<GameInfoType> = [
   {
     id: 'Seoyoo',
     name: 'Seoyoo',
-    profile_image: 'shark_health',
+    profileImage: 'shark_health',
     current_status: 'ONLINE',
     game_mode: 'health'
   },
   {
     id: 'hkong',
     name: 'hkong',
-    profile_image: 'koala_health',
+    profileImage: 'koala_health',
     current_status: 'OFFLINE',
     game_mode: 'swim'
   },
   {
     id: 'hkong',
     name: 'hkong',
-    profile_image: 'koala_health',
+    profileImage: 'koala_health',
     current_status: 'OFFLINE',
     game_mode: 'swim'
   }
@@ -97,35 +97,35 @@ export const friendRequests: Array<UserInfoType> = [
   {
     id: 'jjin',
     name: 'jjin',
-    profile_image: 'polarbear_ski',
+    profileImage: 'polarbear_ski',
     current_status: 'INGAME',
     introduction: 'I love badminton'
   },
   {
     id: 'daejlee',
     name: 'daejlee',
-    profile_image: 'rhino_health',
+    profileImage: 'rhino_health',
     current_status: 'OFFLINE',
     introduction: '난 대지리다!'
   },
   {
     id: 'joushin',
     name: 'joushin',
-    profile_image: 'gorilla_baseBall',
+    profileImage: 'gorilla_baseBall',
     current_status: 'OFFLINE',
     introduction: '난 조신이다!'
   },
   {
     id: 'hkong',
     name: 'hkong',
-    profile_image: 'koala_health',
+    profileImage: 'koala_health',
     current_status: 'OFFLINE',
     introduction: 'I love Swimming~'
   },
   {
     id: 'Seoyoo',
     name: 'Seoyoo',
-    profile_image: 'shark_health',
+    profileImage: 'shark_health',
     current_status: 'ONLINE',
     introduction: 'I love Health'
   }
@@ -136,35 +136,35 @@ export const friendInfos: Array<UserInfoType> = [
   {
     id: 'jjin',
     name: 'jjin',
-    profile_image: 'polarbear_ski',
+    profileImage: 'polarbear_ski',
     introduction: 'I love badminton',
     current_status: 'INGAME'
   },
   {
     id: 'daejlee',
     name: 'daejlee',
-    profile_image: 'rhino_health',
+    profileImage: 'rhino_health',
     introduction: '난 대지리다!',
     current_status: 'OFFLINE'
   },
   {
     id: 'joushin',
     name: 'joushin',
-    profile_image: 'gorilla_baseBall',
+    profileImage: 'gorilla_baseBall',
     introduction: '난 조신이다!',
     current_status: 'OFFLINE'
   },
   {
     id: 'hkong',
     name: 'hkong',
-    profile_image: 'koala_health',
+    profileImage: 'koala_health',
     current_status: 'OFFLINE',
     introduction: 'I love Swimming~'
   },
   {
     id: 'Seoyoo',
     name: 'Seoyoo',
-    profile_image: 'shark_health',
+    profileImage: 'shark_health',
     current_status: 'ONLINE',
     introduction: 'I love Health'
   }
@@ -229,43 +229,43 @@ const chatInfos: Array<chatInfoType> = [
   {
     id: 'jjin',
     name: 'jjin',
-    profile_image: 'polarbear_ski',
+    profileImage: 'polarbear_ski',
     contents: 'Do you want build snow man?'
   },
   {
     id: 'daejlee',
     name: 'daejlee',
-    profile_image: 'rhino_health',
+    profileImage: 'rhino_health',
     contents: '라이노는 코뿔소 들이 박아버려 다 겁을 줘~~'
   },
   {
     id: 'MY_ID',
     name: 'joushin',
-    profile_image: 'gorilla_baseBall',
+    profileImage: 'gorilla_baseBall',
     contents: '고릴라를 무시하지 마라'
   },
   {
     id: 'joshin',
     name: 'joshin',
-    profile_image: 'gorilla_baseBall',
+    profileImage: 'gorilla_baseBall',
     contents: '고릴라를 무시하지 마라'
   },
   {
     id: 'hkong',
     name: 'hkong',
-    profile_image: 'koala_health',
+    profileImage: 'koala_health',
     contents: '수영 꿀잼~~'
   },
   {
     id: 'Seoyoo',
     name: 'Seoyoo',
-    profile_image: 'shark_health',
+    profileImage: 'shark_health',
     contents: '무게가 가볍다?? 근손실 안돼!!'
   },
   {
     id: 'Seoyoo',
     name: 'Seoyoo',
-    profile_image: 'shark_health',
+    profileImage: 'shark_health',
     contents:
       '아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트아주긴거 테테스스트'
   }
@@ -276,7 +276,7 @@ export const channelUserList = [
   {
     id: 'RandomUUid',
     name: 'jjin',
-    profile_image: 'polarbear_ski',
+    profileImage: 'polarbear_ski',
     current_status: 'INGAME',
     introduction: 'Do you want build snow man?',
     role: 'admin'
@@ -284,7 +284,7 @@ export const channelUserList = [
   {
     id: 'RandomUUid',
     name: 'daejlee',
-    profile_image: 'rhino_health',
+    profileImage: 'rhino_health',
     current_status: 'OFFLINE',
     introduction: '라이노는 코뿔소 들이 박아버려 다 겁을 줘~~',
     role: 'admin'
@@ -292,7 +292,7 @@ export const channelUserList = [
   {
     id: 'MY_ID',
     name: 'joushin',
-    profile_image: 'gorilla_baseBall',
+    profileImage: 'gorilla_baseBall',
     current_status: 'OFFLINE',
     introduction: '고릴라를 무시하지 마라',
     role: 'manager'
@@ -300,7 +300,7 @@ export const channelUserList = [
   {
     id: 'RandomUUid',
     name: 'joshin',
-    profile_image: 'gorilla_baseBall',
+    profileImage: 'gorilla_baseBall',
     current_status: 'OFFLINE',
     introduction: '고릴라를 무시하지 마라',
     role: 'admin'
@@ -308,7 +308,7 @@ export const channelUserList = [
   {
     id: 'uuid',
     name: 'hkong',
-    profile_image: 'koala_health',
+    profileImage: 'koala_health',
     current_status: 'OFFLINE',
     introduction: '수영 꿀잼~~',
     role: 'user'
@@ -316,7 +316,7 @@ export const channelUserList = [
   {
     id: 'uuid',
     name: 'Seoyoo',
-    profile_image: 'shark_health',
+    profileImage: 'shark_health',
     current_status: 'ONLINE',
     introduction: 'I love Health',
     role: 'user'
@@ -327,7 +327,7 @@ export const channelUserList = [
 export const chatMyInfo: chatMyInfoType = {
   id: 'MY_ID',
   name: 'joushin',
-  profile_image: 'gorilla_baseBall',
+  profileImage: 'gorilla_baseBall',
   role: 'manager'
 };
 
@@ -343,12 +343,12 @@ export const banUserList: Array<banUserType> = [
   {
     id: 'RandomUUid',
     name: 'Naki',
-    profile_image: 'dog_stateBoard'
+    profileImage: 'dog_stateBoard'
   },
   {
     id: 'RandomUUid',
     name: 'sohlee',
-    profile_image: 'dog_stateBoard'
+    profileImage: 'dog_stateBoard'
   }
 ];
 
@@ -357,7 +357,7 @@ export const blockUserInfos: Array<blockUserType> = [
   {
     id: 'RandomUUid',
     name: 'Naki',
-    profile_image: 'dog_stateBoard'
+    profileImage: 'dog_stateBoard'
   }
 ];
 

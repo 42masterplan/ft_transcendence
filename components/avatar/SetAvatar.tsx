@@ -35,8 +35,6 @@ export default function SetAvatar({setProfileImage}: {setProfileImage: any}) {
     formData.set('profileImage', file);
     try {
       const res = await Axios.post('/users/profile-image', formData);
-      //이거 윈도우문제인지 알길이 없어서 일단 넘어갈께요.
-      console.log(res.data);
       console.log(res.data.profileImage);
       setProfileImage(res.data.profileImage);
       Setselected(15);
