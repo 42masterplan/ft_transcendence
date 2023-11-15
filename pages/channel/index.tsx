@@ -56,7 +56,7 @@ export default function ChannelPage() {
       ) : (
         <div className='flex flex-col w-full h-full'>
           <ChannelHeader channel_name={currentChannel} />
-          <ScrollableContainer className=' bg-custom3'>
+          <ScrollableContainer className=' bg-custom2'>
             <ChannelBody
               messages={messages}
               setMessages={setMessages}
