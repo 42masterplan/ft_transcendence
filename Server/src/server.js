@@ -40,7 +40,8 @@ wsServer.on('connection', (socket) => {
   // socket.emit('setUserInfo');
   socket.onAny((event) => {
     console.log(`Socket Event: ${event}`);
-    socket.emit('setUserInfo');
+		if (socket['username'] === 'Anon')
+   	 	socket.emit('setUserInfo');
   });
 
   //현재 참여중인 채널을 보내주는 이벤트

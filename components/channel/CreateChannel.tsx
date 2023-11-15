@@ -214,7 +214,7 @@ export default function CreateChannel() {
     <Dialog>
       <DialogTrigger asChild>
         <Button
-          className='rounded-full bg-custom1 text-custom4'
+          className='rounded-full'
           onClick={() => {
             fetchUserInfos();
           }}
