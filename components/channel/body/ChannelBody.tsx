@@ -4,7 +4,7 @@ import {useRef, useEffect, Dispatch, SetStateAction} from 'react';
 
 import {ChannelHistoryType} from '@/types/channel';
 import useChatSocket from '@/hooks/useChatSocket';
-import ChatMessage from '@/components/card/userInfoCard/ChatCard';
+import ChatMessage from '@/components/channel/body/ChatCard';
 import ScrollableContainer from '../../container/ScrollableContainer';
 
 export function ChannelBody({
