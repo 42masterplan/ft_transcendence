@@ -75,7 +75,7 @@ export function ChannelBody({
     messageEndRef.current?.scrollIntoView({behavior: 'smooth'});
   }, [messages]);
   return (
-    <div className='rounded-none bg-red-300 h-full'>
+    <div className='rounded-none bg-custom2 h-full'>
       <ScrollableContainer className=''>
         <div>{ShowHistory()}</div>
       </ScrollableContainer>
