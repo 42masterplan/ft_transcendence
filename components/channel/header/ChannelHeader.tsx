@@ -1,4 +1,4 @@
-import CreateChannel from '../CreateChannel';
+import CreateChannel from './createChannel/CreateChannel';
 import ManageChannel from '../ManageChannel';
 import PublicRoomList from './publicRoom/PublicRoomList';
 
