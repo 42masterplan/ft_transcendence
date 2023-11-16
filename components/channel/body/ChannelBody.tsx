@@ -81,7 +81,7 @@ export function ChannelBody({
   }, [messages]);
   return (
     <div className='h-full'>
-      <ScrollableContainer>
+      <ScrollableContainer className='rounded-none'>
         <div>{messages ? ShowHistory() : null}</div>
       </ScrollableContainer>
     </div>

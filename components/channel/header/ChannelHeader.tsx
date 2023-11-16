@@ -1,5 +1,5 @@
 import CreateChannel from './createChannel/CreateChannel';
-import ManageChannel from '../ManageChannel';
+import ManageChannel from './ManageChannel';
 import PublicRoomList from './publicRoom/PublicRoomList';
 
 export default function ChannelHeader({
