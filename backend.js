@@ -92,6 +92,31 @@ const ball = {
   color: BALL_COLOR,
   lastCollision: 0
 };
+const score = {
+  playerA: 0,
+  playerB: 0
+};
+
+function resetBall(isA, io) {
+  console.log('resetBall');
+  if (isA) score.playerA++;
+  else score.playerB++;
+  io.emit('updateScore', score);
+  ball.x = SCREEN_WIDTH / 2;
+  ball.y = SCREEN_HEIGHT / 2;
+  ball.velocity = {x: 0, y: 0};
+  setTimeout(() => {
+    x = isA ? players[0].x : players[1].x;
+    y = isA ? players[0].y : players[1].y;
+    const dx = x - ball.x;
+    const dy = y - ball.y;
+    const speed = Math.sqrt(dx * dx + dy * dy);
+    const ret_x = (dx / speed) * BALL_SPEED;
+    const ret_y = (dy / speed) * BALL_SPEED;
+    ball.velocity = {x: ret_x, y: ret_y};
+    io.emit('updateBall', ball);
+  }, 3000);
+}
 
 nextApp.prepare().then(() => {
   const app = express();
@@ -168,45 +193,25 @@ nextApp.prepare().then(() => {
       if (!targetPlayer) return;
       targetPlayer.dx = 0;
     });
-    socket.on('ballPostionUpdate', () => {
-      ball.x += ball.velocity.x;
-      ball.y += ball.velocity.y;
-    });
-    socket.on('ballHitSideWalls', () => {
-      const now = Date.now();
-      if (ball.lastCollision && now - ball.lastCollision < DEBOUNCINGTIME)
-        return;
+  });
+  setInterval(() => {
+    if (players.length < 2) return;
+    ball.x += ball.velocity.x;
+    ball.y += ball.velocity.y;
+    io.emit('updatePlayers', players);
+    io.emit('updateBall', ball);
+    if (ball.x - ball.radius <= 0 || ball.x + ball.radius >= SCREEN_WIDTH)
       ball.velocity.x *= -1;
-      ball.lastCollision = now;
-    });
-    socket.on('resetBall', (isA) => {
-      ball.x = SCREEN_WIDTH / 2;
-      ball.y = SCREEN_HEIGHT / 2;
-      ball.velocity = {x: 0, y: 0};
-      setTimeout(() => {
-        x = isA ? players[0].x : players[1].x;
-        y = isA ? players[0].y : players[1].y;
-        const dx = x - ball.x;
-        const dy = y - ball.y;
-        const speed = Math.sqrt(dx * dx + dy * dy);
-        const ret_x = (dx / speed) * BALL_SPEED;
-        const ret_y = (dy / speed) * BALL_SPEED;
-        ball.velocity = {x: ret_x, y: ret_y};
-        io.emit('updateBall', ball);
-      }, 3000);
-    });
-    socket.on('ballBounce', () => {
+    else if (ball.y < 0) resetBall(false, io);
+    else if (ball.y > SCREEN_HEIGHT) resetBall(true, io);
+    if (players[0].isACollided(ball) || players[1].isBCollided(ball)) {
       const now = Date.now();
       if (ball.lastCollision && now - ball.lastCollision < DEBOUNCINGTIME)
         return;
       if (players[0].isACollided(ball)) players[0].handleCollision(ball, now);
       else if (players[1].isBCollided(ball))
         players[1].handleCollision(ball, now);
-    });
-  });
-  setInterval(() => {
-    io.emit('updatePlayers', players);
-    io.emit('updateBall', ball);
+    }
   }, 15);
   app.use(express.static('public'));
   app.get('*', (req, res) => {

@@ -81,6 +81,17 @@ export default function Game() {
       ball.velocity = backendBall.velocity;
       ball.lastCollision = backendBall.lastCollision;
     });
+    socket.on('updateScore', (backendScore) => {
+      setScore(() => {
+        const updatedScore = {...backendScore};
+        if (
+          updatedScore.playerB === SCORE_LIMIT ||
+          updatedScore.playerA === SCORE_LIMIT
+        )
+          setGameOver(true);
+        return updatedScore;
+      });
+    });
     setInterval(() => {
       if (keysPressed.current) {
         if (socket.id == playerA.id) {
@@ -104,34 +115,8 @@ export default function Game() {
       c.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
       playerA.draw();
       playerB.draw();
-      ball.update(); //client-side prediction
-      if (ball.x - ball.radius <= 0 || ball.x + ball.radius >= SCREEN_WIDTH) {
-        //for latency padding, 10px
-        socket.emit('ballHitSideWalls');
-        console.log('hit side walls');
-      } else if (ball.y < 0) {
-        setScore((prev) => {
-          const updatedScore = {...prev, playerA: prev.playerA + 1};
-          if (updatedScore.playerA === SCORE_LIMIT) setGameOver(true);
-          return updatedScore;
-        });
-        ball.resetPosition(particles);
-        socket.emit('resetBall', false);
-      } else if (ball.y > SCREEN_HEIGHT) {
-        setScore((prev) => {
-          const updatedScore = {...prev, playerB: prev.playerB + 1};
-          if (updatedScore.playerB === SCORE_LIMIT) setGameOver(true);
-          return updatedScore;
-        });
-        ball.resetPosition(particles);
-        socket.emit('resetBall', true);
-      }
-      socket.emit('ballPostionUpdate');
-      const now = Date.now();
-      // if (ball.lastCollision && now - ball.lastCollision < DEBOUNCINGTIME)
-      //   return; //this exits the whole loop, so the ball won't be drawn
-      if (playerA.isACollided(ball) || playerB.isBCollided(ball))
-        socket.emit('ballBounce');
+      ball.draw(); //client-side prediction
+      if (ball.y > SCREEN_HEIGHT || ball.y < 0) ball.resetPosition(particles);
       particles.forEach((particle) => {
         if (particle.alpha <= 0.01) {
           particles.splice(particles.indexOf(particle), 1);

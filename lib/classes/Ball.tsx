@@ -21,16 +21,6 @@ interface BallProps {
   lastCollision: number;
 }
 
-// function calcBallVelocity(x: number, y: number) {
-//   let dx = x - SCREEN_WIDTH / 2;
-//   let dy = y - SCREEN_HEIGHT / 2;
-
-//   const speed = Math.sqrt(dx * dx + dy * dy);
-//   let ret_x = (dx / speed) * BALL_SPEED;
-//   let ret_y = (dy / speed) * BALL_SPEED;
-//   return {x: ret_x, y: ret_y};
-// }
-
 export default class Ball extends React.Component<BallProps> {
   x = this.props.x;
   y = this.props.y;
@@ -41,16 +31,12 @@ export default class Ball extends React.Component<BallProps> {
 
   draw() {
     const {c} = this.props;
+    this.x += this.velocity.x;
+    this.y += this.velocity.y;
     c.beginPath();
     c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
     c.fillStyle = this.color;
     c.fill();
-  }
-
-  update() {
-    this.draw();
-    this.x += this.velocity.x;
-    this.y += this.velocity.y;
   }
 
   resetPosition(particles: Particle[]) {
