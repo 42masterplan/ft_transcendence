@@ -41,6 +41,22 @@ wsServer.on('connection', (socket) => {
     socket.emit('allPublicChannel', PublicRoomList);
   });
 
+  socket.on('joinChannel', ({channelId, password}, done) => {
+    //비밀번호 인증 후 성공시에만 조인 성공
+    if (password === 'invalid') {
+      //예시일뿐 실제로는 비밀번호 인증을 해야합니다.
+      return;
+    }
+    //올바른 채널인지 확인 필요
+    socket.join(channelId);
+    //참여중 채널 목록 업데이트
+    EngagedChannels.push(
+      PublicRoomList.find((room) => room.channelId === channelId)
+    );
+    socket.emit('myChannels', EngagedChannels);
+    done();
+  });
+
   //채널이 생성된 순간 이벤트
   socket.on(
     'createChannel',

@@ -71,19 +71,19 @@ export const ChaanelHistorys = {
   아비꼬: [
     {
       id: 'yejinam',
-      createdAt: '2021-06-01T14:48:00.000Z',
       name: 'yejinam',
       //채팅을 보낸 사람의 이름
       profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI3 || '', //채팅을 보낸 사람의 프로필 사진
       content: '나는 남예지다.?', //채팅 내용
+      createdAt: '2021-06-01T14:48:00.000Z',
       isBlocked: false //차단 여부
     },
     {
       id: 'daejlee',
-      createdAt: '2021-06-01T14:48:00.000Z',
       name: 'daejlee',
       profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI4 || '',
       content: '라이노는 코뿔소 들이 박아버려 다 겁을 줘~~',
+      createdAt: '2021-06-01T14:48:00.000Z',
       isBlocked: false //차단 여부
     },
     {
@@ -97,11 +97,11 @@ export const ChaanelHistorys = {
   압둘알리: [
     {
       id: 'yejinam2',
-      createdAt: '2021-06-01T14:48:00.000Z',
       name: 'yejinam2',
       //채팅을 보낸 사람의 이름
       profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI4 || '', //채팅을 보낸 사람의 프로필 사진
       content: '나는 남예지다. ? ㄴ미ㅏㅇ;', //채팅 내용
+      createdAt: '2021-06-01T14:48:00.000Z',
       isBlocked: false //차단 여부
     },
     {
