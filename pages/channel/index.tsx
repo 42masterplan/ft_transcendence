@@ -25,9 +25,11 @@ export default function ChannelPage() {
     });
     socket.on('myRole', (data) => {
       console.log('권한 설정', data);
-      setRole(data.role);
+      if (data === null) {
+        alert('채널에 참가중..');
+      } else setRole(data.role);
     });
-    socket.once('setUserInfo', () => {
+    socket.on('setUserInfo', () => {
       socket.emit('setUserInfo', {
         username: 'joushin',
         userId: 'joushin',

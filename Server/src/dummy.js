@@ -6,7 +6,7 @@ export const PublicRoomList = [
     channelName: '개굴개굴 개구리',
     userCount: 10,
     isPassword: false,
-    id: '1'
+    id: '개굴개굴 개구리'
   },
   {
     channelName: '굴개 굴개 개구리',

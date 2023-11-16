@@ -38,10 +38,10 @@ wsServer.on('connection', (socket) => {
   socket.join(EngagedChannels.map((channel) => channel.id));
   //연결 되자마자 유저 정보를 얻어옵니다.
   // socket.emit('setUserInfo');
+  socket.emit('setUserInfo');
   socket.onAny((event) => {
     console.log(`Socket Event: ${event}`);
-		if (socket['username'] === 'Anon')
-   	 	socket.emit('setUserInfo');
+    if (socket['username'] === 'Anon') socket.emit('setUserInfo');
   });
 
   //현재 참여중인 채널을 보내주는 이벤트
@@ -59,6 +59,9 @@ wsServer.on('connection', (socket) => {
   });
 
   socket.on('newMessage', (msg, roomid, done) => {
+    console.log(msg, roomid);
+    console.log(channelHistory);
+    console.log(channelHistory[roomid]);
     channelHistory[roomid].push({
       id: socket.userId,
       name: socket.username,
@@ -86,18 +89,29 @@ wsServer.on('connection', (socket) => {
   });
 
   //public Channel 에 참여하는 경우
-  socket.on('joinChannel', ({channelId, password}, done) => {
+  socket.on('joinChannel', (channelId, password, done) => {
     //비밀번호 인증 후 성공시에만 조인 성공
     if (password === 'invalid') {
       //예시일뿐 실제로는 비밀번호 인증을 해야합니다.
       return;
     }
+    console.log('채널 아이디:', channelId);
     //올바른 채널인지 확인 필요
     socket.join(channelId);
     //참여중 채널 목록 업데이트
-    EngagedChannels.push(
-      PublicRoomList.find((room) => room.channelId === channelId)
-    );
+    const room = PublicRoomList.find((room) => room.channelName === channelId);
+    EngagedChannels.push({
+      id: channelId,
+      channelName: channelId,
+      userCount: room == undefined ? room.userCount : 1,
+      isUnread: true
+    });
+    //권한 설정
+    myRoles[channelId] = {role: 'user'};
+
+    //channel History에 추가
+    if (channelHistory[channelId] == undefined) channelHistory[channelId] = [];
+    //참여중 채널 목록 업데이트
     socket.emit('myChannels', EngagedChannels);
     done();
   });
