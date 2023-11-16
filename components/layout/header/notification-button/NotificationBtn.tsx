@@ -34,12 +34,6 @@ import {
 } from '@/components/shadcn/ui/sheet';
 import {Separator} from '@/components/shadcn/ui/separator';
 
-// import {
-//   getDummyCurrentUserIdSync,
-//   getDummyFriendRequestsSync,
-//   getDummyMatchRequestsSync,
-// } from "@/DummyBackend/outdated/DummyAPI";
-
 import * as dummyAPI from '@/DummyBackend/notificationAPI';
 
 import FriendRequestCard from './request/FriendRequestCard';
@@ -64,7 +58,7 @@ export default function NotificationBtn() {
           size='headerBtn'
           className='flex relative flex-row justify-center items-center'
         >
-          {/* This div is for Notification Count -> if notification count is 0 -> do not display */}
+          {/* This div is for match request -> if notification count is 0 -> do not display */}
           {notificationCount === 0 ? null : (
             <span
               className='absolute 
@@ -75,7 +69,21 @@ export default function NotificationBtn() {
               font-bold leading-none text-red-100 transform translate-x-1/2 
               -translate-y-1/2 bg-red-600 rounded-full '
             >
-              {notificationCount}
+              {matchRequests.length}
+            </span>
+          )}
+          {/* This div is for Notification Count -> if notification count is 0 -> do not display */}
+          {notificationCount === 0 ? null : (
+            <span
+              className='absolute 
+              top-1 left-1 sm:top-1 sm:left-1.5
+              inline-flex items-center justify-center 
+              px-1 py-1  sm:px-1.5 sm:py-0.5
+              text-[0px] sm:text-xs 
+              font-bold leading-none text-red-100 transform -translate-x-1/2 
+              -translate-y-1/2 bg-indigo-600 rounded-full '
+            >
+              {friendRequests.length}
             </span>
           )}
           <Bell className={ResponsiveDesign.iconSize} />

@@ -7,7 +7,7 @@ dotenv.config();
 import {
   PublicRoomList,
   EngagedChannels,
-  ChaanelHistorys,
+  channelHistory,
   myRoles
 } from './dummy.js';
 
@@ -31,16 +31,61 @@ httpServer.listen(4001, handleListen);
 //-------------서버 실행 -----------------
 
 wsServer.on('connection', (socket) => {
-  socket['nickname'] = 'Anon';
-
+  socket['username'] = 'Anon';
+  socket['userId'] = 'Anon';
+  socket['profileImage'] = 'Anon';
+  //처음 들어오면 이미 join된 상태인 room에 join해줍니다.
+  socket.join(EngagedChannels.map((channel) => channel.id));
+  //연결 되자마자 유저 정보를 얻어옵니다.
+  // socket.emit('setUserInfo');
   socket.onAny((event) => {
     console.log(`Socket Event: ${event}`);
+		if (socket['username'] === 'Anon')
+   	 	socket.emit('setUserInfo');
   });
+
+  //현재 참여중인 채널을 보내주는 이벤트
+  socket.on('myChannels', () => {
+    socket.emit('myChannels', EngagedChannels);
+  });
+
+  socket.on('channelHistory', ({roomid}) => {
+    socket.emit('channelHistory', channelHistory[roomid]);
+  });
+
+  //해당 채널에서 나의 역활
+  socket.on('myRole', (roomid) => {
+    socket.emit('myRole', myRoles[roomid]);
+  });
+
+  socket.on('newMessage', (msg, roomid, done) => {
+    channelHistory[roomid].push({
+      id: socket.userId,
+      name: socket.username,
+      profileImage: socket.profileImage,
+      content: msg
+    });
+    socket.to(roomid).emit('newMessage', roomid, {
+      id: socket.userId,
+      name: socket.username,
+      profileImage: socket.profileImage,
+      content: msg
+    });
+    done();
+  });
+
+  socket.on('setUserInfo', ({username, userId, profileImage}) => {
+    socket['username'] = username;
+    socket['userId'] = userId;
+    socket['profileImage'] = profileImage;
+  });
+
   // 모든 public channel 을 보내주는 이벤트
   socket.on('allPublicChannel', () => {
     socket.emit('allPublicChannel', PublicRoomList);
   });
 
+  //public Channel 에 참여하는 경우
   socket.on('joinChannel', ({channelId, password}, done) => {
     //비밀번호 인증 후 성공시에만 조인 성공
     if (password === 'invalid') {
@@ -64,6 +109,8 @@ wsServer.on('connection', (socket) => {
       if (channelName === '')
         return socket.emit('error_exist', '방 이름을 입력해주세요.');
       socket.join(channelName);
+      myRoles[channelName] = 'owner';
+      channelHistory[channelName] = [];
       //초대된 모든 유저들을 전부 join으로 넣어줘야합니다!
       //현재 참여 중인 채널목록 업데이트
       //여기서 하는게 옳은건 아닌데 backend 코드 추가하면서 변경해주세요.
@@ -80,7 +127,7 @@ wsServer.on('connection', (socket) => {
             channelName: channelName,
             userCount: invitedFriendIds.length + 1, //나까지 포함해서 +1
             isPassword: password !== '',
-            channelId: channelName
+            id: channelName
           });
           done(); //똑바로 끝나서 클라이언트 콜백 함수 호출
           //참여중 채널 목록 업데이트
@@ -100,36 +147,4 @@ wsServer.on('connection', (socket) => {
       }
     }
   );
-
-  //현재 참여중인 채널을 보내주는 이벤트
-  socket.on('myChannels', () => {
-    socket.emit('myChannels', EngagedChannels);
-  });
-  //public Channel 에 참여하는 경우
-  socket.on('joinChannel', ({channelId, password}, done) => {
-    socket.join(channelId);
-    done();
-    //참여중 채널 목록 업데이트
-    EngagedChannels.push(
-      PublicRoomList.find((room) => room.channelId === channelId)
-    );
-    socket.emit('myChannels', EngagedChannels);
-  });
-  socket.on('channelHistory', ({roomid}) => {
-    console.log(roomid);
-    console.log(ChaanelHistorys[roomid]);
-    socket.emit('channelHistory', ChaanelHistorys[roomid]);
-  });
-
-  //해당 채널에서 나의 역활
-  socket.on('myRole', (roomid) => {
-    socket.emit('myRole', myRoles[roomid]);
-  });
-
-  socket.on('message', (msg, done) => {
-    // console.log(wsServer.sockets.adapter);
-    socket.emit('message', `${socket.nickname}: ${msg}`);
-    done();
-  });
-  socket.on('nickname', (nickname) => (socket['nickname'] = nickname));
 });

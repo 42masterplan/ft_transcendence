@@ -1,17 +1,17 @@
 import FooterButton from './FooterButton';
 import {useRouter} from 'next/router';
 
-export default function Footer() {
+interface FooterProps {
+  className?: string;
+}
+
+export default function Footer({className = ''}: FooterProps) {
   // get current page url
   const router = useRouter();
   const currentUrl = router.pathname;
 
   return (
-    <footer
-      className={
-        'hidden sm:flex flex-row w-full justify-center space-x-3 px-3 py-3'
-      }
-    >
+    <footer className={className}>
       <FooterButton type='myPage' currentUrl={currentUrl} />
       <FooterButton type='game' currentUrl={currentUrl} />
       <FooterButton type='channel' currentUrl={currentUrl} />

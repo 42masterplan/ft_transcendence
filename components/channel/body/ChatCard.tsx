@@ -11,32 +11,38 @@
  * - showStatus: boolean -> whether to show the user's status. Default is true.
  * - className: string -> className of the card. Default is "".
  */
-
-import AvatarWithStatus from './AvatarWithStatus';
-import {UserInfo} from '@/lib/types';
+import DropDownAvatarBtn from '@/components/avatar/DropDownAvatarBtn';
 import {sizeType} from '@/lib/ResponsiveDesign';
-
-type UserInfoCardProps = {
-  userInfo: UserInfo;
+import React from 'react';
+type ChatMessageProps = {
   size?: sizeType;
-  side?: 'left' | 'right';
-  printIntro?: boolean;
+  side?: string;
   showStatus?: boolean;
   stretch?: boolean;
-  insteadOfIntro?: string;
   className?: string;
+  user_name: string;
+  profileImage: string;
+  channelId: string;
+  role: string;
+  message: string;
+  isMe: boolean;
 };
 
-export default function UserInfoCard({
-  userInfo,
-  size = 'md',
-  side = 'left',
-  printIntro = false,
-  showStatus = true,
-  stretch = false,
-  insteadOfIntro = '',
-  className = ''
-}: UserInfoCardProps) {
+export default React.forwardRef(function ChatMessage(
+  {
+    size = 'md',
+    side = 'left',
+    stretch = false,
+    className = '',
+    user_name = '',
+    profileImage = '',
+    channelId = '',
+    role = '',
+    message = '',
+    isMe
+  }: ChatMessageProps,
+  ref: any
+) {
   let flexAlign: string;
   let textAlign: string;
   if (side === 'left') {
@@ -96,7 +102,7 @@ export default function UserInfoCard({
       break;
     case 'md':
       avatarSize = 'md';
-      nameFontSize = 'text-2xl sm:text-3xl px-2';
+      nameFontSize = 'text-l sm:text-xl px-2';
       introFontSize = 'text-base sm:text-lg px-2';
       break;
     case 'lg':
@@ -112,11 +118,6 @@ export default function UserInfoCard({
   }
 
   let intro: string;
-  if (insteadOfIntro !== '') {
-    intro = insteadOfIntro;
-  } else {
-    intro = userInfo.introduction;
-  }
 
   type UserInfoTextContainerProps = {
     name: string;
@@ -129,33 +130,35 @@ export default function UserInfoCard({
         className={`flex ${textAlign} w-full flex-col justify-center gap-1 px-2 sm:px-3`}
       >
         <h1 className={`${nameFontSize} font-bold`}>{name}</h1>
-        {printIntro && (
+        {
           <div
-            className={`flex ${introFontSize} ${introWidthFit} break-words overflow-hidden`}
+            className={`flex ${introFontSize} ${introWidthFit} break-all overflow-hidden`}
           >
             {intro}
           </div>
-        )}
+        }
       </div>
     );
   }
 
   return (
-    <>
-      <div
-        className={`flex ${widthFit} ${flexAlign} ${className} rounded-xl p-1 sm:p-2`}
-      >
-        <AvatarWithStatus
-          status={userInfo.currentStatus}
-          image={userInfo.profileImage}
-          showStatus={showStatus}
-          size={avatarSize}
+    <div
+      className={`flex ${widthFit} ${flexAlign} ${className} rounded-xl p-1 sm:p-2`}
+      ref={ref}
+    >
+      <div>
+        <DropDownAvatarBtn
+          profileImage={profileImage}
+          user_name={user_name}
+          channel_id={channelId}
+          role={role}
+          isMe={isMe}
         />
-        <UserInfoTextContainer
-          name={userInfo.name}
-          intro={intro}
-        ></UserInfoTextContainer>
       </div>
-    </>
+      <UserInfoTextContainer
+        name={user_name}
+        intro={message}
+      ></UserInfoTextContainer>
+    </div>
   );
-}
+});

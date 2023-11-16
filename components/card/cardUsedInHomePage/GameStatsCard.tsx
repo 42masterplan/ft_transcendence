@@ -30,11 +30,11 @@ export default function GameStatsCard({rank}: GameStatsCardProps) {
   }
 
   return (
-    <Card className='m-2 hover:scale-102 duration-200 hover:-translate-y-1'>
+    <Card className='m-2 hover:scale-102 duration-200 hover:-translate-y-1 h-80 sm:h-72'>
       <CardHeader>
         <CardTitle>Game Stats</CardTitle>
       </CardHeader>
-      <CardContent className='flex flex-col gap-6'>
+      <CardContent className='flex flex-col gap-3'>
         <div>
           <div className='flex flex-row w-full justify-between py-1'>
             <p className='text-lg text-blue-300'>Wins: {rank.win}</p>

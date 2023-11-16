@@ -17,7 +17,7 @@ const DialogBtn = ({socket}: any) => {
   return (
     <DialogTrigger asChild>
       <Button
-        className='rounded-full bg-custom1 text-custom4'
+        className='rounded-full'
         onClick={() => socket.emit('allPublicChannel')} //추후 처음 들어올 때만 요청하도록 변경예정
       >
         <LuGlobe2 className='h-6 w-6' />

@@ -5,7 +5,7 @@ export default function PlayerPortrait(Player: Player) {
   return (
     <div className='flex flex-col items-center justify-center w-full'>
       <AvatarWithStatus
-        image={Player.profile_image}
+        image={Player.profileImage}
         showStatus={false}
         size='lg'
       />
