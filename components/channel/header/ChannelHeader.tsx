@@ -20,7 +20,11 @@ export default function ChannelHeader({
         <CreateChannel />
       </div>
       <div className='flex justify-end py-1'>
-        {role === 'owner' && <ManageChannel channel_name={channel_name} />}
+        {role === 'owner' ? (
+          <ManageChannel channel_name={channel_name} />
+        ) : (
+          role
+        )}
       </div>
     </div>
   );
