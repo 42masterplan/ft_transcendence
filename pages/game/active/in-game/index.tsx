@@ -105,13 +105,11 @@ export default function Game() {
       playerA.draw();
       playerB.draw();
       ball.update(); //client-side prediction
-      if (
-        ball.x - ball.radius <= 10 ||
-        ball.x + ball.radius >= SCREEN_WIDTH - 10
-      )
+      if (ball.x - ball.radius <= 0 || ball.x + ball.radius >= SCREEN_WIDTH) {
         //for latency padding, 10px
         socket.emit('ballHitSideWalls');
-      if (ball.y < 0) {
+        console.log('hit side walls');
+      } else if (ball.y < 0) {
         setScore((prev) => {
           const updatedScore = {...prev, playerA: prev.playerA + 1};
           if (updatedScore.playerA === SCORE_LIMIT) setGameOver(true);

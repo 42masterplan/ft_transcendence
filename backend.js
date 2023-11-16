@@ -173,8 +173,11 @@ nextApp.prepare().then(() => {
       ball.y += ball.velocity.y;
     });
     socket.on('ballHitSideWalls', () => {
-      //do we need to update ball's last collision? for now, no.
+      const now = Date.now();
+      if (ball.lastCollision && now - ball.lastCollision < DEBOUNCINGTIME)
+        return;
       ball.velocity.x *= -1;
+      ball.lastCollision = now;
     });
     socket.on('resetBall', (isA) => {
       ball.x = SCREEN_WIDTH / 2;
