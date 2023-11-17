@@ -48,7 +48,11 @@ export default function ChannelPage() {
       />
       {currentChannel === '' ? (
         <div className='flex flex-col items-center h-full'>
-          <ChannelHeader role={role} channel_name={currentChannel} />
+          <ChannelHeader
+            channelId={channelId}
+            role={role}
+            channel_name={currentChannel}
+          />
           <Image
             src={WaitImage}
             alt='채널에 참여해주세요'

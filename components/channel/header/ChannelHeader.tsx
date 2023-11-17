@@ -4,9 +4,11 @@ import PublicRoomList from './publicRoom/PublicRoomList';
 
 export default function ChannelHeader({
   channel_name,
+  channelId,
   role
 }: {
   channel_name: string;
+  channelId: string;
   role: string;
 }) {
   return (
@@ -20,11 +22,7 @@ export default function ChannelHeader({
         <CreateChannel />
       </div>
       <div className='flex justify-end py-1'>
-        {role === 'owner' ? (
-          <ManageChannel channel_name={channel_name} />
-        ) : (
-          role
-        )}
+        {role === 'owner' ? <ManageChannel channel_name={channelId} /> : role}
       </div>
     </div>
   );

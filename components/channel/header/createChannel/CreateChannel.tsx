@@ -29,7 +29,7 @@ import {Input} from '@/components/shadcn/ui/input';
 import {Label} from '@/components/shadcn/ui/label';
 import {MessageSquarePlus} from 'lucide-react';
 import Axios from '@/api';
-import {Dispatch, SetStateAction, useEffect, useState} from 'react';
+import {Dispatch, SetStateAction, useState} from 'react';
 import {userType, selectUserType} from '@/types/user';
 import useChatSocket from '@/hooks/useChatSocket';
 const SelectChannelType = ({
@@ -183,9 +183,7 @@ export default function CreateChannel() {
   };
   const createChannel = () => {
     const inviteUsers = inviteFriendList.map((friendInfo) => {
-      if (friendInfo.checked) {
-        return friendInfo.id;
-      }
+      if (friendInfo.checked) return friendInfo.id;
     });
     socket.emit(
       'createChannel',
@@ -203,6 +201,10 @@ export default function CreateChannel() {
           invitedFriendIds: inviteUsers,
           type: channelType
         });
+        setChannelName('');
+        setPassword('');
+        setChannelType('');
+        setInviteFriendList([]);
       }
     );
     socket.once('error_exist', (error: string) => {
