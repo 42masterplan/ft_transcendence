@@ -3,37 +3,37 @@ dotenv.config();
 
 export const PublicRoomList = [
   {
-    channelName: '개굴개굴 개구리',
+    name: '개굴개굴 개구리',
     userCount: 10,
     isPassword: false,
     id: '개굴개굴 개구리'
   },
   {
-    channelName: '굴개 굴개 개구리',
+    name: '굴개 굴개 개구리',
     userCount: 20,
     isPassword: false,
     id: '굴개 굴개 개구리'
   },
   {
-    channelName: '뭘봐 이놈아',
+    name: '뭘봐 이놈아',
     userCount: 21,
     isPassword: false,
     id: '뭘봐 이놈아'
   },
   {
-    channelName: '내일 코테인데',
+    name: '내일 코테인데',
     userCount: 22,
     isPassword: true,
     id: '내일 코테인데'
   },
   {
-    channelName: '잘 볼 수 있을까?',
+    name: '잘 볼 수 있을까?',
     userCount: 23,
     isPassword: false,
     id: '잘 볼 수 있을까?'
   },
   {
-    channelName: '기적 같이 맥북 따고 싶다.',
+    name: '기적 같이 맥북 따고 싶다.',
     userCount: 24,
     isPassword: true,
     id: '기적 같이 맥북 따고 싶다.'
@@ -43,25 +43,25 @@ export const PublicRoomList = [
 export const EngagedChannels = [
   {
     id: '아비꼬',
-    channelName: '아비꼬',
+    name: '아비꼬',
     userCount: 11,
     isUnread: true
   },
   {
     id: '압둘알리',
-    channelName: '압둘알리',
+    name: '압둘알리',
     userCount: 15,
     isUnread: false
   },
   {
     id: '헬스는 사랑이다.',
-    channelName: '헬스는 사랑이다.',
+    name: '헬스는 사랑이다.',
     userCount: 13,
     isUnread: true
   },
   {
     id: '42정병',
-    channelName: '42정병',
+    name: '42정병',
     userCount: 12,
     isUnread: false
   }

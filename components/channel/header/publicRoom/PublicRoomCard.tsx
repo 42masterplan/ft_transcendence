@@ -4,18 +4,18 @@ import {useState} from 'react';
 import useChatSocket from '@/hooks/useChatSocket';
 
 export default function PublicRoomCard({
-  channelName,
+  name,
   userCount,
   isLocked
 }: {
-  channelName: string;
+  name: string;
   userCount: number;
   isLocked: boolean;
 }) {
   const [socket] = useChatSocket('channel');
   const [password, SetPassword] = useState('');
-  function handleSubmit(channelName: string, password: string) {
-    socket.emit('joinChannel', channelName, password, () => {
+  function handleSubmit(name: string, password: string) {
+    socket.emit('joinChannel', name, password, () => {
       alert('channel join success');
     });
     // 비밀번호가 맞는지 확인
@@ -24,7 +24,7 @@ export default function PublicRoomCard({
   }
   return (
     <div className='flex justify-around bg-custom2 rounded-full items-center h-12'>
-      <span className='w-[200px]'>{channelName}</span>
+      <span className='w-[200px]'>{name}</span>
       <span className='w-10'>({userCount})</span>
       <Input
         className='w-[200px]'
@@ -35,7 +35,7 @@ export default function PublicRoomCard({
       />
       <Button
         onClick={() => {
-          handleSubmit(channelName, password);
+          handleSubmit(name, password);
           SetPassword('');
         }}
       >

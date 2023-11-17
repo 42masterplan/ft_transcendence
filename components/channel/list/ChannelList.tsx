@@ -34,7 +34,7 @@ export default function ChannelList({
       console.log(data);
       setMessages(data);
     });
-    setCurChannel(channel.channelName);
+    setCurChannel(channel.name);
     setChannelId(channel.id);
   };
   return (
@@ -51,7 +51,7 @@ export default function ChannelList({
           onClick={() => handleChannelClick(channel)}
           key={channel.id}
         >
-          <span className='text-base text-sky-300 '>{channel.channelName}</span>
+          <span className='text-base text-sky-300 '>{channel.name}</span>
           <span className='text-violet-400  text-xs font-bold'>
             {channel.userCount}
           </span>

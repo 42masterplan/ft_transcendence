@@ -99,10 +99,10 @@ wsServer.on('connection', (socket) => {
     //올바른 채널인지 확인 필요
     socket.join(channelId);
     //참여중 채널 목록 업데이트
-    const room = PublicRoomList.find((room) => room.channelName === channelId);
+    const room = PublicRoomList.find((room) => room.name === channelId);
     EngagedChannels.push({
       id: channelId,
-      channelName: channelId,
+      name: channelId,
       userCount: room == undefined ? room.userCount : 1,
       isUnread: true
     });
@@ -119,29 +119,29 @@ wsServer.on('connection', (socket) => {
   //채널이 생성된 순간 이벤트
   socket.on(
     'createChannel',
-    ({channelName, password, invitedFriendIds, type}, done) => {
-      if (channelName === '')
+    ({name, password, invitedFriendIds, status}, done) => {
+      if (name === '')
         return socket.emit('error_exist', '방 이름을 입력해주세요.');
-      socket.join(channelName);
-      myRoles[channelName] = {role: 'owner'};
-      channelHistory[channelName] = [];
+      socket.join(name);
+      myRoles[name] = {role: 'owner'};
+      channelHistory[name] = [];
       //초대된 모든 유저들을 전부 join으로 넣어줘야합니다!
       //현재 참여 중인 채널목록 업데이트
       //여기서 하는게 옳은건 아닌데 backend 코드 추가하면서 변경해주세요.
       EngagedChannels.push({
-        id: channelName,
-        channelName: channelName,
+        id: name,
+        name: name,
         userCount: invitedFriendIds.length + 1,
         isUnread: false
       });
-      if (type === 'Public') {
-        if (!PublicRoomList.find((room) => room.channelName === channelName)) {
+      if (status === 'Public') {
+        if (!PublicRoomList.find((room) => room.name === name)) {
           //공개 방이고 존재하지 않는 방이면
           PublicRoomList.push({
-            channelName: channelName,
+            name: name,
             userCount: invitedFriendIds.length + 1, //나까지 포함해서 +1
             isPassword: password !== '',
-            id: channelName
+            id: name
           });
           done(); //똑바로 끝나서 클라이언트 콜백 함수 호출
           //참여중 채널 목록 업데이트
@@ -149,9 +149,7 @@ wsServer.on('connection', (socket) => {
         } else {
           //이미 존재하는 방이면 에러 출력
           socket.emit('error_exist', '이미 존재하는 방입니다.');
-          PublicRoomList.find(
-            (room) => room.channelName === channelName
-          ).userCount += 1;
+          PublicRoomList.find((room) => room.name === name).userCount += 1;
         }
       } else {
         //비공개 방이면 => 여기서 private room도 에러 처리해주세요

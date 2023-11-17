@@ -188,18 +188,18 @@ export default function CreateChannel() {
     socket.emit(
       'createChannel',
       {
-        channelName: channelName,
+        name: channelName,
         password: password,
         invitedFriendIds: inviteUsers,
-        type: channelType
+        status: channelType
       },
       () => {
         alert('채널이 생성되었습니다.');
         console.log({
-          channelName: channelName,
+          name: channelName,
           password: password,
           invitedFriendIds: inviteUsers,
-          type: channelType
+          status: channelType
         });
         setChannelName('');
         setPassword('');
