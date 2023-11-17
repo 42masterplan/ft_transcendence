@@ -1,6 +1,5 @@
 import UserInfoCard from '@/components/card/userInfoCard/UserInfoCard';
 import RequestButton from './RequestButton';
-import ResponsiveContainer from '@/components/container/ResponsiveContainer';
 import * as dummyAPI from '@/DummyBackend/notificationAPI';
 import * as Type from '@/lib/types';
 import {Game} from '@/lib/classes/Game';
@@ -14,7 +13,7 @@ export default function MatchRequestCard({request}: NotificationCardProps) {
   const newMatch: Type.GameInfo = new Game();
   const notificationShooter: Type.UserInfo = new User();
   notificationShooter.name = request.friend_id;
-  notificationShooter.profileImage = request.profile_image;
+  notificationShooter.profileImage = request.profileImage;
   newMatch.id = request.game_id;
   // TODO: add game type
 
@@ -28,7 +27,7 @@ export default function MatchRequestCard({request}: NotificationCardProps) {
   };
 
   return (
-    <ResponsiveContainer className='flex-row justify-between items-center'>
+    <div className='flex flex-row justify-between items-center'>
       <UserInfoCard
         userInfo={notificationShooter}
         showStatus={false}
@@ -39,6 +38,6 @@ export default function MatchRequestCard({request}: NotificationCardProps) {
         onAccept={handleAccept}
         onReject={handleReject}
       />
-    </ResponsiveContainer>
+    </div>
   );
 }

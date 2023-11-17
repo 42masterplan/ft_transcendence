@@ -1,5 +1,4 @@
 import * as API from '@/DummyBackend/mainAPI';
-import ResponsiveContainer from '../../container/ResponsiveContainer';
 import {Card, CardHeader} from '../../shadcn/ui/card';
 
 interface MatchHistoryCardProps {
@@ -27,12 +26,12 @@ function SingleSideCard({name, score, result}: SingleSideCardProps) {
     scoreColor = 'text-gray-500';
   }
   return (
-    <ResponsiveContainer
-      className={`flex-col justify-center items-center ${boxSizingClassName}`}
+    <div
+      className={`flex flex-col justify-center items-center ${boxSizingClassName}`}
     >
       <h1 className={`text-base`}>{name}</h1>
       <h1 className={`text-xl ${scoreColor}`}>{score}</h1>
-    </ResponsiveContainer>
+    </div>
   );
 }
 
@@ -57,21 +56,21 @@ export default function MatchHistoryCard({match}: MatchHistoryCardProps) {
           {match.createdAt}
         </h1>
       </CardHeader>
-      <ResponsiveContainer className='flex-row justify-around items-center'>
+      <div className='flex flex-row justify-around items-center'>
         <SingleSideCard
           name={match.player1Name}
           score={match.player1Score}
           result={player1Status}
         />
-        <ResponsiveContainer className='flex-row justify-center items-center'>
+        <div className='flex flex-row justify-center items-center'>
           <p>:</p>
-        </ResponsiveContainer>
+        </div>
         <SingleSideCard
           name={match.player2Name}
           score={match.player2Score}
           result={player2Status}
         />
-      </ResponsiveContainer>
+      </div>
     </Card>
   );
 }

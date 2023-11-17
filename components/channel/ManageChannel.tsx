@@ -1,6 +1,6 @@
 import {RiChatSettingsLine} from 'react-icons/ri';
 import {Button} from '@/components/shadcn/ui/button';
-
+import FriendListSelector from '@/components/channel/FriendListSelector';
 import {
   Dialog,
   DialogContent,
@@ -18,33 +18,35 @@ export default function ManageChannel({channel_name}: {channel_name: string}) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className='ml-auto rounded-full h-12 w-36'>
+        <Button className='rounded-full bg-custom1 text-custom4'>
           <RiChatSettingsLine className='h-6 w-6' />
           <p className='text-6'>채널 관리</p>
           <span className='sr-only'>Public Room List</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className='sm:max-w-[425px] bg-color_3'>
+      <DialogContent className=' bg-custom1'>
         <DialogHeader>
-          <DialogTitle>방장 전용 페이지</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className='text-center'>방장 전용 페이지</DialogTitle>
+          <DialogDescription className='text-center'>
             이곳에서 채널을 관리할 수 있습니다.
+            <br />
+            오직 방장만이 이 버튼을 누를 수 있습니다.
           </DialogDescription>
         </DialogHeader>
-        <div className='grid gap-4 py-4'>
-          <div className='grid grid-cols-4 items-center gap-4'>
-            <Label htmlFor='name' className='text-right'>
-              채널명 변경
+        <div className='grid gap-6 py-6 '>
+          <div className='grid grid-cols-4 items-center gap-6'>
+            <Label htmlFor='description' className='text-right'>
+              BAN 유저 목록
             </Label>
-            <Input
-              id='name'
-              defaultValue={channel_name}
-              className='col-span-3'
-            />
+            <FriendListSelector>밴(금지)유저 목록</FriendListSelector>
+            <Label htmlFor='description' className='text-right'>
+              관리자 수정{' '}
+            </Label>
+            <FriendListSelector>현재 채널 유저 목록</FriendListSelector>
           </div>
           <div className='grid grid-cols-4 items-center gap-4'>
             <Label htmlFor='channel_password' className='text-right'>
-              비밀번호
+              비밀번호 변경
             </Label>
             <Input
               id='channel_password'
@@ -54,7 +56,9 @@ export default function ManageChannel({channel_name}: {channel_name: string}) {
           </div>
         </div>
         <DialogFooter>
-          <Button type='submit'>Save changes</Button>
+          <Button type='submit' className='w-full'>
+            Save changes
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

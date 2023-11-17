@@ -1,5 +1,4 @@
 import {ScrollArea, ScrollBar} from '@/components/shadcn/ui/scroll-area';
-import ResponsiveContainer from './ResponsiveContainer';
 
 export type orientationType = 'horizontal' | 'vertical';
 
@@ -29,10 +28,10 @@ export default function ScrollableContainer({
     roundedClassName = '';
   }
   return (
-    <ScrollArea className={`w-full h-full ${roundedClassName} ${className}`}>
-      <ResponsiveContainer className={`flex ${flexOrientation}`}>
-        {children}
-      </ResponsiveContainer>
+    <ScrollArea
+      className={`w-full h-full p-1 ${roundedClassName} ${className}`}
+    >
+      <div className={`flex w-full h-full ${flexOrientation}`}>{children}</div>
       <ScrollBar orientation={orientation} />
     </ScrollArea>
   );
