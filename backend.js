@@ -68,12 +68,13 @@ const PLAYER_B_COLOR = 'rgba(0, 133, 255, 1)';
 const BACKGROUND_COLOR = 'rgba(15, 23, 42, 0.8)';
 const BALL_RADIUS = 5;
 const BALL_COLOR = 'white';
-const BALL_SPEED = 5 / 2;
-const BALL_VELOCITY = {x: 2.51 / 2, y: -4.32 / 2};
-const PADDLE_OFFSET = SCREEN_WIDTH / 200;
+const BALL_SPEED = 5 / 3;
+const BALL_VELOCITY = {x: 1, y: 1};
+const PADDLE_OFFSET = SCREEN_WIDTH / 100;
 const SCORE_LIMIT = 10;
 const GAME_TIME_LIMIT = 120;
 const DEBOUNCINGTIME = 500;
+const RENDERING_RATE = 5;
 
 const express = require('express');
 const next = require('next');
@@ -98,7 +99,6 @@ const score = {
 };
 
 function resetBall(isA, io) {
-  console.log('resetBall');
   if (isA) score.playerA++;
   else score.playerB++;
   io.emit('updateScore', score);
@@ -106,7 +106,7 @@ function resetBall(isA, io) {
   ball.y = SCREEN_HEIGHT / 2;
   ball.velocity = {x: 0, y: 0};
   setTimeout(() => {
-    x = isA ? players[0].x : players[1].x;
+    x = isA ? players[0].x + PLAYER_WIDTH / 2 : players[1].x + PLAYER_WIDTH / 2;
     y = isA ? players[0].y : players[1].y;
     const dx = x - ball.x;
     const dy = y - ball.y;
@@ -151,12 +151,12 @@ nextApp.prepare().then(() => {
     socket.on('keyDown', (keycode) => {
       const targetPlayer = players.find((player) => player.id === socket.id);
       if (!targetPlayer) return;
-      const isA = targetPlayer.color === PLAYER_A_COLOR;
+      const isA = targetPlayer.color !== PLAYER_A_COLOR;
       switch (keycode) {
         case 'a': {
           if (targetPlayer.x > 0) {
             targetPlayer.x -= PADDLE_OFFSET;
-            targetPlayer.dx = PADDLE_OFFSET;
+            targetPlayer.dx = -PADDLE_OFFSET;
           }
           break;
         }
@@ -200,7 +200,7 @@ nextApp.prepare().then(() => {
     ball.y += ball.velocity.y;
     io.emit('updatePlayers', players);
     io.emit('updateBall', ball);
-    if (ball.x - ball.radius <= 0 || ball.x + ball.radius >= SCREEN_WIDTH)
+    if (ball.x - ball.radius <= 5 || ball.x + ball.radius >= SCREEN_WIDTH - 5)
       ball.velocity.x *= -1;
     else if (ball.y < 0) resetBall(false, io);
     else if (ball.y > SCREEN_HEIGHT) resetBall(true, io);
@@ -212,7 +212,7 @@ nextApp.prepare().then(() => {
       else if (players[1].isBCollided(ball))
         players[1].handleCollision(ball, now);
     }
-  }, 15);
+  }, RENDERING_RATE);
   app.use(express.static('public'));
   app.get('*', (req, res) => {
     return nextHandler(req, res);

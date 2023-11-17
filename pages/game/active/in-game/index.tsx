@@ -82,6 +82,7 @@ export default function Game() {
       ball.lastCollision = backendBall.lastCollision;
     });
     socket.on('updateScore', (backendScore) => {
+      ball.resetPosition(particles);
       setScore(() => {
         const updatedScore = {...backendScore};
         if (
@@ -115,8 +116,7 @@ export default function Game() {
       c.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
       playerA.draw();
       playerB.draw();
-      ball.draw(); //client-side prediction
-      if (ball.y > SCREEN_HEIGHT || ball.y < 0) ball.resetPosition(particles);
+      ball.draw();
       particles.forEach((particle) => {
         if (particle.alpha <= 0.01) {
           particles.splice(particles.indexOf(particle), 1);

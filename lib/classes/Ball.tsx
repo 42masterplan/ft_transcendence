@@ -31,8 +31,6 @@ export default class Ball extends React.Component<BallProps> {
 
   draw() {
     const {c} = this.props;
-    this.x += this.velocity.x;
-    this.y += this.velocity.y;
     c.beginPath();
     c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
     c.fillStyle = this.color;
