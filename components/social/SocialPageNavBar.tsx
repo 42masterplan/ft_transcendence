@@ -8,14 +8,11 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/shadcn/ui/select';
-
 import * as React from 'react';
-
 import {
   socialPageTargetUser as target,
   socialPageUserStatus as status
 } from '@/lib/types';
-import {set} from 'react-hook-form';
 
 interface SocialPageNavBarProps {
   searchTarget: target;

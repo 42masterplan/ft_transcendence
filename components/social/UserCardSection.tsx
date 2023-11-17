@@ -1,5 +1,4 @@
 import * as API from '@/DummyBackend/socialAPI';
-
 import {
   socialPageTargetUser as target,
   socialPageUserStatus as status

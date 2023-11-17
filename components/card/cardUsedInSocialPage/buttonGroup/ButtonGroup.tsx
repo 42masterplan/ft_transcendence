@@ -1,12 +1,11 @@
 import {Button} from '@/components/shadcn/ui/button';
-import {TooltipProvider} from '@/components/shadcn/ui/tooltip';
 import {ReactComponentElement} from 'react';
-import BlockButton from './BlockButton';
-import UnblockButton from './UnblockButton';
-import FollowButton from './FollowButton';
-import UnfollowButton from './UnfollowButton';
-import MatchRequestButton from './MatchRequestButton';
-import DMButton from './DMButton';
+import BlockButton from './buttons/BlockButton';
+import UnblockButton from './buttons/UnblockButton';
+import FollowButton from './buttons/FollowButton';
+import UnfollowButton from './buttons/UnfollowButton';
+import MatchRequestButton from './buttons/MatchRequestButton';
+import DMButton from './buttons/DMButton';
 
 interface buttonGroupProps {
   userId: string;
@@ -36,13 +35,11 @@ export default function ButtonGroup(props: buttonGroupProps) {
   }
   return (
     <div className='flex flex-row gap-10'>
-      <TooltipProvider>
-        {buttonGroup.map(
-          (button: ReactComponentElement<typeof Button>, index: number) => (
-            <div key={index}>{button}</div>
-          )
-        )}
-      </TooltipProvider>
+      {buttonGroup.map(
+        (button: ReactComponentElement<typeof Button>, index: number) => (
+          <div key={index}>{button}</div>
+        )
+      )}
     </div>
   );
 }

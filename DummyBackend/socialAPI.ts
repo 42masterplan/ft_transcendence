@@ -212,6 +212,6 @@ export function social__getUsers(): user[] {
 
 export async function social__getUsersAsync(): Promise<user[]> {
   // give delay for 1sec
-  await new Promise((resolve) => setTimeout(resolve, 5000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   return dummyUsers;
 }
