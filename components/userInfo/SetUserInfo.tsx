@@ -21,7 +21,7 @@ export default function SetUserInfo() {
         introduction: statusMsg,
         is2faEnabled: false
       });
-      router.push('/welcome/register/2step-auth');
+      router.push('/welcome/2step-auth');
     } catch (err) {
       alert('회원가입 실패');
     }
