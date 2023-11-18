@@ -8,7 +8,6 @@ export default function twoStepAuth() {
     <>
       <div className=''>
         <Title />
-
         <div className='flex flex-col items-center w-full h-auto rounded-lg p-6  gap-3'>
           <h1
             className='font-roboto-mono text-4xl

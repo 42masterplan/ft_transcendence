@@ -19,7 +19,7 @@ export default function PublicRoomCard({
   const {toast} = useToast();
   function handleSubmit(id: string, password: string) {
     password = password.replace(/\s/g, '');
-    socket.emit('joinChannel', id, password, (ret: string) => {
+    socket.emit('joinChannel', {id, password}, (ret: string) => {
       if (ret === 'success') {
         toast({
           title: '채널 참가',
