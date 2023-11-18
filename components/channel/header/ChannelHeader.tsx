@@ -13,10 +13,7 @@ export default function ChannelHeader({
 }) {
   return (
     <div className='bg-custom2 w-full'>
-      <div
-        bg-custom2
-        className='bg-custom2 w-full flex justify-between font-bold text-3xl'
-      >
+      <div className='bg-custom2 w-full flex justify-between font-bold text-3xl'>
         <PublicRoomList />
         {channel_name}
         <CreateChannel />

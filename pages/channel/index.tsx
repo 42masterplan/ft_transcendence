@@ -61,7 +61,11 @@ export default function ChannelPage() {
         </div>
       ) : (
         <div className='flex flex-col w-full h-full'>
-          <ChannelHeader channel_name={currentChannel} role={role} />
+          <ChannelHeader
+            channel_name={currentChannel}
+            role={role}
+            channelId={channelId}
+          />
           <ScrollableContainer className=' bg-custom2 rounded-none'>
             <ChannelBody
               channel_name={currentChannel}
