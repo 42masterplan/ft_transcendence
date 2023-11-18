@@ -18,7 +18,7 @@ const DialogBtn = ({socket}: any) => {
     <DialogTrigger asChild>
       <Button
         className='rounded-full bg-custom4'
-        onClick={() => socket.emit('allPublicChannel')} //추후 처음 들어올 때만 요청하도록 변경예정
+        onClick={() => socket.emit('getPublicChannels')}
       >
         <LuGlobe2 className='h-6 w-6' />
         <p className='text-6'>공개 채널</p>
@@ -32,9 +32,11 @@ export default function PublicRoomList() {
   const [socket] = useChatSocket('channel');
   const [search, setSearch] = useState('');
   const [publicRooms, setPublicRooms] = useState([] as PublicRoomType[]);
-  socket.once('allPublicChannel', (rooms) => {
+  socket.on('getPublicChannels', (rooms) => {
+    if (typeof rooms === 'undefined') {
+      rooms = [];
+    }
     setPublicRooms(rooms);
-    console.log(rooms);
   });
   return (
     <Dialog>
@@ -59,10 +61,11 @@ export default function PublicRoomList() {
           {publicRooms.map((public_room) => {
             return public_room.name.includes(search) ? (
               <PublicRoomCard
+                id={public_room.id}
                 name={public_room.name}
                 userCount={public_room.userCount}
                 isLocked={public_room.isPassword}
-                key={public_room.name}
+                key={public_room.id}
               />
             ) : (
               ''

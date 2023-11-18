@@ -20,9 +20,7 @@ export default function ChannelPage() {
   const [socket] = useChatSocket('channel');
   const [messages, setMessages] = useState([] as ChannelHistoryType[]);
   useEffect(() => {
-    socket.emit('myChannels', () => {
-      console.log('참여중인 채널 리스트 요청');
-    });
+    socket.emit('myChannels');
     socket.on('myRole', (data) => {
       console.log('권한 설정', data);
       if (data === null) {

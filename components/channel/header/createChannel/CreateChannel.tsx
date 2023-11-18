@@ -32,6 +32,7 @@ import Axios from '@/api';
 import {Dispatch, SetStateAction, useState} from 'react';
 import {userType, selectUserType} from '@/types/user';
 import useChatSocket from '@/hooks/useChatSocket';
+import {useToast} from '@/components/shadcn/ui/use-toast';
 const SelectChannelType = ({
   channelType,
   setChannelType
@@ -162,6 +163,7 @@ export default function CreateChannel() {
     [] as selectUserType[]
   );
   const [socket] = useChatSocket('channel');
+  const {toast} = useToast();
   const fetchUserInfos = async () => {
     try {
       const {data}: {data: userType[]} = await Axios.get(`/users/friends`, {
@@ -188,7 +190,12 @@ export default function CreateChannel() {
     // });
 
     if (channelName.length === 0 || channelType.length === 0) {
-      alert('채널 이름과 채널 유형을 입력해주세요.');
+      toast({
+        title: '채널 생성 실패',
+        description: '채널 이름과 채널 유형을 입력해주세요.',
+        variant: 'destructive',
+        duration: 3000
+      });
       return;
     }
     socket.emit(
@@ -200,7 +207,11 @@ export default function CreateChannel() {
         status: channelType
       },
       (msg: string) => {
-        alert(msg);
+        toast({
+          title: '채널 생성 성공',
+          description: msg,
+          duration: 3000
+        });
         console.log({
           name: channelName,
           password: password,

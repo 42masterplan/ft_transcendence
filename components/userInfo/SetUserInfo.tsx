@@ -5,7 +5,7 @@ import {Button} from '../shadcn/ui/button';
 import Axios from '@/api';
 import SetUserName from './SetUserName';
 import {useRouter} from 'next/router';
-
+import {useToast} from '@/components/shadcn/ui/use-toast';
 export default function SetUserInfo() {
   const [nickname, setNickname] = useState('');
   const [isValidName, setIsValidName] = useState(false);
@@ -13,6 +13,7 @@ export default function SetUserInfo() {
   const [profileImage, setProfileImage] = useState(
     process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI1 || ''
   );
+  const {toast} = useToast();
   const router = useRouter();
 
   const handleSubmit = async () => {
@@ -25,7 +26,12 @@ export default function SetUserInfo() {
       });
       router.push('/welcome/2step-auth');
     } catch (err) {
-      alert('회원가입 실패');
+      toast({
+        title: '회원 정보 설정 실패',
+        description: '회원 정보 설정에 실패했습니다.',
+        variant: 'destructive',
+        duration: 3000
+      });
     }
   };
 

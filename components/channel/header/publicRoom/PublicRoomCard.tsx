@@ -2,25 +2,39 @@ import {Input} from '@/components/shadcn/ui/input';
 import {Button} from '@/components/shadcn/ui/button';
 import {useState} from 'react';
 import useChatSocket from '@/hooks/useChatSocket';
-
+import {useToast} from '@/components/shadcn/ui/use-toast';
 export default function PublicRoomCard({
   name,
+  id,
   userCount,
   isLocked
 }: {
   name: string;
+  id: string;
   userCount: number;
   isLocked: boolean;
 }) {
   const [socket] = useChatSocket('channel');
   const [password, SetPassword] = useState('');
-  function handleSubmit(name: string, password: string) {
-    socket.emit('joinChannel', name, password, () => {
-      alert('channel join success');
+  const {toast} = useToast();
+  function handleSubmit(id: string, password: string) {
+    password = password.replace(/\s/g, '');
+    socket.emit('joinChannel', id, password, (ret: string) => {
+      if (ret === 'success') {
+        toast({
+          title: '채널 참가',
+          description: ret,
+          duration: 3000
+        });
+      } else {
+        toast({
+          title: '채널 참가 실패',
+          description: ret,
+          variant: 'destructive',
+          duration: 3000
+        });
+      }
     });
-    // 비밀번호가 맞는지 확인
-    // 맞으면 참가
-    // 아니면 알림
   }
   return (
     <div className='flex justify-around bg-custom2 rounded-full items-center h-12'>
@@ -35,7 +49,7 @@ export default function PublicRoomCard({
       />
       <Button
         onClick={() => {
-          handleSubmit(name, password);
+          handleSubmit(id, password);
           SetPassword('');
         }}
       >

@@ -3,7 +3,7 @@ import {Label} from '@/components/shadcn/ui/label';
 import {RadioGroup, RadioGroupItem} from '@/components/shadcn/ui/radio-group';
 import {useState} from 'react';
 import Axios from '@/api';
-
+import {useToast} from '@/components/shadcn/ui/use-toast';
 // import SendDataFile from '@/api/SendData';
 // async function uploadAvatar(file: File) {
 //   // const res = await SendDataFile('/users/profile', file);
@@ -12,6 +12,7 @@ import Axios from '@/api';
 export default function SetAvatar({setProfileImage}: {setProfileImage: any}) {
   const [selected, Setselected] = useState(0);
   const [customAvatar, setCustomAvatar] = useState('');
+  const {toast} = useToast();
   const AvatarList: Array<string> = [
     process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI1 || '',
     process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI2 || '',
@@ -39,9 +40,19 @@ export default function SetAvatar({setProfileImage}: {setProfileImage: any}) {
       setProfileImage(res.data.profileImage);
       Setselected(15);
       AvatarList[15] = res.data.profileImage;
+      toast({
+        title: '아바타 업로드 성공',
+        description: '아바타 업로드에 성공했습니다.',
+        duration: 3000
+      });
     } catch (err) {
       console.log(err);
-      alert('업로드 실패');
+      toast({
+        title: '아바타 업로드 실패',
+        description: '아바타 업로드에 실패했습니다.',
+        variant: 'destructive',
+        duration: 3000
+      });
     }
   }
   function clickHandler(id: string) {
