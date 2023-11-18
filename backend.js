@@ -130,6 +130,7 @@ nextApp.prepare().then(() => {
       methods: ['GET', 'POST']
     }
   });
+  let time = 120;
   io.on('connection', (socket) => {
     players.push(
       new Player({
@@ -213,6 +214,10 @@ nextApp.prepare().then(() => {
         players[1].handleCollision(ball, now);
     }
   }, RENDERING_RATE);
+  setInterval(() => {
+    io.emit('updateTime', time);
+    time -= 1;
+  }, 1000);
   app.use(express.static('public'));
   app.get('*', (req, res) => {
     return nextHandler(req, res);

@@ -16,12 +16,13 @@ import {useEffect, useRef, useState} from 'react';
 import {bounceIfCollided, handleKeyDowns, handleKeyUps} from '@/lib/game/util';
 import ScoreBoard from '@/components/game/ScoreBoard';
 import GameStatus from '@/components/game/GameStatus';
-import io from 'socket.io-client';
+import io, {Socket} from 'socket.io-client';
 
 export default function Game() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const keysPressed = useRef<{[key: string]: boolean}>({});
+  const [time, setTime] = useState(120);
   const [score, setScore] = useState({playerA: 0, playerB: 0});
   const [gameover, setGameOver] = useState(false);
 
@@ -93,6 +94,9 @@ export default function Game() {
         return updatedScore;
       });
     });
+    socket.on('updateTime', (backendTime) => {
+      setTime(backendTime);
+    });
     setInterval(() => {
       if (keysPressed.current) {
         if (socket.id == playerA.id) {
@@ -110,7 +114,6 @@ export default function Game() {
       (event) => (keysPressed.current[event.key] = true)
     );
     addEventListener('keyup', (event) => delete keysPressed.current[event.key]);
-
     const gameLoop = () => {
       c.fillStyle = BACKGROUND_COLOR;
       c.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -143,7 +146,11 @@ export default function Game() {
         <>
           <canvas ref={canvasRef} className='z-10 absolute' />
           <div className='absolute left-[calc(50%+217px)] '>
-            <GameStatus gameover={gameover} setGameOver={setGameOver} />
+            <GameStatus
+              gameover={gameover}
+              setGameOver={setGameOver}
+              time={time}
+            />
           </div>
           <ScoreBoard AScore={score.playerA} BScore={score.playerB} />
         </>
