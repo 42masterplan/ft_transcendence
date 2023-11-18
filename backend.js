@@ -49,7 +49,6 @@ class Player {
     ball.velocity.x = Math.cos(reflectedAngle) * BALL_SPEED;
     ball.velocity.y = Math.sin(reflectedAngle) * BALL_SPEED;
     this.applySpin(ball);
-    console.log('Ball hit');
   }
 
   draw() {
@@ -122,6 +121,7 @@ nextApp.prepare().then(() => {
   const app = express();
   const server = http.createServer(app);
   let firstConnection = true;
+  let time = 120;
   const io = socketIO(server, {
     pingInterval: 2000, //need to check it this thing actually works
     pingTimeout: 5000, //this as well
@@ -130,7 +130,6 @@ nextApp.prepare().then(() => {
       methods: ['GET', 'POST']
     }
   });
-  let time = 120;
   io.on('connection', (socket) => {
     players.push(
       new Player({
@@ -143,11 +142,15 @@ nextApp.prepare().then(() => {
     firstConnection = false;
     io.emit('updatePlayers', players);
     io.emit('updateBall', ball);
+    //if player disconnects, opponent wins
     socket.on('disconnect', (reason) => {
       console.log(reason);
       const index = players.findIndex((player) => player.id === socket.id);
       if (index === -1) return;
       players.splice(index, 1);
+      if (players[0].color === PLAYER_A_COLOR) score.playerA = SCORE_LIMIT;
+      else score.playerB = SCORE_LIMIT;
+      socket.broadcast.emit('updateScore', score);
     });
     socket.on('keyDown', (keycode) => {
       const targetPlayer = players.find((player) => player.id === socket.id);

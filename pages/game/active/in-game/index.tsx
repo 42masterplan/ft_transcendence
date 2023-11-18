@@ -84,6 +84,7 @@ export default function Game() {
     });
     socket.on('updateScore', (backendScore) => {
       ball.resetPosition(particles);
+      console.log('updateScore', backendScore);
       setScore(() => {
         const updatedScore = {...backendScore};
         if (
