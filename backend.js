@@ -71,7 +71,7 @@ const BALL_SPEED = 5 / 3;
 const BALL_VELOCITY = {x: 1, y: 1};
 const PADDLE_OFFSET = SCREEN_WIDTH / 100;
 const SCORE_LIMIT = 10;
-const GAME_TIME_LIMIT = 120;
+const GAME_TIME_LIMIT = 180;
 const DEBOUNCINGTIME = 500;
 const RENDERING_RATE = 5;
 
@@ -96,7 +96,6 @@ const score = {
   playerA: 0,
   playerB: 0
 };
-
 function resetBall(isA, io) {
   if (isA) score.playerA++;
   else score.playerB++;
@@ -116,12 +115,11 @@ function resetBall(isA, io) {
     io.emit('updateBall', ball);
   }, 3000);
 }
-
 nextApp.prepare().then(() => {
   const app = express();
   const server = http.createServer(app);
   let firstConnection = true;
-  let time = 120;
+  let time = GAME_TIME_LIMIT;
   const io = socketIO(server, {
     pingInterval: 2000, //need to check it this thing actually works
     pingTimeout: 5000, //this as well
@@ -151,6 +149,7 @@ nextApp.prepare().then(() => {
       if (players[0].color === PLAYER_A_COLOR) score.playerA = SCORE_LIMIT;
       else score.playerB = SCORE_LIMIT;
       socket.broadcast.emit('updateScore', score);
+      exit();
     });
     socket.on('keyDown', (keycode) => {
       const targetPlayer = players.find((player) => player.id === socket.id);

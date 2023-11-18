@@ -16,6 +16,7 @@ import {useEffect, useRef, useState} from 'react';
 import {bounceIfCollided, handleKeyDowns, handleKeyUps} from '@/lib/game/util';
 import ScoreBoard from '@/components/game/ScoreBoard';
 import GameStatus from '@/components/game/GameStatus';
+import GameResult from '@/components/game/GameResult';
 import io, {Socket} from 'socket.io-client';
 
 export default function Game() {
@@ -88,8 +89,8 @@ export default function Game() {
       setScore(() => {
         const updatedScore = {...backendScore};
         if (
-          updatedScore.playerB === SCORE_LIMIT ||
-          updatedScore.playerA === SCORE_LIMIT
+          updatedScore.playerB >= SCORE_LIMIT ||
+          updatedScore.playerA >= SCORE_LIMIT
         )
           setGameOver(true);
         return updatedScore;
@@ -140,9 +141,7 @@ export default function Game() {
   return (
     <div className='relative min-h-screen flex justify-center items-center'>
       {gameover ? (
-        <div className='absolute z-20 text-white text-4xl font-bold'>
-          GameOver
-        </div>
+        <GameResult playerA={score.playerA} playerB={score.playerB} />
       ) : (
         <>
           <canvas ref={canvasRef} className='z-10 absolute' />
