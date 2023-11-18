@@ -39,7 +39,7 @@ export default function PublicRoomList() {
   return (
     <Dialog>
       <DialogBtn socket={socket} />
-      <DialogContent className='sm:max-w-[700px] h-5/6 bg-custom1 flex flex-col'>
+      <DialogContent className='sm:max-w-[700px] h-5/6 bg-custom1 flex flex-col overflow-y-scroll'>
         <div className='text-center text-xl font-semibold'>
           Public Room List
         </div>
