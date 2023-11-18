@@ -23,6 +23,8 @@ export default function ChannelList({
   useEffect(() => {
     socket.on('myChannels', (data) => {
       setEngagedChannels(data);
+      console.log('내 채널 리스트를 받아옵니다.');
+      console.log(data);
     });
   }, []);
   const handleChannelClick = (channel: any) => {

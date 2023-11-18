@@ -182,9 +182,11 @@ export default function CreateChannel() {
     }
   };
   const createChannel = () => {
-    const inviteUsers = inviteFriendList.map((friendInfo) => {
-      if (friendInfo.checked) return friendInfo.id;
-    });
+    let inviteUsers: Array<String> = [];
+    // inviteUsers = inviteFriendList.map((friendInfo) => {
+    //   if (friendInfo.checked) return friendInfo.id;
+    // });
+
     if (channelName.length === 0 || channelType.length === 0) {
       alert('채널 이름과 채널 유형을 입력해주세요.');
       return;
