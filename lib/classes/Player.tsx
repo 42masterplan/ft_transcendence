@@ -1,7 +1,10 @@
 import React from 'react';
 import Ball from './Ball';
+import io, {Socket} from 'socket.io-client';
+import {BALL_SPEED} from '../game/macros';
 
 interface PlayerProps {
+  id: string;
   x: number;
   y: number;
   width?: number;
@@ -9,15 +12,19 @@ interface PlayerProps {
   color?: string;
   dx?: number;
   c: CanvasRenderingContext2D;
+  socket: Socket;
 }
 
 class Player extends React.Component<PlayerProps> {
+  id: string = this.props.id;
   x: number = this.props.x;
   y: number = this.props.y;
   width: number = this.props.width || 100;
   height: number = this.props.height || 15;
   color: string = this.props.color || 'rgba(217, 217, 217, 1)';
   dx: number = this.props.dx || 0;
+  c = this.props.c;
+  socket = this.props.socket;
 
   isACollided(ball: Ball) {
     const offsetX = ball.x - this.x + ball.radius;
@@ -41,24 +48,24 @@ class Player extends React.Component<PlayerProps> {
     const speed = Math.sqrt(
       ball.velocity.x * ball.velocity.x + ball.velocity.y * ball.velocity.y
     );
-    ball.velocity.x = 5 * (ball.velocity.x / speed);
-    ball.velocity.y = 5 * (ball.velocity.y / speed);
+    ball.velocity.x = BALL_SPEED * (ball.velocity.x / speed);
+    ball.velocity.y = BALL_SPEED * (ball.velocity.y / speed);
   }
 
   handleCollision(ball: Ball, now: number) {
-    ball.lastCollision = now;
-    const reflectedAngle = -Math.atan2(ball.velocity.y, ball.velocity.x);
-    ball.velocity.x = Math.cos(reflectedAngle) * 5;
-    ball.velocity.y = Math.sin(reflectedAngle) * 5;
-    this.applySpin(ball);
+    this.socket.emit('ballBounce', this.id);
+    // ball.lastCollision = now;
+    // const reflectedAngle = -Math.atan2(ball.velocity.y, ball.velocity.x);
+    // ball.velocity.x = Math.cos(reflectedAngle) * BALL_SPEED;
+    // ball.velocity.y = Math.sin(reflectedAngle) * BALL_SPEED;
+    // this.applySpin(ball);
   }
 
   draw() {
-    const {c} = this.props;
-    c.beginPath();
-    c.rect(this.x, this.y, this.width, this.height);
-    c.fillStyle = this.color;
-    c.fill();
+    this.c.beginPath();
+    this.c.rect(this.x, this.y, this.width, this.height);
+    this.c.fillStyle = this.color;
+    this.c.fill();
   }
 }
 
