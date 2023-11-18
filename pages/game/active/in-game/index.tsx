@@ -6,8 +6,7 @@ import {
   PLAYER_B_COLOR,
   BACKGROUND_COLOR,
   SCORE_LIMIT,
-  RENDERING_RATE,
-  DEBOUNCINGTIME
+  RENDERING_RATE
 } from '@/lib/game/macros';
 import Player from '@/lib/classes/Player';
 import Ball from '@/lib/classes/Ball';

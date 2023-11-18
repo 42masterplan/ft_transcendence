@@ -1,5 +1,5 @@
-export const SCREEN_WIDTH = 430;
-export const SCREEN_HEIGHT = 600;
+export const SCREEN_WIDTH = 576;
+export const SCREEN_HEIGHT = 1024;
 export const PLAYER_WIDTH = 100;
 export const PLAYER_HEIGHT = 15;
 export const PLAYER_A_COLOR = 'rgba(217, 217, 217, 1)';

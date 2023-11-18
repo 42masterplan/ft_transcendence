@@ -58,8 +58,8 @@ class Player {
     this.c.fill();
   }
 }
-const SCREEN_WIDTH = 430;
-const SCREEN_HEIGHT = 600;
+const SCREEN_WIDTH = 576;
+const SCREEN_HEIGHT = 1024;
 const PLAYER_WIDTH = 100;
 const PLAYER_HEIGHT = 15;
 const PLAYER_A_COLOR = 'rgba(217, 217, 217, 1)';
@@ -148,8 +148,6 @@ nextApp.prepare().then(() => {
       players.splice(index, 1);
       if (players[0].color === PLAYER_A_COLOR) score.playerA = SCORE_LIMIT;
       else score.playerB = SCORE_LIMIT;
-      socket.broadcast.emit('updateScore', score);
-      exit();
     });
     socket.on('keyDown', (keycode) => {
       const targetPlayer = players.find((player) => player.id === socket.id);
