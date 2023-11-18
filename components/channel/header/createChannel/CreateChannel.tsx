@@ -185,6 +185,10 @@ export default function CreateChannel() {
     const inviteUsers = inviteFriendList.map((friendInfo) => {
       if (friendInfo.checked) return friendInfo.id;
     });
+    if (channelName.length === 0 || channelType.length === 0) {
+      alert('채널 이름과 채널 유형을 입력해주세요.');
+      return;
+    }
     socket.emit(
       'createChannel',
       {
@@ -193,8 +197,8 @@ export default function CreateChannel() {
         invitedFriendIds: inviteUsers,
         status: channelType
       },
-      () => {
-        alert('채널이 생성되었습니다.');
+      (msg: string) => {
+        alert(msg);
         console.log({
           name: channelName,
           password: password,
