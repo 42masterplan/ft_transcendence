@@ -2,7 +2,11 @@ import {Button} from '@/components/shadcn/ui/button';
 import {Gamepad2} from 'lucide-react';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 
-export default function MatchRequestButton(userId: string) {
+type MatchRequestButtonProps = {
+  userId: string;
+};
+
+export default function MatchRequestButton({userId}: MatchRequestButtonProps) {
   // function to send match request: TODO: implement this
   const sendMatchRequest = async () => {
     console.log("sendMatchRequest's userId: ", userId);
@@ -24,6 +28,7 @@ export default function MatchRequestButton(userId: string) {
     <Button
       size='icon'
       variant='outline'
+      className='hover:scale-[115%] duration-200'
       onClick={async () => {
         const sendMatchRequestResult = await sendMatchRequest();
         if (sendMatchRequestResult) {

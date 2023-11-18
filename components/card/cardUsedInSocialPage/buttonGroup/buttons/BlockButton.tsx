@@ -3,7 +3,11 @@ import {ShieldAlert} from 'lucide-react';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 import {ToastAction} from '@/components/shadcn/ui/toast';
 
-export default function BlockButton(userId: string) {
+type BlockButtonProps = {
+  userId: string;
+};
+
+export default function BlockButton({userId}: BlockButtonProps) {
   // function to send block request: TODO: implement this
   const sendBlockRequest = async () => {
     console.log("sendBlockRequest's userId: ", userId);
@@ -26,6 +30,7 @@ export default function BlockButton(userId: string) {
     <Button
       variant='destructive'
       size='icon'
+      className='hover:scale-[115%] duration-200'
       onClick={() => {
         toast({
           title: 'Are you sure you want to block this user?',
