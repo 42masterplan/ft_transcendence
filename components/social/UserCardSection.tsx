@@ -1,6 +1,4 @@
 import * as API from '@/DummyBackend/socialAPI';
-import {signal, effect, Signal} from '@preact/signals-react';
-
 import {
   socialPageTargetUser as target,
   socialPageUserStatus as status
@@ -12,26 +10,26 @@ import {Accordion} from '../shadcn/ui/accordion';
 // function to filter users. Returns filtered users.
 function filterUsers(
   users: API.user[],
-  searchTarget: Signal<target>,
-  searchTargetStatus: Signal<status>,
-  searchTargetInput: Signal<string>
+  searchTarget: target,
+  searchTargetStatus: status,
+  searchTargetInput: string
 ): API.user[] {
   // filter friends
-  if (searchTarget.value === 'friend') {
+  if (searchTarget === 'friend') {
     users = users.filter((user) => user.isFriend);
   }
   // filter status
-  if (searchTargetStatus.value === 'Online') {
+  if (searchTargetStatus === 'Online') {
     users = users.filter((user) => user.currentStatus === 'Online');
-  } else if (searchTargetStatus.value === 'Offline') {
+  } else if (searchTargetStatus === 'Offline') {
     users = users.filter((user) => user.currentStatus === 'Offline');
-  } else if (searchTargetStatus.value === 'InGame') {
+  } else if (searchTargetStatus === 'InGame') {
     users = users.filter((user) => user.currentStatus === 'InGame');
   }
   // filter input
-  if (searchTargetInput.value !== '') {
+  if (searchTargetInput !== '') {
     users = users.filter((user) =>
-      user.name.toLowerCase().includes(searchTargetInput.value.toLowerCase())
+      user.name.toLowerCase().includes(searchTargetInput.toLowerCase())
     );
   }
   return users;
@@ -39,9 +37,9 @@ function filterUsers(
 
 interface UserCardSectionProps {
   users: API.user[];
-  searchTarget: Signal<target>;
-  searchTargetStatus: Signal<status>;
-  searchTargetInput: Signal<string>;
+  searchTarget: target;
+  searchTargetStatus: status;
+  searchTargetInput: string;
   className?: string;
 }
 
