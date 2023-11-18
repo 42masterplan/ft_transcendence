@@ -12,3 +12,6 @@ export const BALL_VELOCITY = {x: 2.51, y: -4.32};
 export const PADDLE_OFFSET = SCREEN_WIDTH / 100;
 export const SCORE_LIMIT = 10;
 export const GAME_TIME_LIMIT = 120;
+export const RENDERING_RATE = 15;
+export const DEBOUNCINGTIME = 300;
+export const EMIT_INTERVAL = 15;
