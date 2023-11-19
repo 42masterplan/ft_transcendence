@@ -23,6 +23,8 @@ export default function ChannelList({
   useEffect(() => {
     socket.on('myChannels', (data) => {
       setEngagedChannels(data);
+      console.log('내 채널 리스트를 받아옵니다.');
+      console.log(data);
     });
   }, []);
   const handleChannelClick = (channel: any) => {
@@ -34,7 +36,7 @@ export default function ChannelList({
       console.log(data);
       setMessages(data);
     });
-    setCurChannel(channel.channelName);
+    setCurChannel(channel.name);
     setChannelId(channel.id);
   };
   return (
@@ -51,7 +53,7 @@ export default function ChannelList({
           onClick={() => handleChannelClick(channel)}
           key={channel.id}
         >
-          <span className='text-base text-sky-300 '>{channel.channelName}</span>
+          <span className='text-base text-sky-300 '>{channel.name}</span>
           <span className='text-violet-400  text-xs font-bold'>
             {channel.userCount}
           </span>

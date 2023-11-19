@@ -6,20 +6,23 @@ import {ChannelHistoryType} from '@/types/channel';
 import useChatSocket from '@/hooks/useChatSocket';
 import ChatMessage from '@/components/channel/body/ChatCard';
 import ScrollableContainer from '../../container/ScrollableContainer';
-
+import ManageChannel from '../ManageChannel';
 export function ChannelBody({
   messages,
   setMessages,
   channelId,
-  role
+  role,
+  channel_name
 }: {
   messages: ChannelHistoryType[];
   setMessages: Dispatch<SetStateAction<ChannelHistoryType[]>>;
   channelId: string;
   role: string;
+  channel_name: string;
 }) {
   const messageEndRef = useRef<HTMLDivElement>();
   const [socket] = useChatSocket('channel');
+
   const ShowHistory = () => {
     return (
       <>
@@ -77,9 +80,9 @@ export function ChannelBody({
     messageEndRef.current?.scrollIntoView({behavior: 'smooth'});
   }, [messages]);
   return (
-    <div className='rounded-none h-full'>
-      <ScrollableContainer className=''>
-        <div>{ShowHistory()}</div>
+    <div className='h-full'>
+      <ScrollableContainer className='rounded-none'>
+        <div>{messages ? ShowHistory() : null}</div>
       </ScrollableContainer>
     </div>
   );

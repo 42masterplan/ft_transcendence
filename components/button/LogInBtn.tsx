@@ -17,9 +17,8 @@ export default function LoginBtn() {
       }}
     >
       <Button
-        variant='default'
         size='lg'
-        className='bg-custom3 font-semibold h-20 w-40 text-2xl text-custom4'
+        className=' font-semibold h-20 w-40 text-2xl text-custom4 bg-custom2/50'
       >
         login
       </Button>

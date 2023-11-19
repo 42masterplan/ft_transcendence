@@ -1,5 +1,7 @@
 import {RiChatSettingsLine} from 'react-icons/ri';
 import {Button} from '@/components/shadcn/ui/button';
+import {Input} from '@/components/shadcn/ui/input';
+import {Label} from '@/components/shadcn/ui/label';
 import FriendListSelector from '@/components/channel/FriendListSelector';
 import {
   Dialog,
@@ -11,17 +13,13 @@ import {
   DialogTrigger
 } from '@/components/shadcn/ui/dialog';
 
-import {Input} from '@/components/shadcn/ui/input';
-import {Label} from '@/components/shadcn/ui/label';
-
 export default function ManageChannel({channel_name}: {channel_name: string}) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className='rounded-full bg-custom1 text-custom4'>
+        <Button className='rounded-full bg-custom4 justify-self-end'>
           <RiChatSettingsLine className='h-6 w-6' />
           <p className='text-6'>채널 관리</p>
-          <span className='sr-only'>Public Room List</span>
         </Button>
       </DialogTrigger>
       <DialogContent className=' bg-custom1'>
@@ -40,7 +38,7 @@ export default function ManageChannel({channel_name}: {channel_name: string}) {
             </Label>
             <FriendListSelector>밴(금지)유저 목록</FriendListSelector>
             <Label htmlFor='description' className='text-right'>
-              관리자 수정{' '}
+              관리자 수정
             </Label>
             <FriendListSelector>현재 채널 유저 목록</FriendListSelector>
           </div>

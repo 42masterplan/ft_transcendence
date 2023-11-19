@@ -13,12 +13,7 @@ export interface UserInfoType {
   current_status: string;
   introduction: string;
 }
-//0.채널방 목록
-export interface channelType {
-  id: string; //random uuid
-  channelName: string; //채널방 이름
-  userSize: number; //현재 참여중인 유저 수
-}
+
 
 //1. 채널 방을 클릭하면 받아와야 하는 정보
 export interface channelInfoType {
@@ -170,59 +165,7 @@ export const friendInfos: Array<UserInfoType> = [
   }
 ];
 
-//c.채팅방 목록 정보 입니다.
-export const channelList: Array<channelType> = [
-  {
-    id: '아비꼬',
-    channelName: '아비꼬',
-    userSize: 11
-  },
-  {
-    id: '압둘알리',
-    channelName: '압둘알리',
-    userSize: 15
-  },
-  {
-    id: '헬스는 사랑이다.',
-    channelName: '헬스는 사랑이다.',
-    userSize: 13
-  },
-  {
-    id: '배드민턴',
-    channelName: '배드민턴',
-    userSize: 12
-  },
-  {
-    id: '42정병',
-    channelName: '42정병',
-    userSize: 15
-  },
-  {
-    id: '코딩.',
-    channelName: '코딩.',
-    userSize: 2
-  },
-  {
-    id: '축구선수',
-    channelName: '축구선수',
-    userSize: 3
-  },
-  {
-    id: '방 제목 제한은 8',
-    channelName: '방 제목 제한은 8',
-    userSize: 5
-  },
-  {
-    id: '서준님의 헬스사랑',
-    channelName: '서준님의 헬스사랑',
-    userSize: 2
-  },
-  {
-    id: '찐의 배드민턴 사랑',
-    channelName: '찐의 배드민턴 사랑',
-    userSize: 50
-  }
-];
+
 
 //d-1. 채팅 할 때 메세지가 오는 정보를 나타냅니다.
 const chatInfos: Array<chatInfoType> = [

@@ -17,8 +17,8 @@ const DialogBtn = ({socket}: any) => {
   return (
     <DialogTrigger asChild>
       <Button
-        className='rounded-full'
-        onClick={() => socket.emit('allPublicChannel')} //추후 처음 들어올 때만 요청하도록 변경예정
+        className='rounded-full bg-custom4'
+        onClick={() => socket.emit('getPublicChannels')}
       >
         <LuGlobe2 className='h-6 w-6' />
         <p className='text-6'>공개 채널</p>
@@ -32,14 +32,16 @@ export default function PublicRoomList() {
   const [socket] = useChatSocket('channel');
   const [search, setSearch] = useState('');
   const [publicRooms, setPublicRooms] = useState([] as PublicRoomType[]);
-  socket.once('allPublicChannel', (rooms) => {
+  socket.on('getPublicChannels', (rooms) => {
+    if (typeof rooms === 'undefined') {
+      rooms = [];
+    }
     setPublicRooms(rooms);
-    console.log(rooms);
   });
   return (
     <Dialog>
       <DialogBtn socket={socket} />
-      <DialogContent className='sm:max-w-[700px] h-5/6 bg-custom1 flex flex-col'>
+      <DialogContent className='sm:max-w-[700px] h-5/6 bg-custom1 flex flex-col overflow-y-scroll'>
         <div className='text-center text-xl font-semibold'>
           Public Room List
         </div>
@@ -57,12 +59,13 @@ export default function PublicRoomList() {
         </div>
         <div className='grid grid-col-4 items-center gap-4'>
           {publicRooms.map((public_room) => {
-            return public_room.channelName.includes(search) ? (
+            return public_room.name.includes(search) ? (
               <PublicRoomCard
-                channelName={public_room.channelName}
+                id={public_room.id}
+                name={public_room.name}
                 userCount={public_room.userCount}
                 isLocked={public_room.isPassword}
-                key={public_room.channelName}
+                key={public_room.id}
               />
             ) : (
               ''
