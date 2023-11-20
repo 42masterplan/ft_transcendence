@@ -43,7 +43,6 @@ class Player {
     ball.velocity.y = BALL_SPEED * (ball.velocity.y / speed);
     if (ball.velocity.x > 0.75) ball.velocity.x = 0.75;
     else if (ball.velocity.x < -0.75) ball.velocity.x = -0.75;
-    console.log(ball.velocity.x, ball.velocity.y);
     speed = Math.sqrt(
       ball.velocity.x * ball.velocity.x + ball.velocity.y * ball.velocity.y
     );
@@ -130,7 +129,7 @@ nextApp.prepare().then(() => {
   let firstConnection = true;
   let time = GAME_TIME_LIMIT;
   const io = socketIO(server, {
-    pingInterval: 2000, //need to check it this thing actually works
+    pingInterval: 2000, //need to check it this works -> do we need it?
     pingTimeout: 5000, //this as well
     cors: {
       origin: 'http://localhost:3000',
@@ -138,6 +137,8 @@ nextApp.prepare().then(() => {
     }
   });
   io.on('connection', (socket) => {
+    // A's color is white, B's color is blue
+    // A is on the bottom, B is on the top
     players.push(
       new Player({
         id: socket.id,
@@ -149,12 +150,8 @@ nextApp.prepare().then(() => {
     firstConnection = false;
     io.emit('updatePlayers', players);
     io.emit('updateBall', ball);
-    //if player disconnects, opponent wins
     socket.on('disconnect', (reason) => {
       console.log(reason);
-      const index = players.findIndex((player) => player.id === socket.id);
-      if (index === -1) return;
-      players.splice(index, 1);
       if (players[0].color === PLAYER_A_COLOR) score.playerA = SCORE_LIMIT;
       else score.playerB = SCORE_LIMIT;
       socket.broadcast.emit('updateScore', score);
@@ -163,7 +160,7 @@ nextApp.prepare().then(() => {
     socket.on('keyDown', (keycode) => {
       const targetPlayer = players.find((player) => player.id === socket.id);
       if (!targetPlayer) return;
-      const isA = targetPlayer.color !== PLAYER_A_COLOR;
+      const isA = targetPlayer.color === PLAYER_A_COLOR;
       switch (keycode) {
         case 'a': {
           if (targetPlayer.x > 0) {
@@ -180,19 +177,22 @@ nextApp.prepare().then(() => {
           break;
         }
         case 'w': {
-          if (isA && targetPlayer.y > 0) targetPlayer.y -= PADDLE_OFFSET / 2;
+          if (!isA && targetPlayer.y > 0) targetPlayer.y -= PADDLE_OFFSET / 2;
           else if (
-            targetPlayer.y >
-            (SCREEN_HEIGHT / 3) * 2 - targetPlayer.height
+            isA &&
+            targetPlayer.y > (SCREEN_HEIGHT / 3) * 2 - targetPlayer.height
           )
             targetPlayer.y -= PADDLE_OFFSET / 2;
           break;
         }
         case 's': {
-          if (isA && targetPlayer.y < SCREEN_HEIGHT / 3 - targetPlayer.height) {
+          if (
+            !isA &&
+            targetPlayer.y < SCREEN_HEIGHT / 3 - targetPlayer.height
+          ) {
             targetPlayer.y += PADDLE_OFFSET / 2;
           } else if (
-            !isA &&
+            isA &&
             targetPlayer.y < SCREEN_HEIGHT - targetPlayer.height
           )
             targetPlayer.y += PADDLE_OFFSET / 2;
@@ -214,8 +214,8 @@ nextApp.prepare().then(() => {
     io.emit('updateBall', ball);
     if (ball.x - ball.radius <= 1 || ball.x + ball.radius >= SCREEN_WIDTH - 1)
       ball.velocity.x *= -1;
-    else if (ball.y < 0) resetBall(false, io);
-    else if (ball.y > SCREEN_HEIGHT) resetBall(true, io);
+    else if (ball.y < 0) resetBall(true, io); //A scored
+    else if (ball.y > SCREEN_HEIGHT) resetBall(false, io); //B scored
     if (players[0].isACollided(ball) || players[1].isBCollided(ball)) {
       const now = Date.now();
       if (ball.lastCollision && now - ball.lastCollision < DEBOUNCINGTIME)
