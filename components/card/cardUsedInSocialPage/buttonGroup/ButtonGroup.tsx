@@ -18,7 +18,6 @@ export default function ButtonGroup({
   isFriend,
   isBlocked
 }: buttonGroupProps) {
-  const buttonGroup: ReactComponentElement<typeof Button>[] = [];
   if (isFriend && !isBlocked) {
     // friend: DM, unfollow, match request, block
     return (
