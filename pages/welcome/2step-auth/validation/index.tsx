@@ -1,7 +1,7 @@
 import {Input} from '@/components/shadcn/ui/input';
 import LinkBtn from '@/components/button/LinkBtn';
 
-export default function validation() {
+export default function Validation() {
   return (
     <>
       <div className='flex-col justify-center'>
