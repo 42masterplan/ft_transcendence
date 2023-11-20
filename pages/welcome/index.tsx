@@ -7,13 +7,7 @@ export default function Welcome() {
         <span className='block'>Welcome</span>
         <span className='block text-4xl sm:text-6xl'>Amazing Pong</span>
       </h1>
-      <Image
-        className='z-0'
-        src='/pong.png'
-        width={1000}
-        height={1000}
-        alt=''
-      />
+      <Image src='/cute_dog_rocket.png' width={200} height={200} alt='' />
       <div
         className='rounded-lg bg-custom2/30
       shadow-md flex justify-center items-center mt-12 space-x-12'
