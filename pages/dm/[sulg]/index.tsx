@@ -62,7 +62,7 @@ export default function DMPage() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     const response = true; // change to false to test friend request failed
     if (response) {
-      // if success, clear input
+      // if success,
     } else {
       // if failed, show error message
     }

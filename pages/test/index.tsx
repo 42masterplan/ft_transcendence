@@ -1,23 +1,21 @@
-import Modal from '@/components/modal/Modal';
-import {Button} from '@/components/shadcn/ui/button';
-import {useState} from 'react';
+import CrescentLoader from '@/components/loader/CrescentLoader';
+import FadingDotsLoader from '@/components/loader/FadingDotsLoader';
+import SpinningLoader2 from '@/components/loader/SpinningLoader2';
 
 export default function TestPage() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <>
-      <div className='flex w-full h-full bg-slate-600'>
-        <div className='flex w-1/2 h-full bg-slate-500'>
-          <div className='flex w-full h-1/2 bg-slate-400'></div>
-          <div className='flex w-full h-1/2 bg-slate-300'>
-            <Button onClick={() => setIsModalOpen(true)}>Open Modal</Button>
-            <Modal
-              isModalOpen={isModalOpen}
-              setIsModalOpen={setIsModalOpen}
-            ></Modal>
-          </div>
-        </div>
-        <div className='flex w-1/2 h-full bg-slate-400'></div>
+      <div className='flex w-full h-full gap-10 items-center bg-slate-600'>
+        <FadingDotsLoader size={1} />
+        <FadingDotsLoader size={2} />
+        <FadingDotsLoader size={3} />
+        <FadingDotsLoader size={4} />
+        <FadingDotsLoader size={5} />
+        <FadingDotsLoader size={6} />
+        <FadingDotsLoader size={7} />
+        <FadingDotsLoader size={8} />
+        <FadingDotsLoader size={9} />
+        <FadingDotsLoader size={10} />
       </div>
     </>
   );

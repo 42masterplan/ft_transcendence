@@ -13,7 +13,8 @@
  */
 
 import {Button} from '@/components/shadcn/ui/button';
-import {ArrowUp, Loader} from 'lucide-react';
+import {ArrowUp} from 'lucide-react';
+import SpinningLoader2 from '../loader/SpinningLoader2';
 
 interface MessageInputBarProps {
   className?: string;
@@ -52,7 +53,7 @@ export default function MessageInputBar({
           id='DMMessage'
           value={msg}
           placeholder='Type a message...'
-          className='w-full h-full text-2xl bg-transparent border-none rounded-3xl resize-none p-2 ' // resize-none to prevent resizing
+          className='w-full h-full text-xl bg-transparent border-none rounded-3xl resize-none p-3' // resize-none to prevent resizing
           onChange={(e) => setMsg(e.target.value)}
           onKeyDown={handleKeyPress}
         />
@@ -69,7 +70,7 @@ export default function MessageInputBar({
                 });
               }}
             >
-              {isSending ? <Loader /> : <ArrowUp />}
+              {isSending ? <SpinningLoader2 /> : <ArrowUp />}
             </Button>
           </div>
         ) : (
