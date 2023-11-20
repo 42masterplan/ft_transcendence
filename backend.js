@@ -157,6 +157,8 @@ nextApp.prepare().then(() => {
       players.splice(index, 1);
       if (players[0].color === PLAYER_A_COLOR) score.playerA = SCORE_LIMIT;
       else score.playerB = SCORE_LIMIT;
+      socket.broadcast.emit('updateScore', score);
+      process.exit(0);
     });
     socket.on('keyDown', (keycode) => {
       const targetPlayer = players.find((player) => player.id === socket.id);
