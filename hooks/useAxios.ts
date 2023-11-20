@@ -77,7 +77,7 @@ const useAxios = () => {
           variant: 'destructive'
         });
       } finally {
-        setloading(false);
+        setLoading(false);
       }
     },
     [toast]

@@ -14,7 +14,6 @@ export interface UserInfoType {
   introduction: string;
 }
 
-
 //1. 채널 방을 클릭하면 받아와야 하는 정보
 export interface channelInfoType {
   chatList: Array<chatInfoType>; // 저장되어있는 대화의 내용들입니다.
@@ -165,8 +164,6 @@ export const friendInfos: Array<UserInfoType> = [
   }
 ];
 
-
-
 //d-1. 채팅 할 때 메세지가 오는 정보를 나타냅니다.
 const chatInfos: Array<chatInfoType> = [
   {
@@ -307,8 +304,6 @@ export const blockUserInfos: Array<blockUserType> = [
 export interface GlobalVariable {
   gameRequests: Array<GameInfoType>; //게임 요청이 올 때 정보
   friendInfos: Array<UserInfoType>; //친구 목록
-  channelList: Array<channelType>; //채널방 목록
-  channelInfo: channelInfoType; //채널 방을 클릭하면 받아와야 하는 정보
   banUserList: Array<banUserType>; //현재 채팅방에서 금지된 유저의 정보
   blockUserInfos: Array<blockUserType>; //내가 차단한 유저의 목록입니다.
 }

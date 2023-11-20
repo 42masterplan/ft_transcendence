@@ -54,7 +54,7 @@ export default function Game() {
           </CardContent>
           <CardFooter className='flex justify-center'>
             {/* <FriendMatchList /> */}
-            <LinkBtn link='/game/active'>{`Dummy Match`}</LinkBtn>
+            <LinkBtn link='/game/active'>{`Dummy Match` }</LinkBtn>
           </CardFooter>
         </Card>
       </TabsContent>
