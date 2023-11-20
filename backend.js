@@ -65,22 +65,23 @@ class Player {
     this.c.fill();
   }
 }
-const SCREEN_WIDTH = 400;
-const SCREEN_HEIGHT = 600; //screen ratio is 2:3
-const PLAYER_WIDTH = 100;
-const PLAYER_HEIGHT = 15;
-const PLAYER_A_COLOR = 'rgba(217, 217, 217, 1)';
-const PLAYER_B_COLOR = 'rgba(0, 133, 255, 1)';
-const BALL_RADIUS = 5;
-const BALL_COLOR = 'white';
-const BALL_SPEED = 5 / 3;
-const BALL_VELOCITY = {x: 1, y: 1};
-const PADDLE_OFFSET = SCREEN_WIDTH / 100;
-const SCORE_LIMIT = 10;
-const GAME_TIME_LIMIT = 180;
-const DEBOUNCINGTIME = 500;
-const RENDERING_RATE = 5;
-
+// A's color is white, B's color is blue
+// A is on the bottom, B is on the top
+SCREEN_WIDTH = 400;
+SCREEN_HEIGHT = 600; //screen ratio is 2:3
+PLAYER_WIDTH = 100;
+PLAYER_HEIGHT = 15;
+PLAYER_A_COLOR = 'rgba(217, 217, 217, 1)';
+PLAYER_B_COLOR = 'rgba(0, 133, 255, 1)';
+BALL_RADIUS = 5;
+BALL_COLOR = 'white';
+BALL_SPEED = 5 / 3;
+BALL_VELOCITY = {x: 1, y: 1};
+PADDLE_OFFSET = SCREEN_WIDTH / 100;
+SCORE_LIMIT = 10;
+GAME_TIME_LIMIT = 180;
+DEBOUNCINGTIME = 500;
+RENDERING_RATE = 5;
 const express = require('express');
 const next = require('next');
 const http = require('http');
@@ -89,19 +90,8 @@ const port = 4242;
 const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({dev});
 const nextHandler = nextApp.getRequestHandler();
-const players = [];
-const ball = {
-  x: SCREEN_WIDTH / 2,
-  y: SCREEN_HEIGHT / 2,
-  velocity: BALL_VELOCITY,
-  radius: BALL_RADIUS,
-  color: BALL_COLOR,
-  lastCollision: 0
-};
-const score = {
-  playerA: 0,
-  playerB: 0
-};
+const gameStates = {};
+
 function resetBall(isA, io) {
   if (isA) score.playerA++;
   else score.playerB++;
@@ -123,6 +113,76 @@ function resetBall(isA, io) {
     io.emit('updateBall', ball);
   }, 3000);
 }
+function createNewGameState(gameId) {
+  return {
+    gameId: gameId,
+    players: [
+      Player({
+        id: null, // 플레이어의 소켓 ID
+        x: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
+        y: SCREEN_HEIGHT - 45,
+        width: PLAYER_WIDTH,
+        height: PLAYER_HEIGHT,
+        color: PLAYER_A_COLOR
+      }),
+      // 플레이어 B의 초기 상태
+      Player({
+        id: null, // 플레이어의 소켓 ID
+        x: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
+        y: 30,
+        width: PLAYER_WIDTH,
+        height: PLAYER_HEIGHT,
+        color: PLAYER_B_COLOR
+      })
+    ],
+    ball: {
+      x: SCREEN_WIDTH / 2,
+      y: SCREEN_HEIGHT / 2,
+      velocity: BALL_VELOCITY,
+      radius: BALL_RADIUS,
+      color: BALL_COLOR,
+      lastCollision: 0
+    },
+    score: {
+      playerA: 0,
+      playerB: 0
+    }
+  };
+}
+function updateGameState(state) {
+  // 플레이어가 2명 미만인 경우 업데이트 중지
+  if (state.players.length < 2) return;
+
+  // 볼의 위치 업데이트
+  state.ball.x += state.ball.velocity.x;
+  state.ball.y += state.ball.velocity.y;
+
+  // 볼의 충돌 처리
+  if (
+    state.ball.x - state.ball.radius <= 1 ||
+    state.ball.x + state.ball.radius >= SCREEN_WIDTH - 1
+  )
+    state.ball.velocity.x *= -1;
+  else if (state.ball.y < 0) resetBall(true, state); // A 점수 획득
+  else if (state.ball.y > SCREEN_HEIGHT) resetBall(false, state); // B 점수 획득
+
+  // 플레이어와 볼의 충돌 처리
+  if (
+    state.players[0].isACollided(state.ball) ||
+    state.players[1].isBCollided(state.ball)
+  ) {
+    const now = Date.now();
+    if (
+      state.ball.lastCollision &&
+      now - state.ball.lastCollision < DEBOUNCINGTIME
+    )
+      return;
+    if (state.players[0].isACollided(state.ball))
+      state.players[0].handleCollision(state.ball, now);
+    else if (state.players[1].isBCollided(state.ball))
+      state.players[1].handleCollision(state.ball, now);
+  }
+}
 nextApp.prepare().then(() => {
   const app = express();
   const server = http.createServer(app);
@@ -137,25 +197,17 @@ nextApp.prepare().then(() => {
     }
   });
   io.on('connection', (socket) => {
-    // A's color is white, B's color is blue
-    // A is on the bottom, B is on the top
-    players.push(
-      new Player({
-        id: socket.id,
-        x: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
-        y: firstConnection ? SCREEN_HEIGHT - 45 : 30,
-        color: firstConnection ? PLAYER_A_COLOR : PLAYER_B_COLOR //A : B 첫 번째로 추가되는 플레이어가 A다
-      })
-    );
+    socket.on('joinGame', (gameId) => {
+      socket.join(gameId);
+      if (!gameStates[gameId]) gameStates[gameId] = createNewGameState(gameId);
+      io.to(gameId).emit('gameState', gameStates[gameId]);
+    });
     firstConnection = false;
-    io.emit('updatePlayers', players);
-    io.emit('updateBall', ball);
     socket.on('disconnect', (reason) => {
       console.log(reason);
       if (players[0].color === PLAYER_A_COLOR) score.playerA = SCORE_LIMIT;
       else score.playerB = SCORE_LIMIT;
       socket.broadcast.emit('updateScore', score);
-      process.exit(0);
     });
     socket.on('keyDown', (keycode) => {
       const targetPlayer = players.find((player) => player.id === socket.id);
@@ -206,7 +258,16 @@ nextApp.prepare().then(() => {
       targetPlayer.dx = 0;
     });
   });
+
   setInterval(() => {
+    Object.keys(gameStates).forEach((gameId) => {
+      const state = gameStates[gameId];
+      updateGameState(state); // 게임 상태 업데이트
+      // 방별로 상태 업데이트 이벤트 방송
+      io.to(gameId).emit('updatePlayers', state.players);
+      io.to(gameId).emit('updateBall', state.ball);
+    });
+
     if (players.length < 2) return;
     ball.x += ball.velocity.x;
     ball.y += ball.velocity.y;
@@ -229,6 +290,7 @@ nextApp.prepare().then(() => {
     io.emit('updateTime', time);
     time -= 1;
   }, 1000);
+
   app.use(express.static('public'));
   app.get('*', (req, res) => {
     return nextHandler(req, res);
