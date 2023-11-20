@@ -18,6 +18,14 @@ export default function ChannelPage() {
 
   //여기서는 채널 페이지를 들어올 때 처음 소켓 연결을 수립하지만, 실제로는 모든 페이지에서 socket을 연결한 채로 유지해야만 한다.
   const [socket] = useChatSocket('channel');
+  socket.on('connect', () => {
+    console.log('connected');
+  });
+  socket.emit('setUserInfo', {
+    username: 'joushin',
+    userId: 'joushin',
+    profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI4
+  });
   const [messages, setMessages] = useState([] as ChannelHistoryType[]);
   useEffect(() => {
     socket.emit('myChannels');

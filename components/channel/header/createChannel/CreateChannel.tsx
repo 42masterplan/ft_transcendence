@@ -198,6 +198,7 @@ export default function CreateChannel() {
       });
       return;
     }
+    console.log('채널생성 보내기');
     socket.emit(
       'createChannel',
       {
@@ -209,8 +210,7 @@ export default function CreateChannel() {
       (msg: string) => {
         toast({
           title: '채널 생성 성공',
-          description: msg,
-          duration: 3000
+          description: msg
         });
         console.log({
           name: channelName,
@@ -224,6 +224,7 @@ export default function CreateChannel() {
         setInviteFriendList([]);
       }
     );
+    console.log('채널생성 보내기2');
     socket.once('error_exist', (error: string) => {
       alert(error);
     });
