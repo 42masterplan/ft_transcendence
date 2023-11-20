@@ -87,7 +87,7 @@ export default function SetUserName({
   isValidName: boolean;
   setIsValidName: Dispatch<SetStateAction<boolean>>;
 }) {
-  const {fetchData, response, error, loading, isSuccess} = useAxios();
+  const {fetchData, response} = useAxios();
   const {toast} = useToast();
   useEffect(() => {
     if (response === null) return;

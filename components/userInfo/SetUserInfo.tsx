@@ -2,14 +2,13 @@ import SetAvatar from '@/components/avatar/SetAvatar';
 import {useState} from 'react';
 import {Input} from '../shadcn/ui/input';
 import {Button} from '../shadcn/ui/button';
-import Axios from '@/api';
 import SetUserName from './SetUserName';
 import {useRouter} from 'next/router';
 import {useToast} from '@/components/shadcn/ui/use-toast';
-import SpinningLoader from '@/components/loader/SpinningLoader';
 import useAxios from '@/hooks/useAxios';
+
 export default function SetUserInfo() {
-  const {fetchData, response, error, loading, isSuccess} = useAxios();
+  const {fetchData, isSuccess} = useAxios();
   const {toast} = useToast();
   const [nickname, setNickname] = useState('');
   const [isValidName, setIsValidName] = useState(false);
@@ -18,10 +17,9 @@ export default function SetUserInfo() {
     process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI1 || ''
   );
   const router = useRouter();
-  if (isSuccess === true) {
-    router.push('/welcome/2step-auth');
-  }
-  const handleSubmit = () => {
+  if (isSuccess === true) router.push('/welcome/2step-auth');
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
     fetchData({
       method: 'post',
       url: '/users',
@@ -34,9 +32,7 @@ export default function SetUserInfo() {
     });
   };
 
-  return loading ? (
-    <SpinningLoader />
-  ) : (
+  return (
     <div className='flex flex-col items-center justify-center h-screen'>
       <div className='max-w-100 rounded-lg overflow-y-auto p-6 bg-custom2/70 gap-3'>
         <h1 className='font-roboto-mono text-4xl font-semibold leading-10 tracking-normal text-custom4 m-3'>

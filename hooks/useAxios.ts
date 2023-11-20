@@ -40,15 +40,11 @@ const useAxios = () => {
       disableErrorToast = false
     }: fetchDataType) => {
       setloading(true);
-      console.log('url', url);
-      console.log('method', method);
-      console.log('body', body);
-      console.log('params', params);
-      console.log('headers', headers);
       try {
         const res = await Axios({
           method,
           url,
+          headers,
           data: body,
           params
         });
