@@ -12,11 +12,11 @@ import Player from '@/lib/classes/Player';
 import Ball from '@/lib/classes/Ball';
 import Particle from '@/lib/classes/Particle';
 import {useEffect, useRef, useState} from 'react';
-import {bounceIfCollided, handleKeyDowns, handleKeyUps} from '@/lib/game/util';
+import {handleKeyDowns, handleKeyUps} from '@/lib/game/util';
 import ScoreBoard from '@/components/game/ScoreBoard';
 import GameStatus from '@/components/game/GameStatus';
 import GameResult from '@/components/game/GameResult';
-import io, {Socket} from 'socket.io-client';
+import io from 'socket.io-client';
 
 export default function Game() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -34,10 +34,13 @@ export default function Game() {
     const c = canvas.getContext('2d');
     if (!c) return;
     const devicePixelRatio = window.devicePixelRatio || 1;
-    // console.log('outerWidth', window.outerWidth);
-    // console.log('outerHeight', window.outerHeight);
-    // console.log('width ratio: ', window.outerWidth / SCREEN_WIDTH); // 3.6
-    // console.log('height ratio: ', window.outerHeight / SCREEN_HEIGHT); // 1.46
+    /*
+    console.log('outerWidth', window.outerWidth);
+    console.log('outerHeight', window.outerHeight);
+    console.log('width ratio: ', window.outerWidth / SCREEN_WIDTH); // 3.6
+    console.log('height ratio: ', window.outerHeight / SCREEN_HEIGHT); // 1.46
+    this might be useful for various screen sizes
+    */
     contextRef.current = c;
     canvas.width = SCREEN_WIDTH * devicePixelRatio;
     canvas.height = SCREEN_HEIGHT * devicePixelRatio;
@@ -94,8 +97,13 @@ export default function Game() {
         if (
           updatedScore.playerB >= SCORE_LIMIT ||
           updatedScore.playerA >= SCORE_LIMIT
-        )
+        ) {
           setGameOver(true);
+          cancelAnimationFrame(animationId);
+          socket.off('connect');
+          socket.off('disconnect');
+          socket.disconnect();
+        }
         return updatedScore;
       });
     });
