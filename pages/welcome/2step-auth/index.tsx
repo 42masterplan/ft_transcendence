@@ -7,7 +7,7 @@ import {Input} from '@/components/shadcn/ui/input';
 import {Label} from '@/components/shadcn/ui/label';
 import {useState, ChangeEvent} from 'react';
 import isEmail from 'validator/lib/isEmail';
-
+import Axios from '@/api';
 export default function TwoStepAuth() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -56,6 +56,9 @@ export default function TwoStepAuth() {
             size='lg'
             variant='default'
             disabled={message !== 'Thank you'}
+            onClick={() => {
+              Axios.put('/auth/2step-auth', {email});
+            }}
           >
             인증 코드 받기
           </Button>
