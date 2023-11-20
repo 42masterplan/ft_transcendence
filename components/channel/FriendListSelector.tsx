@@ -12,7 +12,7 @@ import {
 
 interface RenderFriendProps {
   friendInfos: FriendInfoType[];
-  selected: Array<Object>;
+  selected: any;
   setSelected: any;
 }
 function renderFriendCheckBoxItems({
@@ -20,8 +20,8 @@ function renderFriendCheckBoxItems({
   selected,
   setSelected
 }: RenderFriendProps) {
-  const handleCheckedChange = (e) => {
-    const new_array = selected.map((s) => {
+  const handleCheckedChange = (e: any) => {
+    const new_array = selected.map((s: any) => {
       if (s.id == e.target.innerText)
         //임시로 이렇게 두긴 했는데 바꾸긴 해야 할듯요
         return {
@@ -39,7 +39,6 @@ function renderFriendCheckBoxItems({
       <DropdownMenuCheckboxItem
         key={friendInfo.id}
         className='col-span-3'
-        value={friendInfo.id}
         checked={selected[idx].is_selected}
         onClick={(e) => handleCheckedChange(e)}
       >

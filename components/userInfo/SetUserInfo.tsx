@@ -2,37 +2,34 @@ import SetAvatar from '@/components/avatar/SetAvatar';
 import {useState} from 'react';
 import {Input} from '../shadcn/ui/input';
 import {Button} from '../shadcn/ui/button';
-import Axios from '@/api';
 import SetUserName from './SetUserName';
 import {useRouter} from 'next/router';
 import {useToast} from '@/components/shadcn/ui/use-toast';
+import useAxios from '@/hooks/useAxios';
+
 export default function SetUserInfo() {
+  const {fetchData, isSuccess} = useAxios();
+  const {toast} = useToast();
   const [nickname, setNickname] = useState('');
   const [isValidName, setIsValidName] = useState(false);
   const [statusMsg, setStatusMsg] = useState('');
   const [profileImage, setProfileImage] = useState(
     process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI1 || ''
   );
-  const {toast} = useToast();
   const router = useRouter();
-
-  const handleSubmit = async () => {
-    try {
-      await Axios.post('/users', {
+  if (isSuccess === true) router.push('/welcome/2step-auth');
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    fetchData({
+      method: 'post',
+      url: '/users',
+      body: {
         name: nickname,
         profileImage: profileImage,
         introduction: statusMsg,
         is2faEnabled: false
-      });
-      router.push('/welcome/2step-auth');
-    } catch (err) {
-      toast({
-        title: '회원 정보 설정 실패',
-        description: '회원 정보 설정에 실패했습니다.',
-        variant: 'destructive',
-        duration: 3000
-      });
-    }
+      }
+    });
   };
 
   return (
@@ -59,7 +56,10 @@ export default function SetUserInfo() {
           value={statusMsg}
           onChange={(e) => {
             if (e.target.value.length > 20) {
-              alert('20자 이하로 입력해주세요.');
+              toast({
+                title: '상태 메시지는 최대 20자까지 입력 가능합니다.',
+                variant: 'destructive'
+              });
               return;
             }
             setStatusMsg(e.target.value);

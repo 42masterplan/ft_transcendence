@@ -38,7 +38,6 @@ wsServer.on('connection', (socket) => {
   socket.join(EngagedChannels.map((channel) => channel.id));
   //연결 되자마자 유저 정보를 얻어옵니다.
   // socket.emit('setUserInfo');
-  socket.emit('setUserInfo');
   socket.onAny((event) => {
     console.log(`Socket Event: ${event}`);
     if (socket['username'] === 'Anon') socket.emit('setUserInfo');

@@ -22,7 +22,7 @@ const useChatSocket = (namespace: SocketNamespace): [Socket, () => void] => {
   else url = chatSocketUrl;
 
   sockets[namespace] = io(url, {
-    autoConnect: true,
+    autoConnect: false,
     transports: ['websocket']
     // auth: {
     //   Authorization: `Bearer ${getAuthorization()}`
