@@ -148,7 +148,7 @@ export default function Game() {
       ) : (
         <>
           <canvas ref={canvasRef} className='z-10 absolute' />
-          <div className='absolute left-[calc(50%+288px)] '>
+          <div className='absolute left-[calc(50%+200px)] '>
             <GameStatus
               gameover={gameover}
               setGameOver={setGameOver}
