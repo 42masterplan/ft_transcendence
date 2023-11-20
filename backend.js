@@ -36,7 +36,15 @@ class Player {
   applySpin(ball) {
     const spinFactor = 0.4;
     ball.velocity.x += this.dx * spinFactor;
-    const speed = Math.sqrt(
+    let speed = Math.sqrt(
+      ball.velocity.x * ball.velocity.x + ball.velocity.y * ball.velocity.y
+    );
+    ball.velocity.x = BALL_SPEED * (ball.velocity.x / speed);
+    ball.velocity.y = BALL_SPEED * (ball.velocity.y / speed);
+    if (ball.velocity.x > 0.75) ball.velocity.x = 0.75;
+    else if (ball.velocity.x < -0.75) ball.velocity.x = -0.75;
+    console.log(ball.velocity.x, ball.velocity.y);
+    speed = Math.sqrt(
       ball.velocity.x * ball.velocity.x + ball.velocity.y * ball.velocity.y
     );
     ball.velocity.x = BALL_SPEED * (ball.velocity.x / speed);
@@ -103,8 +111,10 @@ function resetBall(isA, io) {
   ball.y = SCREEN_HEIGHT / 2;
   ball.velocity = {x: 0, y: 0};
   setTimeout(() => {
-    x = isA ? players[0].x + PLAYER_WIDTH / 2 : players[1].x + PLAYER_WIDTH / 2;
-    y = isA ? players[0].y : players[1].y;
+    x = !isA
+      ? players[0].x + PLAYER_WIDTH / 2
+      : players[1].x + PLAYER_WIDTH / 2;
+    y = !isA ? players[0].y : players[1].y;
     const dx = x - ball.x;
     const dy = y - ball.y;
     const speed = Math.sqrt(dx * dx + dy * dy);
@@ -200,7 +210,7 @@ nextApp.prepare().then(() => {
     ball.y += ball.velocity.y;
     io.emit('updatePlayers', players);
     io.emit('updateBall', ball);
-    if (ball.x - ball.radius <= 5 || ball.x + ball.radius >= SCREEN_WIDTH - 5)
+    if (ball.x - ball.radius <= 1 || ball.x + ball.radius >= SCREEN_WIDTH - 1)
       ball.velocity.x *= -1;
     else if (ball.y < 0) resetBall(false, io);
     else if (ball.y > SCREEN_HEIGHT) resetBall(true, io);
