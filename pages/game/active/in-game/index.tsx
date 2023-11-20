@@ -1,6 +1,6 @@
 import {
   SCREEN_WIDTH,
-  SCREEN_HEIGHT,
+  SCREEN_HEIGHT, //screen ratio is 2:3
   PLAYER_WIDTH,
   PLAYER_A_COLOR,
   PLAYER_B_COLOR,
@@ -34,12 +34,16 @@ export default function Game() {
     const c = canvas.getContext('2d');
     if (!c) return;
     const devicePixelRatio = window.devicePixelRatio || 1;
+    console.log('outerWidth', window.outerWidth);
+    console.log('outerHeight', window.outerHeight);
+    console.log('width ratio: ', window.outerWidth / SCREEN_WIDTH); // 3.6
+    console.log('height ratio: ', window.outerHeight / SCREEN_HEIGHT); // 1.46
     contextRef.current = c;
     canvas.width = SCREEN_WIDTH * devicePixelRatio;
     canvas.height = SCREEN_HEIGHT * devicePixelRatio;
+    c.scale(devicePixelRatio, devicePixelRatio);
     canvas.style.width = `${SCREEN_WIDTH}px`;
     canvas.style.height = `${SCREEN_HEIGHT}px`;
-    c.scale(devicePixelRatio, devicePixelRatio);
     const particles = [] as Particle[];
     const playerA = new Player({
       id: '',
@@ -144,7 +148,7 @@ export default function Game() {
       ) : (
         <>
           <canvas ref={canvasRef} className='z-10 absolute' />
-          <div className='absolute left-[calc(50%+217px)] '>
+          <div className='absolute left-[calc(50%+288px)] '>
             <GameStatus
               gameover={gameover}
               setGameOver={setGameOver}

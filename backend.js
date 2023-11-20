@@ -58,13 +58,12 @@ class Player {
     this.c.fill();
   }
 }
-const SCREEN_WIDTH = 576;
-const SCREEN_HEIGHT = 1024;
+const SCREEN_WIDTH = 400;
+const SCREEN_HEIGHT = 600; //screen ratio is 2:3
 const PLAYER_WIDTH = 100;
 const PLAYER_HEIGHT = 15;
 const PLAYER_A_COLOR = 'rgba(217, 217, 217, 1)';
 const PLAYER_B_COLOR = 'rgba(0, 133, 255, 1)';
-const BACKGROUND_COLOR = 'rgba(15, 23, 42, 0.8)';
 const BALL_RADIUS = 5;
 const BALL_COLOR = 'white';
 const BALL_SPEED = 5 / 3;
