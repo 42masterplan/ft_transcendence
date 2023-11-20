@@ -1,4 +1,3 @@
-import ResponsiveContainer from '@/components/container/ResponsiveContainer';
 import ScrollableContainer from '@/components/container/ScrollableContainer';
 import {Button} from '@/components/shadcn/ui/button';
 import {Input} from '@/components/shadcn/ui/input';
@@ -101,7 +100,7 @@ export default function FriendMatchList() {
   const users = API.social__getUsers();
   // TODO: modify user list depends on the switch
   return (
-    <ResponsiveContainer className='flex-col w-full h-[430px]'>
+    <div className='flex-col w-full h-[430px]'>
       <SocialPageNavBar className=' px-5' />
       <ScrollableContainer>
         <div className='flex flex-col px-5 py-2'>
@@ -110,7 +109,7 @@ export default function FriendMatchList() {
             collapsible
             className='flex flex-col w-full gap-3'
           >
-            {users.map((user) => (
+            {/* {users.map((user) => (
               <ResponsiveContainer className='w-fit hover:scale-[1.05] transition ease-in-out border-custom2 border-2 rounded-3xl pr-5 pl-3'>
                 <AccordionItem value={user.id}>
                   <AccordionTrigger>
@@ -134,10 +133,10 @@ export default function FriendMatchList() {
                   </AccordionContent>
                 </AccordionItem>
               </ResponsiveContainer>
-            ))}
+            ))} */}
           </Accordion>
         </div>
       </ScrollableContainer>
-    </ResponsiveContainer>
+    </div>
   );
 }

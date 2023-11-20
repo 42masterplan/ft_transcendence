@@ -21,7 +21,7 @@ interface fetchDataType {
 const useAxios = () => {
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
-  const [loading, setloading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const {toast} = useToast();
   const [isSuccess, setSuccess] = useState(false);
 
@@ -39,7 +39,7 @@ const useAxios = () => {
       disableSuccessToast = false,
       disableErrorToast = false
     }: fetchDataType) => {
-      setloading(true);
+      setLoading(true);
       try {
         const res = await Axios({
           method,

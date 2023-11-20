@@ -6,7 +6,7 @@ import {ChannelHistoryType} from '@/types/channel';
 import useChatSocket from '@/hooks/useChatSocket';
 import ChatMessage from '@/components/channel/body/ChatCard';
 import ScrollableContainer from '../../container/ScrollableContainer';
-import ManageChannel from '../ManageChannel';
+import ManageChannel from '../header/ManageChannel';
 export function ChannelBody({
   messages,
   setMessages,

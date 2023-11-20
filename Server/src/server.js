@@ -37,7 +37,7 @@ wsServer.on('connection', (socket) => {
   //처음 들어오면 이미 join된 상태인 room에 join해줍니다.
   socket.join(EngagedChannels.map((channel) => channel.id));
   //연결 되자마자 유저 정보를 얻어옵니다.
-  // socket.emit('setUserInfo');
+  socket.emit('setUserInfo');
   socket.emit('setUserInfo');
   socket.onAny((event) => {
     console.log(`Socket Event: ${event}`);

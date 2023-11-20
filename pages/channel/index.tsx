@@ -22,18 +22,18 @@ export default function ChannelPage() {
   useEffect(() => {
     socket.emit('myChannels');
     socket.on('myRole', (data) => {
-      console.log('권한 설정', data);
-      if (data === null) {
-        alert('채널에 참가중..');
-      } else setRole(data.role);
-    });
+    //   console.log('권한 설정', data);
+    //   if (data === null) {
+    //     alert('채널에 참가중..');
+    //   } else setRole(data.role);
+    // });
     socket.on('setUserInfo', () => {
-      socket.emit('setUserInfo', {
-        username: 'joushin',
-        userId: 'joushin',
-        profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI4
-      }); //추후 recoil로 유저 정보 관리할 예정인데, 일단은 임시로 넣어둠
-    });
+    //   socket.emit('setUserInfo', {
+    //     username: 'joushin',
+    //     userId: 'joushin',
+    //     profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI4
+    //   }); //추후 recoil로 유저 정보 관리할 예정인데, 일단은 임시로 넣어둠
+    // });
   }, []);
 
   return (
