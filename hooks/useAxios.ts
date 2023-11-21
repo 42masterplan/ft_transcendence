@@ -39,6 +39,9 @@ const useAxios = () => {
       disableSuccessToast = false,
       disableErrorToast = false
     }: fetchDataType) => {
+      setResponse(null);
+      setError(null);
+      setSuccess(false);
       setLoading(true);
       try {
         const res = await Axios({

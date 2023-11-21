@@ -11,7 +11,7 @@ import InputValidCode from '@/components/input/InputValidCode';
 export default function TwoStepAuth() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-  const {fetchData: fetchEmail, isSuccess: emailDone} = useAxios();
+  const {fetchData: fetchEmail, response, isSuccess: emailDone} = useAxios();
   const {fetchData: fetchCode, isSuccess: codeDone} = useAxios();
   const [fixEmail, setFixEmail] = useState(false);
   const Router = useRouter();
@@ -25,7 +25,8 @@ export default function TwoStepAuth() {
   };
   useEffect(() => {
     if (emailDone === true) setFixEmail(true);
-  }, [emailDone]);
+    if (response == true) setFixEmail(true);
+  }, [emailDone, response]);
   useEffect(() => {
     if (codeDone === true) Router.push('/');
   }, [codeDone]);
@@ -71,7 +72,7 @@ export default function TwoStepAuth() {
               variant='default'
               disabled={message !== '올바른 이메일 형식 입니다.'}
               onClick={() => {
-                if (message === '올바른 이메일 형식 입니다.' && fixEmail) {
+                if (fixEmail) {
                   setFixEmail(false);
                 } else {
                   fetchEmail({
