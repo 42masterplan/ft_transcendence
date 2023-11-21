@@ -1,13 +1,25 @@
 import SetAvatar from '@/components/avatar/SetAvatar';
 import {useState} from 'react';
-import {Input} from '../shadcn/ui/input';
-import {Button} from '../shadcn/ui/button';
+import {Input} from '@/components/shadcn/ui/input';
+import {Button} from '@/components/shadcn/ui/button';
 import SetUserName from './SetUserName';
 import {useRouter} from 'next/router';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 import useAxios from '@/hooks/useAxios';
 
-export default function SetUserInfo() {
+interface SetUserInfoProps {
+  mode?: 'register' | 'change';
+  userInfo?: {
+    name: string;
+    profileImage: string;
+    introduction: string;
+    is2faEnabled: boolean;
+  };
+}
+export default function SetUserInfo({
+  mode = 'register',
+  userInfo
+}: SetUserInfoProps) {
   const {fetchData, isSuccess} = useAxios();
   const {toast} = useToast();
   const [nickname, setNickname] = useState('');
@@ -16,12 +28,13 @@ export default function SetUserInfo() {
   const [profileImage, setProfileImage] = useState(
     process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI1 || ''
   );
+
   const router = useRouter();
   if (isSuccess === true) router.push('/welcome/2step-auth');
   const handleSubmit = (e: any) => {
     e.preventDefault();
     fetchData({
-      method: 'post',
+      method: 'put',
       url: '/users',
       body: {
         name: nickname,
@@ -69,6 +82,7 @@ export default function SetUserInfo() {
         <p className='text-custom4 text-xs p-3'>
           상태 메시지는 최대 20자까지 입력 가능합니다.
         </p>
+
         <Button
           className='self-center w-full mt-4 '
           disabled={isValidName !== true}

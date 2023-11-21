@@ -22,8 +22,8 @@ const useAxios = () => {
   const [response, setResponse] = useState<any>(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const {toast} = useToast();
   const [isSuccess, setSuccess] = useState(false);
+  const {toast} = useToast();
 
   const fetchData = useCallback(
     async ({
