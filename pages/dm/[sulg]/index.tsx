@@ -3,12 +3,15 @@ import SpinningLoader from '@/components/loader/SpinningLoader';
 import {useRouter} from 'next/router';
 import ScrollableContainer from '@/components/container/ScrollableContainer';
 import MessageInputBar from '@/components/input/MessageInputBar';
+import DMCard from '@/components/card/cardUsedInDMPage/DMCard';
+import {DMType} from '@/lib/types';
+import {DM} from '@/lib/classes/DM';
 
 export default function DMPage() {
   const router = useRouter();
   const [isSending, setIsSending] = useState(false);
   const [msg, setMsg] = useState('');
-  const [DMData, setDMData] = useState(null);
+  const [DMData, setDMData] = useState<DMType[] | null>(null);
 
   // IMPLEMENTING --------------------------------------------------------------
 
@@ -27,6 +30,7 @@ export default function DMPage() {
     }
   }
 
+  // fetch DM data from server
   async function getDMData(): Promise<any> {
     const isFriend = await checkFriendStatus();
     if (!isFriend) {
@@ -39,9 +43,100 @@ export default function DMPage() {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       const response = true; // change to false to test friend request failed
       if (response) {
-        const DMData =
-          'THIS IS DUMMY DM DATA. PLEASE CHANGE IT TO REAL DATA. JSON FORMAT IS PREFERRED';
-        return DMData;
+        const dummyData: DMType[] = [
+          {
+            id: '1',
+            senderName: 'receiver',
+            senderProfileImage: '',
+            receiverName: 'receiver',
+            receiverProfileImage: '',
+            content: 'Hello',
+            sendTime: new Date()
+          },
+          {
+            id: '2',
+            senderName: 'sender',
+            senderProfileImage: '',
+            receiverName: 'receiver',
+            receiverProfileImage: '',
+            content: 'Hello',
+            sendTime: new Date()
+          },
+          {
+            id: '3',
+            senderName: 'receiver',
+            senderProfileImage: '',
+            receiverName: 'receiver',
+            receiverProfileImage: '',
+            content: 'Hello',
+            sendTime: new Date()
+          },
+          {
+            id: '4',
+            senderName: 'sender',
+            senderProfileImage: '',
+            receiverName: 'receiver',
+            receiverProfileImage: '',
+            content: 'Hello',
+            sendTime: new Date()
+          },
+          {
+            id: '5',
+            senderName: 'receiver',
+            senderProfileImage: '',
+            receiverName: 'receiver',
+            receiverProfileImage: '',
+            content: 'Hello',
+            sendTime: new Date()
+          },
+          {
+            id: '6',
+            senderName: 'sender',
+            senderProfileImage: '',
+            receiverName: 'receiver',
+            receiverProfileImage: '',
+            content:
+              'receiverrece iverr e c eiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiver',
+            sendTime: new Date()
+          },
+          {
+            id: '7',
+            senderName: 'sender',
+            senderProfileImage: '',
+            receiverName: 'receiver',
+            receiverProfileImage: '',
+            content: 'Hello',
+            sendTime: new Date()
+          },
+          {
+            id: '8',
+            senderName: 'sender',
+            senderProfileImage: '',
+            receiverName: 'receiver',
+            receiverProfileImage: '',
+            content: 'Hello',
+            sendTime: new Date()
+          },
+          {
+            id: '9',
+            senderName: 'receiver',
+            senderProfileImage: '',
+            receiverName: 'receiver',
+            receiverProfileImage: '',
+            content: 'Hello',
+            sendTime: new Date()
+          },
+          {
+            id: '10',
+            senderName: 'sender',
+            senderProfileImage: '',
+            receiverName: 'receiver',
+            receiverProfileImage: '',
+            content: 'Hello',
+            sendTime: new Date()
+          }
+        ];
+        return dummyData;
       } else {
         return null;
       }
@@ -74,7 +169,11 @@ export default function DMPage() {
     <>
       <div className='bg-custom4'>header</div>
       <ScrollableContainer gap={3}>
-        <div></div>
+        <div>
+          {DMData.map((dm) => (
+            <DMCard key={dm.id} dmInfo={dm} myName='sender' className='mb-3' />
+          ))}
+        </div>
       </ScrollableContainer>
       <MessageInputBar
         isSending={isSending}

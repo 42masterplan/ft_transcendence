@@ -49,3 +49,13 @@ export type FriendRequest = {
 
 export type socialPageTargetUser = 'friend' | 'all users';
 export type socialPageUserStatus = 'Online' | 'Offline' | 'InGame' | 'All';
+
+export type DMType = {
+  id: string; // UUID
+  senderName: string;
+  senderProfileImage: string;
+  receiverName: string;
+  receiverProfileImage: string;
+  content: string;
+  sendTime: Date;
+};
