@@ -38,6 +38,7 @@ export default function SetAvatar({setProfileImage}: {setProfileImage: any}) {
 
     if (response != null) {
       setAvatarList([...avatarList, response.profileImage]);
+      setCustomAvatar(response.profileImage);
     }
   };
   const uploadAvatar = (file: File) => {
@@ -46,6 +47,9 @@ export default function SetAvatar({setProfileImage}: {setProfileImage: any}) {
     fetchData({
       method: 'post',
       url: '/users/profile-image',
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
       body: formData,
       successTitle: '아바타 업로드 성공',
       successDescription: '아바타 업로드에 성공했습니다.',
