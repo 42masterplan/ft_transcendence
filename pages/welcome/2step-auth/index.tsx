@@ -1,17 +1,17 @@
-import LinkBtn from '@/components/button/LinkBtn';
-
 import {Button} from '@/components/shadcn/ui/button';
 import Title from '@/components/Title';
 import Image from 'next/image';
 import {Input} from '@/components/shadcn/ui/input';
 import {Label} from '@/components/shadcn/ui/label';
-import {useState, ChangeEvent} from 'react';
+import {useState, ChangeEvent, useEffect} from 'react';
 import isEmail from 'validator/lib/isEmail';
-import Axios from '@/api';
+import useAxios from '@/hooks/useAxios';
+import {useRouter} from 'next/router';
 export default function TwoStepAuth() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-
+  const {fetchData, isSuccess} = useAxios();
+  const Router = useRouter();
   const validateEmail = (e: ChangeEvent<HTMLInputElement>) => {
     const email = e.target.value;
     if (isEmail(email)) {
@@ -20,6 +20,9 @@ export default function TwoStepAuth() {
       setMessage('Please, enter valid Email!');
     }
   };
+  useEffect(() => {
+    if (isSuccess === true) Router.push('/welcome/2step-auth/validation');
+  }, [isSuccess]);
   return (
     <>
       <div>
@@ -57,14 +60,15 @@ export default function TwoStepAuth() {
             variant='default'
             disabled={message !== 'Thank you'}
             onClick={() => {
-              Axios.put('/auth/2step-auth', {email});
+              fetchData({
+                method: 'put',
+                url: '/auth/2step-auth',
+                body: {email: email}
+              });
             }}
           >
             인증 코드 받기
           </Button>
-          {/* <LinkBtn link='/welcome/2step-auth/validation'>
-            인증 코드 받기
-          </LinkBtn> */}
         </div>
       </div>
     </>

@@ -8,7 +8,6 @@ import useAxios from '@/hooks/useAxios';
 export default function SetAvatar({setProfileImage}: {setProfileImage: any}) {
   const [selected, setSelected] = useState(0);
   const [customAvatar, setCustomAvatar] = useState('');
-  const {toast} = useToast();
   const {fetchData, response, isSuccess} = useAxios();
   const fileUploadRef = useRef<HTMLInputElement>(null);
   const [avatarList, setAvatarList] = useState([
@@ -39,6 +38,7 @@ export default function SetAvatar({setProfileImage}: {setProfileImage: any}) {
     if (response != null) {
       setAvatarList([...avatarList, response.profileImage]);
       setCustomAvatar(response.profileImage);
+      setProfileImage(response.profileImage);
     }
   };
   const uploadAvatar = (file: File) => {
