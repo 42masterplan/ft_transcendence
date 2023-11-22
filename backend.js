@@ -310,9 +310,9 @@ nextApp.prepare().then(() => {
   }, RENDERING_RATE);
 
   setInterval(() => {
-    time -= 1;
     Object.keys(gameStates).forEach((gameId) => {
       const state = gameStates[gameId];
+      state.time--;
       if (!state.ready) return;
       if (state.time <= 0) {
         if (state.score.playerA > state.score.playerB)

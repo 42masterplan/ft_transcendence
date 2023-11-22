@@ -1,8 +1,32 @@
-// ... 기존 코드 ...
-/*
-방 관리: 클라이언트가 연결될 때마다 새로운 방을 만들거나 기존 방에 가입하게 합니다. 방은 고유한 ID를 가지며, 각 방은 독립된 게임 상태를 유지합니다.
+export default function Game() {
+  // ... 기존 변수 선언 ...
 
-방별 상태 저장: 각 방의 게임 상태(플레이어, 볼의 위치, 점수 등)를 저장하기 위한 구조를 만듭니다.
+  const [roomId, setRoomId] = useState(null); // 현재 방의 ID
 
-이벤트 방송: 게임 상태 업데이트, 점수 변경 등의 이벤트를 해당 방에만 방송합니다.
-*/
+  useEffect(() => {
+    const socket = io('http://localhost:4242');
+    // ... 기존 코드 ...
+
+    // 방 ID 설정
+    socket.on('joinedRoom', (id) => {
+      setRoomId(id);
+    });
+
+    // 업데이트 이벤트 리스너
+    socket.on('updatePlayers', (data) => {
+      if (data.roomId !== roomId) return; // 현재 방이 아니면 무시
+      // ... 플레이어 상태 업데이트 로직 ...
+    });
+
+    socket.on('updateBall', (data) => {
+      if (data.roomId !== roomId) return; // 현재 방이 아니면 무시
+      // ... 볼 상태 업데이트 로직 ...
+    });
+
+    // ... 나머지 이벤트 리스너 ...
+
+    // ... 나머지 코드 ...
+  }, []);
+
+  // ... 나머지 코드 ...
+}
