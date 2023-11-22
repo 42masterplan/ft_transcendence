@@ -30,16 +30,16 @@ const DialogBtn = ({socket}: any) => {
 
 export default function PublicRoomList() {
   const [socket] = useChatSocket('channel');
+  const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [publicRooms, setPublicRooms] = useState([] as PublicRoomType[]);
   socket.on('getPublicChannels', (rooms) => {
-    if (typeof rooms === 'undefined') {
-      rooms = [];
-    }
+    if (typeof rooms === 'undefined') rooms = [];
+    console.log(rooms);
     setPublicRooms(rooms);
   });
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogBtn socket={socket} />
       <DialogContent className='sm:max-w-[700px] h-5/6 bg-custom1 flex flex-col overflow-y-scroll'>
         <div className='text-center text-xl font-semibold'>
@@ -66,6 +66,7 @@ export default function PublicRoomList() {
                 userCount={public_room.userCount}
                 isLocked={public_room.isPassword}
                 key={public_room.id}
+                setOpen={setOpen}
               />
             ) : (
               ''

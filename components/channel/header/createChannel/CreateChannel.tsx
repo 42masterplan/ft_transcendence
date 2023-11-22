@@ -156,6 +156,7 @@ const PasswordInput = ({
 };
 
 export default function CreateChannel() {
+  const [open, setOpen] = useState(false);
   const [channelName, setChannelName] = useState('');
   const [channelType, setChannelType] = useState('');
   const [password, setPassword] = useState('');
@@ -185,10 +186,6 @@ export default function CreateChannel() {
   };
   const createChannel = () => {
     let inviteUsers: Array<String> = [];
-    // inviteUsers = inviteFriendList.map((friendInfo) => {
-    //   if (friendInfo.checked) return friendInfo.id;
-    // });
-
     if (channelName.length === 0 || channelType.length === 0) {
       toast({
         title: '채널 생성 실패',
@@ -198,7 +195,6 @@ export default function CreateChannel() {
       });
       return;
     }
-    console.log('채널생성 보내기');
     socket.emit(
       'createChannel',
       {
@@ -222,16 +218,16 @@ export default function CreateChannel() {
         setPassword('');
         setChannelType('');
         setInviteFriendList([]);
+        setOpen(false);
       }
     );
-    console.log('채널생성 보내기2');
     socket.once('error_exist', (error: string) => {
       alert(error);
     });
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           className='rounded-full bg-custom4'
