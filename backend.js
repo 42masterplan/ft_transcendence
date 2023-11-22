@@ -82,6 +82,7 @@ SCORE_LIMIT = 10;
 GAME_TIME_LIMIT = 180;
 DEBOUNCINGTIME = 500;
 RENDERING_RATE = 5;
+
 const express = require('express');
 const next = require('next');
 const http = require('http');
@@ -196,13 +197,20 @@ nextApp.prepare().then(() => {
       methods: ['GET', 'POST']
     }
   });
+  //we should already have 'game key', which is the room id
   io.on('connection', (socket) => {
     socket.on('joinGame', (gameId) => {
       socket.join(gameId);
-      if (!gameStates[gameId]) gameStates[gameId] = createNewGameState(gameId);
-      io.to(gameId).emit('gameState', gameStates[gameId]);
+      if (!gameStates[gameId]) {
+        gameStates[gameId] = createNewGameState(gameId);
+        return;
+      }
+      const clientsInRoom = io.sockets.adapter.rooms[gameId];
+      const numClients = clientsInRoom
+        ? Object.keys(clientsInRoom.sockets).length
+        : 0;
+      if (numClients === 2) io.to(gameId).emit('gameState', gameStates[gameId]);
     });
-    firstConnection = false;
     socket.on('disconnect', (reason) => {
       console.log(reason);
       if (players[0].color === PLAYER_A_COLOR) score.playerA = SCORE_LIMIT;
