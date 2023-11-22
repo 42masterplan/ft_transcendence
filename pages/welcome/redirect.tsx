@@ -1,6 +1,7 @@
 import {useEffect} from 'react';
 import {useRouter} from 'next/router';
 import Axios from '@/api';
+import SpinningLoader from '@/components/loader/SpinningLoader';
 
 export default function Redirect() {
   const router = useRouter();
@@ -33,6 +34,5 @@ export default function Redirect() {
       login(auth_code);
     }
   }, [router]);
-
-  return <div> this is not for you!</div>;
+  return <SpinningLoader />;
 }
