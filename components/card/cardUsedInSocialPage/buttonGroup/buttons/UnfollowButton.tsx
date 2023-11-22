@@ -3,7 +3,11 @@ import {UserX} from 'lucide-react';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 import {ToastAction} from '@/components/shadcn/ui/toast';
 
-export default function UnfollowButton(userId: string) {
+type UnfollowButtonProps = {
+  userId: string;
+};
+
+export default function UnfollowButton({userId}: UnfollowButtonProps) {
   // function to send unfriend request: TODO: implement this
   const sendUnfriendRequest = async () => {
     console.log("sendUnfriendRequest's userId: ", userId);
@@ -23,7 +27,7 @@ export default function UnfollowButton(userId: string) {
   return (
     <Button
       size='icon'
-      className='bg-custom2/40 hover:bg-custom2/60'
+      className='bg-custom2/40 hover:bg-custom2/60 hover:scale-[115%] duration-200'
       onClick={() => {
         toast({
           title: 'Are you sure you want to unfriend this user?',

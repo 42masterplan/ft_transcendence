@@ -10,7 +10,7 @@ Axios.interceptors.request.use(
     const config = parameter;
 
     // const token = getAuthorization();
-    config.headers['Content-Type'] = 'application/json';
+    // config.headers['Content-Type'] = 'application/json';
     // if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },

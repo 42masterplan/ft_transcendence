@@ -10,8 +10,8 @@ interface fetchDataType {
   body?: any;
   params?: any;
   headers?: any;
+  successDescription?: string;
   errorDescription?: string;
-  successMsg?: string;
   errorTitle?: string;
   successTitle?: string;
   disableSuccessToast?: boolean;
@@ -19,11 +19,11 @@ interface fetchDataType {
 }
 
 const useAxios = () => {
-  const [response, setResponse] = useState(null);
+  const [response, setResponse] = useState<any>(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const {toast} = useToast();
   const [isSuccess, setSuccess] = useState(false);
+  const {toast} = useToast();
 
   const fetchData = useCallback(
     async ({
@@ -35,10 +35,13 @@ const useAxios = () => {
       errorTitle,
       errorDescription,
       successTitle,
-      successMsg,
+      successDescription,
       disableSuccessToast = false,
       disableErrorToast = false
     }: fetchDataType) => {
+      setResponse(null);
+      setError(null);
+      setSuccess(false);
       setLoading(true);
       try {
         const res = await Axios({
@@ -57,7 +60,7 @@ const useAxios = () => {
         if (disableSuccessToast) return;
         toast({
           title: successTitle || 'Success',
-          description: res.data.message + successMsg,
+          description: res.data.message + successDescription,
           variant: 'default'
         });
       } catch (err: any) {

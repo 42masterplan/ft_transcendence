@@ -1,62 +1,78 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button} from '@/components/shadcn/ui/button';
-import {DropdownMenuSeparator} from '@/components/shadcn/ui/dropdown-menu';
+import {Switch} from '@/components/shadcn/ui/switch';
+import {Label} from '@/components/shadcn/ui/label';
 import {
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle
 } from '@/components/shadcn/ui/dialog';
-import {Input} from '@/components/shadcn/ui/input';
-import {Label} from '@/components/shadcn/ui/label';
+
 import ScrollableContainer from '@/components/container/ScrollableContainer';
+import SetUserInfo from '@/components/userInfo/SetUserInfo';
+
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger
+} from '@/components/shadcn/ui/tabs';
+import LinkBtn from '@/components/button/LinkBtn';
+import useAxios from '@/hooks/useAxios';
 
 export default function SettingsModal() {
   return (
-    <DialogContent className='w-[425px]'>
-      <DialogHeader>
-        <DialogTitle>Settings</DialogTitle>
-      </DialogHeader>
-      <DropdownMenuSeparator />
-      <ScrollableContainer className='h-[300px]'>
+    <DialogContent className='w-full h-4/5 flex '>
+      <ScrollableContainer className='h-full'>
         <SettingModalContents />
-        <DialogFooter>
-          <Button type='submit'>Save changes</Button>
-        </DialogFooter>
       </ScrollableContainer>
     </DialogContent>
   );
 }
 
-function SettingContentContainer({children}: {children: React.ReactNode}) {
-  return <li className='flex flex-col'>{children}</li>;
-}
-
 function SettingModalContents() {
+  const [is2faEnabled, setIs2faEnabled] = useState(false);
+  const {fetchData, isSuccess} = useAxios();
+  useEffect(() => {
+    if (isSuccess === true) setIs2faEnabled(!is2faEnabled);
+  }, [isSuccess]);
   return (
-    <div className='flex-col w-full p-1'>
-      <ul className='flex flex-col'>
-        <SettingContentContainer>
-          <Input
-            type='text'
-            id='nickName'
-            placeholder='Type your nickname here'
+    // <div className='flex flex-col'>
+    <Tabs
+      defaultValue='account'
+      className='flex flex-col space-y-2 items-center '
+    >
+      <TabsList>
+        <TabsTrigger value='account'>Account</TabsTrigger>
+        <TabsTrigger value='another'>Another</TabsTrigger>
+      </TabsList>
+      <TabsContent value='account' className='text-center'>
+        <SetUserInfo mode='change' />
+      </TabsContent>
+      <TabsContent
+        value='another'
+        className='flex flex-col  justify-center text-center space-y-2'
+      >
+        <div className='flex justify-center space-x-2'>
+          <Switch
+            id='two-step'
+            checked={is2faEnabled}
+            onCheckedChange={() => {
+              fetchData({
+                method: 'put',
+                url: '/users',
+                body: {
+                  is2faEnabled: !is2faEnabled
+                }
+              });
+            }}
           />
-          <Button variant='secondary' className='w-full'>
-            Change Nickname
-          </Button>
-        </SettingContentContainer>
-        {/* ADD SETTING CONTENTS BELOW */}
-        {/* return 10 dummy -------------------------------------------------*/}
-        {Array.from(Array(100).keys()).map((_, index) => {
-          return (
-            <SettingContentContainer key={index}>
-              <p>BLABLA</p>
-            </SettingContentContainer>
-          );
-        })}
-        {/* -----------------------------------------------------------------*/}
-      </ul>
-    </div>
+          <Label htmlFor='two-step'>2단계 인증 활성화</Label>
+        </div>
+        <LinkBtn link='/welcome/2step-auth'>2단계 인증 이메일 변경</LinkBtn>
+        <Button>회원탈퇴</Button>
+      </TabsContent>
+    </Tabs>
+    // </div>
   );
 }

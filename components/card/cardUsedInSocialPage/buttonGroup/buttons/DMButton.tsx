@@ -1,18 +1,20 @@
 import {Button} from '@/components/shadcn/ui/button';
 import {Send} from 'lucide-react';
-import {useEffect, useState} from 'react';
+import {useRouter} from 'next/router';
 
-export default function DMButton(userId: string) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState('');
-  function openDM() {
-    console.log("DMButton's userId: ", userId);
-  }
+type DMButtonProps = {
+  userId: string;
+};
+
+export default function DMButton({userId}: DMButtonProps) {
+  const router = useRouter();
   return (
     <Button
       size='icon'
-      className='bg-custom4 hover:bg-custom4/60'
-      onClick={openDM}
+      className='bg-custom4 hover:bg-custom4/60 hover:scale-[115%] duration-200'
+      onClick={() => {
+        router.push(`/dm/${userId}`);
+      }}
     >
       <Send />
     </Button>
