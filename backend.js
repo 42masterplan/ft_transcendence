@@ -136,6 +136,13 @@ function resetBall(isA, state) {
   if (isA) state.score.playerA++;
   else state.score.playerB++;
   io.to(state.gameId).emit('updateScore', state.score);
+  if (
+    state.score.playerA === SCORE_LIMIT ||
+    state.score.playerB === SCORE_LIMIT
+  ) {
+    io.to(state.gameId).emit('gameOver');
+    return;
+  }
   state.ball.x = SCREEN_WIDTH / 2;
   state.ball.y = SCREEN_HEIGHT / 2;
   state.ball.velocity = {x: 0, y: 0};
@@ -205,18 +212,42 @@ nextApp.prepare().then(() => {
       ? Object.keys(clientsInRoom.sockets).length
       : 0;
     if (numClients === 2) {
-      // io.to(currentGameKey).emit('gameState', gameStates[currentGameKey]);
       currentGameKey++;
       gameStates[currentGameKey].ready = true;
     }
     socket.on('disconnect', (reason) => {
       console.log(reason);
-      if (players[0].color === PLAYER_A_COLOR) score.playerA = SCORE_LIMIT;
-      else score.playerB = SCORE_LIMIT;
-      socket.broadcast.emit('updateScore', score);
+      // find the game that the player was in
+      const gameId = Object.keys(gameStates).find((id) => {
+        const state = gameStates[id];
+        return state.players.some((player) => player.id === socket.id);
+      });
+      if (!gameId) console.error('this should not happen');
+      // if the game is not ready, delete the game
+      if (!gameStates[gameId].ready) {
+        delete gameStates[gameId];
+        return;
+      }
+      // if player A disconnects, player B wins
+      const state = gameStates[gameId];
+      if (state.players[0].id === socket.id) {
+        state.score.playerB = SCORE_LIMIT;
+        io.to(gameId).emit('updateScore', state.score); // this should be sent first
+        io.to(gameId).emit('gameOver');
+      }
+      // if player B disconnects, player A wins
+      else if (state.players[1].id === socket.id) {
+        state.score.playerA = SCORE_LIMIT;
+        io.to(gameId).emit('updateScore', state.score);
+        io.to(gameId).emit('gameOver');
+      }
     });
     socket.on('keyDown', (keycode) => {
-      const targetPlayer = players.find((player) => player.id === socket.id);
+      // find the player that pressed the key
+      const targetPlayer = Object.keys(gameStates).find((gameId) => {
+        const state = gameStates[gameId];
+        return state.players.find((player) => player.id === socket.id);
+      });
       if (!targetPlayer) return;
       const isA = targetPlayer.color === PLAYER_A_COLOR;
       switch (keycode) {
@@ -259,7 +290,10 @@ nextApp.prepare().then(() => {
       }
     });
     socket.on('keyUp', () => {
-      const targetPlayer = players.find((player) => player.id === socket.id);
+      const targetPlayer = Object.keys(gameStates).find((gameId) => {
+        const state = gameStates[gameId];
+        return state.players.find((player) => player.id === socket.id);
+      });
       if (!targetPlayer) return;
       targetPlayer.dx = 0;
     });
@@ -276,8 +310,21 @@ nextApp.prepare().then(() => {
   }, RENDERING_RATE);
 
   setInterval(() => {
-    io.emit('updateTime', time);
     time -= 1;
+    Object.keys(gameStates).forEach((gameId) => {
+      const state = gameStates[gameId];
+      if (!state.ready) return;
+      if (state.time <= 0) {
+        if (state.score.playerA > state.score.playerB)
+          io.to(gameId).emit('gameOver');
+        else if (state.score.playerA < state.score.playerB)
+          io.to(gameId).emit('gameOver');
+        //close the room
+        io.socketsLeave(gameId);
+        return;
+      }
+      io.to(gameId).emit('updateTime', state.time);
+    });
   }, 1000);
 
   app.use(express.static('public'));

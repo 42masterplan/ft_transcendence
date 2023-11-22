@@ -84,21 +84,14 @@ export default function Game() {
     });
     socket.on('updateScore', (backendScore) => {
       ball.resetPosition(particles);
-      console.log('updateScore', backendScore);
-      setScore(() => {
-        const updatedScore = {...backendScore};
-        if (
-          updatedScore.playerB >= SCORE_LIMIT ||
-          updatedScore.playerA >= SCORE_LIMIT
-        ) {
-          setGameOver(true);
-          cancelAnimationFrame(animationId);
-          socket.off('connect');
-          socket.off('disconnect');
-          socket.disconnect();
-        }
-        return updatedScore;
-      });
+      setScore(backendScore);
+    });
+    socket.on('gameover', () => {
+      setGameOver(true);
+      cancelAnimationFrame(animationId);
+      socket.off('connect');
+      socket.off('disconnect');
+      socket.disconnect();
     });
     socket.on('updateTime', (backendTime) => {
       setTime(backendTime);
