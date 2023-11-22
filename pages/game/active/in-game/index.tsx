@@ -34,13 +34,6 @@ export default function Game() {
     const c = canvas.getContext('2d');
     if (!c) return;
     const devicePixelRatio = window.devicePixelRatio || 1;
-    /*
-    console.log('outerWidth', window.outerWidth);
-    console.log('outerHeight', window.outerHeight);
-    console.log('width ratio: ', window.outerWidth / SCREEN_WIDTH); // 3.6
-    console.log('height ratio: ', window.outerHeight / SCREEN_HEIGHT); // 1.46
-    this might be useful for various screen sizes
-    */
     contextRef.current = c;
     canvas.width = SCREEN_WIDTH * devicePixelRatio;
     canvas.height = SCREEN_HEIGHT * devicePixelRatio;

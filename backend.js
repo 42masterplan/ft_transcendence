@@ -93,31 +93,12 @@ const nextApp = next({dev});
 const nextHandler = nextApp.getRequestHandler();
 const gameStates = {};
 
-function resetBall(isA, io) {
-  if (isA) score.playerA++;
-  else score.playerB++;
-  io.emit('updateScore', score);
-  ball.x = SCREEN_WIDTH / 2;
-  ball.y = SCREEN_HEIGHT / 2;
-  ball.velocity = {x: 0, y: 0};
-  setTimeout(() => {
-    x = !isA
-      ? players[0].x + PLAYER_WIDTH / 2
-      : players[1].x + PLAYER_WIDTH / 2;
-    y = !isA ? players[0].y : players[1].y;
-    const dx = x - ball.x;
-    const dy = y - ball.y;
-    const speed = Math.sqrt(dx * dx + dy * dy);
-    const ret_x = (dx / speed) * BALL_SPEED;
-    const ret_y = (dy / speed) * BALL_SPEED;
-    ball.velocity = {x: ret_x, y: ret_y};
-    io.emit('updateBall', ball);
-  }, 3000);
-}
 function createNewGameState(gameId) {
   return {
     gameId: gameId,
+    ready: false,
     players: [
+      //A
       Player({
         id: null, // 플레이어의 소켓 ID
         x: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
@@ -126,9 +107,9 @@ function createNewGameState(gameId) {
         height: PLAYER_HEIGHT,
         color: PLAYER_A_COLOR
       }),
-      // 플레이어 B의 초기 상태
+      //B
       Player({
-        id: null, // 플레이어의 소켓 ID
+        id: null,
         x: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
         y: 30,
         width: PLAYER_WIDTH,
@@ -147,18 +128,34 @@ function createNewGameState(gameId) {
     score: {
       playerA: 0,
       playerB: 0
-    }
+    },
+    time: GAME_TIME_LIMIT
   };
 }
+function resetBall(isA, state) {
+  if (isA) state.score.playerA++;
+  else state.score.playerB++;
+  io.to(state.gameId).emit('updateScore', state.score);
+  state.ball.x = SCREEN_WIDTH / 2;
+  state.ball.y = SCREEN_HEIGHT / 2;
+  state.ball.velocity = {x: 0, y: 0};
+  setTimeout(() => {
+    x = !isA
+      ? state.players[0].x + PLAYER_WIDTH / 2
+      : state.players[1].x + PLAYER_WIDTH / 2;
+    y = !isA ? state.players[0].y : state.players[1].y;
+    const dx = x - state.ball.x;
+    const dy = y - state.ball.y;
+    const speed = Math.sqrt(dx * dx + dy * dy);
+    const ret_x = (dx / speed) * BALL_SPEED;
+    const ret_y = (dy / speed) * BALL_SPEED;
+    state.ball.velocity = {x: ret_x, y: ret_y};
+    io.emit('updateBall', state.ball);
+  }, 3000);
+}
 function updateGameState(state) {
-  // 플레이어가 2명 미만인 경우 업데이트 중지
-  if (state.players.length < 2) return;
-
-  // 볼의 위치 업데이트
   state.ball.x += state.ball.velocity.x;
   state.ball.y += state.ball.velocity.y;
-
-  // 볼의 충돌 처리
   if (
     state.ball.x - state.ball.radius <= 1 ||
     state.ball.x + state.ball.radius >= SCREEN_WIDTH - 1
@@ -166,8 +163,6 @@ function updateGameState(state) {
     state.ball.velocity.x *= -1;
   else if (state.ball.y < 0) resetBall(true, state); // A 점수 획득
   else if (state.ball.y > SCREEN_HEIGHT) resetBall(false, state); // B 점수 획득
-
-  // 플레이어와 볼의 충돌 처리
   if (
     state.players[0].isACollided(state.ball) ||
     state.players[1].isBCollided(state.ball)
@@ -187,8 +182,6 @@ function updateGameState(state) {
 nextApp.prepare().then(() => {
   const app = express();
   const server = http.createServer(app);
-  let firstConnection = true;
-  let time = GAME_TIME_LIMIT;
   const io = socketIO(server, {
     pingInterval: 2000, //need to check it this works -> do we need it?
     pingTimeout: 5000, //this as well
@@ -198,19 +191,24 @@ nextApp.prepare().then(() => {
     }
   });
   //we should already have 'game key', which is the room id
+  //but in this case, we will just use the number of connections as the room id
+  let currentGameKey = 0;
+
   io.on('connection', (socket) => {
-    socket.on('joinGame', (gameId) => {
-      socket.join(gameId);
-      if (!gameStates[gameId]) {
-        gameStates[gameId] = createNewGameState(gameId);
-        return;
-      }
-      const clientsInRoom = io.sockets.adapter.rooms[gameId];
-      const numClients = clientsInRoom
-        ? Object.keys(clientsInRoom.sockets).length
-        : 0;
-      if (numClients === 2) io.to(gameId).emit('gameState', gameStates[gameId]);
-    });
+    socket.join(currentGameKey);
+    if (!gameStates[currentGameKey]) {
+      gameStates[currentGameKey] = createNewGameState(currentGameKey);
+      return;
+    }
+    const clientsInRoom = io.sockets.adapter.rooms[currentGameKey];
+    const numClients = clientsInRoom
+      ? Object.keys(clientsInRoom.sockets).length
+      : 0;
+    if (numClients === 2) {
+      // io.to(currentGameKey).emit('gameState', gameStates[currentGameKey]);
+      currentGameKey++;
+      gameStates[currentGameKey].ready = true;
+    }
     socket.on('disconnect', (reason) => {
       console.log(reason);
       if (players[0].color === PLAYER_A_COLOR) score.playerA = SCORE_LIMIT;
@@ -270,30 +268,13 @@ nextApp.prepare().then(() => {
   setInterval(() => {
     Object.keys(gameStates).forEach((gameId) => {
       const state = gameStates[gameId];
-      updateGameState(state); // 게임 상태 업데이트
-      // 방별로 상태 업데이트 이벤트 방송
+      if (!state.ready) return;
+      updateGameState(state);
       io.to(gameId).emit('updatePlayers', state.players);
       io.to(gameId).emit('updateBall', state.ball);
     });
-
-    if (players.length < 2) return;
-    ball.x += ball.velocity.x;
-    ball.y += ball.velocity.y;
-    io.emit('updatePlayers', players);
-    io.emit('updateBall', ball);
-    if (ball.x - ball.radius <= 1 || ball.x + ball.radius >= SCREEN_WIDTH - 1)
-      ball.velocity.x *= -1;
-    else if (ball.y < 0) resetBall(true, io); //A scored
-    else if (ball.y > SCREEN_HEIGHT) resetBall(false, io); //B scored
-    if (players[0].isACollided(ball) || players[1].isBCollided(ball)) {
-      const now = Date.now();
-      if (ball.lastCollision && now - ball.lastCollision < DEBOUNCINGTIME)
-        return;
-      if (players[0].isACollided(ball)) players[0].handleCollision(ball, now);
-      else if (players[1].isBCollided(ball))
-        players[1].handleCollision(ball, now);
-    }
   }, RENDERING_RATE);
+
   setInterval(() => {
     io.emit('updateTime', time);
     time -= 1;
