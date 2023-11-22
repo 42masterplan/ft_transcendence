@@ -1,8 +1,18 @@
 import {Button} from '@/components/shadcn/ui/button';
 import {ShieldMinus} from 'lucide-react';
 import {useToast} from '@/components/shadcn/ui/use-toast';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from '@/components/shadcn/ui/tooltip';
 
-export default function UnblockButton(userId: string) {
+type UnblockButtonProps = {
+  userId: string;
+};
+
+export default function UnblockButton({userId}: UnblockButtonProps) {
   // function to send unblock request: TODO: implement this
   const sendUnblockRequest = async () => {
     console.log("sendUnblockRequest's userId: ", userId);
@@ -23,7 +33,7 @@ export default function UnblockButton(userId: string) {
   return (
     <Button
       size='icon'
-      className='bg-custom1/40 hover:bg-custom1/60'
+      className='bg-custom1/40 hover:bg-custom1/60 hover:scale-[115%] duration-200'
       onClick={async () => {
         const sendUnblockRequestResult = await sendUnblockRequest();
         if (sendUnblockRequestResult) {

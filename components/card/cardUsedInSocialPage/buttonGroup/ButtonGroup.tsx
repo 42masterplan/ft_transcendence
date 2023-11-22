@@ -7,39 +7,41 @@ import UnfollowButton from './buttons/UnfollowButton';
 import MatchRequestButton from './buttons/MatchRequestButton';
 import DMButton from './buttons/DMButton';
 
-interface buttonGroupProps {
+type buttonGroupProps = {
   userId: string;
   isFriend: boolean;
   isBlocked: boolean;
-}
+};
 
-export default function ButtonGroup(props: buttonGroupProps) {
-  const buttonGroup: ReactComponentElement<typeof Button>[] = [];
-  if (props.isFriend && !props.isBlocked) {
-    // friend
-    buttonGroup.push(DMButton(props.userId));
-    buttonGroup.push(MatchRequestButton(props.userId));
-    buttonGroup.push(UnfollowButton(props.userId));
-    buttonGroup.push(BlockButton(props.userId));
-  } else if (!props.isFriend && !props.isBlocked) {
-    // not friend and not blocked
-    buttonGroup.push(FollowButton(props.userId));
-    buttonGroup.push(MatchRequestButton(props.userId));
-    buttonGroup.push(BlockButton(props.userId));
-  } else if (props.isBlocked && !props.isFriend) {
-    // blocked
-    buttonGroup.push(UnblockButton(props.userId));
+export default function ButtonGroup({
+  userId,
+  isFriend,
+  isBlocked
+}: buttonGroupProps) {
+  if (isFriend && !isBlocked) {
+    // friend: DM, unfollow, match request, block
+    return (
+      <>
+        <DMButton userId={userId} />
+        <UnfollowButton userId={userId} />
+        <MatchRequestButton userId={userId} />
+        <BlockButton userId={userId} />
+      </>
+    );
+  } else if (!isFriend && !isBlocked) {
+    // not friend and not blocked: follow, match request, block
+    return (
+      <>
+        <FollowButton userId={userId} />
+        <MatchRequestButton userId={userId} />
+        <BlockButton userId={userId} />
+      </>
+    );
+  } else if (isBlocked && !isFriend) {
+    // blocked: unblock
+    return <UnblockButton userId={userId} />;
   } else {
     // Error: invalid user status
     console.log('from ButtonGroup: invalid user status');
   }
-  return (
-    <div className='flex flex-row gap-10'>
-      {buttonGroup.map(
-        (button: ReactComponentElement<typeof Button>, index: number) => (
-          <div key={index}>{button}</div>
-        )
-      )}
-    </div>
-  );
 }
