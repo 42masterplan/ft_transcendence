@@ -1,17 +1,26 @@
 import CreateChannel from './createChannel/CreateChannel';
-import ManageChannel from '../ManageChannel';
+import ManageChannel from './ManageChannel';
 import PublicRoomList from './publicRoom/PublicRoomList';
 
-export default function ChannelHeader({channel_name}: {channel_name: string}) {
+export default function ChannelHeader({
+  channel_name,
+  channelId,
+  role
+}: {
+  channel_name: string;
+  channelId: string;
+  role: string;
+}) {
   return (
-    <div bg-custom2 className='bg-custom2 w-full'>
-      <PublicRoomList />
-      <CreateChannel />
-      {/* <div>
-        <ManageChannel channel_name={channel_name} />
-      </div> */}
-
-      <div className='font-bold text-3xl text-center'>{channel_name}</div>
+    <div className='bg-custom2 w-full'>
+      <div className='bg-custom2 w-full flex justify-between font-bold text-3xl'>
+        <PublicRoomList />
+        {channel_name}
+        <CreateChannel />
+      </div>
+      <div className='flex justify-end py-1'>
+        {role === 'owner' ? <ManageChannel channel_name={channelId} /> : role}
+      </div>
     </div>
   );
 }

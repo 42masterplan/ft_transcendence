@@ -32,8 +32,8 @@ const ChannelInput = ({
               content: input
             }
           ]);
+          setInput('');
         });
-        setInput('');
       }}
       className='flex w-full items-center space-x-2'
     >

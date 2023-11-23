@@ -7,13 +7,15 @@ type ScrollableCardProps = {
   orientation?: orientationType;
   rounded?: boolean;
   className?: string;
+  gap?: number;
 };
 
 export default function ScrollableContainer({
   children,
   orientation = 'vertical',
   rounded = true,
-  className = ''
+  className = '',
+  gap = 3
 }: ScrollableCardProps) {
   let flexOrientation: string = '';
   if (orientation === 'horizontal') {
@@ -31,7 +33,9 @@ export default function ScrollableContainer({
     <ScrollArea
       className={`w-full h-full p-1 ${roundedClassName} ${className}`}
     >
-      <div className={`flex w-full h-full ${flexOrientation}`}>{children}</div>
+      <div className={`flex w-full h-full gap-${gap} ${flexOrientation}`}>
+        {children}
+      </div>
       <ScrollBar orientation={orientation} />
     </ScrollArea>
   );

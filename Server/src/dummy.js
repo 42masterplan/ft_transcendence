@@ -3,37 +3,37 @@ dotenv.config();
 
 export const PublicRoomList = [
   {
-    channelName: '개굴개굴 개구리',
+    name: '개굴개굴 개구리',
     userCount: 10,
     isPassword: false,
-    id: '1'
+    id: '개굴개굴 개구리'
   },
   {
-    channelName: '굴개 굴개 개구리',
+    name: '굴개 굴개 개구리',
     userCount: 20,
     isPassword: false,
     id: '굴개 굴개 개구리'
   },
   {
-    channelName: '뭘봐 이놈아',
+    name: '뭘봐 이놈아',
     userCount: 21,
     isPassword: false,
     id: '뭘봐 이놈아'
   },
   {
-    channelName: '내일 코테인데',
+    name: '내일 코테인데',
     userCount: 22,
     isPassword: true,
     id: '내일 코테인데'
   },
   {
-    channelName: '잘 볼 수 있을까?',
+    name: '잘 볼 수 있을까?',
     userCount: 23,
     isPassword: false,
     id: '잘 볼 수 있을까?'
   },
   {
-    channelName: '기적 같이 맥북 따고 싶다.',
+    name: '기적 같이 맥북 따고 싶다.',
     userCount: 24,
     isPassword: true,
     id: '기적 같이 맥북 따고 싶다.'
@@ -43,25 +43,25 @@ export const PublicRoomList = [
 export const EngagedChannels = [
   {
     id: '아비꼬',
-    channelName: '아비꼬',
+    name: '아비꼬',
     userCount: 11,
     isUnread: true
   },
   {
     id: '압둘알리',
-    channelName: '압둘알리',
+    name: '압둘알리',
     userCount: 15,
     isUnread: false
   },
   {
     id: '헬스는 사랑이다.',
-    channelName: '헬스는 사랑이다.',
+    name: '헬스는 사랑이다.',
     userCount: 13,
     isUnread: true
   },
   {
     id: '42정병',
-    channelName: '42정병',
+    name: '42정병',
     userCount: 12,
     isUnread: false
   }
@@ -71,19 +71,19 @@ export const channelHistory = {
   아비꼬: [
     {
       id: 'yejinam',
-      createdAt: '2021-06-01T14:48:00.000Z',
       name: 'yejinam',
       //채팅을 보낸 사람의 이름
       profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI3 || '', //채팅을 보낸 사람의 프로필 사진
       content: '나는 남예지다.?', //채팅 내용
+      createdAt: '2021-06-01T14:48:00.000Z',
       isBlocked: false //차단 여부
     },
     {
       id: 'daejlee',
-      createdAt: '2021-06-01T14:48:00.000Z',
       name: 'daejlee',
       profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI4 || '',
       content: '라이노는 코뿔소 들이 박아버려 다 겁을 줘~~',
+      createdAt: '2021-06-01T14:48:00.000Z',
       isBlocked: false //차단 여부
     },
     {
@@ -97,11 +97,11 @@ export const channelHistory = {
   압둘알리: [
     {
       id: 'yejinam2',
-      createdAt: '2021-06-01T14:48:00.000Z',
       name: 'yejinam2',
       //채팅을 보낸 사람의 이름
       profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI4 || '', //채팅을 보낸 사람의 프로필 사진
       content: '나는 남예지다. ? ㄴ미ㅏㅇ;', //채팅 내용
+      createdAt: '2021-06-01T14:48:00.000Z',
       isBlocked: false //차단 여부
     },
     {

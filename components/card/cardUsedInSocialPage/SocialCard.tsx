@@ -7,6 +7,7 @@ import {
   AccordionContent,
   AccordionTrigger
 } from '@/components/shadcn/ui/accordion';
+import {TooltipProvider} from '@/components/shadcn/ui/tooltip';
 
 function userPropsToUserClass(props: SocialCardProps): Type.UserInfo {
   const userClass = new User();
@@ -70,11 +71,15 @@ export default function SocialCard(props: SocialCardProps) {
         />
       </AccordionTrigger>
       <AccordionContent>
-        <ButtonGroup
-          userId={props.id}
-          isFriend={props.isFriend}
-          isBlocked={props.isBlocked}
-        />
+        <TooltipProvider>
+          <div className='flex flex-row gap-10 p-2'>
+            <ButtonGroup
+              userId={props.id}
+              isFriend={props.isFriend}
+              isBlocked={props.isBlocked}
+            />
+          </div>
+        </TooltipProvider>
       </AccordionContent>
     </AccordionItem>
   );

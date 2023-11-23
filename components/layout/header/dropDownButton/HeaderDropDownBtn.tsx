@@ -97,12 +97,6 @@ export default function HeaderDropDownBtn() {
               name='Social'
               currentUrl={currentUrl}
             />
-            {/* <DropdownMenuPageItem
-              href="/rank"
-              icon={<Users className="mr-2 h-4 w-4" />}
-              name="Ladder"
-              currentUrl={currentUrl}
-            /> */}
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           {/* etc */}

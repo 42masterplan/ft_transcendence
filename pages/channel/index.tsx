@@ -20,14 +20,14 @@ export default function ChannelPage() {
   const [socket] = useChatSocket('channel');
   const [messages, setMessages] = useState([] as ChannelHistoryType[]);
   useEffect(() => {
-    socket.emit('myChannels', () => {
-      console.log('참여중인 채널 리스트 요청');
-    });
+    socket.emit('myChannels');
     socket.on('myRole', (data) => {
       console.log('권한 설정', data);
-      setRole(data.role);
+      if (data === null) {
+        alert('채널에 참가중..');
+      } else setRole(data.role);
     });
-    socket.once('setUserInfo', () => {
+    socket.on('setUserInfo', () => {
       socket.emit('setUserInfo', {
         username: 'joushin',
         userId: 'joushin',
@@ -46,7 +46,11 @@ export default function ChannelPage() {
       />
       {currentChannel === '' ? (
         <div className='flex flex-col items-center h-full'>
-          <ChannelHeader channel_name={currentChannel} />
+          <ChannelHeader
+            channelId={channelId}
+            role={role}
+            channel_name={currentChannel}
+          />
           <Image
             src={WaitImage}
             alt='채널에 참여해주세요'
@@ -55,9 +59,14 @@ export default function ChannelPage() {
         </div>
       ) : (
         <div className='flex flex-col w-full h-full'>
-          <ChannelHeader channel_name={currentChannel} />
-          <ScrollableContainer className=' bg-custom2'>
+          <ChannelHeader
+            channel_name={currentChannel}
+            role={role}
+            channelId={channelId}
+          />
+          <ScrollableContainer className=' bg-custom2 rounded-none'>
             <ChannelBody
+              channel_name={currentChannel}
               messages={messages}
               setMessages={setMessages}
               channelId={channelId}

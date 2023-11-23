@@ -29,9 +29,10 @@ import {Input} from '@/components/shadcn/ui/input';
 import {Label} from '@/components/shadcn/ui/label';
 import {MessageSquarePlus} from 'lucide-react';
 import Axios from '@/api';
-import {Dispatch, SetStateAction, useEffect, useState} from 'react';
+import {Dispatch, SetStateAction, useState} from 'react';
 import {userType, selectUserType} from '@/types/user';
 import useChatSocket from '@/hooks/useChatSocket';
+import {useToast} from '@/components/shadcn/ui/use-toast';
 const SelectChannelType = ({
   channelType,
   setChannelType
@@ -162,6 +163,7 @@ export default function CreateChannel() {
     [] as selectUserType[]
   );
   const [socket] = useChatSocket('channel');
+  const {toast} = useToast();
   const fetchUserInfos = async () => {
     try {
       const {data}: {data: userType[]} = await Axios.get(`/users/friends`, {
@@ -182,27 +184,44 @@ export default function CreateChannel() {
     }
   };
   const createChannel = () => {
-    const inviteUsers = inviteFriendList.map((friendInfo) => {
-      if (friendInfo.checked) {
-        return friendInfo.id;
-      }
-    });
+    let inviteUsers: Array<String> = [];
+    // inviteUsers = inviteFriendList.map((friendInfo) => {
+    //   if (friendInfo.checked) return friendInfo.id;
+    // });
+
+    if (channelName.length === 0 || channelType.length === 0) {
+      toast({
+        title: '채널 생성 실패',
+        description: '채널 이름과 채널 유형을 입력해주세요.',
+        variant: 'destructive',
+        duration: 3000
+      });
+      return;
+    }
     socket.emit(
       'createChannel',
       {
-        channelName: channelName,
+        name: channelName,
         password: password,
         invitedFriendIds: inviteUsers,
-        type: channelType
+        status: channelType
       },
-      () => {
-        alert('채널이 생성되었습니다.');
+      (msg: string) => {
+        toast({
+          title: '채널 생성 성공',
+          description: msg,
+          duration: 3000
+        });
         console.log({
-          channelName: channelName,
+          name: channelName,
           password: password,
           invitedFriendIds: inviteUsers,
-          type: channelType
+          status: channelType
         });
+        setChannelName('');
+        setPassword('');
+        setChannelType('');
+        setInviteFriendList([]);
       }
     );
     socket.once('error_exist', (error: string) => {
@@ -214,7 +233,7 @@ export default function CreateChannel() {
     <Dialog>
       <DialogTrigger asChild>
         <Button
-          className='rounded-full'
+          className='rounded-full bg-custom4'
           onClick={() => {
             fetchUserInfos();
           }}

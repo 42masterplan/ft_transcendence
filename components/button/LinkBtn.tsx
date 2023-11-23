@@ -5,7 +5,7 @@ interface LinkBtnProps {
   link: string;
   children: React.ReactNode;
   className?: string;
-  disabled: boolean;
+  disabled?: boolean;
   onClick?: () => void;
 }
 
