@@ -67,7 +67,9 @@ export default function Game() {
     socket.on('joinedRoom', (id) => {
       setRoomId(id);
     });
-    socket.on('updatePlayers', (backendPlayers) => {
+    socket.on('updatePlayers', (state) => {
+      if (state.roomId != roomId) return;
+      const backendPlayers = state.players;
       if (backendPlayers.length < 2) return;
       if (!playerA.id) playerA.id = backendPlayers[0].id;
       if (!playerB.id) playerB.id = backendPlayers[1].id;
@@ -80,24 +82,31 @@ export default function Game() {
       if (!(playerA.id in backendPlayers)) delete backendPlayers[playerA.id];
       if (!(playerB.id in backendPlayers)) delete backendPlayers[playerB.id];
     });
-    socket.on('updateBall', (backendBall) => {
+    socket.on('updateBall', (state) => {
+      if (state.roomId != roomId) return;
+      const backendBall = state.ball;
       ball.x = backendBall.x;
       ball.y = backendBall.y;
       ball.velocity = backendBall.velocity;
       ball.lastCollision = backendBall.lastCollision;
     });
-    socket.on('updateScore', (backendScore) => {
+    socket.on('updateScore', (state) => {
+      if (state.roomId != roomId) return;
+      const backendScore = state.score;
       ball.resetPosition(particles);
       setScore(backendScore);
     });
-    socket.on('gameover', () => {
+    socket.on('gameOver', (state) => {
+      if (state.roomId != roomId) return;
       setGameOver(true);
       cancelAnimationFrame(animationId);
       socket.off('connect');
       socket.off('disconnect');
       socket.disconnect();
     });
-    socket.on('updateTime', (backendTime) => {
+    socket.on('updateTime', (state) => {
+      if (state.roomId != roomId) return;
+      const backendTime = state.time;
       setTime(backendTime);
     });
     setInterval(() => {

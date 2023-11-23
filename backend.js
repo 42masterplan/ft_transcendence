@@ -135,12 +135,12 @@ function createNewGameState(gameId) {
 function resetBall(isA, state, io) {
   if (isA) state.score.playerA++;
   else state.score.playerB++;
-  io.to(state.gameId).emit('updateScore', state.score);
+  io.to(state.gameId).emit('updateScore', state);
   if (
     state.score.playerA === SCORE_LIMIT ||
     state.score.playerB === SCORE_LIMIT
   ) {
-    io.to(state.gameId).emit('gameOver');
+    io.to(state.gameId).emit('gameOver', state);
     return;
   }
   state.ball.x = SCREEN_WIDTH / 2;
@@ -157,7 +157,7 @@ function resetBall(isA, state, io) {
     const ret_x = (dx / speed) * BALL_SPEED;
     const ret_y = (dy / speed) * BALL_SPEED;
     state.ball.velocity = {x: ret_x, y: ret_y};
-    io.emit('updateBall', state.ball);
+    io.to(state.gameId).emit('updateBall', state);
   }, 3000);
 }
 function updateGameState(state, io) {
@@ -206,10 +206,13 @@ nextApp.prepare().then(() => {
     socket.emit('joinedRoom', currentGameKey);
     if (!gameStates[currentGameKey]) {
       gameStates[currentGameKey] = createNewGameState(currentGameKey);
-      return;
+      gameStates[currentGameKey].players[0].id = socket.id;
+    } else {
+      //DO NOT RETURN BEFORE SOCKET.ON SETTING !!!!
+      gameStates[currentGameKey].players[1].id = socket.id;
+      gameStates[currentGameKey].ready = true;
+      currentGameKey++;
     }
-    gameStates[currentGameKey].ready = true;
-    currentGameKey++;
     socket.on('disconnect', (reason) => {
       console.log(reason);
       // find the game that the player was in
@@ -227,22 +230,25 @@ nextApp.prepare().then(() => {
       const state = gameStates[gameId];
       if (state.players[0].id === socket.id) {
         state.score.playerB = SCORE_LIMIT;
-        io.to(gameId).emit('updateScore', state.score); // this should be sent first
-        io.to(gameId).emit('gameOver');
+        io.to(state.gameId).emit('updateScore', state); // this should be sent first
+        io.to(state.gameId).emit('gameOver', state);
       }
       // if player B disconnects, player A wins
       else if (state.players[1].id === socket.id) {
         state.score.playerA = SCORE_LIMIT;
-        io.to(gameId).emit('updateScore', state.score);
-        io.to(gameId).emit('gameOver');
+        io.to(state.gameId).emit('updateScore', state);
+        io.to(state.gameId).emit('gameOver', state);
       }
     });
     socket.on('keyDown', (keycode) => {
       // find the player that pressed the key
-      const targetPlayer = Object.keys(gameStates).find((gameId) => {
-        const state = gameStates[gameId];
-        return state.players.find((player) => player.id === socket.id);
+      const gameId = Object.keys(gameStates).find((id) => {
+        const state = gameStates[id];
+        return state.players.some((player) => player.id === socket.id);
       });
+      const targetPlayer = gameStates[gameId].players.find(
+        (player) => player.id === socket.id
+      );
       if (!targetPlayer) return;
       const isA = targetPlayer.color === PLAYER_A_COLOR;
       switch (keycode) {
@@ -285,25 +291,30 @@ nextApp.prepare().then(() => {
       }
     });
     socket.on('keyUp', () => {
-      const targetPlayer = Object.keys(gameStates).find((gameId) => {
-        const state = gameStates[gameId];
-        return state.players.find((player) => player.id === socket.id);
+      const gameId = Object.keys(gameStates).find((id) => {
+        const state = gameStates[id];
+        return state.players.some((player) => player.id === socket.id);
       });
+      const targetPlayer = gameStates[gameId].players.find(
+        (player) => player.id === socket.id
+      );
       if (!targetPlayer) return;
       targetPlayer.dx = 0;
     });
   });
 
+  //game rendering
   setInterval(() => {
     Object.keys(gameStates).forEach((gameId) => {
       const state = gameStates[gameId];
       if (!state.ready) return;
       updateGameState(state, io);
-      io.to(gameId).emit('updatePlayers', state.players);
-      io.to(gameId).emit('updateBall', state.ball);
+      io.to(state.gameId).emit('updatePlayers', state);
+      io.to(state.gameId).emit('updateBall', state);
     });
   }, RENDERING_RATE);
 
+  //game timer
   setInterval(() => {
     Object.keys(gameStates).forEach((gameId) => {
       const state = gameStates[gameId];
@@ -311,14 +322,14 @@ nextApp.prepare().then(() => {
       if (!state.ready) return;
       if (state.time <= 0) {
         if (state.score.playerA > state.score.playerB)
-          io.to(gameId).emit('gameOver');
+          io.to(state.gameId).emit('gameOver', state);
         else if (state.score.playerA < state.score.playerB)
-          io.to(gameId).emit('gameOver');
+          io.to(state.gameId).emit('gameOver', state);
         //close the room
         io.socketsLeave(gameId);
         return;
       }
-      io.to(gameId).emit('updateTime', state.time);
+      io.to(state.gameId).emit('updateTime', state);
     });
   }, 1000);
 
