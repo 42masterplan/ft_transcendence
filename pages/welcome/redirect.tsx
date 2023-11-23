@@ -3,45 +3,62 @@ import {useRouter} from 'next/router';
 import Axios from '@/api';
 import SpinningLoader from '@/components/loader/SpinningLoader';
 import {useCookies} from 'react-cookie';
-
+import {useSetRecoilState} from 'recoil';
+import {twoFactorAuthorizeState} from '@/recoils/twoFactorEnable';
+import {loginState} from '@/recoils/login';
+import {toast, useToast} from '@/components/shadcn/ui/use-toast';
 export default function Redirect() {
   const router = useRouter();
   const [cookie, setCookie, removeCookie] = useCookies();
+  const setTwoFactorAuthorize = useSetRecoilState(twoFactorAuthorizeState);
+  const setLogin = useSetRecoilState(loginState);
   async function login(auth_code: string | string[]) {
     await Axios.get('/auth/callback', {params: {code: auth_code}})
       .then((res) => {
         console.log('>>> [LOGIN] ✅ SUCCESS', res.data);
         if (res.status === 200) {
+          setCookie('accessToken', res.data.accessToken);
+          setCookie('intraId', res.data.intraId);
           if (res.data.hasAccount) {
             if (res.data.isTwoFactorEnabled === false) {
-              setCookie('accessToken', res.data.accessToken, {
-                path: '/',
-                maxAge: 3600 * 24 * 3
-              });
-              setCookie('intraId', res.data.intraId, {
-                path: '/',
-                maxAge: 3600 * 24 * 3
-              });
+              setLogin(true);
+              setTwoFactorAuthorize(true);
               router.replace('/');
-            } else router.replace('/welcome/2step-auth/validation');
+            } else {
+              setLogin(true);
+              setTwoFactorAuthorize(false);
+              router.replace('/welcome/2step-auth/validation');
+            }
           } else {
+            setLogin(false);
+            setTwoFactorAuthorize(false);
             router.replace('/welcome/register');
           }
         } else if (res.status === 401) {
-          console.warn('It is auth_code Error');
+          toast({
+            title: 'Error',
+            description: 'It is auth_code Error',
+            variant: 'destructive'
+          });
+          setLogin(false);
+          setTwoFactorAuthorize(false);
           router.replace('/welcome');
         }
       })
       .catch((err) => {
-        console.warn('>>> [LOGIN] 🤬 ERROR', err.message);
+        setLogin(false);
+        setTwoFactorAuthorize(false);
+        toast({
+          title: 'Error',
+          description: `>>> [LOGIN] 🤬 ERROR', ${err.message}`,
+          variant: 'destructive'
+        });
         router.replace('/welcome');
       });
   }
   useEffect(() => {
     const auth_code = router.query.code;
     if (auth_code) {
-      console.log(auth_code);
-      console.log('>>> [LOGIN] 🚀 auth_code:', auth_code);
       login(auth_code);
     }
   }, [router]);

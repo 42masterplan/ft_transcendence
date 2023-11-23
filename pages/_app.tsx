@@ -14,13 +14,13 @@ export default function App({Component, pageProps}: AppProps) {
       enableSystem
       disableTransitionOnChange
     >
-      <Layout>
-        <CookiesProvider>
-          <RecoilRoot>
+      <CookiesProvider>
+        <RecoilRoot>
+          <Layout>
             <Component {...pageProps} />
-          </RecoilRoot>
-        </CookiesProvider>
-      </Layout>
+          </Layout>
+        </RecoilRoot>
+      </CookiesProvider>
     </ThemeProvider>
   );
 }
