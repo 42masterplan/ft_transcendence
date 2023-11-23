@@ -99,7 +99,7 @@ function createNewGameState(gameId) {
     ready: false,
     players: [
       //A
-      Player({
+      new Player({
         id: null, // 플레이어의 소켓 ID
         x: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
         y: SCREEN_HEIGHT - 45,
@@ -108,7 +108,7 @@ function createNewGameState(gameId) {
         color: PLAYER_A_COLOR
       }),
       //B
-      Player({
+      new Player({
         id: null,
         x: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
         y: 30,
@@ -132,7 +132,7 @@ function createNewGameState(gameId) {
     time: GAME_TIME_LIMIT
   };
 }
-function resetBall(isA, state) {
+function resetBall(isA, state, io) {
   if (isA) state.score.playerA++;
   else state.score.playerB++;
   io.to(state.gameId).emit('updateScore', state.score);
@@ -160,7 +160,7 @@ function resetBall(isA, state) {
     io.emit('updateBall', state.ball);
   }, 3000);
 }
-function updateGameState(state) {
+function updateGameState(state, io) {
   state.ball.x += state.ball.velocity.x;
   state.ball.y += state.ball.velocity.y;
   if (
@@ -168,8 +168,8 @@ function updateGameState(state) {
     state.ball.x + state.ball.radius >= SCREEN_WIDTH - 1
   )
     state.ball.velocity.x *= -1;
-  else if (state.ball.y < 0) resetBall(true, state); // A 점수 획득
-  else if (state.ball.y > SCREEN_HEIGHT) resetBall(false, state); // B 점수 획득
+  else if (state.ball.y < 0) resetBall(true, state, io); // A 점수 획득
+  else if (state.ball.y > SCREEN_HEIGHT) resetBall(false, state, io); // B 점수 획득
   if (
     state.players[0].isACollided(state.ball) ||
     state.players[1].isBCollided(state.ball)
@@ -203,18 +203,13 @@ nextApp.prepare().then(() => {
 
   io.on('connection', (socket) => {
     socket.join(currentGameKey);
+    socket.emit('joinedRoom', currentGameKey);
     if (!gameStates[currentGameKey]) {
       gameStates[currentGameKey] = createNewGameState(currentGameKey);
       return;
     }
-    const clientsInRoom = io.sockets.adapter.rooms[currentGameKey];
-    const numClients = clientsInRoom
-      ? Object.keys(clientsInRoom.sockets).length
-      : 0;
-    if (numClients === 2) {
-      currentGameKey++;
-      gameStates[currentGameKey].ready = true;
-    }
+    gameStates[currentGameKey].ready = true;
+    currentGameKey++;
     socket.on('disconnect', (reason) => {
       console.log(reason);
       // find the game that the player was in
@@ -303,7 +298,7 @@ nextApp.prepare().then(() => {
     Object.keys(gameStates).forEach((gameId) => {
       const state = gameStates[gameId];
       if (!state.ready) return;
-      updateGameState(state);
+      updateGameState(state, io);
       io.to(gameId).emit('updatePlayers', state.players);
       io.to(gameId).emit('updateBall', state.ball);
     });

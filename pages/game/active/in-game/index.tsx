@@ -25,6 +25,7 @@ export default function Game() {
   const [time, setTime] = useState(120);
   const [score, setScore] = useState({playerA: 0, playerB: 0});
   const [gameover, setGameOver] = useState(false);
+  const [roomId, setRoomId] = useState(null); // 현재 방의 ID
 
   useEffect(() => {
     const socket = io('http://localhost:4242');
@@ -62,6 +63,9 @@ export default function Game() {
       y: SCREEN_HEIGHT / 2,
       c,
       lastCollision: 0
+    });
+    socket.on('joinedRoom', (id) => {
+      setRoomId(id);
     });
     socket.on('updatePlayers', (backendPlayers) => {
       if (backendPlayers.length < 2) return;
