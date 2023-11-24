@@ -11,22 +11,23 @@ export default function Layout({children}: {children: React.ReactNode}) {
   const router = useRouter();
   const [isLogin, setIsLogin] = useRecoilState(loginState);
   const [isAuth, setIsAuth] = useRecoilState(loginState);
-  const [isLoading, setIsLoading] = useState(true);
+  const isLoading = true;
+  // const [isLoading, setIsLoading] = useState(false);
   // useEffect(() => {
   //   if (router.pathname.startsWith('/welcome') == false) {
   //     if (isLogin == false) {
-  //       router.replace('/welcome');
+  //       router.push('/welcome');
   //       return;
   //     }
   //     if (isAuth == false) {
-  //       router.replace('/welcome/2step-auth/validation');
+  //       router.push('/welcome/2step-auth/validation');
   //       return;
   //     }
   //     const token = getAuthorization();
   //     if (token === null) {
   //       setIsLogin(false);
   //       setIsAuth(false);
-  //       router.replace('/welcome');
+  //       router.push('/welcome');
   //       return;
   //     }
   //   }
