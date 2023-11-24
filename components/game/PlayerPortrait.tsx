@@ -7,7 +7,7 @@ export default function PlayerPortrait(Player: Player) {
       <AvatarWithStatus
         image={Player.profileImage}
         showStatus={false}
-        size='lg'
+        size='md'
       />
       <h3 className='text-zinc-300 text-[22.06px] font-bold font-roboto-mono'>
         {Player.name}

@@ -36,7 +36,14 @@ class Player {
   applySpin(ball) {
     const spinFactor = 0.4;
     ball.velocity.x += this.dx * spinFactor;
-    const speed = Math.sqrt(
+    let speed = Math.sqrt(
+      ball.velocity.x * ball.velocity.x + ball.velocity.y * ball.velocity.y
+    );
+    ball.velocity.x = BALL_SPEED * (ball.velocity.x / speed);
+    ball.velocity.y = BALL_SPEED * (ball.velocity.y / speed);
+    if (ball.velocity.x > 0.75) ball.velocity.x = 0.75;
+    else if (ball.velocity.x < -0.75) ball.velocity.x = -0.75;
+    speed = Math.sqrt(
       ball.velocity.x * ball.velocity.x + ball.velocity.y * ball.velocity.y
     );
     ball.velocity.x = BALL_SPEED * (ball.velocity.x / speed);
@@ -49,7 +56,6 @@ class Player {
     ball.velocity.x = Math.cos(reflectedAngle) * BALL_SPEED;
     ball.velocity.y = Math.sin(reflectedAngle) * BALL_SPEED;
     this.applySpin(ball);
-    console.log('Ball hit');
   }
 
   draw() {
@@ -59,22 +65,23 @@ class Player {
     this.c.fill();
   }
 }
-const SCREEN_WIDTH = 430;
-const SCREEN_HEIGHT = 600;
-const PLAYER_WIDTH = 100;
-const PLAYER_HEIGHT = 15;
-const PLAYER_A_COLOR = 'rgba(217, 217, 217, 1)';
-const PLAYER_B_COLOR = 'rgba(0, 133, 255, 1)';
-const BACKGROUND_COLOR = 'rgba(15, 23, 42, 0.8)';
-const BALL_RADIUS = 5;
-const BALL_COLOR = 'white';
-const BALL_SPEED = 5 / 3;
-const BALL_VELOCITY = {x: 1, y: 1};
-const PADDLE_OFFSET = SCREEN_WIDTH / 100;
-const SCORE_LIMIT = 10;
-const GAME_TIME_LIMIT = 120;
-const DEBOUNCINGTIME = 500;
-const RENDERING_RATE = 5;
+// A's color is white, B's color is blue
+// A is on the bottom, B is on the top
+SCREEN_WIDTH = 400;
+SCREEN_HEIGHT = 600; //screen ratio is 2:3
+PLAYER_WIDTH = 100;
+PLAYER_HEIGHT = 15;
+PLAYER_A_COLOR = 'rgba(217, 217, 217, 1)';
+PLAYER_B_COLOR = 'rgba(0, 133, 255, 1)';
+BALL_RADIUS = 5;
+BALL_COLOR = 'white';
+BALL_SPEED = 5 / 3;
+BALL_VELOCITY = {x: 1, y: 1};
+PADDLE_OFFSET = SCREEN_WIDTH / 100;
+SCORE_LIMIT = 10;
+GAME_TIME_LIMIT = 180;
+DEBOUNCINGTIME = 500;
+RENDERING_RATE = 5;
 
 const express = require('express');
 const next = require('next');
@@ -84,74 +91,166 @@ const port = 4242;
 const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({dev});
 const nextHandler = nextApp.getRequestHandler();
-const players = [];
-const ball = {
-  x: SCREEN_WIDTH / 2,
-  y: SCREEN_HEIGHT / 2,
-  velocity: BALL_VELOCITY,
-  radius: BALL_RADIUS,
-  color: BALL_COLOR,
-  lastCollision: 0
-};
-const score = {
-  playerA: 0,
-  playerB: 0
-};
+const gameStates = {};
 
-function resetBall(isA, io) {
-  if (isA) score.playerA++;
-  else score.playerB++;
-  io.emit('updateScore', score);
-  ball.x = SCREEN_WIDTH / 2;
-  ball.y = SCREEN_HEIGHT / 2;
-  ball.velocity = {x: 0, y: 0};
+function createNewGameState(gameId) {
+  return {
+    gameId: gameId,
+    ready: false,
+    players: [
+      //A
+      new Player({
+        id: null, // 플레이어의 소켓 ID
+        x: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
+        y: SCREEN_HEIGHT - 45,
+        width: PLAYER_WIDTH,
+        height: PLAYER_HEIGHT,
+        color: PLAYER_A_COLOR
+      }),
+      //B
+      new Player({
+        id: null,
+        x: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
+        y: 30,
+        width: PLAYER_WIDTH,
+        height: PLAYER_HEIGHT,
+        color: PLAYER_B_COLOR
+      })
+    ],
+    ball: {
+      x: SCREEN_WIDTH / 2,
+      y: SCREEN_HEIGHT / 2,
+      velocity: BALL_VELOCITY,
+      radius: BALL_RADIUS,
+      color: BALL_COLOR,
+      lastCollision: 0
+    },
+    score: {
+      playerA: 0,
+      playerB: 0
+    },
+    time: GAME_TIME_LIMIT
+  };
+}
+function resetBall(isA, state, io) {
+  if (isA) state.score.playerA++;
+  else state.score.playerB++;
+  io.to(state.gameId).emit('updateScore', state);
+  if (
+    state.score.playerA === SCORE_LIMIT ||
+    state.score.playerB === SCORE_LIMIT
+  ) {
+    io.to(state.gameId).emit('gameOver', state);
+    return;
+  }
+  state.ball.x = SCREEN_WIDTH / 2;
+  state.ball.y = SCREEN_HEIGHT / 2;
+  state.ball.velocity = {x: 0, y: 0};
   setTimeout(() => {
-    x = isA ? players[0].x + PLAYER_WIDTH / 2 : players[1].x + PLAYER_WIDTH / 2;
-    y = isA ? players[0].y : players[1].y;
-    const dx = x - ball.x;
-    const dy = y - ball.y;
+    x = !isA
+      ? state.players[0].x + PLAYER_WIDTH / 2
+      : state.players[1].x + PLAYER_WIDTH / 2;
+    y = !isA ? state.players[0].y : state.players[1].y;
+    const dx = x - state.ball.x;
+    const dy = y - state.ball.y;
     const speed = Math.sqrt(dx * dx + dy * dy);
     const ret_x = (dx / speed) * BALL_SPEED;
     const ret_y = (dy / speed) * BALL_SPEED;
-    ball.velocity = {x: ret_x, y: ret_y};
-    io.emit('updateBall', ball);
+    state.ball.velocity = {x: ret_x, y: ret_y};
+    io.to(state.gameId).emit('updateBall', state);
   }, 3000);
 }
-
+function updateGameState(state, io) {
+  state.ball.x += state.ball.velocity.x;
+  state.ball.y += state.ball.velocity.y;
+  if (
+    state.ball.x - state.ball.radius <= 1 ||
+    state.ball.x + state.ball.radius >= SCREEN_WIDTH - 1
+  )
+    state.ball.velocity.x *= -1;
+  else if (state.ball.y < 0) resetBall(true, state, io); // A 점수 획득
+  else if (state.ball.y > SCREEN_HEIGHT) resetBall(false, state, io); // B 점수 획득
+  if (
+    state.players[0].isACollided(state.ball) ||
+    state.players[1].isBCollided(state.ball)
+  ) {
+    const now = Date.now();
+    if (
+      state.ball.lastCollision &&
+      now - state.ball.lastCollision < DEBOUNCINGTIME
+    )
+      return;
+    if (state.players[0].isACollided(state.ball))
+      state.players[0].handleCollision(state.ball, now);
+    else if (state.players[1].isBCollided(state.ball))
+      state.players[1].handleCollision(state.ball, now);
+  }
+}
 nextApp.prepare().then(() => {
   const app = express();
   const server = http.createServer(app);
-  let firstConnection = true;
   const io = socketIO(server, {
-    pingInterval: 2000, //need to check it this thing actually works
+    pingInterval: 2000, //need to check it this works -> do we need it?
     pingTimeout: 5000, //this as well
     cors: {
       origin: 'http://localhost:3000',
       methods: ['GET', 'POST']
     }
   });
+  //we should already have 'game key', which is the room id
+  //but in this case, we will just use the number of connections as the room id
+  let currentGameKey = 0;
+
   io.on('connection', (socket) => {
-    players.push(
-      new Player({
-        id: socket.id,
-        x: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
-        y: firstConnection ? SCREEN_HEIGHT - 45 : 30,
-        color: firstConnection ? PLAYER_A_COLOR : PLAYER_B_COLOR //A : B 첫 번째로 추가되는 플레이어가 A다
-      })
-    );
-    firstConnection = false;
-    io.emit('updatePlayers', players);
-    io.emit('updateBall', ball);
+    socket.join(currentGameKey);
+    socket.emit('joinedRoom', currentGameKey);
+    if (!gameStates[currentGameKey]) {
+      gameStates[currentGameKey] = createNewGameState(currentGameKey);
+      gameStates[currentGameKey].players[0].id = socket.id;
+    } else {
+      //DO NOT RETURN BEFORE SOCKET.ON SETTING !!!!
+      gameStates[currentGameKey].players[1].id = socket.id;
+      gameStates[currentGameKey].ready = true;
+      currentGameKey++;
+    }
     socket.on('disconnect', (reason) => {
       console.log(reason);
-      const index = players.findIndex((player) => player.id === socket.id);
-      if (index === -1) return;
-      players.splice(index, 1);
+      // find the game that the player was in
+      const gameId = Object.keys(gameStates).find((id) => {
+        const state = gameStates[id];
+        return state.players.some((player) => player.id === socket.id);
+      });
+      if (!gameId) console.error('this should not happen');
+      // if the game is not ready, delete the game
+      if (!gameStates[gameId].ready) {
+        delete gameStates[gameId];
+        return;
+      }
+      // if player A disconnects, player B wins
+      const state = gameStates[gameId];
+      if (state.players[0].id === socket.id) {
+        state.score.playerB = SCORE_LIMIT;
+        io.to(state.gameId).emit('updateScore', state); // this should be sent first
+        io.to(state.gameId).emit('gameOver', state);
+      }
+      // if player B disconnects, player A wins
+      else if (state.players[1].id === socket.id) {
+        state.score.playerA = SCORE_LIMIT;
+        io.to(state.gameId).emit('updateScore', state);
+        io.to(state.gameId).emit('gameOver', state);
+      }
     });
     socket.on('keyDown', (keycode) => {
-      const targetPlayer = players.find((player) => player.id === socket.id);
+      // find the player that pressed the key
+      const gameId = Object.keys(gameStates).find((id) => {
+        const state = gameStates[id];
+        return state.players.some((player) => player.id === socket.id);
+      });
+      const targetPlayer = gameStates[gameId].players.find(
+        (player) => player.id === socket.id
+      );
       if (!targetPlayer) return;
-      const isA = targetPlayer.color !== PLAYER_A_COLOR;
+      const isA = targetPlayer.color === PLAYER_A_COLOR;
       switch (keycode) {
         case 'a': {
           if (targetPlayer.x > 0) {
@@ -168,19 +267,22 @@ nextApp.prepare().then(() => {
           break;
         }
         case 'w': {
-          if (isA && targetPlayer.y > 0) targetPlayer.y -= PADDLE_OFFSET / 2;
+          if (!isA && targetPlayer.y > 0) targetPlayer.y -= PADDLE_OFFSET / 2;
           else if (
-            targetPlayer.y >
-            (SCREEN_HEIGHT / 3) * 2 - targetPlayer.height
+            isA &&
+            targetPlayer.y > (SCREEN_HEIGHT / 3) * 2 - targetPlayer.height
           )
             targetPlayer.y -= PADDLE_OFFSET / 2;
           break;
         }
         case 's': {
-          if (isA && targetPlayer.y < SCREEN_HEIGHT / 3 - targetPlayer.height) {
+          if (
+            !isA &&
+            targetPlayer.y < SCREEN_HEIGHT / 3 - targetPlayer.height
+          ) {
             targetPlayer.y += PADDLE_OFFSET / 2;
           } else if (
-            !isA &&
+            isA &&
             targetPlayer.y < SCREEN_HEIGHT - targetPlayer.height
           )
             targetPlayer.y += PADDLE_OFFSET / 2;
@@ -189,30 +291,48 @@ nextApp.prepare().then(() => {
       }
     });
     socket.on('keyUp', () => {
-      const targetPlayer = players.find((player) => player.id === socket.id);
+      const gameId = Object.keys(gameStates).find((id) => {
+        const state = gameStates[id];
+        return state.players.some((player) => player.id === socket.id);
+      });
+      const targetPlayer = gameStates[gameId].players.find(
+        (player) => player.id === socket.id
+      );
       if (!targetPlayer) return;
       targetPlayer.dx = 0;
     });
   });
+
+  //game rendering
   setInterval(() => {
-    if (players.length < 2) return;
-    ball.x += ball.velocity.x;
-    ball.y += ball.velocity.y;
-    io.emit('updatePlayers', players);
-    io.emit('updateBall', ball);
-    if (ball.x - ball.radius <= 5 || ball.x + ball.radius >= SCREEN_WIDTH - 5)
-      ball.velocity.x *= -1;
-    else if (ball.y < 0) resetBall(false, io);
-    else if (ball.y > SCREEN_HEIGHT) resetBall(true, io);
-    if (players[0].isACollided(ball) || players[1].isBCollided(ball)) {
-      const now = Date.now();
-      if (ball.lastCollision && now - ball.lastCollision < DEBOUNCINGTIME)
-        return;
-      if (players[0].isACollided(ball)) players[0].handleCollision(ball, now);
-      else if (players[1].isBCollided(ball))
-        players[1].handleCollision(ball, now);
-    }
+    Object.keys(gameStates).forEach((gameId) => {
+      const state = gameStates[gameId];
+      if (!state.ready) return;
+      updateGameState(state, io);
+      io.to(state.gameId).emit('updatePlayers', state);
+      io.to(state.gameId).emit('updateBall', state);
+    });
   }, RENDERING_RATE);
+
+  //game timer
+  setInterval(() => {
+    Object.keys(gameStates).forEach((gameId) => {
+      const state = gameStates[gameId];
+      state.time--;
+      if (!state.ready) return;
+      if (state.time <= 0) {
+        if (state.score.playerA > state.score.playerB)
+          io.to(state.gameId).emit('gameOver', state);
+        else if (state.score.playerA < state.score.playerB)
+          io.to(state.gameId).emit('gameOver', state);
+        //close the room
+        io.socketsLeave(gameId);
+        return;
+      }
+      io.to(state.gameId).emit('updateTime', state);
+    });
+  }, 1000);
+
   app.use(express.static('public'));
   app.get('*', (req, res) => {
     return nextHandler(req, res);
