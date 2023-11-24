@@ -1,4 +1,4 @@
-export const SCREEN_WIDTH = 430;
+export const SCREEN_WIDTH = 400;
 export const SCREEN_HEIGHT = 600;
 export const PLAYER_WIDTH = 100;
 export const PLAYER_HEIGHT = 15;
@@ -7,7 +7,7 @@ export const PLAYER_B_COLOR = 'rgba(0, 133, 255, 1)';
 export const BACKGROUND_COLOR = 'rgba(15, 23, 42, 0.8)';
 export const BALL_RADIUS = 5;
 export const BALL_COLOR = 'white';
-export const BALL_SPEED = 5;
+export const BALL_SPEED = SCREEN_HEIGHT / 50;
 export const BALL_VELOCITY = {x: 2.51, y: -4.32};
 export const PADDLE_OFFSET = SCREEN_WIDTH / 100;
 export const SCORE_LIMIT = 10;
