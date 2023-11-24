@@ -17,15 +17,24 @@ export default function Redirect() {
       .then((res) => {
         console.log('>>> [LOGIN] ✅ SUCCESS', res.data);
         if (res.status === 200) {
-          setCookie('accessToken', res.data.accessToken);
-          setCookie('intraId', res.data.intraId);
+          setCookie('accessToken', res.data.accessToken, {
+            path: '/',
+            sameSite: 'strict',
+            secure: true
+          });
+
+          setCookie('intraId', res.data.intraId, {
+            path: '/',
+            sameSite: 'strict',
+            secure: true
+          });
           if (res.data.hasAccount) {
             if (res.data.isTwoFactorEnabled === false) {
               setLogin(true);
               setTwoFactorAuthorize(true);
               router.replace('/');
             } else {
-              setLogin(true);
+              setLogin(() => true);
               setTwoFactorAuthorize(false);
               router.replace('/welcome/2step-auth/validation');
             }
