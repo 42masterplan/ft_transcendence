@@ -1,3 +1,8 @@
+/**
+ * @brief 백엔드에서 사용되는 플레이어 클래스입니다. 플레이어의 정보와 플레이어와 공의 상호작용 메소드를 포함합니다.
+ * @details 플레이어의 정보는 플레이어의 위치, 크기, 색상, 속도 등을 포함합니다.
+ * 플레이어와 공의 상호작용 메소드는 공과의 충돌 감지와 충돌 시 공의 반사각을 계산하는 메소드입니다.
+ **/
 class Player {
   constructor({
     id,
@@ -17,22 +22,49 @@ class Player {
     this.dx = dx;
   }
 
-  isACollided(ball) {
+  /**
+   * @param {*} ball 충돌을 감지할 공입니다.
+   * @returns 플레이어와 공이 충돌했는지 여부를 반환합니다.
+   */
+  isCollided(ball) {
     const offsetX = ball.x - this.x + ball.radius;
-    const offsetY = ball.y - this.y + ball.radius - this.height;
-    return (
-      offsetX < this.width + 4 && offsetX > 0 && offsetY <= 10 && offsetY >= -10
-    );
+    if (this.color === PLAYER_A_COLOR) {
+      const offsetY = ball.y - this.y + ball.radius - this.height;
+      return (
+        offsetX < this.width + 4 &&
+        offsetX > 0 &&
+        offsetY <= 10 &&
+        offsetY >= -10
+      );
+    } else {
+      const offsetY = this.y - ball.y - ball.radius + this.height;
+      return (
+        offsetX < this.width + 4 &&
+        offsetX > 0 &&
+        offsetY >= -10 &&
+        offsetY <= 10
+      );
+    }
   }
 
-  isBCollided(ball) {
-    const offsetX = ball.x - this.x + ball.radius;
-    const offsetY = this.y - ball.y - ball.radius + this.height;
-    return (
-      offsetX < this.width + 4 && offsetX > 0 && offsetY >= -10 && offsetY <= 10
-    );
+  /**
+   * @param {*} ball 충돌을 처리할 공입니다.
+   * @param {*} now 현재 시간입니다.
+   * @details 공의 마지막 충돌 시간을 현재 시간으로 업데이트하고 공의 반사각을 계산하여 적용합니다.
+   * 스핀 적용 메소드를 호출합니다.
+   */
+  handleCollision(ball, now) {
+    ball.lastCollision = now;
+    const reflectedAngle = -Math.atan2(ball.velocity.y, ball.velocity.x);
+    ball.velocity.x = Math.cos(reflectedAngle) * BALL_SPEED;
+    ball.velocity.y = Math.sin(reflectedAngle) * BALL_SPEED;
+    this.applySpin(ball);
   }
 
+  /**
+   * @param {*} ball 스핀을 적용할 공입니다.
+   * @details 정의된 스핀 계수만큼의 스핀을 적용합니다. 속력은 보존됩니다.
+   */
   applySpin(ball) {
     const spinFactor = 0.4;
     ball.velocity.x += this.dx * spinFactor;
@@ -49,24 +81,13 @@ class Player {
     ball.velocity.x = BALL_SPEED * (ball.velocity.x / speed);
     ball.velocity.y = BALL_SPEED * (ball.velocity.y / speed);
   }
-
-  handleCollision(ball, now) {
-    ball.lastCollision = now;
-    const reflectedAngle = -Math.atan2(ball.velocity.y, ball.velocity.x);
-    ball.velocity.x = Math.cos(reflectedAngle) * BALL_SPEED;
-    ball.velocity.y = Math.sin(reflectedAngle) * BALL_SPEED;
-    this.applySpin(ball);
-  }
-
-  draw() {
-    this.c.beginPath();
-    this.c.rect(this.x, this.y, this.width, this.height);
-    this.c.fillStyle = this.color;
-    this.c.fill();
-  }
 }
-// A's color is white, B's color is blue
-// A is on the bottom, B is on the top
+
+/*
+  플레이어 A의 색상은 흰색, 플레이어 B의 색상은 파랑색입니다.
+  플레이어 A는 아래쪽, 플레이어 B는 위쪽에 위치합니다.
+  사용할 상수들을 정의합니다.
+*/
 SCREEN_WIDTH = 400;
 SCREEN_HEIGHT = 600; //screen ratio is 2:3
 PLAYER_WIDTH = 100;
@@ -83,6 +104,10 @@ GAME_TIME_LIMIT = 180;
 DEBOUNCINGTIME = 500;
 RENDERING_RATE = 5;
 
+/*
+  next.js를 사용하여 프론트엔드 서버와 연결합니다.
+  이 부분은 next.js에 맞게 수정해야 합니다.
+*/
 const express = require('express');
 const next = require('next');
 const http = require('http');
@@ -93,6 +118,11 @@ const nextApp = next({dev});
 const nextHandler = nextApp.getRequestHandler();
 const gameStates = {};
 
+/**
+ * @brief 소켓룸에서 사용할 게임 상태를 생성합니다.
+ * @param {*} gameId 소켓룸 ID입니다.
+ * @returns 생성되어 초기화된 게임 상태를 반환합니다.
+ */
 function createNewGameState(gameId) {
   return {
     gameId: gameId,
@@ -132,6 +162,16 @@ function createNewGameState(gameId) {
     time: GAME_TIME_LIMIT
   };
 }
+
+/**
+ * @brief 점수가 오르거나 시간이 초과되어 공을 초기화하는 메소드입니다.
+ * @param {*} isA 점수를 획득한 플레이어가 플레이어 A인지 여부입니다.
+ * @param {*} state 해당 게임 상태입니다.
+ * @param {*} io 소켓 통신을 위한 인스턴스입니다.
+ * @details 점수를 업데이트하고, 점수 제한에 도달하면 게임을 종료합니다.
+ * 이벤트들을 소켓룸에 전송합니다.
+ * 공의 위치를 화면 중앙으로 이동, 고정시키고 3초 후에 실점한 플레이어 방향으로 발사합니다.
+ */
 function resetBall(isA, state, io) {
   if (isA) state.score.playerA++;
   else state.score.playerB++;
@@ -160,19 +200,35 @@ function resetBall(isA, state, io) {
     io.to(state.gameId).emit('updateBall', state);
   }, 3000);
 }
+
+/**
+ * @brief 게임 상태를 업데이트하는 메소드입니다.
+ * @param {*} state 해당 게임 상태입니다.
+ * @param {*} io 소켓 통신을 위한 인스턴스입니다.
+ * @details 공의 위치를 업데이트하고, 벽에 부딪히면 반사각을 계산하여 적용합니다.
+ * 플레이어와 충돌하면 충돌 시간을 업데이트하고 반사각을 계산하여 적용합니다.
+ * 충돌 시간이 DEBOUNCINGTIME보다 작으면 충돌을 무시합니다. (무한 충돌 이벤트 발생 방지)
+ * 충돌 시간을 업데이트합니다.
+ */
 function updateGameState(state, io) {
+  // 현재 속도에 따라 공의 위치를 업데이트합니다.
   state.ball.x += state.ball.velocity.x;
   state.ball.y += state.ball.velocity.y;
+
+  // 공이 벽에 부딪히면 반사각을 계산하여 적용합니다.
   if (
     state.ball.x - state.ball.radius <= 1 ||
     state.ball.x + state.ball.radius >= SCREEN_WIDTH - 1
   )
     state.ball.velocity.x *= -1;
+  // 공이 화면 위 아래에 닿으면 점수를 획득하고 공을 초기화합니다.
   else if (state.ball.y < 0) resetBall(true, state, io); // A 점수 획득
   else if (state.ball.y > SCREEN_HEIGHT) resetBall(false, state, io); // B 점수 획득
+  // 플레이어와 충돌하면 충돌 시간을 업데이트하고 반사각을 계산하여 적용합니다.
+  // 충돌 시간이 DEBOUNCINGTIME보다 작으면 충돌을 무시합니다. (무한 충돌 이벤트 발생 방지)
   if (
-    state.players[0].isACollided(state.ball) ||
-    state.players[1].isBCollided(state.ball)
+    state.players[0].isCollided(state.ball) ||
+    state.players[1].isCollided(state.ball)
   ) {
     const now = Date.now();
     if (
@@ -180,12 +236,18 @@ function updateGameState(state, io) {
       now - state.ball.lastCollision < DEBOUNCINGTIME
     )
       return;
-    if (state.players[0].isACollided(state.ball))
+    if (state.players[0].isCollided(state.ball))
       state.players[0].handleCollision(state.ball, now);
-    else if (state.players[1].isBCollided(state.ball))
+    else if (state.players[1].isCollided(state.ball))
       state.players[1].handleCollision(state.ball, now);
   }
 }
+
+/**
+ * @brief 백엔드 서버를 실행합니다.
+ * @details next.js를 사용하여 프론트엔드 서버와 연결합니다.
+ * 이 부분은 next.js에 맞게 수정할 수 있습니다. 전체적인 흐름 작성할 것.
+ */
 nextApp.prepare().then(() => {
   const app = express();
   const server = http.createServer(app);
