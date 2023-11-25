@@ -1,15 +1,6 @@
-import Ball from '@/lib/classes/Ball';
 import Player from '@/lib/classes/Player';
 import {SCREEN_WIDTH, SCREEN_HEIGHT, PADDLE_OFFSET} from './macros';
-import io, {Socket} from 'socket.io-client';
-
-export function bounceIfCollided(ball: Ball, playerA: Player, playerB: Player) {
-  const debouncingTime = 300;
-  const now = Date.now();
-  if (ball.lastCollision && now - ball.lastCollision < debouncingTime) return;
-  if (playerA.isACollided(ball)) playerA.handleCollision(ball, now);
-  else if (playerB.isBCollided(ball)) playerB.handleCollision(ball, now);
-}
+import {Socket} from 'socket.io-client';
 
 export function handleKeyDowns(
   keysPressed: {[key: string]: boolean},

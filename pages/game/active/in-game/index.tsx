@@ -5,8 +5,8 @@ import {
   PLAYER_A_COLOR,
   PLAYER_B_COLOR,
   BACKGROUND_COLOR,
-  SCORE_LIMIT,
-  RENDERING_RATE
+  RENDERING_RATE,
+  GAME_TIME_LIMIT
 } from '@/lib/game/macros';
 import Player from '@/lib/classes/Player';
 import Ball from '@/lib/classes/Ball';
@@ -22,7 +22,7 @@ export default function Game() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const keysPressed = useRef<{[key: string]: boolean}>({});
-  const [time, setTime] = useState(120);
+  const [time, setTime] = useState(GAME_TIME_LIMIT);
   const [score, setScore] = useState({playerA: 0, playerB: 0});
   const [gameover, setGameOver] = useState(false);
   const [roomId, setRoomId] = useState(null); // 현재 방의 ID
@@ -132,6 +132,7 @@ export default function Game() {
       playerA.draw();
       playerB.draw();
       ball.draw();
+      // remove particles that fade out
       particles.forEach((particle) => {
         if (particle.alpha <= 0.01) {
           particles.splice(particles.indexOf(particle), 1);
@@ -146,7 +147,7 @@ export default function Game() {
       socket.off('disconnect');
       socket.disconnect();
     };
-  }, []);
+  }, []); //do we have to add roomId to dependency array?
 
   return (
     <div className='relative min-h-screen flex justify-center items-center'>
