@@ -2,8 +2,10 @@ import Header from './header/Header';
 import Footer from './footer/Footer';
 import {Toaster} from '@/components/shadcn/ui/toaster';
 import {useRouter} from 'next/router';
+
 export default function Layout({children}: {children: React.ReactNode}) {
   const router = useRouter();
+
   return (
     <>
       {router.pathname.startsWith('/welcome') ||
