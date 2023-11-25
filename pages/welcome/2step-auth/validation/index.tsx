@@ -2,13 +2,32 @@ import {Input} from '@/components/shadcn/ui/input';
 import {Button} from '@/components/shadcn/ui/button';
 import Image from 'next/image';
 import Title from '@/components/Title';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
+import {toast} from '@/components/shadcn/ui/use-toast';
+import {useCookies} from 'react-cookie';
+import Router from 'next/router';
 export default function Validation() {
   const [code, setCode] = useState('');
+  const [cookie, setCookie] = useCookies();
+  useEffect(() => {
+    const isTwoFactorDone = cookie.isTwoFactorDone;
 
+    if (isTwoFactorDone) {
+      toast({
+        title: '이미 인증 완료',
+        description: '이미 2단계 인증이 완료되었습니다'
+      });
+      Router.push('/');
+    }
+  }, []);
   const handleClick = () => {
-    console.log(code);
     setCode('');
+    toast({
+      title: '인증 완료',
+      description: '2단계 인증이 완료되었습니다'
+    });
+    setCookie('isTwoFactorDone', true, {path: '/'});
+    Router.push('/');
   };
   return (
     <>
@@ -41,7 +60,7 @@ export default function Validation() {
             value={code}
             onChange={(e) => setCode(e.target.value)}
           />
-          <Button onClick={handleClick} disabled={code.trim('').length === 0}>
+          <Button onClick={handleClick} disabled={code.trim().length === 0}>
             계속하기
           </Button>
         </div>

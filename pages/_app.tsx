@@ -15,13 +15,13 @@ export default function App({Component, pageProps}: AppProps) {
       disableTransitionOnChange
     >
       <CookiesProvider>
-        <Layout>
-          <RecoilRoot>
+        <RecoilRoot>
+          <Layout>
             <LoginFilter>
               <Component {...pageProps} />
             </LoginFilter>
-          </RecoilRoot>
-        </Layout>
+          </Layout>
+        </RecoilRoot>
       </CookiesProvider>
     </ThemeProvider>
   );
