@@ -30,7 +30,7 @@ export default function SetUserInfo({
   );
 
   const router = useRouter();
-  if (isSuccess === true) router.push('/welcome/2step-auth');
+  if (isSuccess === true) router.push('/welcome/register/setEmail');
   const handleSubmit = (e: any) => {
     e.preventDefault();
     fetchData({

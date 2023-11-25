@@ -1,5 +1,9 @@
 import LoginBtn from '@/components/button/LogInBtn';
 import Image from 'next/image';
+import {useResetRecoilState} from 'recoil';
+import {loginState} from '@/recoils/login';
+import {twoFactorAuthorizeState} from '@/recoils/twoFactorEnable';
+import {useEffect} from 'react';
 export default function Welcome() {
   return (
     <div className='flex flex-col justify-center items-center h-screen'>
