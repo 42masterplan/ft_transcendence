@@ -1,29 +1,31 @@
 import {
   SCREEN_WIDTH,
-  SCREEN_HEIGHT,
+  SCREEN_HEIGHT, //screen ratio is 2:3
   PLAYER_WIDTH,
   PLAYER_A_COLOR,
   PLAYER_B_COLOR,
   BACKGROUND_COLOR,
   SCORE_LIMIT,
-  RENDERING_RATE,
-  DEBOUNCINGTIME
+  RENDERING_RATE
 } from '@/lib/game/macros';
 import Player from '@/lib/classes/Player';
 import Ball from '@/lib/classes/Ball';
 import Particle from '@/lib/classes/Particle';
 import {useEffect, useRef, useState} from 'react';
-import {bounceIfCollided, handleKeyDowns, handleKeyUps} from '@/lib/game/util';
+import {handleKeyDowns, handleKeyUps} from '@/lib/game/util';
 import ScoreBoard from '@/components/game/ScoreBoard';
 import GameStatus from '@/components/game/GameStatus';
+import GameResult from '@/components/game/GameResult';
 import io from 'socket.io-client';
 
 export default function Game() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const keysPressed = useRef<{[key: string]: boolean}>({});
+  const [time, setTime] = useState(120);
   const [score, setScore] = useState({playerA: 0, playerB: 0});
   const [gameover, setGameOver] = useState(false);
+  const [roomId, setRoomId] = useState(null); // 현재 방의 ID
 
   useEffect(() => {
     const socket = io('http://localhost:4242');
@@ -36,9 +38,9 @@ export default function Game() {
     contextRef.current = c;
     canvas.width = SCREEN_WIDTH * devicePixelRatio;
     canvas.height = SCREEN_HEIGHT * devicePixelRatio;
+    c.scale(devicePixelRatio, devicePixelRatio);
     canvas.style.width = `${SCREEN_WIDTH}px`;
     canvas.style.height = `${SCREEN_HEIGHT}px`;
-    c.scale(devicePixelRatio, devicePixelRatio);
     const particles = [] as Particle[];
     const playerA = new Player({
       id: '',
@@ -62,7 +64,12 @@ export default function Game() {
       c,
       lastCollision: 0
     });
-    socket.on('updatePlayers', (backendPlayers) => {
+    socket.on('joinedRoom', (id) => {
+      setRoomId(id);
+    });
+    socket.on('updatePlayers', (state) => {
+      if (state.roomId != roomId) return;
+      const backendPlayers = state.players;
       if (backendPlayers.length < 2) return;
       if (!playerA.id) playerA.id = backendPlayers[0].id;
       if (!playerB.id) playerB.id = backendPlayers[1].id;
@@ -75,23 +82,32 @@ export default function Game() {
       if (!(playerA.id in backendPlayers)) delete backendPlayers[playerA.id];
       if (!(playerB.id in backendPlayers)) delete backendPlayers[playerB.id];
     });
-    socket.on('updateBall', (backendBall) => {
+    socket.on('updateBall', (state) => {
+      if (state.roomId != roomId) return;
+      const backendBall = state.ball;
       ball.x = backendBall.x;
       ball.y = backendBall.y;
       ball.velocity = backendBall.velocity;
       ball.lastCollision = backendBall.lastCollision;
     });
-    socket.on('updateScore', (backendScore) => {
+    socket.on('updateScore', (state) => {
+      if (state.roomId != roomId) return;
+      const backendScore = state.score;
       ball.resetPosition(particles);
-      setScore(() => {
-        const updatedScore = {...backendScore};
-        if (
-          updatedScore.playerB === SCORE_LIMIT ||
-          updatedScore.playerA === SCORE_LIMIT
-        )
-          setGameOver(true);
-        return updatedScore;
-      });
+      setScore(backendScore);
+    });
+    socket.on('gameOver', (state) => {
+      if (state.roomId != roomId) return;
+      setGameOver(true);
+      cancelAnimationFrame(animationId);
+      socket.off('connect');
+      socket.off('disconnect');
+      socket.disconnect();
+    });
+    socket.on('updateTime', (state) => {
+      if (state.roomId != roomId) return;
+      const backendTime = state.time;
+      setTime(backendTime);
     });
     setInterval(() => {
       if (keysPressed.current) {
@@ -110,7 +126,6 @@ export default function Game() {
       (event) => (keysPressed.current[event.key] = true)
     );
     addEventListener('keyup', (event) => delete keysPressed.current[event.key]);
-
     const gameLoop = () => {
       c.fillStyle = BACKGROUND_COLOR;
       c.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -136,14 +151,16 @@ export default function Game() {
   return (
     <div className='relative min-h-screen flex justify-center items-center'>
       {gameover ? (
-        <div className='absolute z-20 text-white text-4xl font-bold'>
-          GameOver
-        </div>
+        <GameResult playerA={score.playerA} playerB={score.playerB} />
       ) : (
         <>
           <canvas ref={canvasRef} className='z-10 absolute' />
-          <div className='absolute left-[calc(50%+217px)] '>
-            <GameStatus gameover={gameover} setGameOver={setGameOver} />
+          <div className='absolute left-[calc(50%+200px)] '>
+            <GameStatus
+              gameover={gameover}
+              setGameOver={setGameOver}
+              time={time}
+            />
           </div>
           <ScoreBoard AScore={score.playerA} BScore={score.playerB} />
         </>
