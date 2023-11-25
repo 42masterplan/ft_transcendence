@@ -246,64 +246,68 @@ function updateGameState(state, io) {
 /**
  * @brief 백엔드 서버를 실행합니다.
  * @details next.js를 사용하여 프론트엔드 서버와 연결합니다.
- * 이 부분은 next.js에 맞게 수정할 수 있습니다. 전체적인 흐름 작성할 것.
  */
 nextApp.prepare().then(() => {
   const app = express();
   const server = http.createServer(app);
   const io = socketIO(server, {
-    pingInterval: 2000, //need to check it this works -> do we need it?
-    pingTimeout: 5000, //this as well
+    pingInterval: 2000, // 추후 테스트 필요
+    pingTimeout: 5000,
     cors: {
       origin: 'http://localhost:3000',
       methods: ['GET', 'POST']
     }
   });
-  //we should already have 'game key', which is the room id
-  //but in this case, we will just use the number of connections as the room id
-  let currentGameKey = 0;
 
+  let currentGameKey = 0; // 소켓 룸 아이디에 해당하는 '게임 키'가 필요합니다. 플레이어 짝이 지어질 때마다 게임 키를 1씩 증가시킵니다.
+
+  // 새로운 소켓이 연결되면 실행될 초기화 콜백 함수입니다.
   io.on('connection', (socket) => {
-    socket.join(currentGameKey);
-    socket.emit('joinedRoom', currentGameKey);
+    socket.join(currentGameKey); // 현재 게임 키에 해당하는 소켓룸에 클라이언트를 추가합니다.
+    socket.emit('joinedRoom', currentGameKey); // 클라이언트에게 현재 게임 키를 전달합니다.
     if (!gameStates[currentGameKey]) {
+      // 현재 게임 키에 해당하는 게임 상태가 없으면 새로 생성합니다. (2명 중 1명이 들어온 경우)
       gameStates[currentGameKey] = createNewGameState(currentGameKey);
-      gameStates[currentGameKey].players[0].id = socket.id;
+      gameStates[currentGameKey].players[0].id = socket.id; // 플레이어 A의 소켓 ID를 초기화합니다.
     } else {
-      //DO NOT RETURN BEFORE SOCKET.ON SETTING !!!!
+      // 현재 게임 키에 해당하는 게임 상태가 있으면 플레이어 B의 소켓 ID를 초기화합니다.
       gameStates[currentGameKey].players[1].id = socket.id;
       gameStates[currentGameKey].ready = true;
-      currentGameKey++;
+      currentGameKey++; // 다음 게임 키를 위해 게임 키를 1 증가시킵니다.
     }
+
+    // 플레이어가 연결을 끊으면 실행될 콜백 함수입니다.
     socket.on('disconnect', (reason) => {
-      console.log(reason);
-      // find the game that the player was in
+      console.log(reason); // 연결 끊김 원인을 출력합니다.
+      // 플레이어가 배정된 게임 룸을 찾습니다.
       const gameId = Object.keys(gameStates).find((id) => {
         const state = gameStates[id];
         return state.players.some((player) => player.id === socket.id);
       });
-      if (!gameId) console.error('this should not happen');
-      // if the game is not ready, delete the game
+      if (!gameId) console.error('this should not happen'); // 게임 룸을 찾지 못하면 에러를 출력합니다. (로직상 불가능합니다 ;)..
       if (!gameStates[gameId].ready) {
+        // 1명이 들어왔는데 두 번째 플레이어가 들어오기 전에 연결이 끊긴 경우 게임 상태를 삭제합니다.
         delete gameStates[gameId];
         return;
       }
-      // if player A disconnects, player B wins
+      // 플레이어 A가 연결을 끊으면 플레이어 B가 기권패합니다.
       const state = gameStates[gameId];
       if (state.players[0].id === socket.id) {
         state.score.playerB = SCORE_LIMIT;
-        io.to(state.gameId).emit('updateScore', state); // this should be sent first
+        io.to(state.gameId).emit('updateScore', state);
         io.to(state.gameId).emit('gameOver', state);
       }
-      // if player B disconnects, player A wins
+      // 플레이어 B가 연결을 끊으면 플레이어 A가 기권패합니다.
       else if (state.players[1].id === socket.id) {
         state.score.playerA = SCORE_LIMIT;
         io.to(state.gameId).emit('updateScore', state);
         io.to(state.gameId).emit('gameOver', state);
       }
     });
+
+    // 플레이어가 키를 누르면 실행될 콜백 함수입니다. 프론트에서 감지한 키를 전달받습니다.
     socket.on('keyDown', (keycode) => {
-      // find the player that pressed the key
+      // 키를 누른 플레이어를 찾습니다.
       const gameId = Object.keys(gameStates).find((id) => {
         const state = gameStates[id];
         return state.players.some((player) => player.id === socket.id);
@@ -313,6 +317,8 @@ nextApp.prepare().then(() => {
       );
       if (!targetPlayer) return;
       const isA = targetPlayer.color === PLAYER_A_COLOR;
+      // 키에 따라 플레이어의 위치를 업데이트합니다. 화면 중앙 가까이 한계선을 설정해서 넘어가지 않도록 합니다.
+      // 플레이어가 움직이고 있기 때문에 dx를 업데이트합니다. (스핀 적용을 위해서 필요합니다. dy는 사용하지 않습니다.)
       switch (keycode) {
         case 'a': {
           if (targetPlayer.x > 0) {
@@ -352,6 +358,8 @@ nextApp.prepare().then(() => {
         }
       }
     });
+
+    // 플레이어가 키에서 손을 떼면 실행될 콜백 함수입니다. 플레이어가 정지했으므로 dx를 0으로 초기화합니다.
     socket.on('keyUp', () => {
       const gameId = Object.keys(gameStates).find((id) => {
         const state = gameStates[id];
@@ -365,18 +373,19 @@ nextApp.prepare().then(() => {
     });
   });
 
-  //game rendering
+  // 게임 상태를 업데이트하는 렌더링 루프입니다.
   setInterval(() => {
+    // 모든 게임 상태를 업데이트합니다.
     Object.keys(gameStates).forEach((gameId) => {
       const state = gameStates[gameId];
-      if (!state.ready) return;
+      if (!state.ready) return; // 아직 게임이 시작되지 않은 상태라면 업데이트하지 않습니다.
       updateGameState(state, io);
-      io.to(state.gameId).emit('updatePlayers', state);
-      io.to(state.gameId).emit('updateBall', state);
+      io.to(state.gameId).emit('updatePlayers', state); // 플레이어의 위치를 업데이트합니다.
+      io.to(state.gameId).emit('updateBall', state); // 공의 위치를 업데이트합니다.
     });
   }, RENDERING_RATE);
 
-  //game timer
+  // 게임 시간을 업데이트하는 렌더링 루프입니다. 게임 시간이 0이 되면 게임을 종료합니다.
   setInterval(() => {
     Object.keys(gameStates).forEach((gameId) => {
       const state = gameStates[gameId];
@@ -395,6 +404,7 @@ nextApp.prepare().then(() => {
     });
   }, 1000);
 
+  // 아래는 nest.js에 맞게 변경할 수 있습니다.
   app.use(express.static('public'));
   app.get('*', (req, res) => {
     return nextHandler(req, res);
