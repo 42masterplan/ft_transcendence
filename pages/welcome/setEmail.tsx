@@ -8,7 +8,7 @@ import Image from 'next/image';
 import {Input} from '@/components/shadcn/ui/input';
 import {Label} from '@/components/shadcn/ui/label';
 import InputValidCode from '@/components/input/InputValidCode';
-export default function TwoStepAuth() {
+export default function SetEmail() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const {fetchData: fetchEmail, response, isSuccess: emailDone} = useAxios();

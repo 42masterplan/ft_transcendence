@@ -30,7 +30,7 @@ export default function LoginFilter({children}: {children: React.ReactNode}) {
         description: '계정이 생성되지 않았습니다. 계정을 생성해주세요'
       });
     } else if (isTwoFactorDone === false) {
-      router.push('/welcome/2step-auth/validation');
+      router.push('/welcome/2step-auth');
       toast({
         title: '2단계 인증 필요',
         description: '2단계 인증이 필요합니다. 2단계 인증을 진행해주세요'
