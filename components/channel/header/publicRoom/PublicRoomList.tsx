@@ -10,7 +10,7 @@ import {
 } from '@/components/shadcn/ui/dialog';
 import {Input} from '@/components/shadcn/ui/input';
 import {Label} from '@/components/shadcn/ui/label';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {PublicRoomType} from '@/types/channel';
 
 const DialogBtn = ({socket}: any) => {
@@ -33,11 +33,13 @@ export default function PublicRoomList() {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [publicRooms, setPublicRooms] = useState([] as PublicRoomType[]);
-  socket.on('getPublicChannels', (rooms) => {
-    if (typeof rooms === 'undefined') rooms = [];
-    console.log(rooms);
-    setPublicRooms(rooms);
-  });
+  useEffect(() => {
+    socket.on('getPublicChannels', (rooms) => {
+      if (typeof rooms === 'undefined') rooms = [];
+      console.log(rooms);
+      setPublicRooms(rooms);
+    });
+  }, []);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogBtn socket={socket} />
