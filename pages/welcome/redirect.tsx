@@ -41,7 +41,7 @@ export default function Redirect() {
                 secure: true
               });
               router.replace('/');
-            } else router.replace('/welcome/2step-auth/validation');
+            } else router.replace('/welcome/2step-auth');
           } else router.replace('/welcome/register');
         } else if (res.status === 401) {
           toast({
