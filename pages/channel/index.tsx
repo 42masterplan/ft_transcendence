@@ -9,6 +9,7 @@ import useChatSocket from '@/hooks/useChatSocket';
 import {ChannelHistoryType} from '@/types/channel';
 import ChannelInput from '@/components/channel/body/ChannelInput';
 import ScrollableContainer from '@/components/container/ScrollableContainer';
+import {toast} from '@/components/shadcn/ui/use-toast';
 // const socket = io('http://localhost:4001');
 
 export default function ChannelPage() {
@@ -18,18 +19,21 @@ export default function ChannelPage() {
 
   //여기서는 채널 페이지를 들어올 때 처음 소켓 연결을 수립하지만, 실제로는 모든 페이지에서 socket을 연결한 채로 유지해야만 한다.
   const [socket] = useChatSocket('channel');
-  socket.on('connect', () => {
-    console.log('connected');
-  });
 
   const [messages, setMessages] = useState([] as ChannelHistoryType[]);
   useEffect(() => {
     socket.emit('myChannels');
+    socket.on('connect', () => {
+      console.log('connected');
+    });
     socket.on('myRole', (data) => {
       console.log('권한 설정', data);
       if (data === null) {
         alert('채널에 참가중..');
       } else setRole(data.role);
+    });
+    socket.io.on('error', (error) => {
+      console.log('error', error);
     });
   }, []);
 
