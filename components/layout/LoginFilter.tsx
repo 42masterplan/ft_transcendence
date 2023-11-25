@@ -12,6 +12,7 @@ export default function LoginFilter({children}: {children: React.ReactNode}) {
     const token = cookie.accessToken;
     const isTwoFactorDone = cookie.isTwoFactorDone;
     const hasAccount = cookie.hasAccount;
+    const intraId = cookie.intraId;
     if (router.pathname.startsWith('/welcome')) {
       if (
         router.pathname === '/welcome' ||
@@ -20,10 +21,16 @@ export default function LoginFilter({children}: {children: React.ReactNode}) {
         setLoading(false);
         return;
       }
-      if (token || isTwoFactorDone === undefined || hasAccount === undefined)
+      if (
+        !token ||
+        isTwoFactorDone === undefined ||
+        hasAccount === undefined ||
+        intraId === undefined
+      ) {
+        console.log('<<<<<<<🤬>>>>>>');
         router.push('/welcome');
-      else if (router.pathname === '/welcome/2step-auth') {
-        if (isTwoFactorDone) {
+      } else if (router.pathname === '/welcome/2step-auth') {
+        if (isTwoFactorDone === true) {
           toast({
             title: '이미 인증 완료',
             description: '이미 2단계 인증이 완료되었습니다'
