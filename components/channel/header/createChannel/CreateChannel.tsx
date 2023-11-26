@@ -204,26 +204,34 @@ export default function CreateChannel() {
         status: channelType
       },
       (msg: string) => {
-        toast({
-          title: '채널 생성 성공',
-          description: msg
-        });
-        console.log({
-          name: channelName,
-          password: password,
-          invitedFriendIds: inviteUsers,
-          status: channelType
-        });
-        setChannelName('');
-        setPassword('');
-        setChannelType('');
-        setInviteFriendList([]);
-        setOpen(false);
+        if (msg === 'create Success!') {
+          toast({
+            title: '채널 생성 성공',
+            description: msg
+          });
+          console.log({
+            name: channelName,
+            password: password,
+            invitedFriendIds: inviteUsers,
+            status: channelType
+          });
+          setChannelName('');
+          setPassword('');
+          setChannelType('');
+          setInviteFriendList([]);
+          setOpen(false);
+        } else {
+          toast({
+            title: '채널 생성 실패',
+            description: msg,
+            variant: 'destructive'
+          });
+        }
       }
     );
-    socket.once('error_exist', (error: string) => {
-      alert(error);
-    });
+    // socket.once('error_exist', (error: string) => {
+    //   alert(error);
+    // });
   };
 
   return (

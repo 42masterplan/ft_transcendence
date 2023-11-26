@@ -32,7 +32,7 @@ export default function ChannelPage() {
         alert('채널에 참가중..');
       } else setRole(data.role);
     });
-    socket.io.on('error', (error) => {
+    socket.on('error_exist', (error) => {
       console.log('error', error);
     });
   }, []);
