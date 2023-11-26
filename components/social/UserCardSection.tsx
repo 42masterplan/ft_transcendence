@@ -51,6 +51,7 @@ export default function UserCardSection({
   className = ''
 }: UserCardSectionProps) {
   // filter users
+	
   users = filterUsers(
     users,
     searchTarget,
@@ -63,7 +64,7 @@ export default function UserCardSection({
         type='multiple'
         className='flex flex-row flex-wrap items-center justify-center gap-3 sm:gap-5'
       >
-        {users.map((user) => (
+        {/* {users.map((user) => (
           <SocialCard
             key={user.id}
             id={user.id}
@@ -74,7 +75,7 @@ export default function UserCardSection({
             isFriend={user.isFriend}
             isBlocked={user.isBlocked}
           />
-        ))}
+        ))} */}
       </Accordion>
     </ScrollableContainer>
   );

@@ -41,7 +41,7 @@ export default function SocialPage() {
   if (loading == true) return <SpinningLoader />;
   return (
     <div className='flex flex-col w-full h-full px-3 gap-2'>
-      {/* <SocialPageNavBar
+      <SocialPageNavBar
         searchTarget={searchTarget}
         setSearchTarget={setSearchTarget}
         searchTargetStatus={searchTargetStatus}
@@ -54,7 +54,7 @@ export default function SocialPage() {
         searchTarget={searchTarget}
         searchTargetStatus={searchTargetStatus}
         searchTargetInput={searchTargetInput}
-      /> */}
+      />
     </div>
   );
 }
