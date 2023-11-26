@@ -10,15 +10,9 @@ import {Accordion} from '../shadcn/ui/accordion';
 // function to filter users. Returns filtered users.
 function filterUsers(
   users: API.user[],
-  searchTarget: target,
   searchTargetStatus: status,
   searchTargetInput: string
 ): API.user[] {
-  // filter friends
-  if (searchTarget === 'friend') {
-    users = users.filter((user) => user.isFriend);
-  }
-  // filter status
   if (searchTargetStatus === 'Online') {
     users = users.filter((user) => user.currentStatus === 'Online');
   } else if (searchTargetStatus === 'Offline') {
@@ -37,7 +31,6 @@ function filterUsers(
 
 interface UserCardSectionProps {
   users: API.user[];
-  searchTarget: target;
   searchTargetStatus: status;
   searchTargetInput: string;
   className?: string;
@@ -45,37 +38,32 @@ interface UserCardSectionProps {
 
 export default function UserCardSection({
   users,
-  searchTarget,
   searchTargetStatus,
   searchTargetInput,
   className = ''
 }: UserCardSectionProps) {
   // filter users
-	
-  users = filterUsers(
-    users,
-    searchTarget,
-    searchTargetStatus,
-    searchTargetInput
-  );
+
+  users = filterUsers(users, searchTargetStatus, searchTargetInput);
   return (
     <ScrollableContainer className={` ${className}`}>
       <Accordion
         type='multiple'
         className='flex flex-row flex-wrap items-center justify-center gap-3 sm:gap-5'
       >
-        {/* {users.map((user) => (
-          <SocialCard
-            key={user.id}
-            id={user.id}
-            profileImage={user.profileImage}
-            name={user.name}
-            currentStatus={user.currentStatus}
-            introduction={user.introduction}
-            isFriend={user.isFriend}
-            isBlocked={user.isBlocked}
-          />
-        ))} */}
+        {users &&
+          users.map((user) => (
+            <SocialCard
+              key={user.id}
+              id={user.id}
+              profileImage={user.profileImage}
+              name={user.name}
+              currentStatus={user.currentStatus}
+              introduction={user.introduction}
+              isFriend={false}
+              isBlocked={false}
+            />
+          ))}
       </Accordion>
     </ScrollableContainer>
   );

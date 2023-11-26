@@ -17,9 +17,7 @@ import {
 interface SocialPageNavBarProps {
   searchTarget: target;
   setSearchTarget: React.Dispatch<React.SetStateAction<target>>;
-  searchTargetStatus: status;
   setSearchTargetStatus: React.Dispatch<React.SetStateAction<status>>;
-  searchTargetInput: string;
   setSearchTargetInput: React.Dispatch<React.SetStateAction<string>>;
   className?: string;
 }
@@ -27,9 +25,7 @@ interface SocialPageNavBarProps {
 export function SocialPageNavBar({
   searchTarget,
   setSearchTarget,
-  searchTargetStatus,
   setSearchTargetStatus,
-  searchTargetInput,
   setSearchTargetInput,
   className = ''
 }: SocialPageNavBarProps) {
@@ -46,8 +42,8 @@ export function SocialPageNavBar({
             className=''
             id='search-target'
             onCheckedChange={() => {
-              setSearchTarget(
-                searchTarget === 'friend' ? 'all users' : 'friend'
+              setSearchTarget((prev) =>
+                prev === 'friend' ? 'all users' : 'friend'
               );
             }}
           />

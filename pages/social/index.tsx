@@ -18,22 +18,36 @@ export default function SocialPage() {
   // user data
   const [users, setUsers] = useState<API.user[]>([]);
   const [loading, setLoading] = useState(true);
+  async function getUserData() {
+    const users = await API.social__getUsersAsync();
+    setUsers(users);
+  }
   useEffect(() => {
-    fetchData({
-      method: 'get',
-      url: '/users/friends',
-      params: {
-        id: '1'
-      },
-      errorTitle: '유저 정보 조회 실패',
-      errorDescription: '유저 정보 조회에 실패했습니다.'
-    });
-  }, []);
+    if (searchTarget === 'friend') {
+      fetchData({
+        method: 'get',
+        url: '/users/friends',
+        params: {
+          id: '1'
+        },
+        errorTitle: '유저 정보 조회 실패',
+        errorDescription: '유저 정보 조회에 실패했습니다.'
+      });
+    } else if (searchTarget === 'all users') {
+      fetchData({
+        method: 'get',
+        url: '/users/all',
+        errorTitle: '유저 정보 조회 실패',
+        errorDescription: '유저 정보 조회에 실패했습니다.'
+      });
+      // getUserData();
+    }
+  }, [searchTarget, searchTargetStatus]);
   useEffect(() => {
     if (isSuccess === true) {
-      setUsers(response.data);
+      setUsers(response);
       setLoading(false);
-      console.log(response.data);
+      console.log('로딩끝', response);
     }
   }, [isSuccess, response]);
 
@@ -44,14 +58,11 @@ export default function SocialPage() {
       <SocialPageNavBar
         searchTarget={searchTarget}
         setSearchTarget={setSearchTarget}
-        searchTargetStatus={searchTargetStatus}
         setSearchTargetStatus={setSearchTargetStatus}
-        searchTargetInput={searchTargetInput}
         setSearchTargetInput={setSearchTargetInput}
       />
       <UserCardSection
         users={users}
-        searchTarget={searchTarget}
         searchTargetStatus={searchTargetStatus}
         searchTargetInput={searchTargetInput}
       />
