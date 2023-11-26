@@ -21,7 +21,12 @@ const ChannelInput = ({
       onSubmit={(event) => {
         event.preventDefault();
         if (inputLength === 0) return;
-        socket.emit('newMessage', input, channelId, () => {
+        socket.emit('newMessage', {input, channelId}, (msg: string) => {
+          if (msg === 'success') {
+            console.log('success');
+          } else {
+            console.log('failed');
+          }
           setMessages([
             ...messages,
             {
