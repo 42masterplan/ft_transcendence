@@ -1,4 +1,3 @@
-import {Button} from '@/components/shadcn/ui/button';
 import {Input} from '@/components/shadcn/ui/input';
 import {Switch} from '@/components/shadcn/ui/switch';
 import {
@@ -9,10 +8,12 @@ import {
   SelectValue
 } from '@/components/shadcn/ui/select';
 import * as React from 'react';
+
 import type {
   socialPageUserStatus as status,
   socialPageTargetUser as target
 } from '@/types/social';
+
 interface SocialPageNavBarProps {
   searchTarget: target;
   searchTargetStatus: status;

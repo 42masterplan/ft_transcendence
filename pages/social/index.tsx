@@ -1,5 +1,3 @@
-import * as API from '@/DummyBackend/socialAPI';
-
 import {userType} from '@/types/user';
 import {
   socialPageTargetUser as target,
@@ -10,7 +8,7 @@ import UserCardSection from '@/components/social/UserCardSection';
 import SpinningLoader from '@/components/loader/SpinningLoader';
 import useAxios from '@/hooks/useAxios';
 import {useEffect, useState} from 'react';
-import Axios from '@/api';
+
 export default function SocialPage() {
   // search options
   const [searchTarget, setSearchTarget] = useState<target>('friend');
@@ -20,11 +18,7 @@ export default function SocialPage() {
   // user data
   const [allUsers, setAllUsers] = useState<userType[]>([]);
   const [friends, setFriends] = useState<userType[]>([]);
-  // const [loading, setLoading] = useState(true);
-  // async function getUserData() {
-  //   const users = await API.social__getUsersAsync();
-  //   setUsers(users);
-  // }
+  // fetch data
   useEffect(() => {
     if (searchTarget === 'friend') {
       fetchData({
@@ -53,7 +47,6 @@ export default function SocialPage() {
     }
   }, [isSuccess, response]);
 
-  // TEST: TODO: erase this ----------------------------------------------------
   if (loading == true) return <SpinningLoader />;
   return (
     <div className='flex flex-col w-full h-full px-3 gap-2'>
