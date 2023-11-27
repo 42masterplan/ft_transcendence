@@ -14,12 +14,14 @@ export default function SocialPage() {
   const [searchTarget, setSearchTarget] = useState<target>('friend');
   const [searchTargetStatus, setSearchTargetStatus] = useState<status>('All');
   const [searchTargetInput, setSearchTargetInput] = useState('');
-  const {fetchData, response, isSuccess, loading} = useAxios();
+  const {fetchData, response, isSuccess} = useAxios();
   // user data
   const [allUsers, setAllUsers] = useState<userType[]>([]);
   const [friends, setFriends] = useState<userType[]>([]);
   // fetch data
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
+    setLoading(true);
     if (searchTarget === 'friend') {
       fetchData({
         method: 'get',
@@ -44,6 +46,7 @@ export default function SocialPage() {
       if (searchTarget === 'all users') setAllUsers(response);
       if (searchTarget === 'friend') setFriends(response);
       console.log('로딩끝', response);
+      setLoading(false);
     }
   }, [isSuccess, response]);
 
