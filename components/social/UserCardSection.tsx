@@ -66,9 +66,10 @@ export default function UserCardSection({
       method: 'get',
       url: '/users/block',
       errorTitle: 'banuser 조회 실패',
-      errorDescription: 'banuser 정보 조회에 실패했습니다.'
+      errorDescription: 'banuser 정보 조회에 실패했습니다.',
+      disableSuccessToast: true
     });
-  }, [searchTarget]);
+  }, [searchTarget, searchTargetStatus, searchTargetInput, allUsers, friends]);
   useEffect(() => {
     if (isSuccess === true) {
       setBlockUsers(response);
