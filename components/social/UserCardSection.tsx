@@ -65,8 +65,8 @@ export default function UserCardSection({
     fetchData({
       method: 'get',
       url: '/users/block',
-      errorTitle: 'banuser 조회 실패',
-      errorDescription: 'banuser 정보 조회에 실패했습니다.',
+      errorTitle: 'block 조회 실패',
+      errorDescription: 'block 정보 조회에 실패했습니다.',
       disableSuccessToast: true
     });
   }, [searchTarget, searchTargetStatus, searchTargetInput, allUsers, friends]);
