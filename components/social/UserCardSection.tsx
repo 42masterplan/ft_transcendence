@@ -7,7 +7,17 @@ import type {
   socialPageUserStatus as status
 } from '@/types/social';
 import {useEffect, useState} from 'react';
+import useAxios from '@/hooks/useAxios';
 // function to filter users. Returns filtered users.
+interface UserCardSectionProps {
+  allUsers: userType[];
+  friends: userType[];
+  searchTarget: target;
+  searchTargetStatus: status;
+  searchTargetInput: string;
+  className?: string;
+}
+
 function filterUsers(
   users: userType[],
   searchTargetStatus: status,
@@ -29,13 +39,8 @@ function filterUsers(
   return users;
 }
 
-interface UserCardSectionProps {
-  allUsers: userType[];
-  friends: userType[];
-  searchTarget: target;
-  searchTargetStatus: status;
-  searchTargetInput: string;
-  className?: string;
+function isUserIdInArray(userId: string, array: userType[]) {
+  return array.some((user) => user.id === userId);
 }
 
 export default function UserCardSection({
@@ -47,16 +52,29 @@ export default function UserCardSection({
   className = ''
 }: UserCardSectionProps) {
   // filter users
-
+  const {fetchData, response, isSuccess, loading} = useAxios();
+  const [blockUsers, setBlockUsers] = useState<userType[]>([]);
   const [users, setUsers] = useState<userType[]>([]);
+
   useEffect(() => {
     if (searchTarget === 'all users') {
       setUsers(filterUsers(allUsers, searchTargetStatus, searchTargetInput));
     } else {
       setUsers(filterUsers(friends, searchTargetStatus, searchTargetInput));
     }
+    fetchData({
+      method: 'get',
+      url: '/users/block',
+      errorTitle: 'banuser 조회 실패',
+      errorDescription: 'banuser 정보 조회에 실패했습니다.'
+    });
   }, [searchTarget]);
-
+  useEffect(() => {
+    if (isSuccess === true) {
+      setBlockUsers(response);
+    }
+  }, [loading, isSuccess, response]);
+  if (loading == true) return null;
   return (
     <ScrollableContainer className={` ${className}`}>
       <Accordion
@@ -72,8 +90,8 @@ export default function UserCardSection({
               name={user.name}
               currentStatus={user.currentState}
               introduction={user.introduction}
-              isFriend={false}
-              isBlocked={false}
+              isFriend={isUserIdInArray(user.id, friends)}
+              isBlocked={isUserIdInArray(user.id, blockUsers)}
             />
           ))}
       </Accordion>

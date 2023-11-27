@@ -16,11 +16,11 @@ export default function SocialPage() {
   const [searchTarget, setSearchTarget] = useState<target>('friend');
   const [searchTargetStatus, setSearchTargetStatus] = useState<status>('All');
   const [searchTargetInput, setSearchTargetInput] = useState('');
-  const {fetchData, response, isSuccess} = useAxios();
+  const {fetchData, response, isSuccess, loading} = useAxios();
   // user data
   const [allUsers, setAllUsers] = useState<userType[]>([]);
   const [friends, setFriends] = useState<userType[]>([]);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   // async function getUserData() {
   //   const users = await API.social__getUsersAsync();
   //   setUsers(users);
@@ -49,7 +49,6 @@ export default function SocialPage() {
     if (isSuccess === true) {
       if (searchTarget === 'all users') setAllUsers(response);
       if (searchTarget === 'friend') setFriends(response);
-      setLoading(false);
       console.log('로딩끝', response);
     }
   }, [isSuccess, response]);
@@ -60,6 +59,7 @@ export default function SocialPage() {
     <div className='flex flex-col w-full h-full px-3 gap-2'>
       <SocialPageNavBar
         searchTarget={searchTarget}
+        searchTargetStatus={searchTargetStatus}
         setSearchTarget={setSearchTarget}
         setSearchTargetStatus={setSearchTargetStatus}
         setSearchTargetInput={setSearchTargetInput}
@@ -67,7 +67,7 @@ export default function SocialPage() {
       <UserCardSection
         allUsers={allUsers}
         friends={friends}
-				searchTarget={searchTarget}
+        searchTarget={searchTarget}
         searchTargetStatus={searchTargetStatus}
         searchTargetInput={searchTargetInput}
       />

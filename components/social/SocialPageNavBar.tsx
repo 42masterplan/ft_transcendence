@@ -9,13 +9,13 @@ import {
   SelectValue
 } from '@/components/shadcn/ui/select';
 import * as React from 'react';
-import {
-  socialPageTargetUser as target,
-  socialPageUserStatus as status
-} from '@/lib/types';
-
+import type {
+  socialPageUserStatus as status,
+  socialPageTargetUser as target
+} from '@/types/social';
 interface SocialPageNavBarProps {
   searchTarget: target;
+  searchTargetStatus: status;
   setSearchTarget: React.Dispatch<React.SetStateAction<target>>;
   setSearchTargetStatus: React.Dispatch<React.SetStateAction<status>>;
   setSearchTargetInput: React.Dispatch<React.SetStateAction<string>>;
@@ -24,6 +24,7 @@ interface SocialPageNavBarProps {
 
 export function SocialPageNavBar({
   searchTarget,
+  searchTargetStatus,
   setSearchTarget,
   setSearchTargetStatus,
   setSearchTargetInput,
@@ -41,6 +42,8 @@ export function SocialPageNavBar({
           <Switch
             className=''
             id='search-target'
+            value={searchTarget}
+            checked={searchTarget === 'friend'}
             onCheckedChange={() => {
               setSearchTarget((prev) =>
                 prev === 'friend' ? 'all users' : 'friend'
@@ -54,6 +57,7 @@ export function SocialPageNavBar({
           onValueChange={(value) => {
             setSearchTargetStatus(value as status);
           }}
+          value={searchTargetStatus}
         >
           <SelectTrigger className='w-32'>
             <SelectValue placeholder='Select' />
