@@ -1,14 +1,16 @@
 import * as API from '@/DummyBackend/socialAPI';
 
+import {userType} from '@/types/user';
 import {
   socialPageTargetUser as target,
   socialPageUserStatus as status
-} from '@/lib/types';
+} from '@/types/social';
 import {SocialPageNavBar} from '@/components/social/SocialPageNavBar';
 import UserCardSection from '@/components/social/UserCardSection';
 import SpinningLoader from '@/components/loader/SpinningLoader';
 import useAxios from '@/hooks/useAxios';
 import {useEffect, useState} from 'react';
+import Axios from '@/api';
 export default function SocialPage() {
   // search options
   const [searchTarget, setSearchTarget] = useState<target>('friend');
@@ -16,12 +18,13 @@ export default function SocialPage() {
   const [searchTargetInput, setSearchTargetInput] = useState('');
   const {fetchData, response, isSuccess} = useAxios();
   // user data
-  const [users, setUsers] = useState<API.user[]>([]);
+  const [allUsers, setAllUsers] = useState<userType[]>([]);
+  const [friends, setFriends] = useState<userType[]>([]);
   const [loading, setLoading] = useState(true);
-  async function getUserData() {
-    const users = await API.social__getUsersAsync();
-    setUsers(users);
-  }
+  // async function getUserData() {
+  //   const users = await API.social__getUsersAsync();
+  //   setUsers(users);
+  // }
   useEffect(() => {
     if (searchTarget === 'friend') {
       fetchData({
@@ -40,12 +43,12 @@ export default function SocialPage() {
         errorTitle: '유저 정보 조회 실패',
         errorDescription: '유저 정보 조회에 실패했습니다.'
       });
-      // getUserData();
     }
   }, [searchTarget, searchTargetStatus]);
   useEffect(() => {
     if (isSuccess === true) {
-      setUsers(response);
+      if (searchTarget === 'all users') setAllUsers(response);
+      if (searchTarget === 'friend') setFriends(response);
       setLoading(false);
       console.log('로딩끝', response);
     }
@@ -62,7 +65,9 @@ export default function SocialPage() {
         setSearchTargetInput={setSearchTargetInput}
       />
       <UserCardSection
-        users={users}
+        allUsers={allUsers}
+        friends={friends}
+				searchTarget={searchTarget}
         searchTargetStatus={searchTargetStatus}
         searchTargetInput={searchTargetInput}
       />

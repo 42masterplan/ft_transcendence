@@ -1,24 +1,24 @@
-import * as API from '@/DummyBackend/socialAPI';
-import {
-  socialPageTargetUser as target,
-  socialPageUserStatus as status
-} from '@/lib/types';
 import ScrollableContainer from '../container/ScrollableContainer';
 import SocialCard from '../card/cardUsedInSocialPage/SocialCard';
 import {Accordion} from '../shadcn/ui/accordion';
-
+import type {userType} from '@/types/user';
+import type {
+  socialPageTargetUser as target,
+  socialPageUserStatus as status
+} from '@/types/social';
+import {useEffect, useState} from 'react';
 // function to filter users. Returns filtered users.
 function filterUsers(
-  users: API.user[],
+  users: userType[],
   searchTargetStatus: status,
   searchTargetInput: string
-): API.user[] {
+) {
   if (searchTargetStatus === 'Online') {
-    users = users.filter((user) => user.currentStatus === 'Online');
+    users = users.filter((user) => user.currentState === 'Online');
   } else if (searchTargetStatus === 'Offline') {
-    users = users.filter((user) => user.currentStatus === 'Offline');
+    users = users.filter((user) => user.currentState === 'Offline');
   } else if (searchTargetStatus === 'InGame') {
-    users = users.filter((user) => user.currentStatus === 'InGame');
+    users = users.filter((user) => user.currentState === 'InGame');
   }
   // filter input
   if (searchTargetInput !== '') {
@@ -30,21 +30,33 @@ function filterUsers(
 }
 
 interface UserCardSectionProps {
-  users: API.user[];
+  allUsers: userType[];
+  friends: userType[];
+  searchTarget: target;
   searchTargetStatus: status;
   searchTargetInput: string;
   className?: string;
 }
 
 export default function UserCardSection({
-  users,
+  allUsers,
+  friends,
+  searchTarget,
   searchTargetStatus,
   searchTargetInput,
   className = ''
 }: UserCardSectionProps) {
   // filter users
 
-  users = filterUsers(users, searchTargetStatus, searchTargetInput);
+  const [users, setUsers] = useState<userType[]>([]);
+  useEffect(() => {
+    if (searchTarget === 'all users') {
+      setUsers(filterUsers(allUsers, searchTargetStatus, searchTargetInput));
+    } else {
+      setUsers(filterUsers(friends, searchTargetStatus, searchTargetInput));
+    }
+  }, [searchTarget]);
+
   return (
     <ScrollableContainer className={` ${className}`}>
       <Accordion
@@ -58,7 +70,7 @@ export default function UserCardSection({
               id={user.id}
               profileImage={user.profileImage}
               name={user.name}
-              currentStatus={user.currentStatus}
+              currentStatus={user.currentState}
               introduction={user.introduction}
               isFriend={false}
               isBlocked={false}

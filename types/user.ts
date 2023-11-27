@@ -7,6 +7,7 @@ export interface userType {
   introduction: string;
 }
 
+
 export interface selectUserType {
   id: string;
   name: string;
