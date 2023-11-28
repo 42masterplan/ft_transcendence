@@ -14,9 +14,9 @@ export default function UnblockButton({userId}: UnblockButtonProps) {
       className='bg-custom1/40 hover:bg-custom1/60 hover:scale-[115%] duration-200'
       onClick={() => {
         fetchData({
-          method: 'post',
-          url: '/users/unblock',
-          params: {
+          method: 'delete',
+          url: '/users/block',
+          body: {
             id: userId
           },
           successTitle: 'User unblocked',
