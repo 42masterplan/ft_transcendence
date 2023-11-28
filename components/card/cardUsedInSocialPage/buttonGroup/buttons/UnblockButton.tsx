@@ -18,7 +18,11 @@ export default function UnblockButton({userId}: UnblockButtonProps) {
           url: '/users/unblock',
           params: {
             id: userId
-          }
+          },
+          successTitle: 'User unblocked',
+          successDescription: "well you can't see their posts anymore.",
+          errorTitle: 'Unblock user failed',
+          errorDescription: 'Please try again later.'
         });
       }}
     >
