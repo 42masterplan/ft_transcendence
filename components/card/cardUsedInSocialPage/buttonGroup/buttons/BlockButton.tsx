@@ -8,7 +8,7 @@ type BlockButtonProps = {
 };
 
 export default function BlockButton({userId}: BlockButtonProps) {
-  const {fetchData, isSuccess, loading, response} = useAxios();
+  const {fetchData} = useAxios();
   // function to send block request: TODO: implement this
   const sendBlockRequest = async () => {
     fetchData({
