@@ -9,6 +9,9 @@ import type {
 import {useEffect, useState} from 'react';
 import useAxios from '@/hooks/useAxios';
 // function to filter users. Returns filtered users.
+
+//TODO: 추후에 status별로 따로 요청 또는 소켓 통해서 사용자 상태 업데이트
+
 interface UserCardSectionProps {
   allUsers: userType[];
   friends: userType[];
@@ -24,11 +27,11 @@ function filterUsers(
   searchTargetInput: string
 ) {
   if (searchTargetStatus === 'on-line') {
-    users = users.filter((user) => user.currentState === 'on-line');
+    users = users.filter((user) => user.currentStatus === 'on-line');
   } else if (searchTargetStatus === 'off-line') {
-    users = users.filter((user) => user.currentState === 'off-line');
+    users = users.filter((user) => user.currentStatus === 'off-line');
   } else if (searchTargetStatus === 'in-game') {
-    users = users.filter((user) => user.currentState === 'in-game');
+    users = users.filter((user) => user.currentStatus === 'in-game');
   }
   // filter input
   if (searchTargetInput !== '') {
@@ -89,7 +92,7 @@ export default function UserCardSection({
               id={user.id}
               profileImage={user.profileImage}
               name={user.name}
-              currentStatus={user.currentState}
+              currentStatus={user.currentStatus}
               introduction={user.introduction}
               isFriend={isUserIdInArray(user.id, friends)}
               isBlocked={isUserIdInArray(user.id, blockUsers)}
