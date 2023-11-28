@@ -2,27 +2,14 @@ import {Button} from '@/components/shadcn/ui/button';
 import {UserX} from 'lucide-react';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 import {ToastAction} from '@/components/shadcn/ui/toast';
-
+import useAxios from '@/hooks/useAxios';
 type UnfollowButtonProps = {
   userId: string;
 };
 
 export default function UnfollowButton({userId}: UnfollowButtonProps) {
   // function to send unfriend request: TODO: implement this
-  const sendUnfriendRequest = async () => {
-    console.log("sendUnfriendRequest's userId: ", userId);
-    // dummy function to test
-    const response = await new Promise((resolve) =>
-      setTimeout(resolve, 1000)
-    ).then(() => false); // change to false to test unfriend request failed
-    if (response) {
-      console.log('unfriend request sent');
-      return true;
-    } else {
-      console.log('unfriend request failed');
-      return false;
-    }
-  };
+  const {fetchData} = useAxios();
   const {toast} = useToast();
   return (
     <Button
@@ -34,19 +21,19 @@ export default function UnfollowButton({userId}: UnfollowButtonProps) {
           action: (
             <ToastAction
               altText='Unfriend User'
-              onClick={async () => {
-                const sendUnfriendRequestResult = await sendUnfriendRequest();
-                if (sendUnfriendRequestResult) {
-                  toast({
-                    title: 'User unfriended'
-                  });
-                } else {
-                  toast({
-                    title: 'Block user failed',
-                    description: 'Please try again later.',
-                    variant: 'destructive'
-                  });
-                }
+              onClick={() => {
+                fetchData({
+                  method: 'delete',
+                  url: '/users/friends',
+                  params: {
+                    id: userId
+                  },
+                  errorTitle: 'Unfriend user failed',
+                  errorDescription: 'Please try again later.',
+                  successTitle: 'User unfriended',
+                  successDescription:
+                    'You can still send friend request to this user.'
+                });
               }}
             >
               Unfriend User
