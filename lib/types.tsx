@@ -1,4 +1,4 @@
-export type userStatus = 'Online' | 'Offline' | 'InGame' | 'AFK';
+export type userStatus = 'on-line' | 'off-line' | 'in-Game' | 'AFK';
 
 export type UserInfo = {
   id: string; // UUID

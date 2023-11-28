@@ -23,12 +23,12 @@ function filterUsers(
   searchTargetStatus: status,
   searchTargetInput: string
 ) {
-  if (searchTargetStatus === 'Online') {
-    users = users.filter((user) => user.currentState === 'Online');
-  } else if (searchTargetStatus === 'Offline') {
-    users = users.filter((user) => user.currentState === 'Offline');
-  } else if (searchTargetStatus === 'InGame') {
-    users = users.filter((user) => user.currentState === 'InGame');
+  if (searchTargetStatus === 'on-line') {
+    users = users.filter((user) => user.currentState === 'on-line');
+  } else if (searchTargetStatus === 'off-line') {
+    users = users.filter((user) => user.currentState === 'off-line');
+  } else if (searchTargetStatus === 'in-game') {
+    users = users.filter((user) => user.currentState === 'in-game');
   }
   // filter input
   if (searchTargetInput !== '') {

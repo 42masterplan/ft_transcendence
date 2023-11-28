@@ -65,9 +65,9 @@ export function SocialPageNavBar({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value='All'>All</SelectItem>
-            <SelectItem value='Online'>Online</SelectItem>
-            <SelectItem value='Offline'>Offline</SelectItem>
-            <SelectItem value='InGame'>InGame</SelectItem>
+            <SelectItem value='on-line'>Online</SelectItem>
+            <SelectItem value='off-line'>Offline</SelectItem>
+            <SelectItem value='in-game'>InGame</SelectItem>
           </SelectContent>
         </Select>
       </div>

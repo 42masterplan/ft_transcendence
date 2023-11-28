@@ -67,21 +67,21 @@ export const gameRequests: Array<GameInfoType> = [
     id: 'Seoyoo',
     name: 'Seoyoo',
     profileImage: 'shark_health',
-    current_status: 'ONLINE',
+    current_status: 'on-line',
     game_mode: 'health'
   },
   {
     id: 'hkong',
     name: 'hkong',
     profileImage: 'koala_health',
-    current_status: 'OFFLINE',
+    current_status: 'off-line',
     game_mode: 'swim'
   },
   {
     id: 'hkong',
     name: 'hkong',
     profileImage: 'koala_health',
-    current_status: 'OFFLINE',
+    current_status: 'off-line',
     game_mode: 'swim'
   }
 ];
@@ -92,35 +92,35 @@ export const friendRequests: Array<UserInfoType> = [
     id: 'jjin',
     name: 'jjin',
     profileImage: 'polarbear_ski',
-    current_status: 'INGAME',
+    current_status: 'in-game',
     introduction: 'I love badminton'
   },
   {
     id: 'daejlee',
     name: 'daejlee',
     profileImage: 'rhino_health',
-    current_status: 'OFFLINE',
+    current_status: 'off-line',
     introduction: '난 대지리다!'
   },
   {
     id: 'joushin',
     name: 'joushin',
     profileImage: 'gorilla_baseBall',
-    current_status: 'OFFLINE',
+    current_status: 'off-line',
     introduction: '난 조신이다!'
   },
   {
     id: 'hkong',
     name: 'hkong',
     profileImage: 'koala_health',
-    current_status: 'OFFLINE',
+    current_status: 'off-line',
     introduction: 'I love Swimming~'
   },
   {
     id: 'Seoyoo',
     name: 'Seoyoo',
     profileImage: 'shark_health',
-    current_status: 'ONLINE',
+    current_status: 'on-line',
     introduction: 'I love Health'
   }
 ];
@@ -132,34 +132,34 @@ export const friendInfos: Array<UserInfoType> = [
     name: 'jjin',
     profileImage: 'polarbear_ski',
     introduction: 'I love badminton',
-    current_status: 'INGAME'
+    current_status: 'in-game'
   },
   {
     id: 'daejlee',
     name: 'daejlee',
     profileImage: 'rhino_health',
     introduction: '난 대지리다!',
-    current_status: 'OFFLINE'
+    current_status: 'off-line'
   },
   {
     id: 'joushin',
     name: 'joushin',
     profileImage: 'gorilla_baseBall',
     introduction: '난 조신이다!',
-    current_status: 'OFFLINE'
+    current_status: 'off-line'
   },
   {
     id: 'hkong',
     name: 'hkong',
     profileImage: 'koala_health',
-    current_status: 'OFFLINE',
+    current_status: 'off-line',
     introduction: 'I love Swimming~'
   },
   {
     id: 'Seoyoo',
     name: 'Seoyoo',
     profileImage: 'shark_health',
-    current_status: 'ONLINE',
+    current_status: 'on-line',
     introduction: 'I love Health'
   }
 ];
@@ -217,7 +217,7 @@ export const channelUserList = [
     id: 'RandomUUid',
     name: 'jjin',
     profileImage: 'polarbear_ski',
-    current_status: 'INGAME',
+    current_status: 'in-game',
     introduction: 'Do you want build snow man?',
     role: 'admin'
   },
@@ -225,7 +225,7 @@ export const channelUserList = [
     id: 'RandomUUid',
     name: 'daejlee',
     profileImage: 'rhino_health',
-    current_status: 'OFFLINE',
+    current_status: 'off-line',
     introduction: '라이노는 코뿔소 들이 박아버려 다 겁을 줘~~',
     role: 'admin'
   },
@@ -233,7 +233,7 @@ export const channelUserList = [
     id: 'MY_ID',
     name: 'joushin',
     profileImage: 'gorilla_baseBall',
-    current_status: 'OFFLINE',
+    current_status: 'off-line',
     introduction: '고릴라를 무시하지 마라',
     role: 'manager'
   },
@@ -241,7 +241,7 @@ export const channelUserList = [
     id: 'RandomUUid',
     name: 'joshin',
     profileImage: 'gorilla_baseBall',
-    current_status: 'OFFLINE',
+    current_status: 'off-line',
     introduction: '고릴라를 무시하지 마라',
     role: 'admin'
   },
@@ -249,7 +249,7 @@ export const channelUserList = [
     id: 'uuid',
     name: 'hkong',
     profileImage: 'koala_health',
-    current_status: 'OFFLINE',
+    current_status: 'off-line',
     introduction: '수영 꿀잼~~',
     role: 'user'
   },
@@ -257,7 +257,7 @@ export const channelUserList = [
     id: 'uuid',
     name: 'Seoyoo',
     profileImage: 'shark_health',
-    current_status: 'ONLINE',
+    current_status: 'on-line',
     introduction: 'I love Health',
     role: 'user'
   }
