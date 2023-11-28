@@ -22,19 +22,6 @@ export default function BlockButton({userId}: BlockButtonProps) {
       successTitle: 'User blocked',
       successDescription: 'User blocked successfully.'
     });
-    // console.log("sendBlockRequest's userId: ", userId);
-    // // dummy function to test
-    // const response = await new Promise((resolve) =>
-    //   setTimeout(resolve, 1000)
-    // ).then(() => false); // change to false to test block request failed
-    // if (response) {
-    //   console.log('block request sent');
-    //   return true;
-    // } else {
-    //   console.log('block request failed');
-    //   // TODO: Add actions to manage error.
-    //   return false;
-    // }
   };
 
   const {toast} = useToast();
@@ -48,24 +35,7 @@ export default function BlockButton({userId}: BlockButtonProps) {
           title: 'Are you sure you want to block this user?',
           description: 'Unfriend action will be followed.',
           action: (
-            <ToastAction
-              altText='Block User'
-              onClick={async () => {
-                const sendBlockRequestResult = await sendBlockRequest();
-                if (sendBlockRequestResult) {
-                  toast({
-                    title: 'User blocked',
-                    description: 'You can unblock this user.'
-                  });
-                } else {
-                  toast({
-                    title: 'Block user failed',
-                    description: 'Please try again later.',
-                    variant: 'destructive'
-                  });
-                }
-              }}
-            >
+            <ToastAction altText='Block User' onClick={sendBlockRequest}>
               Block User
             </ToastAction>
           )
