@@ -29,13 +29,13 @@ export default function AvatarWithStatus({
 
   let statusColor: string;
   switch (status) {
-    case 'Online':
+    case 'on-line':
       statusColor = 'bg-green-500';
       break;
-    case 'Offline':
+    case 'off-line':
       statusColor = 'bg-gray-500';
       break;
-    case 'InGame':
+    case 'in-Game':
       statusColor = 'bg-blue-500';
       break;
     case 'AFK':

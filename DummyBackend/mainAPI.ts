@@ -4,7 +4,7 @@ const dummyUserData = {
   id: '1',
   name: 'Seoyoo',
   profileImage: 'https://www.w3schools.com/howto/img_avatar.png',
-  currentStatus: 'Online',
+  currentStatus: 'on-line',
   introduction:
     'Hello, I am User1 and this is a very very very very long long long long long long introduction. ',
   rank: {
