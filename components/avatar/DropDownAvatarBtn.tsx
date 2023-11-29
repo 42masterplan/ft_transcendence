@@ -6,7 +6,7 @@ import {MdOutlineManageAccounts} from 'react-icons/md';
 import {IoVolumeMuteOutline} from 'react-icons/io5';
 import {PiPaperPlaneTiltBold, PiSmileyAngry} from 'react-icons/pi';
 // 여기까진 아이콘 임포트
-import {Dispatch, SetStateAction} from 'react';
+import {useRouter} from 'next/router';
 import AvatarWithStatus from '../card/userInfoCard/AvatarWithStatus';
 import {Button} from '@/components/shadcn/ui/button';
 import {
@@ -24,12 +24,17 @@ import {
 } from '@/components/shadcn/ui/dropdown-menu';
 import useChatSocket from '@/hooks/useChatSocket';
 
+const moveToProfile = (userId: string) => {
+  const router = useRouter();
+  router.push('/profile:username');
+};
+
 const UserDropdownGroup = () => {
   return (
     <DropdownMenuGroup className=''>
       <DropdownMenuItem>
         <User className='mr-2 h-4 w-4' />
-        <span>프로필 보기</span>
+        <span onClick={() => moveToProfile('joushin')}>프로필 보기</span>
       </DropdownMenuItem>
       <DropdownMenuItem>
         <Gamepad2 className='mr-2 h-4 w-4' />

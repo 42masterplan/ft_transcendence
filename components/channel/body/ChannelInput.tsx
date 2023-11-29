@@ -4,6 +4,7 @@ import {Send} from 'lucide-react';
 import {Dispatch, SetStateAction, useState} from 'react';
 import {ChannelHistoryType} from '@/types/channel';
 import useChatSocket from '@/hooks/useChatSocket';
+import {useToast} from '@/components/shadcn/ui/use-toast';
 const ChannelInput = ({
   messages,
   setMessages,
@@ -21,23 +22,9 @@ const ChannelInput = ({
       onSubmit={(event) => {
         event.preventDefault();
         if (inputLength === 0) return;
+        console.log('내!!channelId', channelId);
         socket.emit('newMessage', {content, channelId}, (msg: string) => {
-          if (msg === 'success') {
-            console.log('success');
-          } else {
-            console.log('failed');
-          }
-          setMessages([
-            ...messages,
-            {
-              id: 'joushin',
-              name: 'joushin',
-              profileImage:
-                process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI4 || '',
-              content: content
-            }
-          ]);
-          setContent('');
+          if (msg === 'success') setContent('');
         });
       }}
       className='flex w-full items-center space-x-2'

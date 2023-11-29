@@ -3,7 +3,13 @@ import useChatSocket from '@/hooks/useChatSocket';
 import {EngagedChannelType} from '@/types/channel';
 import {cn} from '@/lib/utils';
 import {ChannelHistoryType} from '@/types/channel';
-import {useEffect, useState, Dispatch, SetStateAction} from 'react';
+import {
+  useEffect,
+  useState,
+  Dispatch,
+  SetStateAction,
+  useCallback
+} from 'react';
 
 export default function ChannelList({
   currentChannel,
@@ -20,21 +26,18 @@ export default function ChannelList({
     [] as EngagedChannelType[]
   );
   const [socket] = useChatSocket('channel');
+  const myChannelsListener = useCallback((data: EngagedChannelType[]) => {
+    console.log('myChannelsListener', data);
+    setEngagedChannels(data);
+  }, []);
+
   useEffect(() => {
-    socket.on('myChannels', (data) => {
-      setEngagedChannels(data);
-      console.log('내 채널 리스트를 받아옵니다.');
-      console.log(data);
-    });
+    socket.on('myChannels', myChannelsListener);
   }, []);
   const handleChannelClick = (channel: any) => {
     //채널방 클릭시 채널방 정보를 받아옵니다.
     console.log(`채널방 클릭시 '${channel.id}'채널방 정보를 받아옵니다.`);
     socket.emit('channelHistory', {roomid: channel.id});
-    socket.once('channelHistory', (data) => {
-      console.log(data);
-      setMessages(data);
-    });
     setCurChannel(channel.name);
     setChannelId(channel.id);
   };

@@ -3,98 +3,58 @@ import {cn} from '@/lib/utils';
 import {useRef, useEffect, Dispatch, SetStateAction} from 'react';
 
 import {ChannelHistoryType} from '@/types/channel';
-import useChatSocket from '@/hooks/useChatSocket';
 import ChatMessage from '@/components/channel/body/ChatCard';
 import ScrollableContainer from '../../container/ScrollableContainer';
-import ManageChannel from '../header/ManageChannel';
+
 export function ChannelBody({
   messages,
   setMessages,
-  channelId,
+  nowChannelId,
   role,
   channel_name
 }: {
   messages: ChannelHistoryType[];
   setMessages: Dispatch<SetStateAction<ChannelHistoryType[]>>;
-  channelId: string;
+  nowChannelId: string;
   role: string;
   channel_name: string;
 }) {
   const messageEndRef = useRef<HTMLDivElement>();
-  const [socket] = useChatSocket('channel');
 
-  const ShowHistory = () => {
-    return (
-      <>
-        {messages.map((message, idx) => (
-          <div
-            key={idx}
-            // 이 부분도 추후 리코일로 관리 하는 유저 정보로 확인 예정
-            className={cn(
-              'flex w-max max-w-[90%] rounded-lg px-3 text-sm',
-              message.name === 'joushin' ? 'ml-auto' : 'p-2'
-            )}
-          >
-            {message.name === 'joushin' ? (
-              <ChatMessage
-                isMe={true}
-                size='md'
-                message={message.content}
-                side='right'
-                className='m-2 hover:scale-[1.02] duration-200 hover:-translate-y-1 bg-custom4'
-                ref={messageEndRef as any}
-                profileImage={message.profileImage}
-                user_name={message.name}
-                channelId={channelId}
-                role={role}
-              />
-            ) : (
-              <ChatMessage
-                isMe={false}
-                size='md'
-                message={message.content}
-                side='left'
-                className='m-2 hover:scale-[1.02] duration-200 hover:-translate-y-1 bg-custom4'
-                ref={messageEndRef as any}
-                profileImage={message.profileImage}
-                user_name={message.name}
-                channelId={channelId}
-                role={role}
-              />
-            )}
-          </div>
-        ))}
-      </>
-    );
-  };
-
-  useEffect(() => {
-    socket.on(
-      'newMessage',
-      ({channelId, userId, userName, profileImage, content}) => {
-        console.log(channelId, userId, userName, profileImage, content);
-        if (channelId !== channelId) return;
-        if (userName === 'joushin') return;
-        console.log('새로운 메시지', userId, userName, profileImage, content);
-        setMessages([
-          ...messages,
-          {
-            id: userId,
-            name: userName,
-            profileImage: profileImage,
-            content: content
-          }
-        ]);
-      }
-    );
-  }, []);
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({behavior: 'smooth'});
   }, [messages]);
   return (
     <div className='h-full'>
       <ScrollableContainer className='rounded-none'>
-        <div>{messages ? ShowHistory() : null}</div>
+        <div>
+          {messages ? (
+            <>
+              {messages.map((message, idx) => (
+                <div
+                  key={idx}
+                  className={cn(
+                    'flex w-max max-w-[90%] rounded-lg px-3 text-sm',
+                    message.name === 'joushin' ? 'ml-auto' : 'p-2'
+                  )}
+                >
+                  <ChatMessage
+                    isMe={message.name === 'joushin'}
+                    size='md'
+                    message={message.content}
+                    side={message.name === 'joushin' ? 'right' : 'left'}
+                    className='m-2 hover:scale-[1.02] duration-200 hover:-translate-y-1 bg-custom4'
+                    ref={messageEndRef as any}
+                    profileImage={message.profileImage}
+                    user_name={message.name}
+                    channelId={nowChannelId}
+                    role={role}
+                  />
+                </div>
+              ))}
+            </>
+          ) : null}
+        </div>
       </ScrollableContainer>
     </div>
   );
