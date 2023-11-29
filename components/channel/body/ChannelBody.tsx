@@ -32,10 +32,10 @@ export function ChannelBody({
             // 이 부분도 추후 리코일로 관리 하는 유저 정보로 확인 예정
             className={cn(
               'flex w-max max-w-[90%] rounded-lg px-3 text-sm',
-              message.id === 'joushin' ? 'ml-auto' : 'p-2'
+              message.name === 'joushin' ? 'ml-auto' : 'p-2'
             )}
           >
-            {message.id === 'joushin' ? (
+            {message.name === 'joushin' ? (
               <ChatMessage
                 isMe={true}
                 size='md'
