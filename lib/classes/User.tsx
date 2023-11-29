@@ -12,7 +12,7 @@ export class User {
     this.id = '';
     this.name = '';
     this.profileImage = '';
-    this.currentStatus = 'Offline';
+    this.currentStatus = 'off-line';
     this.introduction = '';
     this.friendList = [];
     this.blockList = [];

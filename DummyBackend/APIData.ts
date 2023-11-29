@@ -52,21 +52,21 @@ export const gameRequests: Array<GameInfoType> = [
     id: 'Seoyoo',
     name: 'Seoyoo',
     profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI6 || '',
-    current_status: 'ONLINE',
+    current_status: 'on-line',
     game_mode: 'health'
   },
   {
     id: 'hkong',
     name: 'hkong',
     profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI11 || '',
-    current_status: 'OFFLINE',
+    current_status: 'off-line',
     game_mode: 'swim'
   },
   {
     id: 'hkong',
     name: 'hkong',
     profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI11 || '',
-    current_status: 'OFFLINE',
+    current_status: 'off-line',
     game_mode: 'swim'
   }
 ];
@@ -78,34 +78,34 @@ export const friendInfos: Array<FriendInfoType> = [
     name: 'yejinam',
     profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI3 || '',
     introduction: 'I love badminton',
-    current_status: 'INGAME'
+    current_status: 'in-game'
   },
   {
     id: 'daejlee',
     name: 'daejlee',
     profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI4 || '',
     introduction: '난 대지리다!',
-    current_status: 'OFFLINE'
+    current_status: 'off-line'
   },
   {
     id: 'joushin',
     name: 'joushin',
     profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI5 || '',
     introduction: '난 조신이다!',
-    current_status: 'OFFLINE'
+    current_status: 'off-line'
   },
   {
     id: 'hkong',
     name: 'hkong',
     profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI11 || '',
-    current_status: 'OFFLINE',
+    current_status: 'off-line',
     introduction: 'I love Swimming~'
   },
   {
     id: 'Seoyoo',
     name: 'Seoyoo',
     profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI6 || '',
-    current_status: 'ONLINE',
+    current_status: 'on-line',
     introduction: 'I love Health'
   }
 ];
