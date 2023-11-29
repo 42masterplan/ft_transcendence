@@ -17,7 +17,7 @@ export default function FollowButton({userId}: FollowButtonProps) {
         fetchData({
           url: '/users/friends',
           method: 'post',
-          params: {
+          body: {
             id: userId
           },
           successTitle: 'Friend request sent',

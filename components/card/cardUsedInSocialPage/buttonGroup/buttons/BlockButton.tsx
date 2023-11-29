@@ -14,7 +14,7 @@ export default function BlockButton({userId}: BlockButtonProps) {
     fetchData({
       method: 'post',
       url: '/users/block',
-      params: {
+      body: {
         id: userId
       },
       errorTitle: 'Block request failed',
