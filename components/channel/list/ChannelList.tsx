@@ -31,7 +31,6 @@ export default function ChannelList({
     //채널방 클릭시 채널방 정보를 받아옵니다.
     console.log(`채널방 클릭시 '${channel.id}'채널방 정보를 받아옵니다.`);
     socket.emit('channelHistory', {roomid: channel.id});
-    socket.emit('myRole', channel.id);
     socket.once('channelHistory', (data) => {
       console.log(data);
       setMessages(data);

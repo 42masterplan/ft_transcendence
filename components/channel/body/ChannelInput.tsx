@@ -14,14 +14,14 @@ const ChannelInput = ({
   channelId: string;
 }) => {
   const [socket] = useChatSocket('channel');
-  const [input, setInput] = useState('');
-  const inputLength = input.trim().length;
+  const [content, setContent] = useState('');
+  const inputLength = content.trim().length;
   return (
     <form
       onSubmit={(event) => {
         event.preventDefault();
         if (inputLength === 0) return;
-        socket.emit('newMessage', {input, channelId}, (msg: string) => {
+        socket.emit('newMessage', {content, channelId}, (msg: string) => {
           if (msg === 'success') {
             console.log('success');
           } else {
@@ -34,10 +34,10 @@ const ChannelInput = ({
               name: 'joushin',
               profileImage:
                 process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI4 || '',
-              content: input
+              content: content
             }
           ]);
-          setInput('');
+          setContent('');
         });
       }}
       className='flex w-full items-center space-x-2'
@@ -47,10 +47,10 @@ const ChannelInput = ({
         placeholder='Type your message...'
         className='flex-1'
         autoComplete='off'
-        value={input}
+        value={content}
         onChange={(event) => {
-          if (input.length > 500) return;
-          setInput(event.target.value);
+          if (content.length > 500) return;
+          setContent(event.target.value);
         }}
       />
       <Button type='submit' size='icon' disabled={inputLength === 0}>

@@ -69,14 +69,24 @@ export function ChannelBody({
   };
 
   useEffect(() => {
-    socket.on('newMessage', (roomid, {id, name, profileImage, content}) => {
-      if (roomid !== channelId) return;
-      console.log('새로운 메시지', id, name, profileImage, content);
-      setMessages([
-        ...messages,
-        {id: id, name: name, profileImage: profileImage, content: content}
-      ]);
-    });
+    socket.on(
+      'newMessage',
+      ({channelId, userId, userName, profileImage, content}) => {
+        console.log(channelId, userId, userName, profileImage, content);
+        if (channelId !== channelId) return;
+        if (userName === 'joushin') return;
+        console.log('새로운 메시지', userId, userName, profileImage, content);
+        setMessages([
+          ...messages,
+          {
+            id: userId,
+            name: userName,
+            profileImage: profileImage,
+            content: content
+          }
+        ]);
+      }
+    );
   }, []);
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({behavior: 'smooth'});
