@@ -33,6 +33,9 @@ export default function ChannelList({
 
   useEffect(() => {
     socket.on('myChannels', myChannelsListener);
+    return () => {
+      socket.off('myChannels', myChannelsListener);
+    };
   }, []);
   const handleChannelClick = (channel: any) => {
     //채널방 클릭시 채널방 정보를 받아옵니다.

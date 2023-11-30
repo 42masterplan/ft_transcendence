@@ -41,28 +41,37 @@ export default function ChannelPage() {
     },
     []
   );
+  const myRoleHandler = useCallback(({role}: any) => {
+    console.log('myRole', role);
+    setRole(role);
+  }, []);
+
+  const errorHandler = useCallback(({error}: any) => {
+    console.log('error', error);
+    toast(error);
+  }, []);
+  const channelHistoryHandler = useCallback(({channelHistory}: any) => {
+    console.log('channelHistory', channelHistory);
+    setMessages(channelHistory);
+  }, []);
 
   useEffect(() => {
-    socket.emit('myChannels');
     socket.on('connect', () => {
       console.log('---------connected----------');
+      socket.on('myRole', myRoleHandler);
+      socket.on('error_exist', errorHandler);
+      socket.on('channelHistory', channelHistoryHandler);
+      socket.on('newMessage', newMessageHandler);
     });
     socket.on('disconnect', () => {
       console.log('---------disconnected----------');
     });
-    socket.on('myRole', (data) => {
-      console.log('권한 설정', data);
-      if (data === null) alert('채널에 참가중..');
-      else setRole(data.role);
-    });
-    socket.on('error_exist', (error) => {
-      console.log('error', error);
-    });
-    socket.on('channelHistory', (data) => {
-      console.log(data);
-      setMessages(data);
-    });
-    socket.on('newMessage', newMessageHandler);
+    return () => {
+      socket.off('newMessage', newMessageHandler);
+      socket.off('channelHistory', channelHistoryHandler);
+      socket.off('myRole', myRoleHandler);
+      socket.off('error_exist', errorHandler);
+    };
   }, []);
 
   return (
