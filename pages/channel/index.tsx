@@ -52,7 +52,7 @@ export default function ChannelPage() {
   }, []);
   const channelHistoryHandler = useCallback(({channelHistory}: any) => {
     console.log('channelHistory', channelHistory);
-    setMessages(channelHistory);
+    if (channelHistory !== undefined) setMessages(channelHistory);
   }, []);
 
   useEffect(() => {
@@ -60,15 +60,16 @@ export default function ChannelPage() {
       console.log('---------connected----------');
       socket.on('myRole', myRoleHandler);
       socket.on('error_exist', errorHandler);
-      socket.on('channelHistory', channelHistoryHandler);
+      // socket.on('channelHistory', channelHistoryHandler);
       socket.on('newMessage', newMessageHandler);
     });
     socket.on('disconnect', () => {
       console.log('---------disconnected----------');
     });
     return () => {
+      console.log('---------off----------');
       socket.off('newMessage', newMessageHandler);
-      socket.off('channelHistory', channelHistoryHandler);
+      // socket.off('channelHistory', channelHistoryHandler);
       socket.off('myRole', myRoleHandler);
       socket.off('error_exist', errorHandler);
     };

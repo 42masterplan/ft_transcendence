@@ -30,7 +30,10 @@ export default function ChannelList({
     console.log('myChannelsListener', data);
     setEngagedChannels(data);
   }, []);
-
+  const channelHistoryHandler = useCallback((data: ChannelHistoryType[]) => {
+    console.log('channelHistoryListener', data);
+    setMessages(data);
+  }, []);
   useEffect(() => {
     socket.on('myChannels', myChannelsListener);
     return () => {
@@ -40,9 +43,9 @@ export default function ChannelList({
   const handleChannelClick = (channel: any) => {
     //채널방 클릭시 채널방 정보를 받아옵니다.
     console.log(`채널방 클릭시 '${channel.id}'채널방 정보를 받아옵니다.`);
-    socket.emit('channelHistory', {roomid: channel.id});
     setCurChannel(channel.name);
     setChannelId(channel.id);
+    socket.emit('channelHistory', {roomid: channel.id}, channelHistoryHandler);
   };
   return (
     <div className='flex flex-col min-w-[100px] h-full border overflow-y-scroll rounded-l-xl bg-custom2 w-[20vw] max-w-[300px]'>
