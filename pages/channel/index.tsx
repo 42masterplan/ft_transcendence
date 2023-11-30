@@ -21,26 +21,7 @@ export default function ChannelPage() {
   const [socket] = useChatSocket('channel');
 
   const [messages, setMessages] = useState([] as ChannelHistoryType[]);
-  const newMessageHandler = useCallback(
-    ({channelId, userId, userName, profileImage, content}: any) => {
-      console.log('newMessage');
-      console.log(channelId, userId, userName, profileImage, content);
-      console.log('myChannelId', nowChannelId);
-      if (nowChannelId === channelId) {
-        console.log('메세지가 도착했습니다.');
-        setMessages([
-          {
-            id: userId,
-            name: userName,
-            profileImage: profileImage,
-            content: content
-          },
-          ...messages
-        ]);
-      }
-    },
-    []
-  );
+
   const myRoleHandler = useCallback(({role}: any) => {
     console.log('myRole', role);
     setRole(role);
@@ -61,14 +42,12 @@ export default function ChannelPage() {
       socket.on('myRole', myRoleHandler);
       socket.on('error_exist', errorHandler);
       // socket.on('channelHistory', channelHistoryHandler);
-      socket.on('newMessage', newMessageHandler);
     });
     socket.on('disconnect', () => {
       console.log('---------disconnected----------');
     });
     return () => {
       console.log('---------off----------');
-      socket.off('newMessage', newMessageHandler);
       // socket.off('channelHistory', channelHistoryHandler);
       socket.off('myRole', myRoleHandler);
       socket.off('error_exist', errorHandler);
