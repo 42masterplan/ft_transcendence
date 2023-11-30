@@ -4,16 +4,7 @@ import {Send} from 'lucide-react';
 import {Dispatch, SetStateAction, useState} from 'react';
 import {ChannelHistoryType} from '@/types/channel';
 import useChatSocket from '@/hooks/useChatSocket';
-import {useToast} from '@/components/shadcn/ui/use-toast';
-const ChannelInput = ({
-  messages,
-  setMessages,
-  channelId
-}: {
-  messages: ChannelHistoryType[];
-  setMessages: Dispatch<SetStateAction<ChannelHistoryType[]>>;
-  channelId: string;
-}) => {
+const ChannelInput = ({channelId}: {channelId: string}) => {
   const [socket] = useChatSocket('channel');
   const [content, setContent] = useState('');
   const inputLength = content.trim().length;
