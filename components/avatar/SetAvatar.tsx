@@ -2,7 +2,6 @@ import AvatarIcon from '@/components/avatar/AvatarIcon';
 import {Label} from '@/components/shadcn/ui/label';
 import {RadioGroup, RadioGroupItem} from '@/components/shadcn/ui/radio-group';
 import {useEffect, useState, useRef} from 'react';
-import {useToast} from '@/components/shadcn/ui/use-toast';
 import useAxios from '@/hooks/useAxios';
 
 export default function SetAvatar({setProfileImage}: {setProfileImage: any}) {
