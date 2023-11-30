@@ -27,18 +27,18 @@ export function ChannelBody({
       console.log('newMessage');
       console.log(channelId, userId, userName, profileImage, content);
       console.log('myChannelId', nowChannelId);
-      // if (nowChannelId === channelId) {
-      console.log('메세지가 도착했습니다.');
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          id: userId,
-          name: userName,
-          profileImage: profileImage,
-          content: content
-        }
-      ]);
-      // }
+      if (nowChannelId === channelId) {
+        console.log('메세지가 도착했습니다.');
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            id: userId,
+            name: userName,
+            profileImage: profileImage,
+            content: content
+          }
+        ]);
+      }
     },
     []
   );
