@@ -12,11 +12,13 @@ import {
 } from 'react';
 
 export default function ChannelList({
-  channelState,
-  dispatch
+  channelInfoState,
+  infoDispatch,
+  messageDispatch
 }: {
-  channelState: any;
-  dispatch: Dispatch<SetStateAction<any>>;
+  channelInfoState: any;
+  messageDispatch: Dispatch<SetStateAction<any>>;
+  infoDispatch: Dispatch<SetStateAction<any>>;
 }) {
   const [engagedChannels, setEngagedChannels] = useState(
     [] as EngagedChannelType[]
@@ -28,7 +30,7 @@ export default function ChannelList({
   }, []);
   const channelHistoryHandler = useCallback((data: ChannelHistoryType[]) => {
     console.log('channelHistoryListener', data);
-    dispatch({
+    messageDispatch({
       type: 'MESSAGE_SET',
       payload: data
     });
@@ -36,11 +38,11 @@ export default function ChannelList({
   const handleChannelClick = (channel: any) => {
     //채널방 클릭시 채널방 정보를 받아옵니다.
     console.log(`채널방 클릭시 '${channel.id}'채널방 정보를 받아옵니다.`);
-    dispatch({
+    infoDispatch({
       type: 'ID_SET',
       payload: channel.id
     });
-    dispatch({
+    infoDispatch({
       type: 'NAME_SET',
       payload: channel.name
     });
@@ -62,7 +64,7 @@ export default function ChannelList({
         <Button
           className={cn(
             'bg-custom2 hover:bg-custom3 border-b',
-            channel.id === channelState.channelId ? 'bg-custom3' : ''
+            channel.id === channelInfoState.channelId ? 'bg-custom3' : ''
           )}
           onClick={() => handleChannelClick(channel)}
           key={channel.id}

@@ -8,16 +8,18 @@ import ScrollableContainer from '../../container/ScrollableContainer';
 import useChatSocket from '@/hooks/useChatSocket';
 
 export function ChannelBody({
-  channelState,
-  dispatch
+  channelInfoState,
+  messageState,
+  messageDispatch
 }: {
-  channelState: any;
-  dispatch: any;
+  channelInfoState: any;
+  messageState: any;
+  messageDispatch: any;
 }) {
   const messageEndRef = useRef<HTMLDivElement>();
   const [socket] = useChatSocket('channel');
   function handleMessageAdd(payload: any) {
-    dispatch({
+    messageDispatch({
       type: 'MESSAGE_ADD',
       payload: payload
     });
@@ -26,7 +28,7 @@ export function ChannelBody({
     ({channelId, userId, userName, profileImage, content}: any) => {
       console.log('newMessage');
       console.log(channelId, userId, userName, profileImage, content);
-      console.log('myChannelId', channelState.channelID);
+      console.log('myChannelId', channelInfoState.channelID);
       // if (channelState.channelID === channelId) {
       console.log('메세지가 도착했습니다.');
       handleMessageAdd({
@@ -41,7 +43,7 @@ export function ChannelBody({
   );
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({behavior: 'smooth'});
-  }, [channelState.messages]);
+  }, [messageState]);
   useEffect(() => {
     socket.on('newMessage', newMessageHandler);
     return () => {
@@ -52,9 +54,9 @@ export function ChannelBody({
     <div className='h-full'>
       <ScrollableContainer className='rounded-none'>
         <div>
-          {typeof channelState.messages === 'object' ? (
+          {messageState ? (
             <>
-              {channelState.messages.map((msg, idx) => (
+              {messageState.map((msg: ChannelHistoryType, idx: number) => (
                 <div
                   key={idx}
                   className={cn(
@@ -71,8 +73,8 @@ export function ChannelBody({
                     ref={messageEndRef as any}
                     profileImage={msg.profileImage}
                     user_name={msg.name}
-                    channelId={channelState.channelID}
-                    role={channelState.role}
+                    channelId={channelInfoState.channelID}
+                    role={channelInfoState.role}
                   />
                 </div>
               ))}

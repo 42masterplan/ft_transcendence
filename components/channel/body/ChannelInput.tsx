@@ -1,7 +1,7 @@
 import {Input} from '@/components/shadcn/ui/input';
 import {Button} from '@/components/shadcn/ui/button';
 import {Send} from 'lucide-react';
-import {Dispatch, SetStateAction, useState} from 'react';
+import {useState} from 'react';
 
 import useChatSocket from '@/hooks/useChatSocket';
 const ChannelInput = ({channelId}: {channelId: string}) => {
