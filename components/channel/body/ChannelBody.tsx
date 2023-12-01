@@ -8,43 +8,40 @@ import ScrollableContainer from '../../container/ScrollableContainer';
 import useChatSocket from '@/hooks/useChatSocket';
 
 export function ChannelBody({
-  messages,
-  setMessages,
-  nowChannelId,
-  role,
-  channel_name
+  channelState,
+  dispatch
 }: {
-  messages: ChannelHistoryType[];
-  setMessages: Dispatch<SetStateAction<ChannelHistoryType[]>>;
-  nowChannelId: string;
-  role: string;
-  channel_name: string;
+  channelState: any;
+  dispatch: any;
 }) {
   const messageEndRef = useRef<HTMLDivElement>();
   const [socket] = useChatSocket('channel');
+  function handleMessageAdd(payload: any) {
+    dispatch({
+      type: 'MESSAGE_ADD',
+      payload: payload
+    });
+  }
   const newMessageHandler = useCallback(
     ({channelId, userId, userName, profileImage, content}: any) => {
       console.log('newMessage');
       console.log(channelId, userId, userName, profileImage, content);
-      console.log('myChannelId', nowChannelId);
-      // if (nowChannelId === channelId) {
+      console.log('myChannelId', channelState.channelID);
+      // if (channelState.channelID === channelId) {
       console.log('메세지가 도착했습니다.');
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          id: userId,
-          name: userName,
-          profileImage: profileImage,
-          content: content
-        }
-      ]);
+      handleMessageAdd({
+        id: userId,
+        name: userName,
+        profileImage: profileImage,
+        content: content
+      });
       // }
     },
     []
   );
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({behavior: 'smooth'});
-  }, [messages]);
+  }, [channelState.messages]);
   useEffect(() => {
     socket.on('newMessage', newMessageHandler);
     return () => {
@@ -55,27 +52,27 @@ export function ChannelBody({
     <div className='h-full'>
       <ScrollableContainer className='rounded-none'>
         <div>
-          {messages ? (
+          {typeof channelState.messages === 'object' ? (
             <>
-              {messages.map((message, idx) => (
+              {channelState.messages.map((msg, idx) => (
                 <div
                   key={idx}
                   className={cn(
                     'flex w-max max-w-[90%] rounded-lg px-3 text-sm',
-                    message.name === 'joushin' ? 'ml-auto' : 'p-2'
+                    msg.name === 'joushin' ? 'ml-auto' : 'p-2'
                   )}
                 >
                   <ChatMessage
-                    isMe={message.name === 'joushin'}
+                    isMe={msg.name === 'joushin'}
                     size='md'
-                    message={message.content}
-                    side={message.name === 'joushin' ? 'right' : 'left'}
+                    message={msg.content}
+                    side={msg.name === 'joushin' ? 'right' : 'left'}
                     className='m-2 hover:scale-[1.02] duration-200 hover:-translate-y-1 bg-custom4'
                     ref={messageEndRef as any}
-                    profileImage={message.profileImage}
-                    user_name={message.name}
-                    channelId={nowChannelId}
-                    role={role}
+                    profileImage={msg.profileImage}
+                    user_name={msg.name}
+                    channelId={channelState.channelID}
+                    role={channelState.role}
                   />
                 </div>
               ))}
