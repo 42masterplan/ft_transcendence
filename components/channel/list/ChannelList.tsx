@@ -4,13 +4,7 @@ import {EngagedChannelType} from '@/types/channel';
 import {cn} from '@/lib/utils';
 import {ChannelHistoryType} from '@/types/channel';
 import React from 'react';
-import {
-  useEffect,
-  useState,
-  Dispatch,
-  SetStateAction,
-  useCallback
-} from 'react';
+import {useEffect, Dispatch, SetStateAction, useCallback} from 'react';
 
 export default React.forwardRef(function ChannelList(
   {
@@ -53,7 +47,6 @@ export default React.forwardRef(function ChannelList(
     });
     ref.current.channelName = channel.name;
     socket.emit('channelHistory', {roomid: channel.id}, channelHistoryHandler);
-    console.log('너가 세팅한 channelId', channel.id);
   }, []);
   useEffect(() => {
     socket.on('myChannels', myChannelsListener);
@@ -66,11 +59,11 @@ export default React.forwardRef(function ChannelList(
       <div className='min-h-[40px] text-l text-custom4 text-center sticky top-0 z-20 bg-custom2'>
         참여중인 채널 목록
       </div>
-      {channelInfoState.engagedChannels.map((channel) => (
+      {channelInfoState.engagedChannels.map((channel: EngagedChannelType) => (
         <Button
           className={cn(
             'bg-custom2 hover:bg-custom3 border-b',
-            channel.id === channelInfoState.channelId ? 'bg-custom3' : ''
+            channel.id == channelInfoState.channelID ? 'bg-custom3' : ''
           )}
           onClick={() => {
             handleChannelClick(channel);

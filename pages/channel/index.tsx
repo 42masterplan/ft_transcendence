@@ -9,7 +9,7 @@ import ScrollableContainer from '@/components/container/ScrollableContainer';
 import ChannelInput from '@/components/channel/body/ChannelInput';
 import {toast} from '@/components/shadcn/ui/use-toast';
 import {channelStateType} from '@/types/channel';
-import {ChannelHistoryType, EngagedChannelType} from '@/types/channel';
+import {ChannelHistoryType} from '@/types/channel';
 const initialStateInfo: channelStateType = {
   channelName: '',
   channelID: '',
@@ -40,7 +40,6 @@ function channelInfoReducer(state: any, action: any) {
         ...state,
         engagedChannels: action.payload
       };
-
     default:
       return state;
   }
