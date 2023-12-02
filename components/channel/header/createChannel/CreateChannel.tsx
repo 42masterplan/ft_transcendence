@@ -156,6 +156,7 @@ const PasswordInput = ({
 };
 
 export default function CreateChannel() {
+  const [open, setOpen] = useState(false);
   const [channelName, setChannelName] = useState('');
   const [channelType, setChannelType] = useState('');
   const [password, setPassword] = useState('');
@@ -185,10 +186,6 @@ export default function CreateChannel() {
   };
   const createChannel = () => {
     let inviteUsers: Array<String> = [];
-    // inviteUsers = inviteFriendList.map((friendInfo) => {
-    //   if (friendInfo.checked) return friendInfo.id;
-    // });
-
     if (channelName.length === 0 || channelType.length === 0) {
       toast({
         title: '채널 생성 실패',
@@ -207,30 +204,38 @@ export default function CreateChannel() {
         status: channelType
       },
       (msg: string) => {
-        toast({
-          title: '채널 생성 성공',
-          description: msg,
-          duration: 3000
-        });
-        console.log({
-          name: channelName,
-          password: password,
-          invitedFriendIds: inviteUsers,
-          status: channelType
-        });
-        setChannelName('');
-        setPassword('');
-        setChannelType('');
-        setInviteFriendList([]);
+        if (msg === 'create Success!') {
+          toast({
+            title: '채널 생성 성공',
+            description: msg
+          });
+          console.log({
+            name: channelName,
+            password: password,
+            invitedFriendIds: inviteUsers,
+            status: channelType
+          });
+          setChannelName('');
+          setPassword('');
+          setChannelType('');
+          setInviteFriendList([]);
+          setOpen(false);
+        } else {
+          toast({
+            title: '채널 생성 실패',
+            description: msg,
+            variant: 'destructive'
+          });
+        }
       }
     );
-    socket.once('error_exist', (error: string) => {
-      alert(error);
-    });
+    // socket.once('error_exist', (error: string) => {
+    //   alert(error);
+    // });
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           className='rounded-full bg-custom4'

@@ -1,89 +1,98 @@
 import {cn} from '@/lib/utils';
 
-import {useRef, useEffect, Dispatch, SetStateAction} from 'react';
-
-import {ChannelHistoryType} from '@/types/channel';
-import useChatSocket from '@/hooks/useChatSocket';
-import ChatMessage from '@/components/channel/body/ChatCard';
+import React from 'react';
+import {useRef, useEffect, useCallback} from 'react';
+import {ChannelHistoryType, channelStateType} from '@/types/channel';
 import ScrollableContainer from '../../container/ScrollableContainer';
-import ManageChannel from '../header/ManageChannel';
-export function ChannelBody({
-  messages,
-  setMessages,
-  channelId,
-  role,
-  channel_name
-}: {
-  messages: ChannelHistoryType[];
-  setMessages: Dispatch<SetStateAction<ChannelHistoryType[]>>;
+import ChatMessage from '@/components/channel/body/ChatCard';
+import useChatSocket from '@/hooks/useChatSocket';
+
+interface MessageHandlerArgs {
   channelId: string;
-  role: string;
-  channel_name: string;
-}) {
+  userId: string;
+  userName: string;
+  profileImage: string;
+  content: string;
+}
+
+export default React.forwardRef(function ChannelBody(
+  {
+    channelInfoState,
+    messageState,
+    messageDispatch
+  }: {
+    channelInfoState: channelStateType;
+    messageState: ChannelHistoryType[];
+    messageDispatch: any;
+  },
+  channelInfoRef: any
+) {
   const messageEndRef = useRef<HTMLDivElement>();
   const [socket] = useChatSocket('channel');
-
-  const ShowHistory = () => {
-    return (
-      <>
-        {messages.map((message, idx) => (
-          <div
-            key={idx}
-            // 이 부분도 추후 리코일로 관리 하는 유저 정보로 확인 예정
-            className={cn(
-              'flex w-max max-w-[90%] rounded-lg px-3 text-sm',
-              message.id === 'joushin' ? 'ml-auto' : 'p-2'
-            )}
-          >
-            {message.id === 'joushin' ? (
-              <ChatMessage
-                isMe={true}
-                size='md'
-                message={message.content}
-                side='right'
-                className='m-2 hover:scale-[1.02] duration-200 hover:-translate-y-1 bg-custom4'
-                ref={messageEndRef as any}
-                profileImage={message.profileImage}
-                user_name={message.name}
-                channelId={channelId}
-                role={role}
-              />
-            ) : (
-              <ChatMessage
-                isMe={false}
-                size='md'
-                message={message.content}
-                side='left'
-                className='m-2 hover:scale-[1.02] duration-200 hover:-translate-y-1 bg-custom4'
-                ref={messageEndRef as any}
-                profileImage={message.profileImage}
-                user_name={message.name}
-                channelId={channelId}
-                role={role}
-              />
-            )}
-          </div>
-        ))}
-      </>
-    );
-  };
-
-  socket.on('newMessage', (roomid, {id, name, profileImage, content}) => {
-    if (roomid !== channelId) return;
-    console.log('새로운 메시지', id, name, profileImage, content);
-    setMessages([
-      ...messages,
-      {id: id, name: name, profileImage: profileImage, content: content}
-    ]);
-  });
+  function handleMessageAdd(payload: any) {
+    messageDispatch({
+      type: 'MESSAGE_ADD',
+      payload: payload
+    });
+  }
+  const newMessageHandler = useCallback(
+    ({
+      channelId,
+      userId,
+      userName,
+      profileImage,
+      content
+    }: MessageHandlerArgs) => {
+      console.log('newMessage');
+      if (channelInfoRef?.current.channelID === channelId) {
+        console.log('메세지가 도착했습니다.');
+        handleMessageAdd({
+          id: userId,
+          name: userName,
+          profileImage: profileImage,
+          content: content
+        });
+      }
+    },
+    []
+  );
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({behavior: 'smooth'});
-  }, [messages]);
+  }, [messageState]);
+  useEffect(() => {
+    socket.on('newMessage', newMessageHandler);
+    return () => {
+      socket.off('newMessage', newMessageHandler);
+    };
+  }, []);
   return (
     <div className='h-full'>
       <ScrollableContainer className='rounded-none'>
-        <div>{messages ? ShowHistory() : null}</div>
+        <div>
+          {messageState?.map((msg: ChannelHistoryType, idx: number) => (
+            <div
+              key={idx}
+              className={cn(
+                'flex w-max max-w-[90%] rounded-lg px-3 text-sm',
+                msg.name === 'joushin' ? 'ml-auto' : 'p-2'
+              )}
+            >
+              <ChatMessage
+                isMe={msg.name === 'joushin'}
+                size='md'
+                message={msg.content}
+                side={msg.name === 'joushin' ? 'right' : 'left'}
+                className='m-2 hover:scale-[1.02] duration-200 hover:-translate-y-1 bg-custom4'
+                ref={messageEndRef as any}
+                profileImage={msg.profileImage}
+                user_name={msg.name}
+                channelId={msg.id}
+                role={channelInfoState.role}
+              />
+            </div>
+          ))}
+        </div>
       </ScrollableContainer>
     </div>
   );
-}
+});
