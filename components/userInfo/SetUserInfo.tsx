@@ -5,6 +5,7 @@ import {Button} from '@/components/shadcn/ui/button';
 import SetUserName from './SetUserName';
 import {useRouter} from 'next/router';
 import {useToast} from '@/components/shadcn/ui/use-toast';
+
 import useAxios from '@/hooks/useAxios';
 
 interface SetUserInfoProps {
@@ -30,7 +31,14 @@ export default function SetUserInfo({
   );
 
   const router = useRouter();
-  if (isSuccess === true) router.push('/welcome/register/setEmail');
+  if (isSuccess === true) {
+    if (mode == 'register') router.push('/welcome/register/setEmail');
+    else
+      return (
+        <div className='text-4xl font-bold'>회원정보가 변경되었습니다.</div>
+      );
+  }
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
     fetchData({
@@ -88,7 +96,7 @@ export default function SetUserInfo({
           disabled={isValidName !== true}
           onClick={handleSubmit}
         >
-          계속하기
+          {mode == 'change' ? '변경하기' : '회원가입(계속)'}
         </Button>
       </div>
     </div>
