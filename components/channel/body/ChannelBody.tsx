@@ -1,11 +1,19 @@
 import {cn} from '@/lib/utils';
 
-import {useRef, useEffect, Dispatch, SetStateAction, useCallback} from 'react';
 import React from 'react';
-import {ChannelHistoryType} from '@/types/channel';
-import ChatMessage from '@/components/channel/body/ChatCard';
+import {useRef, useEffect, useCallback} from 'react';
+import {ChannelHistoryType, channelStateType} from '@/types/channel';
 import ScrollableContainer from '../../container/ScrollableContainer';
+import ChatMessage from '@/components/channel/body/ChatCard';
 import useChatSocket from '@/hooks/useChatSocket';
+
+interface MessageHandlerArgs {
+  channelId: string;
+  userId: string;
+  userName: string;
+  profileImage: string;
+  content: string;
+}
 
 export default React.forwardRef(function ChannelBody(
   {
@@ -13,14 +21,13 @@ export default React.forwardRef(function ChannelBody(
     messageState,
     messageDispatch
   }: {
-    channelInfoState: any;
-    messageState: any;
+    channelInfoState: channelStateType;
+    messageState: ChannelHistoryType[];
     messageDispatch: any;
   },
   channelInfoRef: any
 ) {
   const messageEndRef = useRef<HTMLDivElement>();
-  // const channelInfoRef = useRef(channelInfoState);
   const [socket] = useChatSocket('channel');
   function handleMessageAdd(payload: any) {
     messageDispatch({
@@ -29,7 +36,13 @@ export default React.forwardRef(function ChannelBody(
     });
   }
   const newMessageHandler = useCallback(
-    ({channelId, userId, userName, profileImage, content}: any) => {
+    ({
+      channelId,
+      userId,
+      userName,
+      profileImage,
+      content
+    }: MessageHandlerArgs) => {
       console.log('newMessage');
       if (channelInfoRef?.current.channelID === channelId) {
         console.log('메세지가 도착했습니다.');
