@@ -14,7 +14,7 @@ import {useRouter} from 'next/router';
 const initialStateInfo: channelStateType = {
   channelName: '',
   channelID: '',
-  role: 'admin',
+  role: 'owner',
   engagedChannels: []
 };
 
