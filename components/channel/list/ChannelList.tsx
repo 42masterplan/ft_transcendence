@@ -5,7 +5,7 @@ import {cn} from '@/lib/utils';
 import {ChannelHistoryType} from '@/types/channel';
 import React from 'react';
 import {useEffect, Dispatch, SetStateAction, useCallback} from 'react';
-
+import {useRouter} from 'next/router';
 export default React.forwardRef(function ChannelList(
   {
     channelInfoState,
@@ -19,6 +19,7 @@ export default React.forwardRef(function ChannelList(
   ref: any
 ) {
   const [socket] = useChatSocket('channel');
+  const router = useRouter();
   const myChannelsListener = useCallback((data: EngagedChannelType[]) => {
     console.log('myChannelsListener', data);
     infoDispatch({
@@ -50,10 +51,11 @@ export default React.forwardRef(function ChannelList(
   }, []);
   useEffect(() => {
     socket.on('myChannels', myChannelsListener);
+    socket.emit('myChannels');
     return () => {
       socket.off('myChannels', myChannelsListener);
     };
-  }, []);
+  }, [router.pathname]);
   return (
     <div className='flex flex-col min-w-[100px] h-full border overflow-y-scroll rounded-l-xl bg-custom2 w-[20vw] max-w-[300px]'>
       <div className='min-h-[40px] text-l text-custom4 text-center sticky top-0 z-20 bg-custom2'>

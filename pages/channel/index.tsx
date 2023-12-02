@@ -10,6 +10,7 @@ import ChannelInput from '@/components/channel/body/ChannelInput';
 import {toast} from '@/components/shadcn/ui/use-toast';
 import {channelStateType} from '@/types/channel';
 import {ChannelHistoryType} from '@/types/channel';
+import {useRouter} from 'next/router';
 const initialStateInfo: channelStateType = {
   channelName: '',
   channelID: '',
@@ -65,6 +66,7 @@ export default function ChannelPage() {
   const [socket] = useChatSocket('channel');
   const {channelName, channelID} = channelInfoState;
   const channelInfoRef = useRef(channelInfoState);
+  const router = useRouter();
   const myRoleHandler = useCallback(({role}: any) => {
     console.log('myRole', role);
     infoDispatch({
@@ -90,7 +92,7 @@ export default function ChannelPage() {
       socket.off('myRole', myRoleHandler);
       socket.off('error_exist', errorHandler);
     };
-  }, []);
+  }, [router.pathname]);
 
   return (
     <div className='flex h-full'>
