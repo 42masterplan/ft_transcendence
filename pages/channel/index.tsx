@@ -1,24 +1,26 @@
-import {useCallback, useEffect, useReducer} from 'react';
+import {useCallback, useEffect, useReducer, useRef} from 'react';
 import Image from 'next/image';
 import WaitImage from '@/public/postcss.config.png';
 import useChatSocket from '@/hooks/useChatSocket';
-import {ChannelBody} from '@/components/channel/body/ChannelBody';
+import ChannelBody from '@/components/channel/body/ChannelBody';
 import ChannelList from '@/components/channel/list/ChannelList';
 import ChannelHeader from '@/components/channel/header/ChannelHeader';
 import ScrollableContainer from '@/components/container/ScrollableContainer';
 import ChannelInput from '@/components/channel/body/ChannelInput';
 import {toast} from '@/components/shadcn/ui/use-toast';
 import {channelStateType} from '@/types/channel';
-import {ChannelHistoryType} from '@/types/channel';
+import {ChannelHistoryType, EngagedChannelType} from '@/types/channel';
 const initialStateInfo: channelStateType = {
   channelName: '',
   channelID: '',
-  role: 'admin'
+  role: 'admin',
+  engagedChannels: []
 };
 
 function channelInfoReducer(state: any, action: any) {
   switch (action.type) {
     case 'ID_SET': // channelId 변경됨
+      console.log('ID_SET', action.payload);
       return {
         ...state,
         channelID: action.payload
@@ -33,6 +35,12 @@ function channelInfoReducer(state: any, action: any) {
         ...state,
         role: action.payload
       };
+    case 'ENGAGED_SET': // engagedChannels 변경됨
+      return {
+        ...state,
+        engagedChannels: action.payload
+      };
+
     default:
       return state;
   }
@@ -41,7 +49,6 @@ function channelInfoReducer(state: any, action: any) {
 const messageReducer = (state: ChannelHistoryType[], action: any) => {
   switch (action.type) {
     case 'MESSAGE_SET': // message 변경됨
-      console.log('MESSAGE_SET', action.payload);
       return action.payload;
     case 'MESSAGE_ADD': // message 추가됨
       return [...state, action.payload];
@@ -56,10 +63,9 @@ export default function ChannelPage() {
     initialStateInfo
   );
   const [messageState, messageDispatch] = useReducer(messageReducer, []);
-
   const [socket] = useChatSocket('channel');
   const {channelName, channelID} = channelInfoState;
-
+  const channelInfoRef = useRef(channelInfoState);
   const myRoleHandler = useCallback(({role}: any) => {
     console.log('myRole', role);
     infoDispatch({
@@ -93,6 +99,7 @@ export default function ChannelPage() {
         channelInfoState={channelInfoState}
         infoDispatch={infoDispatch}
         messageDispatch={messageDispatch}
+        ref={channelInfoRef}
       />
       <div className='flex flex-col h-full w-full'>
         <ChannelHeader channelInfoState={channelInfoState} />
@@ -109,6 +116,7 @@ export default function ChannelPage() {
                 channelInfoState={channelInfoState}
                 messageState={messageState}
                 messageDispatch={messageDispatch}
+                ref={channelInfoRef}
               />
             </ScrollableContainer>
             <ChannelInput channelId={channelID} />
