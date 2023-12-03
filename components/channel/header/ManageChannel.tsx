@@ -17,7 +17,7 @@ export default function ManageChannel({channel_name}: {channel_name: string}) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className='rounded-full bg-custom4 justify-self-end'>
+        <Button className='bg-custom4 justify-self-end'>
           <RiChatSettingsLine className='h-6 w-6' />
           <p className='text-6'>채널 관리</p>
         </Button>

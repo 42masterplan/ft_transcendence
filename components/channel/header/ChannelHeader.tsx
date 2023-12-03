@@ -1,7 +1,8 @@
 import CreateChannel from './createChannel/CreateChannel';
 import ManageChannel from './ManageChannel';
 import PublicRoomList from './publicRoom/PublicRoomList';
-
+import {CiLogout} from 'react-icons/ci';
+import {Button} from '@/components/shadcn/ui/button';
 export default function ChannelHeader({
   channelInfoState
 }: {
@@ -15,9 +16,15 @@ export default function ChannelHeader({
         {channelInfoState.channelName}
         <CreateChannel />
       </div>
-      <div className='flex justify-end py-1'>
+      <div className='flex justify-between  py-1'>
+        <ManageChannel channel_name={channelInfoState.channelID} />
         {channelInfoState.role === 'owner' ? (
-          <ManageChannel channel_name={channelInfoState.channelID} />
+          <>
+            <Button variant='iconBtn' className='bg-custom4'>
+              <CiLogout className='h-6 w-6' />
+              채널 나가기
+            </Button>
+          </>
         ) : (
           channelInfoState.role
         )}
