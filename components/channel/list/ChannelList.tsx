@@ -2,7 +2,7 @@ import {Button} from '@/components/shadcn/ui/button';
 import useChatSocket from '@/hooks/useChatSocket';
 import {EngagedChannelType} from '@/types/channel';
 import {cn} from '@/lib/utils';
-import {ChannelHistoryType} from '@/types/channel';
+import {ChannelHistoryType, channelStateType} from '@/types/channel';
 import React from 'react';
 import {useEffect, Dispatch, SetStateAction, useCallback} from 'react';
 import {useRouter} from 'next/router';
@@ -12,7 +12,7 @@ export default React.forwardRef(function ChannelList(
     infoDispatch,
     messageDispatch
   }: {
-    channelInfoState: any;
+    channelInfoState: channelStateType;
     messageDispatch: Dispatch<SetStateAction<any>>;
     infoDispatch: Dispatch<SetStateAction<any>>;
   },
@@ -58,13 +58,13 @@ export default React.forwardRef(function ChannelList(
   }, [router.pathname]);
   return (
     <div className='flex flex-col min-w-[100px] h-full border overflow-y-scroll rounded-l-xl bg-custom2 w-[20vw] max-w-[300px]'>
-      <div className='min-h-[40px] text-l text-custom4 text-center sticky top-0 z-20 bg-custom2'>
+      <div className='min-h-[50px] text-l text-custom4 text-center sticky top-0 z-20 bg-custom2 flex justify-center items-center'>
         참여중인 채널 목록
       </div>
       {channelInfoState.engagedChannels.map((channel: EngagedChannelType) => (
         <Button
           className={cn(
-            'bg-custom2 hover:bg-custom3 border-b',
+            'bg-custom2 hover:bg-custom3 border',
             channel.id == channelInfoState.channelID ? 'bg-custom3' : ''
           )}
           onClick={() => {
@@ -72,7 +72,7 @@ export default React.forwardRef(function ChannelList(
           }}
           key={channel.id}
         >
-          <span className='text-base text-sky-300 '>{channel.name}</span>
+          <span className='text-custom4 truncate ...'>{channel.name}</span>
           <span className='text-violet-400  text-xs font-bold'>
             {channel.userCount}
           </span>
