@@ -46,11 +46,7 @@ export default function ManageChannel({channel_name}: {channel_name: string}) {
             <Label htmlFor='channel_password' className='text-right'>
               비밀번호 변경
             </Label>
-            <Input
-              id='channel_password'
-              defaultValue={channel_name}
-              className='col-span-3'
-            />
+            <Input id='channel_password' className='col-span-3' />
           </div>
         </div>
         <DialogFooter>

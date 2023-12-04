@@ -98,56 +98,127 @@ const UserDropdownGroup = ({
   );
 };
 
-const AdminDropdownGroup = () => {
-  return (
-    <DropdownMenuGroup>
-      <DropdownMenuSub>
-        <DropdownMenuSubTrigger>
-          <MdOutlineManageAccounts className='mr-2 h-4 w-4' />
-          <span>유저 관리</span>
-        </DropdownMenuSubTrigger>
-        <DropdownMenuPortal>
-          <DropdownMenuSubContent>
-            <DropdownMenuItem>
-              <Skull className='mr-2 h-4 w-4' />
-              <span
-                onClick={() => {
-                  console.log('재명');
-                }}
-              >
-                제명하기(BAN)
-              </span>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <GiBootKick className='mr-2 h-4 w-4' />
-              <span>추방하기(KICK)</span>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <IoVolumeMuteOutline className='mr-2 h-4 w-4' />
-              <span>음소거(MUTE)</span>
-            </DropdownMenuItem>
-          </DropdownMenuSubContent>
-        </DropdownMenuPortal>
-      </DropdownMenuSub>
-    </DropdownMenuGroup>
-  );
-};
+interface DropdownAvatarBtnProps {
+  profileImage: string;
+  user_name: string;
+  user_id: string;
+  channel_id: string;
+  role: string;
+  isMe: boolean;
+}
 
 export default function DropdownAvatarBtn({
   profileImage,
   user_name,
+  user_id,
   channel_id,
   role,
   isMe
-}: {
-  profileImage: string;
-  user_name: string;
-  channel_id: string;
-  role: string;
-  isMe: boolean;
-}) {
+}: DropdownAvatarBtnProps) {
   const [socket] = useChatSocket('channel');
+  const {toast} = useToast();
+  const AdminDropdownGroup = () => {
+    return (
+      <DropdownMenuGroup>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
+            <MdOutlineManageAccounts className='mr-2 h-4 w-4' />
+            <span>유저 관리</span>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuPortal>
+            <DropdownMenuSubContent>
+              <DropdownMenuItem>
+                <Skull className='mr-2 h-4 w-4' />
+                <span
+                  onClick={() => {
+                    socket.emit(
+                      'banUser',
+                      {
+                        channelId: channel_id,
+                        userId: user_id
+                      },
+                      (res: string) => {
+                        if (res === 'ban Success!')
+                          toast({
+                            title: '유저 제명',
+                            description: `${user_name}님을 제명했습니다.`
+                          });
+                        else
+                          toast({
+                            title: '유저 제명 실패',
+                            description: `${user_name}님을 제명에 실패했습니다. 일반 유저만 재명할 수 있습니다.`
+                          });
+                      }
+                    );
+                  }}
+                >
+                  제명하기(BAN)
+                </span>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <GiBootKick className='mr-2 h-4 w-4' />
+                <span
+                  onClick={() => {
+                    socket.emit(
+                      'kickUser',
+                      {
+                        channelId: channel_id,
+                        userId: user_id
+                      },
+                      (res: string) => {
+                        if (res === 'kick Success!')
+                          toast({
+                            title: '유저 추방',
+                            description: `${user_name}님을 추방했습니다.`
+                          });
+                        else
+                          toast({
+                            title: '유저 추방 실패',
+                            description: `${user_name}님을 추방에 실패했습니다. 일반 유저만 추방할 수 있습니다.`
+                          });
+                      }
+                    );
+                  }}
+                >
+                  추방하기(KICK)
+                </span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <IoVolumeMuteOutline className='mr-2 h-4 w-4' />
+                <span
+                  onClick={() => {
+                    socket.emit(
+                      'muteUser',
+                      {
+                        channelId: channel_id,
+                        userId: user_id
+                      },
+                      (res: string) => {
+                        if (res === 'mute Success!')
+                          toast({
+                            title: '유저 mute',
+                            description: `${user_name}님을 mute했습니다. 일정 시간동안 채팅을 할 수 없습니다.`
+                          });
+                        else
+                          toast({
+                            title: '유저 mute 실패',
+                            description: `${user_name}님을 mute에 실패했습니다. 일반 유저만 mute할 수 있습니다.`
+                          });
+                      }
+                    );
+                  }}
+                >
+                  음소거(MUTE)
+                </span>
+              </DropdownMenuItem>
+            </DropdownMenuSubContent>
+          </DropdownMenuPortal>
+        </DropdownMenuSub>
+      </DropdownMenuGroup>
+    );
+  };
+
   return isMe ? (
     <AvatarWithStatus size='sm' image={profileImage} showStatus={false} />
   ) : (
@@ -165,9 +236,9 @@ export default function DropdownAvatarBtn({
       <DropdownMenuContent>
         <DropdownMenuLabel>{user_name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <UserDropdownGroup userId='joushin' userName={user_name} />
+        <UserDropdownGroup userId={user_id} userName={user_name} />
         <DropdownMenuSeparator />
-        {role === 'admin' || role == 'owner' ? AdminDropdownGroup() : null}
+        {role === 'admin' || role == 'owner' ? <AdminDropdownGroup /> : null}
       </DropdownMenuContent>
     </DropdownMenu>
   );

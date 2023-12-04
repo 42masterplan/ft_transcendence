@@ -37,7 +37,7 @@ export default function ChannelHeader({
               socket.emit(
                 'leaveChannel',
                 {
-                  channelID: channelInfoState.channelID
+                  channelId: channelInfoState.channelID
                 },
                 (res: string) => {
                   if (res === 'leave Success!') {

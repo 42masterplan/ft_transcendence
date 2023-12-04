@@ -48,7 +48,6 @@ function channelInfoReducer(state: any, action: any) {
         channelID: '',
         role: 'owner'
       };
-
     default:
       return state;
   }

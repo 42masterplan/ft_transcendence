@@ -21,6 +21,7 @@ type ChatMessageProps = {
   stretch?: boolean;
   className?: string;
   user_name: string;
+  user_id: string;
   profileImage: string;
   channelId: string;
   role: string;
@@ -39,7 +40,8 @@ export default React.forwardRef(function ChatMessage(
     channelId = '',
     role = '',
     message = '',
-    isMe
+    isMe,
+    user_id = ''
   }: ChatMessageProps,
   ref: any
 ) {
@@ -147,6 +149,7 @@ export default React.forwardRef(function ChatMessage(
     >
       <div>
         <DropDownAvatarBtn
+          user_id={user_id}
           profileImage={profileImage}
           user_name={user_name}
           channel_id={channelId}

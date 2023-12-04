@@ -95,8 +95,9 @@ export default React.forwardRef(function ChannelBody(
                   ref={messageEndRef as any}
                   profileImage={msg.profileImage}
                   user_name={msg.name}
-                  channelId={msg.id}
+                  channelId={channelInfoState.channelID}
                   role={channelInfoState.role}
+                  user_id={msg.id}
                 />
               </div>
             )
