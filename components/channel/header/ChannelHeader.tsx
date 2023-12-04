@@ -1,5 +1,5 @@
 import CreateChannel from './createChannel/CreateChannel';
-import ManageChannel from './ManageChannel';
+import ManageChannel from '@/components/channel/header/ManageChannel';
 import PublicRoomList from './publicRoom/PublicRoomList';
 import {CiLogout} from 'react-icons/ci';
 import {Button} from '@/components/shadcn/ui/button';
@@ -54,7 +54,10 @@ export default function ChannelHeader({
           </Button>
           {channelInfoState.channelName}
           {channelInfoState.role === 'owner' ? (
-            <ManageChannel channel_name={channelInfoState.channelId} />
+            <ManageChannel
+              channel_name={channelInfoState.channelName}
+              channelId={channelInfoState.channelId}
+            />
           ) : (
             channelInfoState.role
           )}
