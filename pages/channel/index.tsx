@@ -41,6 +41,14 @@ function channelInfoReducer(state: any, action: any) {
         ...state,
         engagedChannels: action.payload
       };
+    case 'CHANNEL_LEAVE': // 참여중인 채널 떠남
+      return {
+        ...state,
+        channelName: '',
+        channelID: '',
+        role: 'owner'
+      };
+
     default:
       return state;
   }
@@ -103,7 +111,10 @@ export default function ChannelPage() {
         ref={channelInfoRef}
       />
       <div className='flex flex-col h-full w-full'>
-        <ChannelHeader channelInfoState={channelInfoState} />
+        <ChannelHeader
+          channelInfoState={channelInfoState}
+          infoDispatch={infoDispatch}
+        />
         {channelName === '' ? (
           <Image
             src={WaitImage}
