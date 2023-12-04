@@ -140,7 +140,6 @@ export default React.forwardRef(function ChatMessage(
       </div>
     );
   }
-
   return (
     <div
       className={`flex ${widthFit} ${flexAlign} ${className} rounded-xl p-1 sm:p-2`}
