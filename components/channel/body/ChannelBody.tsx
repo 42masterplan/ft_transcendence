@@ -4,7 +4,7 @@ import React from 'react';
 import {useRef, useEffect, useCallback} from 'react';
 import {ChannelHistoryType, channelStateType} from '@/types/channel';
 import ScrollableContainer from '../../container/ScrollableContainer';
-import ChatMessage from '@/components/channel/body/ChatCard';
+import ChatMessage from '@/components/channel/body/ChatMessage';
 import useChatSocket from '@/hooks/useChatSocket';
 import SystemCard from './SystemCard';
 interface MessageHandlerArgs {
@@ -83,9 +83,8 @@ export default React.forwardRef(function ChannelBody(
                   msg.name === 'joushin' ? 'ml-auto' : 'p-2'
                 )}
               >
-                {/* TODO 채팅 메시지 내 정보랑 비교하기 
-								TODO 시스템 메시지 랜더링 구현하기
-							*/}
+                {/* TODO 채팅 메시지 내 정보랑 비교하기
+                 */}
                 <ChatMessage
                   isMe={msg.name === 'joushin'}
                   size='md'

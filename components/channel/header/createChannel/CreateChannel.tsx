@@ -204,7 +204,7 @@ export default function CreateChannel() {
         status: channelType
       },
       (msg: string) => {
-        if (msg === 'create Success!') {
+        if (msg === 'createChannel Success!') {
           toast({
             title: '채널 생성 성공',
             description: msg

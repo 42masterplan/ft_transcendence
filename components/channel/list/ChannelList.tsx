@@ -28,7 +28,7 @@ export default React.forwardRef(function ChannelList(
     });
   }, []);
   const channelHistoryHandler = useCallback((data: ChannelHistoryType[]) => {
-    // console.log('channelHistoryListener', data);
+    console.log('channelHistoryListener', data);
     messageDispatch({
       type: 'MESSAGE_SET',
       payload: data
@@ -47,6 +47,7 @@ export default React.forwardRef(function ChannelList(
       payload: channel.name
     });
     ref.current.channelName = channel.name;
+    console.log('channelHistoryHandler', channel.id);
     socket.emit(
       'channelHistory',
       {channelId: channel.id},

@@ -40,7 +40,7 @@ export default function ChannelHeader({
                   channelId: channelInfoState.channelID
                 },
                 (res: string) => {
-                  if (res === 'leave Success!') {
+                  if (res === 'leaveChannel Success!') {
                     infoDispatch({
                       type: 'CHANNEL_LEAVE'
                     });

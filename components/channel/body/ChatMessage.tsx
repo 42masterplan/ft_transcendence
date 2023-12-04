@@ -14,6 +14,7 @@
 import DropDownAvatarBtn from '@/components/avatar/DropDownAvatarBtn';
 import {sizeType} from '@/lib/ResponsiveDesign';
 import React from 'react';
+
 type ChatMessageProps = {
   size?: sizeType;
   side?: string;
