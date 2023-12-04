@@ -47,7 +47,11 @@ export default React.forwardRef(function ChannelList(
       payload: channel.name
     });
     ref.current.channelName = channel.name;
-    socket.emit('channelHistory', {roomid: channel.id}, channelHistoryHandler);
+    socket.emit(
+      'channelHistory',
+      {channelId: channel.id},
+      channelHistoryHandler
+    );
   }, []);
   useEffect(() => {
     socket.on('myChannels', myChannelsListener);
