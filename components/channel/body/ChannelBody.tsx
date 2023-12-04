@@ -44,7 +44,7 @@ export default React.forwardRef(function ChannelBody(
       content
     }: MessageHandlerArgs) => {
       console.log('newMessage');
-      if (channelInfoRef?.current.channelID === channelId) {
+      if (channelInfoRef?.current.channelId === channelId) {
         console.log('메세지가 도착했습니다.');
         handleMessageAdd({
           id: userId,
@@ -94,7 +94,7 @@ export default React.forwardRef(function ChannelBody(
                   ref={messageEndRef as any}
                   profileImage={msg.profileImage}
                   user_name={msg.name}
-                  channelId={channelInfoState.channelID}
+                  channelId={channelInfoState.channelId}
                   role={channelInfoState.role}
                   user_id={msg.id}
                 />

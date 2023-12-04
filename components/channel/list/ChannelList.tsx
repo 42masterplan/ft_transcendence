@@ -41,7 +41,7 @@ export default React.forwardRef(function ChannelList(
       type: 'ID_SET',
       payload: channel.id
     });
-    ref.current.channelID = channel.id;
+    ref.current.channelId = channel.id;
     infoDispatch({
       type: 'NAME_SET',
       payload: channel.name
@@ -70,7 +70,7 @@ export default React.forwardRef(function ChannelList(
         <Button
           className={cn(
             'bg-custom2 hover:bg-custom3 border justify-between',
-            channel.id == channelInfoState.channelID ? 'bg-custom3' : ''
+            channel.id == channelInfoState.channelId ? 'bg-custom3' : ''
           )}
           onClick={() => {
             handleChannelClick(channel);

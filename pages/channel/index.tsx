@@ -13,7 +13,7 @@ import {ChannelHistoryType} from '@/types/channel';
 import {useRouter} from 'next/router';
 const initialStateInfo: channelStateType = {
   channelName: '',
-  channelID: '',
+  channelId: '',
   role: 'owner',
   engagedChannels: []
 };
@@ -24,7 +24,7 @@ function channelInfoReducer(state: any, action: any) {
       console.log('ID_SET', action.payload);
       return {
         ...state,
-        channelID: action.payload
+        channelId: action.payload
       };
     case 'NAME_SET': // channelName 변경됨
       return {
@@ -45,7 +45,7 @@ function channelInfoReducer(state: any, action: any) {
       return {
         ...state,
         channelName: '',
-        channelID: '',
+        channelId: '',
         role: 'owner'
       };
     default:
@@ -71,7 +71,7 @@ export default function ChannelPage() {
   );
   const [messageState, messageDispatch] = useReducer(messageReducer, []);
   const [socket] = useChatSocket('channel');
-  const {channelName, channelID} = channelInfoState;
+  const {channelName, channelId} = channelInfoState;
   const channelInfoRef = useRef(channelInfoState);
   const router = useRouter();
   const myRoleHandler = useCallback(({role}: any) => {
@@ -130,7 +130,7 @@ export default function ChannelPage() {
                 ref={channelInfoRef}
               />
             </ScrollableContainer>
-            <ChannelInput channelId={channelID} />
+            <ChannelInput channelId={channelId} />
           </>
         )}
       </div>

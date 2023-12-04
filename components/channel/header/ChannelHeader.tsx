@@ -32,12 +32,12 @@ export default function ChannelHeader({
               console.log(
                 '채널 나가기 버튼 클릭 채널명:',
                 channelInfoState.channelName,
-                channelInfoState.channelID
+                channelInfoState.channelId
               );
               socket.emit(
                 'leaveChannel',
                 {
-                  channelId: channelInfoState.channelID
+                  channelId: channelInfoState.channelId
                 },
                 (res: string) => {
                   if (res === 'leaveChannel Success!') {
@@ -54,7 +54,7 @@ export default function ChannelHeader({
           </Button>
           {channelInfoState.channelName}
           {channelInfoState.role === 'owner' ? (
-            <ManageChannel channel_name={channelInfoState.channelID} />
+            <ManageChannel channel_name={channelInfoState.channelId} />
           ) : (
             channelInfoState.role
           )}
