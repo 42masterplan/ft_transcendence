@@ -27,13 +27,12 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
     []
   );
   useEffect(() => {
-    socket.on('getBannedUsers', adminUserHandler);
-    // socket.on('getParticipants', participantsHandler);
+    socket.on('getAdminUsers', adminUserHandler);
     socket.emit('getAdminUsers', {channelId: channelId});
     return () => {
-      socket.off('getAdminUsers', participantsHandler);
+      socket.off('getAdminUsers', adminUserHandler);
     };
-  }, [socket, participantsHandler, channelId]);
+  }, [socket, adminUserHandler, channelId]);
 
   return (
     <div className=' border border-amber-400'>

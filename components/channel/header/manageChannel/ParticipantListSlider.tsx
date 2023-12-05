@@ -27,28 +27,27 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
     []
   );
   useEffect(() => {
-    socket.on('getBannedUsers', adminUserHandler);
     socket.on('getParticipants', participantsHandler);
     socket.emit('getParticipants', {channelId: channelId});
     return () => {
-      socket.off('getAdminUsers', participantsHandler);
+      socket.off('getParticipants', participantsHandler);
     };
   }, [socket, participantsHandler, channelId]);
 
   return (
     <div className=' border border-amber-400'>
       <p>참여중인 유저 목록</p>
-      <div className='flex overflow-x-auto'>
+      <div className='flex overflow-x-auto space-x-2	 '>
         {participants.map((user: userListType) => {
           return (
-            <div className='flex'>
+            <div className='flex  text-center'>
               <FcUnlock
-                className='h-10 w-10 hover:bg-custom4 rounded-full'
+                className='h-7 w-7 lg:hover:scale-150 transition-transform ease-in-out duration-500 rounded-full absolute z-10'
                 onClick={() => {}}
               />
               <p>
                 <AvatarIcon avatarName={user.profileImage} size='h-20 w-20' />
-                <p>{user.userName}</p>
+                {user.userName}
               </p>
             </div>
           );

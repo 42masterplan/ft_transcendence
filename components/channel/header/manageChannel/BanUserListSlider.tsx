@@ -12,19 +12,19 @@ interface BanUserListType {
 export default function BanUserListSlider({channelId}: {channelId: string}) {
   const [socket] = useChatSocket('channel');
   const [banUserList, setBanUserList] = useState([] as BanUserListType[]);
-  const participantsHandler: (res: BanUserListType[]) => void = useCallback(
+  const banUserHandler: (res: BanUserListType[]) => void = useCallback(
     (res: BanUserListType[]) => {
       setBanUserList(res);
     },
     []
   );
   useEffect(() => {
-    socket.on('getBannedUsers', participantsHandler);
+    socket.on('getBannedUsers', banUserHandler);
     socket.emit('getBannedUsers', {channelId: channelId});
     return () => {
-      socket.off('getBannedUsers', participantsHandler);
+      socket.off('getBannedUsers', banUserHandler);
     };
-  }, [socket, participantsHandler, channelId]);
+  }, [socket, banUserHandler, channelId]);
   const unBanUserAction = useSocketAction(
     'unBanUser',
     'unBanUser Success!',
@@ -40,7 +40,7 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
           return (
             <div className='flex'>
               <FcUnlock
-                className='h-10 w-10 hover:bg-custom4 rounded-full'
+                className='h-10 w-10 hover:bg-custom4 rounded-full absolute z-10 '
                 onClick={() => {
                   unBanUserAction(channelId, banUser.userId, banUser.userName);
                 }}
