@@ -1,9 +1,10 @@
 import {RiChatSettingsLine} from 'react-icons/ri';
 import {Button} from '@/components/shadcn/ui/button';
 import {Input} from '@/components/shadcn/ui/input';
-import {Label} from '@/components/shadcn/ui/label';
-import FriendListSelector from '@/components/channel/FriendListSelector';
+
+import AdminUserListSlider from '@/components/channel/header/manageChannel/AdminUserListSlider';
 import BanUserListSlider from '@/components/channel/header/manageChannel/BanUserListSlider';
+import ParticipantListSlider from '@/components/channel/header/manageChannel/ParticipantListSlider';
 import {
   Dialog,
   DialogContent,
@@ -40,7 +41,9 @@ export default function ManageChannel({
         </DialogHeader>
         <div className='grid gap-6 py-6 '>
           {/* TODO : 채널 Ban user Icon 띄우고 지우는 형식으로 만들기*/}
+          <ParticipantListSlider channelId={channelId} />
           <BanUserListSlider channelId={channelId} />
+          <AdminUserListSlider channelId={channelId} />
           {/* <FriendListSelector>밴(금지)유저 목록</FriendListSelector> */}
           {/* TODO : 전체 유저가 나오고, 채널 관리자 임명 삭제를 할 수 있도록 함.*/}
           {/* <FriendListSelector>관리자 수정</FriendListSelector> */}

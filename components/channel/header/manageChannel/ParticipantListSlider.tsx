@@ -13,23 +13,23 @@ interface userListType {
 }
 export default function BanUserListSlider({channelId}: {channelId: string}) {
   const [socket] = useChatSocket('channel');
-  const [adminUserList, setadminUserList] = useState([] as userListType[]);
+  const [participants, setParticipants] = useState([] as userListType[]);
   const adminUserHandler: (res: userListType[]) => void = useCallback(
     (res: userListType[]) => {
-      setadminUserList(res);
+      setParticipants(res);
     },
     []
   );
   const participantsHandler: (res: userListType[]) => void = useCallback(
     (res: userListType[]) => {
-      setadminUserList(res);
+      setParticipants(res);
     },
     []
   );
   useEffect(() => {
     socket.on('getBannedUsers', adminUserHandler);
-    // socket.on('getParticipants', participantsHandler);
-    socket.emit('getAdminUsers', {channelId: channelId});
+    socket.on('getParticipants', participantsHandler);
+    socket.emit('getParticipants', {channelId: channelId});
     return () => {
       socket.off('getAdminUsers', participantsHandler);
     };
@@ -37,9 +37,9 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
 
   return (
     <div className=' border border-amber-400'>
-      <p>관리자 유저 목록</p>
+      <p>참여중인 유저 목록</p>
       <div className='flex overflow-x-auto'>
-        {adminUserList.map((banUser: userListType) => {
+        {participants.map((user: userListType) => {
           return (
             <div className='flex'>
               <FcUnlock
@@ -47,11 +47,8 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
                 onClick={() => {}}
               />
               <p>
-                <AvatarIcon
-                  avatarName={banUser.profileImage}
-                  size='h-20 w-20'
-                />
-                <p>{banUser.userName}</p>
+                <AvatarIcon avatarName={user.profileImage} size='h-20 w-20' />
+                <p>{user.userName}</p>
               </p>
             </div>
           );
