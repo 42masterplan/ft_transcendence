@@ -32,7 +32,7 @@ export default function SetUserInfo({
 
   const router = useRouter();
   if (isSuccess === true) {
-    if (mode == 'register') router.push('/welcome/register/setEmail');
+    if (mode == 'register') router.push('/welcome/setEmail');
     else
       return (
         <div className='text-4xl font-bold'>회원정보가 변경되었습니다.</div>
