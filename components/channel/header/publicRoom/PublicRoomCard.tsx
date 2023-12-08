@@ -7,12 +7,14 @@ export default function PublicRoomCard({
   name,
   id,
   userCount,
-  isLocked
+  isLocked,
+  setOpen
 }: {
   name: string;
   id: string;
   userCount: number;
   isLocked: boolean;
+  setOpen: any;
 }) {
   const [socket] = useChatSocket('channel');
   const [password, SetPassword] = useState('');
@@ -23,15 +25,14 @@ export default function PublicRoomCard({
       if (ret === 'success') {
         toast({
           title: '채널 참가',
-          description: ret,
-          duration: 3000
+          description: ret
         });
+        setOpen(false);
       } else {
         toast({
           title: '채널 참가 실패',
           description: ret,
-          variant: 'destructive',
-          duration: 3000
+          variant: 'destructive'
         });
       }
     });

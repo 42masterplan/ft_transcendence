@@ -20,3 +20,10 @@ export interface ChannelHistoryType {
   content: string; //채팅 내용
   isBlocked?: boolean;
 }
+
+export interface channelStateType {
+  channelName: string;
+  channelID: string;
+  role: string;
+  engagedChannels: EngagedChannelType[];
+}

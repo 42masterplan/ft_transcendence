@@ -1,4 +1,3 @@
-import {Button} from '@/components/shadcn/ui/button';
 import {Input} from '@/components/shadcn/ui/input';
 import {Switch} from '@/components/shadcn/ui/switch';
 import {
@@ -9,27 +8,26 @@ import {
   SelectValue
 } from '@/components/shadcn/ui/select';
 import * as React from 'react';
-import {
-  socialPageTargetUser as target,
-  socialPageUserStatus as status
-} from '@/lib/types';
+
+import type {
+  socialPageUserStatus as status,
+  socialPageTargetUser as target
+} from '@/types/social';
 
 interface SocialPageNavBarProps {
   searchTarget: target;
-  setSearchTarget: React.Dispatch<React.SetStateAction<target>>;
   searchTargetStatus: status;
+  setSearchTarget: React.Dispatch<React.SetStateAction<target>>;
   setSearchTargetStatus: React.Dispatch<React.SetStateAction<status>>;
-  searchTargetInput: string;
   setSearchTargetInput: React.Dispatch<React.SetStateAction<string>>;
   className?: string;
 }
 
 export function SocialPageNavBar({
   searchTarget,
-  setSearchTarget,
   searchTargetStatus,
+  setSearchTarget,
   setSearchTargetStatus,
-  searchTargetInput,
   setSearchTargetInput,
   className = ''
 }: SocialPageNavBarProps) {
@@ -45,9 +43,11 @@ export function SocialPageNavBar({
           <Switch
             className=''
             id='search-target'
+            value={searchTarget}
+            checked={searchTarget === 'friend'}
             onCheckedChange={() => {
-              setSearchTarget(
-                searchTarget === 'friend' ? 'all users' : 'friend'
+              setSearchTarget((prev) =>
+                prev === 'friend' ? 'all users' : 'friend'
               );
             }}
           />
@@ -58,15 +58,16 @@ export function SocialPageNavBar({
           onValueChange={(value) => {
             setSearchTargetStatus(value as status);
           }}
+          value={searchTargetStatus}
         >
           <SelectTrigger className='w-32'>
             <SelectValue placeholder='Select' />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value='All'>All</SelectItem>
-            <SelectItem value='Online'>Online</SelectItem>
-            <SelectItem value='Offline'>Offline</SelectItem>
-            <SelectItem value='InGame'>InGame</SelectItem>
+            <SelectItem value='on-line'>Online</SelectItem>
+            <SelectItem value='off-line'>Offline</SelectItem>
+            <SelectItem value='in-game'>InGame</SelectItem>
           </SelectContent>
         </Select>
       </div>

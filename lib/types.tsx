@@ -1,4 +1,4 @@
-export type userStatus = 'Online' | 'Offline' | 'InGame' | 'AFK';
+export type userStatus = 'on-line' | 'off-line' | 'in-Game' | 'AFK';
 
 export type UserInfo = {
   id: string; // UUID
@@ -46,9 +46,6 @@ export type FriendRequest = {
   requestTime: Date;
   status: MatchRequestStatus;
 };
-
-export type socialPageTargetUser = 'friend' | 'all users';
-export type socialPageUserStatus = 'Online' | 'Offline' | 'InGame' | 'All';
 
 export type DMType = {
   id: string; // UUID

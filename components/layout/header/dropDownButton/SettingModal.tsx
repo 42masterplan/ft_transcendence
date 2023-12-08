@@ -10,7 +10,7 @@ import {
 
 import ScrollableContainer from '@/components/container/ScrollableContainer';
 import SetUserInfo from '@/components/userInfo/SetUserInfo';
-
+import UnMemberBtn from '@/components/button/UnMemberBtn';
 import {
   Tabs,
   TabsContent,
@@ -69,8 +69,8 @@ function SettingModalContents() {
           />
           <Label htmlFor='two-step'>2단계 인증 활성화</Label>
         </div>
-        <LinkBtn link='/welcome/2step-auth'>2단계 인증 이메일 변경</LinkBtn>
-        <Button>회원탈퇴</Button>
+        <LinkBtn link='/welcome/setEmail'>2단계 인증 이메일 변경</LinkBtn>
+        <UnMemberBtn>회원 탈퇴</UnMemberBtn>
       </TabsContent>
     </Tabs>
     // </div>

@@ -24,7 +24,7 @@ import {ResponsiveDesign} from '../../../../lib/ResponsiveDesign';
 import Link from 'next/link';
 import SettingsModal from './SettingModal';
 import {useRouter} from 'next/router';
-
+import LogOutBtn from '@/components/button/LogoutBtn';
 interface DropdownMenuPageItemProps {
   href: string;
   icon: React.ReactNode;
@@ -113,8 +113,7 @@ export default function HeaderDropDownBtn() {
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <LogOut className='mr-2 h-4 w-4' />
-              <span>Logout</span>
-              {/* Todo: add function to logout */}
+              <LogOutBtn>로그 아웃</LogOutBtn>
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>

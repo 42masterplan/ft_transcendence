@@ -8,6 +8,7 @@ type SocketNamespace =
   | 'matching';
 
 import {useCallback} from 'react';
+const chatSocketUrl = process.env.NEXT_PUBLIC_CHAT_SOCKET ?? '';
 const sockets: {[key: string]: Socket} = {};
 const useChatSocket = (namespace: SocketNamespace): [Socket, () => void] => {
   const disconnect = useCallback(() => {
@@ -15,14 +16,10 @@ const useChatSocket = (namespace: SocketNamespace): [Socket, () => void] => {
     sockets[namespace].disconnect();
     delete sockets[namespace];
   }, [namespace]);
-
+  let url = chatSocketUrl + '/' + namespace;
   if (sockets[namespace]) return [sockets[namespace], disconnect];
-  let url;
-  if (namespace === 'global') url = chatSocketUrl;
-  else url = chatSocketUrl;
-
   sockets[namespace] = io(url, {
-    autoConnect: false,
+    autoConnect: true,
     transports: ['websocket']
     // auth: {
     //   Authorization: `Bearer ${getAuthorization()}`
@@ -30,7 +27,5 @@ const useChatSocket = (namespace: SocketNamespace): [Socket, () => void] => {
   });
   return [sockets[namespace], disconnect];
 };
-
-const chatSocketUrl = process.env.NEXT_PUBLIC_CHAT_SOCKET ?? '';
 
 export default useChatSocket;
