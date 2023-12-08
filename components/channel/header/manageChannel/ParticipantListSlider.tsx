@@ -72,16 +72,16 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
                   className='h-7 w-7 lg:hover:scale-125 transition-transform ease-in-out duration-200 rounded-full'
                   onClick={() => {
                     toast({
-                      title: 'Are you sure you want to log out?',
-                      description: 'This action cannot be undone.',
-
+                      title: `${user.userName}님을 관리자로 임명하시겠습니까?`,
+                      description: '관리자는 채널을 관리할 수 있습니다.',
                       action: (
                         <ToastAction
-                          altText='Log Out'
+                          altText='관리자 임명'
                           onClick={() => {
-                            socket.emit('setAdmin', {
+                            socket.emit('changeAdmin', {
                               channelId: channelId,
-                              userId: user.userId
+                              userId: user.userId,
+                              types: 'add'
                             });
                           }}
                         >
@@ -97,8 +97,27 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
                   width={50}
                   height={50}
                   className='h-7 w-7 lg:hover:scale-125 transition-transform ease-in-out duration-200 rounded-full'
-                  onClick={() => {}}
-                  id='user_ban'
+                  onClick={() => {
+                    toast({
+                      title: `${user.userName}님을 BAN 하시겠습니까?`,
+                      description:
+                        'BAN된 유저는 자동으로 채널에서 추방되며, 채널에 참여할 수 없습니다.',
+                      variant: 'destructive',
+                      action: (
+                        <ToastAction
+                          altText='BAN'
+                          onClick={() => {
+                            socket.emit('banUser', {
+                              channelId: channelId,
+                              userId: user.userId
+                            });
+                          }}
+                        >
+                          유저 BAN
+                        </ToastAction>
+                      )
+                    });
+                  }}
                 />
                 <Image
                   src='/icon/kick.png'
@@ -106,7 +125,27 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
                   width={50}
                   height={50}
                   className='h-7 w-7 lg:hover:scale-125 transition-transform ease-in-out duration-200 rounded-full'
-                  onClick={() => {}}
+                  onClick={() => {
+                    toast({
+                      title: `${user.userName}님을 추방 하시겠습니까?`,
+                      description:
+                        '이 유저는 채널에서 추방되며, 채널에는 다시 참여할 수 없습니다.',
+                      variant: 'destructive',
+                      action: (
+                        <ToastAction
+                          altText='KICK'
+                          onClick={() => {
+                            socket.emit('kickUser', {
+                              channelId: channelId,
+                              userId: user.userId
+                            });
+                          }}
+                        >
+                          유저 추방
+                        </ToastAction>
+                      )
+                    });
+                  }}
                 />
               </div>
             </div>
