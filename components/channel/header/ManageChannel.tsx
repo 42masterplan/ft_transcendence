@@ -14,7 +14,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/shadcn/ui/dialog';
-
+import {Label} from '@/components/shadcn/ui/label';
 export default function ManageChannel({
   channel_name,
   channelId
@@ -30,7 +30,7 @@ export default function ManageChannel({
           <p className='text-6'>채널 관리</p>
         </Button>
       </DialogTrigger>
-      <DialogContent className=' bg-custom1 h-5/6 sm:max-w-[700px]'>
+      <DialogContent className=' bg-custom1 h-5/6 sm:max-w-[700px] overflow-auto'>
         <DialogHeader>
           <DialogTitle className='text-center'>방장 전용 페이지</DialogTitle>
           <DialogDescription className='text-center text-l'>
@@ -49,10 +49,17 @@ export default function ManageChannel({
           {/* <FriendListSelector>관리자 수정</FriendListSelector> */}
 
           {/* TODO : 채널 비밀번호 변경 기능 버튼 추가*/}
-          {/* <Label htmlFor='channel_password' className='text-right'>
+          <div>
+            <Label htmlFor='channel_password' className='text-right'>
               비밀번호 변경
             </Label>
-            <Input id='channel_password' className='col-span-3' /> */}
+            <div className='flex space-x-4 text-start flex-row items-center'>
+              <Input id='channel_password' className='col-span-3' />
+              <Button variant='default' className='w-20'>
+                변경
+              </Button>
+            </div>
+          </div>
         </div>
       </DialogContent>
     </Dialog>

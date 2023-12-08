@@ -35,7 +35,7 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
   }, [socket, adminUserHandler, channelId]);
 
   return (
-    <div className=' border border-amber-400'>
+    <div className=' border border-amber-400 h-40'>
       <p>관리자 유저 목록</p>
       <div className='flex overflow-x-auto'>
         {adminUserList.map((banUser: userListType) => {

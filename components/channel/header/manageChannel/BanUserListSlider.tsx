@@ -33,7 +33,7 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
     '유저를 밴 해제하는데 실패했습니다.'
   );
   return (
-    <div className=' border border-amber-400'>
+    <div className=' border border-amber-400 h-40 p-2'>
       <p>밴 유저 목록</p>
       <div className='flex overflow-x-auto'>
         {banUserList.map((banUser: BanUserListType) => {
