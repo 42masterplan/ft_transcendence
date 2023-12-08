@@ -97,7 +97,8 @@ PLAYER_B_COLOR = 'rgba(0, 133, 255, 1)';
 BALL_RADIUS = 5;
 BALL_COLOR = 'white';
 BALL_SPEED = 5 / 3;
-BALL_VELOCITY = {x: 1, y: 1};
+// ball velocity's speed is 5
+BALL_VELOCITY = {x: 1.1785, y: 1.1785};
 PADDLE_OFFSET = SCREEN_WIDTH / 100;
 SCORE_LIMIT = 10;
 GAME_TIME_LIMIT = 180;
