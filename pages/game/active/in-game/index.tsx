@@ -6,7 +6,8 @@ import {
   PLAYER_B_COLOR,
   BACKGROUND_COLOR,
   RENDERING_RATE,
-  GAME_TIME_LIMIT
+  GAME_TIME_LIMIT,
+  SCORE_LIMIT
 } from '@/lib/game/macros';
 import Player from '@/lib/classes/Player';
 import Ball from '@/lib/classes/Ball';
@@ -152,7 +153,11 @@ export default function Game() {
   return (
     <div className='relative min-h-screen flex justify-center items-center'>
       {gameover ? (
-        <GameResult playerA={score.playerA} playerB={score.playerB} />
+        <GameResult
+          score={score}
+          time={time}
+          winner={score.playerA == SCORE_LIMIT ? true : false}
+        />
       ) : (
         <>
           <canvas ref={canvasRef} className='z-10 absolute' />
