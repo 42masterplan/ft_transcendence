@@ -26,7 +26,7 @@ export default function SetUserName({
         variant: 'destructive'
       });
       setIsValidName(false);
-    } else if (response == true) {
+    } else if (response.isDuplicated == true) {
       toast({
         title: '이미 존재하는 닉네임입니다.',
         description: '다른 닉네임을 입력해주세요.',

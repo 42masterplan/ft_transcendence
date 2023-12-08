@@ -7,9 +7,9 @@ const getAuthorization = (): string | null => {
   });
   console.log('쿠키22:', cookies);
 
-  // const token = cookies.accessToken || null;
+  const token = cookies.accessToken || null;
   // console.log('토큰22222:', token);
-  return 'AccessToken';
+  return token;
 };
 
 export default getAuthorization;
