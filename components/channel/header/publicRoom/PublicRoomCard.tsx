@@ -22,7 +22,7 @@ export default function PublicRoomCard({
   function handleSubmit(id: string, password: string) {
     password = password.replace(/\s/g, '');
     socket.emit('joinChannel', {id, password}, (ret: string) => {
-      if (ret === 'success') {
+      if (ret === 'joinChannel Success!') {
         toast({
           title: '채널 참가',
           description: ret
