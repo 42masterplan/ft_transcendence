@@ -92,7 +92,7 @@ export default function NormalMatchMakingBtn({}) {
         <Button>Start Match</Button>
       </DialogTrigger>
       <DialogContent
-        className='w-[480px] h-[500px] bg-slate-400 rounded-[10px] shadow flex-col 
+        className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col 
       justify-center items-center gap-[110px] inline-flex'
       >
         <div className='flex flex-col w-full h-full px-3 gap-2'>
@@ -111,17 +111,6 @@ export default function NormalMatchMakingBtn({}) {
             searchTargetInput={searchTargetInput}
             className=''
           />
-          {/* <ScrollableContainer className={''}>
-            <InvitationCard
-              id={'1'}
-              name='test'
-              introduction='test'
-              isFriend={true}
-              isBlocked={false}
-              currentStatus='online'
-              profileImage=''
-            />
-          </ScrollableContainer> */}
         </div>
       </DialogContent>
     </Dialog>
