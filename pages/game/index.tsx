@@ -44,9 +44,8 @@ export default function Game() {
             <CardHeader>
               <CardTitle>Normal Game</CardTitle>
               <CardDescription>
-                다양한 테마와 규칙을 적용할 수 있는 노멀 게임입니다. 소문에
-                따르면 궁극기 등의 추가 기능이 추가될 수도 있다고 합니다만!
-                개발팀의 속도에 따라 정해진다고 합니다.
+                다양한 테마와 규칙을 적용할 수 있는 노멀 게임입니다. 친구를
+                초대해 즐겨보세요!
               </CardDescription>
             </CardHeader>
             <CardContent className='flex justify-center'>
