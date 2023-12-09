@@ -1,6 +1,6 @@
-import LinkBtn from '@/components/button/LinkBtn';
 import ChildTab from '../../components/game/ChildTab';
-import MatchMakingBtn from '../../components/game/MatchMaking';
+import MatchMakingBtn from '../../components/game/LadderMatchMaking';
+import NormalMatchMakingBtn from '@/components/game/NormalMatchMaking';
 import {
   Card,
   CardContent,
@@ -16,7 +16,6 @@ import {
   TabsList,
   TabsTrigger
 } from '@/components/shadcn/ui/tabs';
-import FriendMatchList from '@/components/game/FriendMatchList';
 
 export default function Game() {
   return (
@@ -54,8 +53,7 @@ export default function Game() {
               <ChildTab />
             </CardContent>
             <CardFooter className='flex justify-center'>
-              {/* <FriendMatchList /> */}
-              <LinkBtn link='/game/active'>{`Dummy Match`}</LinkBtn>
+              <NormalMatchMakingBtn />
             </CardFooter>
           </Card>
         </TabsContent>

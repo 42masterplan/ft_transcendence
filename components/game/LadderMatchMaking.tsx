@@ -1,13 +1,8 @@
 import MatchMakingTimer from './MatchMakingTimer';
 import {Button} from '@/components/shadcn/ui/button';
 import {Dialog, DialogContent, DialogTrigger} from './MatchMakingDialog';
-import * as DialogPrimitive from '@radix-ui/react-dialog';
 
-interface gameInfo {
-  option: boolean;
-}
-
-export default function MatchMakingBtn() {
+export default function LadderMatchMakingBtn() {
   return (
     <Dialog>
       <DialogTrigger asChild>
