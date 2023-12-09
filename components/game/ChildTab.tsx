@@ -15,16 +15,11 @@ export default function ChildTab() {
         <TabsTrigger value='theme3'>Theme3</TabsTrigger>
         <TabsTrigger value='theme4'>Theme4</TabsTrigger>
       </TabsList>
+      {/* below options will be replaced with theme discription or pictures */}
       <TabsContent value='theme1' />
-      <TabsContent value='theme2'>
-        <Options />
-      </TabsContent>
-      <TabsContent value='theme3'>
-        <Options />
-      </TabsContent>
-      <TabsContent value='theme4'>
-        <Options />
-      </TabsContent>
+      <TabsContent value='theme2'>{/* <Options /> */}</TabsContent>
+      <TabsContent value='theme3'>{/* <Options /> */}</TabsContent>
+      <TabsContent value='theme4'>{/* <Options /> */}</TabsContent>
     </Tabs>
   );
 }

@@ -1,5 +1,6 @@
 import {Switch} from '@/components/shadcn/ui/switch';
 
+// This won't be used for now.
 export default function Options() {
   return (
     <div className='p-1 grid gap-y-3'>

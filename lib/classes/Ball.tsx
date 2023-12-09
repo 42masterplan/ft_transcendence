@@ -1,15 +1,6 @@
 import React from 'react';
-import Player from './Player';
 import Particle from './Particle';
-import {
-  SCREEN_WIDTH,
-  SCREEN_HEIGHT,
-  PLAYER_WIDTH,
-  BALL_RADIUS,
-  BALL_COLOR,
-  BALL_VELOCITY,
-  BALL_SPEED
-} from '../game/macros';
+import {BALL_RADIUS, BALL_COLOR, BALL_VELOCITY} from '../game/macros';
 
 interface BallProps {
   x: number;
@@ -38,9 +29,10 @@ export default class Ball extends React.Component<BallProps> {
     c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
     c.fillStyle = this.color;
     c.fill();
-    c.restore();
+    c.restore(); //for glow
   }
 
+  // create particles
   resetPosition(particles: Particle[]) {
     for (let i = 0; i < 16; i++)
       particles.push(new Particle({x: this.x, y: this.y, c: this.props.c}));
