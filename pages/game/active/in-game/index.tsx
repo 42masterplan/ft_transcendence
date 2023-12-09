@@ -14,9 +14,9 @@ import Ball from '@/lib/classes/Ball';
 import Particle from '@/lib/classes/Particle';
 import {useEffect, useRef, useState} from 'react';
 import {handleKeyDowns, handleKeyUps} from '@/lib/game/util';
-import ScoreBoard from '@/components/game/ScoreBoard';
-import GameStatus from '@/components/game/GameStatus';
-import GameResult from '@/components/game/GameResult';
+import ScoreBoard from '@/components/game/ingame/ScoreBoard';
+import GameStatus from '@/components/game/ingame/GameStatus';
+import GameResult from '@/components/game/ingame/GameResult';
 import io from 'socket.io-client';
 
 export default function Game() {

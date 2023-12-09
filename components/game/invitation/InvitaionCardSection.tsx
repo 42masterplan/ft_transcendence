@@ -1,6 +1,6 @@
-import ScrollableContainer from '../container/ScrollableContainer';
+import ScrollableContainer from '../../container/ScrollableContainer';
 import InvitationCard from './InvitationCard';
-import {Accordion} from '../shadcn/ui/accordion';
+import {Accordion} from '../../shadcn/ui/accordion';
 import type {userType} from '@/types/user';
 import type {
   socialPageTargetUser as target,

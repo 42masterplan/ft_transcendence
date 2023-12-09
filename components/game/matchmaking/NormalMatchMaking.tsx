@@ -1,4 +1,4 @@
-import ScrollableContainer from '../container/ScrollableContainer';
+import ScrollableContainer from '../../container/ScrollableContainer';
 import {Button} from '@/components/shadcn/ui/button';
 import {Dialog, DialogContent, DialogTrigger} from './MatchMakingDialog';
 import {SocialPageNavBar} from '@/components/social/SocialPageNavBar';
@@ -9,7 +9,7 @@ import {
 } from '@/types/social';
 import useAxios from '@/hooks/useAxios';
 import {useEffect, useState} from 'react';
-import InvitaionCardSection from './InvitaionCardSection';
+import InvitaionCardSection from '../invitation/InvitaionCardSection';
 
 interface UserCardSectionProps {
   allUsers: userType[];
@@ -45,7 +45,7 @@ function isUserIdInArray(userId: string, array: userType[]) {
   return array.some((user) => user.id === userId);
 }
 
-export default function NormalMatchMakingBtn({}: UserCardSectionProps) {
+export default function NormalMatchMakingBtn({}) {
   // search options
   const [searchTarget, setSearchTarget] = useState<target>('friend');
   const [searchTargetStatus, setSearchTargetStatus] = useState<status>('All');

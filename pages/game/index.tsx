@@ -1,6 +1,6 @@
 import ChildTab from '../../components/game/ChildTab';
-import MatchMakingBtn from '../../components/game/LadderMatchMaking';
-import NormalMatchMakingBtn from '@/components/game/NormalMatchMaking';
+import MatchMakingBtn from '../../components/game/matchmaking/LadderMatchMaking';
+import NormalMatchMakingBtn from '@/components/game/matchmaking/NormalMatchMaking';
 import {
   Card,
   CardContent,
