@@ -1,7 +1,7 @@
 import * as Type from '@/lib/types';
 import {User} from '@/lib/classes/User';
-import UserInfoCard from '../../card/userInfoCard/UserInfoCard';
-import ButtonGroup from '../../card/cardUsedInSocialPage/buttonGroup/ButtonGroup';
+import UserInfoCard from '@/components/card/userInfoCard/UserInfoCard';
+import ButtonGroup from '@/components/card/cardUsedInSocialPage/buttonGroup/ButtonGroup';
 import {AccordionItem} from '@radix-ui/react-accordion';
 import {
   AccordionContent,
