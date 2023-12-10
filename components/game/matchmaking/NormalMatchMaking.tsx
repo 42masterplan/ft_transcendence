@@ -47,9 +47,9 @@ export default function NormalMatchMakingBtn({}) {
       </DialogTrigger>
       <DialogContent
         className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col 
-      justify-center items-center gap-[110px] inline-flex'
+      justify-center items-center gap-[20px] inline-flex'
       >
-        <div className='flex flex-col w-full h-full px-3 gap-2'>
+        <div className='flex flex-col w-full h-[390px] px-3 gap-2'>
           <InvitationNavBar setSearchTargetInput={setSearchTargetInput} />
           <InvitaionCardSection
             searchTargetInput={searchTargetInput}

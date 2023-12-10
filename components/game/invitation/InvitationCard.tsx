@@ -57,14 +57,6 @@ export default function InvitationCard(props: SocialCardProps) {
   }
 
   return (
-    // <UserInfoCard
-    //   userInfo={user}
-    //   size='md'
-    //   side='left'
-    //   printIntro={printIntro}
-    //   stretch={true}
-    //   insteadOfIntro={insteadOfIntro}
-    // />
     <AccordionItem
       value={props.id}
       className={`flex flex-col w-fit px-3 justify-between items-center gap-2 rounded-xl hover:scale-[1.02] duration-200 ${cardColor} `}
@@ -75,6 +67,7 @@ export default function InvitationCard(props: SocialCardProps) {
         printIntro={printIntro}
         stretch={false}
         insteadOfIntro={insteadOfIntro}
+        className='p-3'
       />
     </AccordionItem>
   );
