@@ -1,15 +1,9 @@
 import * as Type from '@/lib/types';
 import {User} from '@/lib/classes/User';
 import UserInfoCard from '@/components/card/userInfoCard/UserInfoCard';
-import ButtonGroup from '@/components/card/cardUsedInSocialPage/buttonGroup/ButtonGroup';
 import {AccordionItem} from '@radix-ui/react-accordion';
-import {
-  AccordionContent,
-  AccordionTrigger
-} from '@/components/shadcn/ui/accordion';
-import {TooltipProvider} from '@/components/shadcn/ui/tooltip';
 
-function userPropsToUserClass(props: SocialCardProps): Type.UserInfo {
+function userPropsToUserClass(props: InvitationCardProps): Type.UserInfo {
   const userClass = new User();
   userClass.id = props.id;
   userClass.profileImage = props.profileImage;
@@ -19,7 +13,7 @@ function userPropsToUserClass(props: SocialCardProps): Type.UserInfo {
   return userClass as Type.UserInfo;
 }
 
-interface SocialCardProps {
+interface InvitationCardProps {
   id: string;
   profileImage: string;
   name: string;
@@ -27,9 +21,10 @@ interface SocialCardProps {
   introduction: string;
   isFriend: boolean;
   isBlocked: boolean;
+  onClick: () => void; // onClick 속성 추가
 }
 
-export default function InvitationCard(props: SocialCardProps) {
+export default function InvitationCard(props: InvitationCardProps) {
   const user = userPropsToUserClass(props);
   let cardColor: string;
   let printIntro: boolean;
@@ -59,12 +54,13 @@ export default function InvitationCard(props: SocialCardProps) {
   return (
     <AccordionItem
       value={props.id}
-      className={`flex flex-col w-fit px-3 justify-between items-center gap-2 rounded-xl hover:scale-[1.02] duration-200 ${cardColor} `}
+      className={`flex flex-col w-full px-3 justify-between items-left gap-2 rounded-xl hover:scale-[1.02] duration-200 ${cardColor}`}
+      onClick={props.onClick}
     >
       <UserInfoCard
         userInfo={user}
         size='md'
-        printIntro={printIntro}
+        printIntro={false}
         stretch={false}
         insteadOfIntro={insteadOfIntro}
         className='p-3'

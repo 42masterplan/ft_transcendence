@@ -16,8 +16,10 @@ import {
   TabsList,
   TabsTrigger
 } from '@/components/shadcn/ui/tabs';
+import {useRef} from 'react';
 
 export default function Game() {
+  const theme = useRef('');
   return (
     <div className='flex justify-center items-center'>
       <Tabs defaultValue='ladder' className='w-full h-full pt-20 sm:max-w-2xl '>
@@ -49,7 +51,7 @@ export default function Game() {
               </CardDescription>
             </CardHeader>
             <CardContent className='flex justify-center'>
-              <ChildTab />
+              <ChildTab themeRef={theme} />
             </CardContent>
             <CardFooter className='flex justify-center'>
               <NormalMatchMakingBtn />

@@ -1,15 +1,10 @@
-import ScrollableContainer from '../../container/ScrollableContainer';
 import {Button} from '@/components/shadcn/ui/button';
 import {Dialog, DialogContent, DialogTrigger} from './MatchMakingDialog';
 import {InvitationNavBar} from '../invitation/InvitationNavBar';
 import {userType} from '@/types/user';
 import useAxios from '@/hooks/useAxios';
 import {useEffect, useState} from 'react';
-import InvitaionCardSection from '../invitation/InvitaionCardSection';
-
-function isUserIdInArray(userId: string, array: userType[]) {
-  return array.some((user) => user.id === userId);
-}
+import InvitationCardSection from '../invitation/InvitationCardSection';
 
 export default function NormalMatchMakingBtn({}) {
   // we are only going to search for online friends
@@ -51,7 +46,7 @@ export default function NormalMatchMakingBtn({}) {
       >
         <div className='flex flex-col w-full h-[390px] px-3 gap-2'>
           <InvitationNavBar setSearchTargetInput={setSearchTargetInput} />
-          <InvitaionCardSection
+          <InvitationCardSection
             searchTargetInput={searchTargetInput}
             className=''
             friends={friends}

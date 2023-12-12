@@ -28,7 +28,11 @@ function isUserIdInArray(userId: string, array: userType[]) {
   return array.some((user) => user.id === userId);
 }
 
-export default function InvitaionCardSection({
+function handleCardClick(userId: string, themeId?: string) {
+  console.log(userId);
+}
+
+export default function InvitationCardSection({
   friends,
   searchTargetInput,
   className = ''
@@ -55,6 +59,7 @@ export default function InvitaionCardSection({
               introduction={user.introduction}
               isFriend={isUserIdInArray(user.id, friends)}
               isBlocked={isUserIdInArray(user.id, [])}
+              onClick={() => handleCardClick(user.id)}
             />
           ))}
       </Accordion>
