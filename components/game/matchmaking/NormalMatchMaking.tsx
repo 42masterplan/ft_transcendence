@@ -25,7 +25,8 @@ export default function NormalMatchMakingBtn(props: {theme: string}) {
         id: '1'
       },
       errorTitle: '유저 정보 조회 실패',
-      errorDescription: '유저 정보 조회에 실패했습니다.'
+      errorDescription: '유저 정보 조회에 실패했습니다.',
+      disableSuccessToast: true
     });
   }, []); // ignore eslint warning. we only want to fetch data once ^^
   useEffect(() => {
