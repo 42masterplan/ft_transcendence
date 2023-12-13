@@ -13,13 +13,13 @@ export default function NormalMatchMakingBtn(props: {theme: string}) {
   // user data
   const [friends, setFriends] = useState<userType[]>([]);
   // fetch data
-  const [loading, setLoading] = useState(true);
   const theme = props.theme;
   useEffect(() => {
-    setLoading(true);
     fetchData({
       method: 'get',
-      // it supposed to be /users/friends but using all for now because of scrollable feature testing !!
+      // NOTICE: it supposed to be /users/friends but using all for now because of scrollable feature testing !!
+      // TODO: we are only going to search for online friends so we need to change this later !!
+      // socket will be used for this feature -> 알림 소켓이 구현되면 그때 바꿔야함.
       url: '/users',
       params: {
         id: '1'
@@ -32,7 +32,6 @@ export default function NormalMatchMakingBtn(props: {theme: string}) {
     if (isSuccess === true) {
       setFriends(response);
       console.log('로딩끝', response);
-      setLoading(false);
     }
   }, [isSuccess, response]);
 
