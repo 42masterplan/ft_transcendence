@@ -6,7 +6,7 @@ import useAxios from '@/hooks/useAxios';
 import {useEffect, useState} from 'react';
 import InvitationCardSection from '../invitation/InvitationCardSection';
 
-export default function NormalMatchMakingBtn({}) {
+export default function NormalMatchMakingBtn(props: {theme: string}) {
   // we are only going to search for online friends
   const [searchTargetInput, setSearchTargetInput] = useState('');
   const {fetchData, response, isSuccess} = useAxios();
@@ -14,6 +14,7 @@ export default function NormalMatchMakingBtn({}) {
   const [friends, setFriends] = useState<userType[]>([]);
   // fetch data
   const [loading, setLoading] = useState(true);
+  const theme = props.theme;
   useEffect(() => {
     setLoading(true);
     fetchData({
@@ -50,6 +51,7 @@ export default function NormalMatchMakingBtn({}) {
             searchTargetInput={searchTargetInput}
             className=''
             friends={friends}
+            theme={theme}
           />
         </div>
       </DialogContent>

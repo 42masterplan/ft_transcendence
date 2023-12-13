@@ -12,6 +12,7 @@ interface UserCardSectionProps {
   friends: userType[];
   searchTargetInput: string;
   className?: string;
+  theme?: string;
 }
 
 function filterUsers(users: userType[], searchTargetInput: string) {
@@ -28,16 +29,30 @@ function isUserIdInArray(userId: string, array: userType[]) {
   return array.some((user) => user.id === userId);
 }
 
-function handleCardClick(userId: string, themeId?: string) {
+function handleCardClick(userId: string, fetchData: any, theme?: string) {
   console.log(userId);
+  console.log(theme);
+  // fetchData({
+  //   method: 'post',
+  //   url: '/users/friends',
+  //   data: {
+  //     id: userId,
+  //     theme: theme
+  //   },
+  //   errorTitle: '매치 요청 실패',
+  //   errorDescription: '매치 요청에 실패했습니다.'
+  // });
+  // 이 부분 인터페이스 작성해서 협의 후 수정 예정
 }
 
 export default function InvitationCardSection({
   friends,
   searchTargetInput,
-  className = ''
+  className = '',
+  theme
 }: UserCardSectionProps) {
   const [users, setUsers] = useState<userType[]>([]);
+  const {fetchData, response, isSuccess} = useAxios();
 
   useEffect(() => {
     setUsers(filterUsers(friends, searchTargetInput));
@@ -59,7 +74,7 @@ export default function InvitationCardSection({
               introduction={user.introduction}
               isFriend={isUserIdInArray(user.id, friends)}
               isBlocked={isUserIdInArray(user.id, [])}
-              onClick={() => handleCardClick(user.id)}
+              onClick={() => handleCardClick(user.id, theme, fetchData)}
             />
           ))}
       </Accordion>

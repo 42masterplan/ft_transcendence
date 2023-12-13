@@ -1,3 +1,4 @@
+import {useState} from 'react';
 import ChildTab from '../../components/game/ChildTab';
 import MatchMakingBtn from '../../components/game/matchmaking/LadderMatchMaking';
 import NormalMatchMakingBtn from '@/components/game/matchmaking/NormalMatchMaking';
@@ -9,17 +10,16 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/shadcn/ui/card';
-
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger
 } from '@/components/shadcn/ui/tabs';
-import {useRef} from 'react';
 
 export default function Game() {
-  const theme = useRef('');
+  const [theme, setTheme] = useState('');
+  console.log(theme);
   return (
     <div className='flex justify-center items-center'>
       <Tabs defaultValue='ladder' className='w-full h-full pt-20 sm:max-w-2xl '>
@@ -51,10 +51,10 @@ export default function Game() {
               </CardDescription>
             </CardHeader>
             <CardContent className='flex justify-center'>
-              <ChildTab themeRef={theme} />
+              <ChildTab setTheme={setTheme} />
             </CardContent>
             <CardFooter className='flex justify-center'>
-              <NormalMatchMakingBtn />
+              <NormalMatchMakingBtn theme={theme} />
             </CardFooter>
           </Card>
         </TabsContent>

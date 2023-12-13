@@ -1,23 +1,21 @@
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger
-} from '@/components/shadcn/ui/tabs';
-import {Ref} from 'react';
+import {Tabs, TabsList, TabsTrigger} from '@/components/shadcn/ui/tabs';
 
-function onTabClick() {
-  console.log('tab clicked');
-}
-
-export default function ChildTab(themeRef: Ref<string>) {
+export default function ChildTab({setTheme}: any) {
   return (
-    <Tabs defaultValue='theme'>
+    <Tabs defaultValue='Theme'>
       <TabsList>
-        <TabsTrigger value='theme1'>Theme1</TabsTrigger>
-        <TabsTrigger value='theme2'>Theme2</TabsTrigger>
-        <TabsTrigger value='theme3'>Theme3</TabsTrigger>
-        <TabsTrigger value='theme4'>Theme4</TabsTrigger>
+        <TabsTrigger value='Theme1' onClick={() => setTheme('Theme1')}>
+          Theme1
+        </TabsTrigger>
+        <TabsTrigger value='Theme2' onClick={() => setTheme('Theme2')}>
+          Theme2
+        </TabsTrigger>
+        <TabsTrigger value='Theme3' onClick={() => setTheme('Theme3')}>
+          Theme3
+        </TabsTrigger>
+        <TabsTrigger value='Theme4' onClick={() => setTheme('Theme4')}>
+          Theme4
+        </TabsTrigger>
       </TabsList>
     </Tabs>
   );
