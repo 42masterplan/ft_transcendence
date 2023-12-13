@@ -43,6 +43,7 @@ function handleCardClick(userId: string, fetchData: any, theme?: string) {
   //   errorDescription: '매치 요청에 실패했습니다.'
   // });
   // 이 부분 인터페이스 작성해서 협의 후 수정 예정
+  // 소켓으로 요청 보내는 부분이 필요할 것 같음 -> 구현 예정인 알림 소켓을 활용할 수 있을 것 같음
 }
 
 export default function InvitationCardSection({
@@ -74,7 +75,7 @@ export default function InvitationCardSection({
               introduction={user.introduction}
               isFriend={isUserIdInArray(user.id, friends)}
               isBlocked={isUserIdInArray(user.id, [])}
-              onClick={() => handleCardClick(user.id, theme, fetchData)}
+              onClick={() => handleCardClick(user.id, fetchData, theme)}
             />
           ))}
       </Accordion>
