@@ -10,7 +10,7 @@ export default function MatchMakingTimer() {
     return () => clearInterval(id);
   }, []);
   return (
-    <span className='w-[480px] text-center text-slate-800 text-[40px] font-bold font-[Roboto Mono]'>
+    <span className='w-[480px] text-center text-[40px] font-bold font-[Roboto Mono]'>
       {TimeNum >= 60
         ? Math.floor(TimeNum / 60) + ':' + (TimeNum % 60)
         : '0:' + TimeNum}

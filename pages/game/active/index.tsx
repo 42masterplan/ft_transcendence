@@ -1,5 +1,5 @@
 import PlayerPortrait from '../../../components/game/PlayerPortrait';
-import Divider from '../../../components/game/Divider';
+import Divider from '../../../components/game/ingame/Divider';
 import {Player} from '@/DummyBackend/APIData';
 import {PLAYER_DUMMY_1} from '@/DummyBackend/APIData';
 import {PLAYER_DUMMY_2} from '@/DummyBackend/APIData';

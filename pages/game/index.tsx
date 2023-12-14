@@ -1,6 +1,7 @@
-import LinkBtn from '@/components/button/LinkBtn';
+import {useState} from 'react';
 import ChildTab from '../../components/game/ChildTab';
-import MatchMakingBtn from '../../components/game/MatchMaking';
+import MatchMakingBtn from '../../components/game/matchmaking/LadderMatchMaking';
+import NormalMatchMakingBtn from '@/components/game/matchmaking/NormalMatchMaking';
 import {
   Card,
   CardContent,
@@ -9,16 +10,15 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/shadcn/ui/card';
-
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger
 } from '@/components/shadcn/ui/tabs';
-import FriendMatchList from '@/components/game/FriendMatchList';
 
 export default function Game() {
+  const [theme, setTheme] = useState('');
   return (
     <div className='flex justify-center items-center'>
       <Tabs defaultValue='ladder' className='w-full h-full pt-20 sm:max-w-2xl '>
@@ -45,17 +45,15 @@ export default function Game() {
             <CardHeader>
               <CardTitle>Normal Game</CardTitle>
               <CardDescription>
-                다양한 테마와 규칙을 적용할 수 있는 노멀 게임입니다. 소문에
-                따르면 궁극기 등의 추가 기능이 추가될 수도 있다고 합니다만!
-                개발팀의 속도에 따라 정해진다고 합니다.
+                다양한 테마와 규칙을 적용할 수 있는 노멀 게임입니다. 친구를
+                초대해 즐겨보세요!
               </CardDescription>
             </CardHeader>
             <CardContent className='flex justify-center'>
-              <ChildTab />
+              <ChildTab setTheme={setTheme} />
             </CardContent>
             <CardFooter className='flex justify-center'>
-              {/* <FriendMatchList /> */}
-              <LinkBtn link='/game/active'>{`Dummy Match`}</LinkBtn>
+              <NormalMatchMakingBtn theme={theme} />
             </CardFooter>
           </Card>
         </TabsContent>
