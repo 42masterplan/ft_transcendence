@@ -147,7 +147,6 @@ export default function Game() {
   const [time, setTime] = useState(GAME_TIME_LIMIT);
   const [score, setScore] = useState({playerA: 0, playerB: 0});
   const [gameover, setGameOver] = useState(false);
-  const [roomId, setRoomId] = useState(0);
 
   useEffect(() => {
     const socket = io('http://localhost:4242');
@@ -162,21 +161,20 @@ export default function Game() {
       socket,
       c
     );
-    socket.on('joinedRoom', (id: number) => {
-      setRoomId(id);
+    socket.on('joinedRoom', (id) => {
+      listenToSocketEvents(
+        socket,
+        id,
+        playerA,
+        playerB,
+        ball,
+        setScore,
+        setGameOver,
+        setTime,
+        animationId,
+        particles
+      );
     });
-    listenToSocketEvents(
-      socket,
-      roomId,
-      playerA,
-      playerB,
-      ball,
-      setScore,
-      setGameOver,
-      setTime,
-      (animationId = 0), //used before initialization? 0 for now
-      particles
-    );
     setInterval(() => {
       handleKeys(keysPressed, playerA, playerB, socket);
     }, RENDERING_RATE);
@@ -185,9 +183,9 @@ export default function Game() {
       c.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
       c.fillStyle = BACKGROUND_COLOR;
       c.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-      c.strokeStyle = 'white'; // 선의 색상을 흰색으로 설정
-      c.lineWidth = 2; // 선의 두께 설정
-      c.strokeRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT); // 캔버스 테두리에 선 그리기
+      c.strokeStyle = 'white';
+      c.lineWidth = 2;
+      c.strokeRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
       playerA.draw();
       playerB.draw();
       ball.draw();
