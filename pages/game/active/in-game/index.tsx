@@ -61,7 +61,6 @@ function prepGame(
 function listenToSocketEvents(
   socket: Socket,
   roomId: number,
-  setRoomId: any,
   playerA: Player,
   playerB: Player,
   ball: Ball,
@@ -71,12 +70,7 @@ function listenToSocketEvents(
   animationId: number,
   particles: Particle[]
 ) {
-  socket.on('joinedRoom', (id: number) => {
-    console.log('joinedRoom: ', id);
-    setRoomId(id);
-  });
   socket.on('updatePlayers', (state) => {
-    console.log(state.roomId, roomId);
     if (state.roomId != roomId) return;
     const backendPlayers = state.players;
     if (backendPlayers.length < 2) return;
@@ -93,7 +87,6 @@ function listenToSocketEvents(
   });
   socket.on('updateBall', (state) => {
     if (state.roomId != roomId) return;
-    console.log('updateBall');
     const backendBall = state.ball;
     ball.x = backendBall.x;
     ball.y = backendBall.y;
@@ -169,10 +162,12 @@ export default function Game() {
       socket,
       c
     );
+    socket.on('joinedRoom', (id: number) => {
+      setRoomId(id);
+    });
     listenToSocketEvents(
       socket,
       roomId,
-      setRoomId,
       playerA,
       playerB,
       ball,
@@ -187,6 +182,7 @@ export default function Game() {
     }, RENDERING_RATE);
     addEventListeners(keysPressed);
     const gameLoop = () => {
+      c.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
       c.fillStyle = BACKGROUND_COLOR;
       c.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
       c.strokeStyle = 'white'; // 선의 색상을 흰색으로 설정
