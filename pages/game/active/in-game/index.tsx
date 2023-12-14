@@ -17,7 +17,133 @@ import {handleKeyDowns, handleKeyUps} from '@/lib/game/util';
 import ScoreBoard from '@/components/game/ingame/ScoreBoard';
 import GameStatus from '@/components/game/ingame/GameStatus';
 import GameResult from '@/components/game/ingame/GameResult';
-import io from 'socket.io-client';
+import {io, Socket} from 'socket.io-client';
+
+function prepGame(
+  canvas: HTMLCanvasElement,
+  contextRef: any,
+  socket: Socket,
+  c: CanvasRenderingContext2D
+) {
+  contextRef.current = c;
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  canvas.width = SCREEN_WIDTH * devicePixelRatio;
+  canvas.height = SCREEN_HEIGHT * devicePixelRatio;
+  c.scale(devicePixelRatio, devicePixelRatio);
+  canvas.style.width = `${SCREEN_WIDTH}px`;
+  canvas.style.height = `${SCREEN_HEIGHT}px`;
+  const particles = [] as Particle[];
+  const playerA = new Player({
+    id: '',
+    x: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
+    y: SCREEN_HEIGHT - 45,
+    color: PLAYER_A_COLOR,
+    c,
+    socket
+  });
+  const playerB = new Player({
+    id: '',
+    x: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
+    y: 30,
+    color: PLAYER_B_COLOR,
+    c,
+    socket
+  });
+  const ball = new Ball({
+    x: SCREEN_WIDTH / 2,
+    y: SCREEN_HEIGHT / 2,
+    c,
+    lastCollision: 0
+  });
+  return {playerA, playerB, ball, particles};
+}
+
+function listenToSocketEvents(
+  socket: Socket,
+  roomId: string,
+  setRoomId: any,
+  playerA: Player,
+  playerB: Player,
+  ball: Ball,
+  setScore: any,
+  setGameOver: any,
+  setTime: any,
+  animationId: number,
+  particles: Particle[]
+) {
+  console.log('listening to socket events');
+  socket.on('joinedRoom', (id) => {
+    setRoomId(id);
+  });
+  socket.on('updatePlayers', (state) => {
+    if (state.roomId != roomId) return;
+    const backendPlayers = state.players;
+    if (backendPlayers.length < 2) return;
+    if (!playerA.id) playerA.id = backendPlayers[0].id;
+    if (!playerB.id) playerB.id = backendPlayers[1].id;
+    playerA.x = backendPlayers[0].x;
+    playerA.y = backendPlayers[0].y;
+    playerB.x = backendPlayers[1].x;
+    playerB.y = backendPlayers[1].y;
+    playerA.dx = backendPlayers[0].dx;
+    playerB.dx = backendPlayers[1].dx;
+    if (!(playerA.id in backendPlayers)) delete backendPlayers[playerA.id];
+    if (!(playerB.id in backendPlayers)) delete backendPlayers[playerB.id];
+  });
+  socket.on('updateBall', (state) => {
+    if (state.roomId != roomId) return;
+    const backendBall = state.ball;
+    ball.x = backendBall.x;
+    ball.y = backendBall.y;
+    ball.velocity = backendBall.velocity;
+    ball.lastCollision = backendBall.lastCollision;
+  });
+  socket.on('updateScore', (state) => {
+    if (state.roomId != roomId) return;
+    const backendScore = state.score;
+    ball.resetPosition(particles);
+    setScore(backendScore);
+  });
+  socket.on('gameOver', (state) => {
+    if (state.roomId != roomId) return;
+    setGameOver(true);
+    cancelAnimationFrame(animationId);
+    socket.off('connect');
+    socket.off('disconnect');
+    socket.disconnect();
+  });
+  socket.on('updateTime', (state) => {
+    if (state.roomId != roomId) return;
+    const backendTime = state.time;
+    setTime(backendTime);
+  });
+}
+
+function handleKeys(
+  keysPressed: any,
+  playerA: Player,
+  playerB: Player,
+  socket: Socket
+) {
+  if (keysPressed.current) {
+    if (socket.id == playerA.id) {
+      handleKeyDowns(keysPressed.current, playerA, socket, true);
+      handleKeyUps(keysPressed.current, playerA, socket);
+    }
+    if (socket.id == playerB.id) {
+      handleKeyDowns(keysPressed.current, playerB, socket, false);
+      handleKeyUps(keysPressed.current, playerB, socket);
+    }
+  }
+}
+
+function addEventListeners(keysPressed: any) {
+  addEventListener(
+    'keydown',
+    (event) => (keysPressed.current[event.key] = true)
+  );
+  addEventListener('keyup', (event) => delete keysPressed.current[event.key]);
+}
 
 export default function Game() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -26,107 +152,38 @@ export default function Game() {
   const [time, setTime] = useState(GAME_TIME_LIMIT);
   const [score, setScore] = useState({playerA: 0, playerB: 0});
   const [gameover, setGameOver] = useState(false);
-  const [roomId, setRoomId] = useState(null); // 현재 방의 ID
+  const [roomId, setRoomId] = useState('');
 
   useEffect(() => {
     const socket = io('http://localhost:4242');
-    let animationId: number;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const c = canvas.getContext('2d');
     if (!c) return;
-    const devicePixelRatio = window.devicePixelRatio || 1;
-    contextRef.current = c;
-    canvas.width = SCREEN_WIDTH * devicePixelRatio;
-    canvas.height = SCREEN_HEIGHT * devicePixelRatio;
-    c.scale(devicePixelRatio, devicePixelRatio);
-    canvas.style.width = `${SCREEN_WIDTH}px`;
-    canvas.style.height = `${SCREEN_HEIGHT}px`;
-    const particles = [] as Particle[];
-    const playerA = new Player({
-      id: '',
-      x: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
-      y: SCREEN_HEIGHT - 45,
-      color: PLAYER_A_COLOR,
-      c,
-      socket
-    });
-    const playerB = new Player({
-      id: '',
-      x: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
-      y: 30,
-      color: PLAYER_B_COLOR,
-      c,
-      socket
-    });
-    const ball = new Ball({
-      x: SCREEN_WIDTH / 2,
-      y: SCREEN_HEIGHT / 2,
-      c,
-      lastCollision: 0
-    });
-    socket.on('joinedRoom', (id) => {
-      setRoomId(id);
-    });
-    socket.on('updatePlayers', (state) => {
-      if (state.roomId != roomId) return;
-      const backendPlayers = state.players;
-      if (backendPlayers.length < 2) return;
-      if (!playerA.id) playerA.id = backendPlayers[0].id;
-      if (!playerB.id) playerB.id = backendPlayers[1].id;
-      playerA.x = backendPlayers[0].x;
-      playerA.y = backendPlayers[0].y;
-      playerB.x = backendPlayers[1].x;
-      playerB.y = backendPlayers[1].y;
-      playerA.dx = backendPlayers[0].dx;
-      playerB.dx = backendPlayers[1].dx;
-      if (!(playerA.id in backendPlayers)) delete backendPlayers[playerA.id];
-      if (!(playerB.id in backendPlayers)) delete backendPlayers[playerB.id];
-    });
-    socket.on('updateBall', (state) => {
-      if (state.roomId != roomId) return;
-      const backendBall = state.ball;
-      ball.x = backendBall.x;
-      ball.y = backendBall.y;
-      ball.velocity = backendBall.velocity;
-      ball.lastCollision = backendBall.lastCollision;
-    });
-    socket.on('updateScore', (state) => {
-      if (state.roomId != roomId) return;
-      const backendScore = state.score;
-      ball.resetPosition(particles);
-      setScore(backendScore);
-    });
-    socket.on('gameOver', (state) => {
-      if (state.roomId != roomId) return;
-      setGameOver(true);
-      cancelAnimationFrame(animationId);
-      socket.off('connect');
-      socket.off('disconnect');
-      socket.disconnect();
-    });
-    socket.on('updateTime', (state) => {
-      if (state.roomId != roomId) return;
-      const backendTime = state.time;
-      setTime(backendTime);
-    });
-    setInterval(() => {
-      if (keysPressed.current) {
-        if (socket.id == playerA.id) {
-          handleKeyDowns(keysPressed.current, playerA, socket, true);
-          handleKeyUps(keysPressed.current, playerA, socket);
-        }
-        if (socket.id == playerB.id) {
-          handleKeyDowns(keysPressed.current, playerB, socket, false);
-          handleKeyUps(keysPressed.current, playerB, socket);
-        }
-      }
-    }, RENDERING_RATE);
-    addEventListener(
-      'keydown',
-      (event) => (keysPressed.current[event.key] = true)
+    let animationId: number;
+    const {playerA, playerB, ball, particles} = prepGame(
+      canvas,
+      contextRef,
+      socket,
+      c
     );
-    addEventListener('keyup', (event) => delete keysPressed.current[event.key]);
+    listenToSocketEvents(
+      socket,
+      roomId,
+      setRoomId,
+      playerA,
+      playerB,
+      ball,
+      setScore,
+      setGameOver,
+      setTime,
+      (animationId = 0), //used before initialization? 0 for now
+      particles
+    );
+    setInterval(() => {
+      handleKeys(keysPressed, playerA, playerB, socket);
+    }, RENDERING_RATE);
+    addEventListeners(keysPressed);
     const gameLoop = () => {
       c.fillStyle = BACKGROUND_COLOR;
       c.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -148,7 +205,7 @@ export default function Game() {
       socket.off('disconnect');
       socket.disconnect();
     };
-  }, []); //do we have to add roomId to dependency array?
+  }, []);
 
   return (
     <div className='relative min-h-screen flex justify-center items-center'>
