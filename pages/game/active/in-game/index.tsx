@@ -60,7 +60,7 @@ function prepGame(
 
 function listenToSocketEvents(
   socket: Socket,
-  roomId: string,
+  roomId: number,
   setRoomId: any,
   playerA: Player,
   playerB: Player,
@@ -71,11 +71,12 @@ function listenToSocketEvents(
   animationId: number,
   particles: Particle[]
 ) {
-  console.log('listening to socket events');
-  socket.on('joinedRoom', (id) => {
+  socket.on('joinedRoom', (id: number) => {
+    console.log('joinedRoom: ', id);
     setRoomId(id);
   });
   socket.on('updatePlayers', (state) => {
+    console.log(state.roomId, roomId);
     if (state.roomId != roomId) return;
     const backendPlayers = state.players;
     if (backendPlayers.length < 2) return;
@@ -92,6 +93,7 @@ function listenToSocketEvents(
   });
   socket.on('updateBall', (state) => {
     if (state.roomId != roomId) return;
+    console.log('updateBall');
     const backendBall = state.ball;
     ball.x = backendBall.x;
     ball.y = backendBall.y;
@@ -152,7 +154,7 @@ export default function Game() {
   const [time, setTime] = useState(GAME_TIME_LIMIT);
   const [score, setScore] = useState({playerA: 0, playerB: 0});
   const [gameover, setGameOver] = useState(false);
-  const [roomId, setRoomId] = useState('');
+  const [roomId, setRoomId] = useState(0);
 
   useEffect(() => {
     const socket = io('http://localhost:4242');
