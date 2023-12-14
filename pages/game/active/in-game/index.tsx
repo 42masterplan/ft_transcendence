@@ -189,6 +189,9 @@ export default function Game() {
     const gameLoop = () => {
       c.fillStyle = BACKGROUND_COLOR;
       c.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+      c.strokeStyle = 'white'; // 선의 색상을 흰색으로 설정
+      c.lineWidth = 2; // 선의 두께 설정
+      c.strokeRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT); // 캔버스 테두리에 선 그리기
       playerA.draw();
       playerB.draw();
       ball.draw();
