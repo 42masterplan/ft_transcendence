@@ -1,20 +1,20 @@
 import MatchMakingTimer from './MatchMakingTimer';
 import {Button} from '@/components/shadcn/ui/button';
 import {Dialog, DialogContent, DialogTrigger} from './MatchMakingDialog';
-import {useNavigate} from 'react-router-dom';
+import {useRouter} from 'next/router';
 import {Socket, io} from 'socket.io-client';
 import {useEffect, useState} from 'react';
 
 export default function LadderMatchMakingBtn() {
   const [socket, setSocket] = useState<Socket | null>(null);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     const socket = io('http://localhost:4242');
     setSocket(socket);
     socket.on('ladderMatch', (state) => {
       console.log('래더 매치 발견', state);
-      navigate(`/game/active/in-game/${state.id}`, {state: state});
+      router.push(`/game/active/in-game/${state.id}`);
     });
     // THINK: 매치 메이킹 취소 성공 확인?
     return () => {

@@ -7,7 +7,7 @@ import {useEffect, useState} from 'react';
 import InvitationCardSection from '../invitation/InvitationCardSection';
 import MatchMakingTimer from './MatchMakingTimer';
 import {io, Socket} from 'socket.io-client';
-import {useNavigate} from 'react-router-dom';
+import {useRouter} from 'next/router';
 
 export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   // we are only going to search for online friends
@@ -17,14 +17,14 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   const [isWaiting, setIsWaiting] = useState(false);
   const forwardTheme = theme;
   const [socket, setSocket] = useState<Socket | null>(null);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     const socket = io('http://localhost:4242');
     setSocket(socket);
     socket.on('normalMatch', (state) => {
       console.log('일반 매치 발견', state);
-      navigate(`/game/active/in-game/${state.id}`, {state: state});
+      router.push(`/game/active/in-game/${state.id}`);
     });
     return () => {
       socket.disconnect();
