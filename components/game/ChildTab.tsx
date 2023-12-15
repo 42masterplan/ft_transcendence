@@ -1,30 +1,22 @@
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger
-} from '@/components/shadcn/ui/tabs';
-import Options from './GameOptions';
+import {Tabs, TabsList, TabsTrigger} from '@/components/shadcn/ui/tabs';
 
-export default function ChildTab() {
+export default function ChildTab({setTheme}: any) {
   return (
-    <Tabs defaultValue='theme'>
+    <Tabs defaultValue='Theme'>
       <TabsList>
-        <TabsTrigger value='theme1'>Theme1</TabsTrigger>
-        <TabsTrigger value='theme2'>Theme2</TabsTrigger>
-        <TabsTrigger value='theme3'>Theme3</TabsTrigger>
-        <TabsTrigger value='theme4'>Theme4</TabsTrigger>
+        <TabsTrigger value='Theme1' onClick={() => setTheme('Theme1')}>
+          Theme1
+        </TabsTrigger>
+        <TabsTrigger value='Theme2' onClick={() => setTheme('Theme2')}>
+          Theme2
+        </TabsTrigger>
+        <TabsTrigger value='Theme3' onClick={() => setTheme('Theme3')}>
+          Theme3
+        </TabsTrigger>
+        <TabsTrigger value='Theme4' onClick={() => setTheme('Theme4')}>
+          Theme4
+        </TabsTrigger>
       </TabsList>
-      <TabsContent value='theme1' />
-      <TabsContent value='theme2'>
-        <Options />
-      </TabsContent>
-      <TabsContent value='theme3'>
-        <Options />
-      </TabsContent>
-      <TabsContent value='theme4'>
-        <Options />
-      </TabsContent>
     </Tabs>
   );
 }

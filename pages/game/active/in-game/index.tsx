@@ -5,24 +5,25 @@ import {
   PLAYER_A_COLOR,
   PLAYER_B_COLOR,
   BACKGROUND_COLOR,
-  SCORE_LIMIT,
-  RENDERING_RATE
+  RENDERING_RATE,
+  GAME_TIME_LIMIT,
+  SCORE_LIMIT
 } from '@/lib/game/macros';
 import Player from '@/lib/classes/Player';
 import Ball from '@/lib/classes/Ball';
 import Particle from '@/lib/classes/Particle';
 import {useEffect, useRef, useState} from 'react';
 import {handleKeyDowns, handleKeyUps} from '@/lib/game/util';
-import ScoreBoard from '@/components/game/ScoreBoard';
-import GameStatus from '@/components/game/GameStatus';
-import GameResult from '@/components/game/GameResult';
+import ScoreBoard from '@/components/game/ingame/ScoreBoard';
+import GameStatus from '@/components/game/ingame/GameStatus';
+import GameResult from '@/components/game/ingame/GameResult';
 import io from 'socket.io-client';
 
 export default function Game() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const keysPressed = useRef<{[key: string]: boolean}>({});
-  const [time, setTime] = useState(120);
+  const [time, setTime] = useState(GAME_TIME_LIMIT);
   const [score, setScore] = useState({playerA: 0, playerB: 0});
   const [gameover, setGameOver] = useState(false);
   const [roomId, setRoomId] = useState(null); // 현재 방의 ID
@@ -132,6 +133,7 @@ export default function Game() {
       playerA.draw();
       playerB.draw();
       ball.draw();
+      // remove particles that fade out
       particles.forEach((particle) => {
         if (particle.alpha <= 0.01) {
           particles.splice(particles.indexOf(particle), 1);
@@ -146,12 +148,16 @@ export default function Game() {
       socket.off('disconnect');
       socket.disconnect();
     };
-  }, []);
+  }, []); //do we have to add roomId to dependency array?
 
   return (
     <div className='relative min-h-screen flex justify-center items-center'>
       {gameover ? (
-        <GameResult playerA={score.playerA} playerB={score.playerB} />
+        <GameResult
+          score={score}
+          time={time}
+          winner={score.playerA == SCORE_LIMIT ? true : false}
+        />
       ) : (
         <>
           <canvas ref={canvasRef} className='z-10 absolute' />

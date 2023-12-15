@@ -1,5 +1,5 @@
 import PlayerPortrait from '../../../components/game/PlayerPortrait';
-import Divider from '../../../components/game/Divider';
+import Divider from '../../../components/game/ingame/Divider';
 import {Player} from '@/DummyBackend/APIData';
 import {PLAYER_DUMMY_1} from '@/DummyBackend/APIData';
 import {PLAYER_DUMMY_2} from '@/DummyBackend/APIData';
@@ -12,7 +12,7 @@ interface GameInfo {
 
 export default function Preinfo() {
   return (
-    <div className='py-14 flex items-center justify-center h-screen relative'>
+    <div className='relative min-h-screen flex justify-center items-center'>
       <div
         className='absolute left-1/2 top-1/2 transform translate-x-[-50%] translate-y-[-50%] w-[370px] h-[620px] py-[50px] bg-slate-800 rounded-[10px]
       shadow border border-black flex flex-col justify-between items-center'
