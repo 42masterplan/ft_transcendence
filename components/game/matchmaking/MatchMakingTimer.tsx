@@ -3,9 +3,10 @@ import {useEffect, useState} from 'react';
 export default function MatchMakingTimer(props: {
   isAscending: boolean;
   stopNormalMatchMaking?: any;
+  setIsWaiting?: any;
 }) {
   const [TimeNum, setTimeNum] = useState(10);
-  const {isAscending, stopNormalMatchMaking} = props;
+  const {isAscending, stopNormalMatchMaking, setIsWaiting} = props;
   useEffect(() => {
     setTimeNum(0);
     if (isAscending === true) {
@@ -23,16 +24,15 @@ export default function MatchMakingTimer(props: {
   }, []);
   useEffect(() => {
     if (!TimeNum && !isAscending) {
-      console.log('매칭 취소');
       stopNormalMatchMaking();
+      setIsWaiting(false);
     }
   }, [TimeNum, isAscending]);
 
   return (
     <span className='w-[480px] text-center text-[40px] font-bold font-[Roboto Mono]'>
-      {TimeNum >= 60
-        ? Math.floor(TimeNum / 60) + ':' + (TimeNum % 60)
-        : '0:' + TimeNum}
+      {isAscending ? '0:' : ''}
+      {TimeNum}
     </span>
   );
 }

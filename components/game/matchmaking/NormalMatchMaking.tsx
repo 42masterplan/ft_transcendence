@@ -6,16 +6,8 @@ import useAxios from '@/hooks/useAxios';
 import {useEffect, useState} from 'react';
 import InvitationCardSection from '../invitation/InvitationCardSection';
 import MatchMakingTimer from './MatchMakingTimer';
-
-export const startNormalMatchMaking = () => {
-  console.log('노멀 매칭 시작');
-  // TODO: 매치 매이킹 소켓 연결
-};
-
-function stopNormalMatchMaking() {
-  console.log('노멀 매칭 취소');
-  // TODO: 매치 매이킹 소켓 연결 해제, dialog 닫기
-}
+import {io, Socket} from 'socket.io-client';
+import {useNavigate} from 'react-router-dom';
 
 export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   // we are only going to search for online friends
@@ -24,6 +16,33 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   const [friends, setFriends] = useState<userType[]>([]);
   const [isWaiting, setIsWaiting] = useState(false);
   const forwardTheme = theme;
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const socket = io('http://localhost:4242');
+    setSocket(socket);
+    socket.on('normalMatch', (state) => {
+      console.log('일반 매치 발견', state);
+      navigate(`/game/active/in-game/${state.id}`, {state: state});
+    });
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
+  function stopNormalMatchMaking() {
+    console.log('노멀 매칭 취소');
+    if (socket) socket.emit('normalMatchCancel', {userName: 'daejlee'});
+  }
+  function startNormalMatchMaking() {
+    console.log('노멀 매칭 시작');
+    if (socket)
+      socket.emit('normalMatch', {
+        userName: 'daejlee',
+        theme: forwardTheme
+      });
+  }
   useEffect(() => {
     fetchData({
       method: 'get',
@@ -40,9 +59,7 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
     });
   }, []); // ignore eslint warning. we only want to fetch data once ^^
   useEffect(() => {
-    if (isSuccess === true) {
-      setFriends(response);
-    }
+    if (isSuccess === true) setFriends(response);
   }, [isSuccess, response]);
 
   return isWaiting === false ? (
@@ -62,6 +79,7 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
             friends={friends}
             theme={forwardTheme}
             setIsWaiting={setIsWaiting}
+            startNormalMatchMaking={startNormalMatchMaking}
           />
         </div>
       </DialogContent>
@@ -69,21 +87,19 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   ) : (
     <Dialog
       onClose={() => {
-        setIsWaiting(false);
         stopNormalMatchMaking();
+        setIsWaiting(false);
       }}
     >
-      <DialogContent
-        className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col 
-      justify-center items-center gap-[20px] inline-flex'
-      >
-        <div className='flex flex-col justify-center items-center'>
-          <div className='text-4xl font-bold'>Waiting for opponent...</div>
-          <MatchMakingTimer
-            isAscending={false}
-            stopNormalMatchMaking={stopNormalMatchMaking}
-          />
-        </div>
+      <DialogContent className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col justify-center items-center gap-[110px] inline-flex'>
+        <h1 className='text-[40px] font-bold font-[Roboto Mono]'>
+          매칭을 수락하길 기다리는중
+        </h1>
+        <MatchMakingTimer
+          isAscending={false}
+          stopNormalMatchMaking={stopNormalMatchMaking}
+          setIsWaiting={setIsWaiting}
+        />
       </DialogContent>
     </Dialog>
   );

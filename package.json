@@ -47,6 +47,7 @@
     "react-dom": "^18",
     "react-hook-form": "^7.47.0",
     "react-icons": "^4.11.0",
+    "react-router-dom": "^6.21.0",
     "recoil": "^0.7.7",
     "recoil-persist": "^5.1.0",
     "socket.io": "^4.7.2",

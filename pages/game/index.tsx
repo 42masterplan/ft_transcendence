@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import ChildTab from '../../components/game/ChildTab';
 import MatchMakingBtn from '../../components/game/matchmaking/LadderMatchMaking';
 import NormalMatchMakingBtn from '@/components/game/matchmaking/NormalMatchMaking';
@@ -20,6 +20,7 @@ import {Theme} from '@/lib/types';
 
 export default function Game() {
   const [theme, setTheme] = useState(Theme.Default);
+
   return (
     <div className='flex justify-center items-center'>
       <Tabs defaultValue='ladder' className='w-full h-full pt-20 sm:max-w-2xl '>
