@@ -3,31 +3,37 @@ import {Theme} from '@/lib/types';
 
 export default function ChildTab({setTheme}: any) {
   return (
-    <Tabs defaultValue={Theme.Theme1}>
+    <Tabs defaultValue={Theme.Default}>
       <TabsList>
         <TabsTrigger
-          value={Theme.Theme1}
-          onClick={() => setTheme(Theme.Theme1)}
+          value={Theme.Default}
+          onClick={() => setTheme(Theme.Default)}
         >
-          Theme1
+          Default
         </TabsTrigger>
         <TabsTrigger
-          value={Theme.Theme2}
-          onClick={() => setTheme(Theme.Theme2)}
+          value={Theme.Badminton}
+          onClick={() => setTheme(Theme.Badminton)}
         >
-          Theme2
+          Badminton
         </TabsTrigger>
         <TabsTrigger
-          value={Theme.Theme3}
-          onClick={() => setTheme(Theme.Theme3)}
+          value={Theme.Basketball}
+          onClick={() => setTheme(Theme.Basketball)}
         >
-          Theme3
+          Basketball
         </TabsTrigger>
         <TabsTrigger
-          value={Theme.Theme4}
-          onClick={() => setTheme(Theme.Theme4)}
+          value={Theme.Soccer}
+          onClick={() => setTheme(Theme.Soccer)}
         >
-          Theme4
+          Soccer
+        </TabsTrigger>
+        <TabsTrigger
+          value={Theme.Swimming}
+          onClick={() => setTheme(Theme.Swimming)}
+        >
+          Swimming
         </TabsTrigger>
       </TabsList>
     </Tabs>

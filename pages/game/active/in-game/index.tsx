@@ -162,7 +162,7 @@ export default function Game() {
       c
     );
     const backgroundImage = new Image();
-    backgroundImage.src = '/gameThemes/badminton.png';
+    backgroundImage.src = '/gameThemes/swimming.png';
     socket.on('joinedRoom', (id) => {
       listenToSocketEvents(
         socket,
@@ -184,7 +184,6 @@ export default function Game() {
     const gameLoop = () => {
       if (backgroundImage.complete)
         c.drawImage(backgroundImage, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-      // c.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
       c.fillStyle = BACKGROUND_COLOR;
       c.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
       c.strokeStyle = 'white';

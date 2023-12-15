@@ -59,8 +59,9 @@ export type DMType = {
 
 // 원래 enum으로 하려고 했지만 TS에서 as const 형태를 지향하기에..
 export const Theme = {
-  Theme1: 'Theme1',
-  Theme2: 'Theme2',
-  Theme3: 'Theme3',
-  Theme4: 'Theme4'
+  Badminton: 'Badminton',
+  Basketball: 'Basketball',
+  Soccer: 'Soccer',
+  Swimming: 'Swimming',
+  Default: 'Default'
 } as const;

@@ -6,7 +6,22 @@ import {Button} from '@/components/shadcn/ui/button';
 
 import {cn} from '@/lib/utils';
 
-const Dialog = DialogPrimitive.Root;
+interface DialogProps {
+  onClose?: () => void;
+  children: React.ReactNode;
+  // 다른 필요한 props 타입들을 여기에 추가
+}
+
+const Dialog = ({onClose, children, ...props}: DialogProps) => (
+  <DialogPrimitive.Root
+    {...props}
+    onOpenChange={(open) => {
+      if (!open) onClose?.();
+    }}
+  >
+    {children}
+  </DialogPrimitive.Root>
+);
 
 const DialogTrigger = DialogPrimitive.Trigger;
 

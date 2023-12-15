@@ -10,9 +10,8 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   // we are only going to search for online friends
   const [searchTargetInput, setSearchTargetInput] = useState('');
   const {fetchData, response, isSuccess} = useAxios();
-  // user data
   const [friends, setFriends] = useState<userType[]>([]);
-  // fetch data
+  const [isWaiting, setIsWaiting] = useState(false);
   const forwardTheme = theme;
   useEffect(() => {
     fetchData({
@@ -32,11 +31,10 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   useEffect(() => {
     if (isSuccess === true) {
       setFriends(response);
-      console.log('로딩끝', response);
     }
   }, [isSuccess, response]);
 
-  return (
+  return isWaiting === false ? (
     <Dialog>
       <DialogTrigger asChild>
         <Button>Start Match</Button>
@@ -52,7 +50,25 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
             className=''
             friends={friends}
             theme={forwardTheme}
+            setIsWaiting={setIsWaiting}
           />
+        </div>
+      </DialogContent>
+    </Dialog>
+  ) : (
+    <Dialog
+      onClose={() => {
+        setIsWaiting(false);
+        console.log('SUCCESS!!!');
+      }}
+    >
+      <DialogContent
+        className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col 
+      justify-center items-center gap-[20px] inline-flex'
+      >
+        <div className='flex flex-col justify-center items-center'>
+          <div className='text-4xl font-bold'>Waiting for opponent...</div>
+          <div className='text-2xl font-bold'>Please wait for a moment</div>
         </div>
       </DialogContent>
     </Dialog>

@@ -16,9 +16,10 @@ import {
   TabsList,
   TabsTrigger
 } from '@/components/shadcn/ui/tabs';
+import {Theme} from '@/lib/types';
 
 export default function Game() {
-  const [theme, setTheme] = useState('');
+  const [theme, setTheme] = useState(Theme.Default);
   return (
     <div className='flex justify-center items-center'>
       <Tabs defaultValue='ladder' className='w-full h-full pt-20 sm:max-w-2xl '>
