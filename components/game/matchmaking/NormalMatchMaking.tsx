@@ -7,6 +7,16 @@ import {useEffect, useState} from 'react';
 import InvitationCardSection from '../invitation/InvitationCardSection';
 import MatchMakingTimer from './MatchMakingTimer';
 
+export const startNormalMatchMaking = () => {
+  console.log('노멀 매칭 시작');
+  // TODO: 매치 매이킹 소켓 연결
+};
+
+function stopNormalMatchMaking() {
+  console.log('노멀 매칭 취소');
+  // TODO: 매치 매이킹 소켓 연결 해제, dialog 닫기
+}
+
 export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   // we are only going to search for online friends
   const [searchTargetInput, setSearchTargetInput] = useState('');
@@ -57,14 +67,22 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
       </DialogContent>
     </Dialog>
   ) : (
-    <Dialog onClose={() => setIsWaiting(false)}>
+    <Dialog
+      onClose={() => {
+        setIsWaiting(false);
+        stopNormalMatchMaking();
+      }}
+    >
       <DialogContent
         className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col 
       justify-center items-center gap-[20px] inline-flex'
       >
         <div className='flex flex-col justify-center items-center'>
           <div className='text-4xl font-bold'>Waiting for opponent...</div>
-          <MatchMakingTimer isAscending={false} />
+          <MatchMakingTimer
+            isAscending={false}
+            stopNormalMatchMaking={stopNormalMatchMaking}
+          />
         </div>
       </DialogContent>
     </Dialog>

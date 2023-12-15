@@ -1,12 +1,11 @@
-import {clear} from 'console';
 import {useEffect, useState} from 'react';
 
-export default function MatchMakingTimer({
-  isAscending
-}: {
+export default function MatchMakingTimer(props: {
   isAscending: boolean;
+  stopNormalMatchMaking?: any;
 }) {
   const [TimeNum, setTimeNum] = useState(10);
+  const {isAscending, stopNormalMatchMaking} = props;
   useEffect(() => {
     setTimeNum(0);
     if (isAscending === true) {
@@ -25,6 +24,7 @@ export default function MatchMakingTimer({
   useEffect(() => {
     if (!TimeNum && !isAscending) {
       console.log('매칭 취소');
+      stopNormalMatchMaking();
     }
   }, [TimeNum, isAscending]);
 

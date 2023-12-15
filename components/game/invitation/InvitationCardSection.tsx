@@ -4,6 +4,7 @@ import {Accordion} from '@/components/shadcn/ui/accordion';
 import type {userType} from '@/types/user';
 import {useEffect, useState} from 'react';
 import useAxios from '@/hooks/useAxios';
+import {startNormalMatchMaking} from '../matchmaking/NormalMatchMaking';
 
 interface InvitationCardSectionProps {
   friends: userType[];
@@ -35,6 +36,7 @@ function handleCardClick(
 ) {
   console.log('useId: ', userId, 'theme: ', theme);
   setIsWaiting(true);
+  startNormalMatchMaking();
   // TODO: Add invitation request with socket -> 구현 예정인 알림 소켓을 활용할 수 있을 것임. 그때 구현
 }
 
