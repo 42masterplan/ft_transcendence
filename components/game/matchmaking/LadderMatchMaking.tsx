@@ -12,7 +12,7 @@ export default function LadderMatchMakingBtn() {
         <h1 className='text-[40px] font-bold font-[Roboto Mono]'>
           래더 게임 매칭중
         </h1>
-        <MatchMakingTimer />
+        <MatchMakingTimer isAscending={true} />
       </DialogContent>
     </Dialog>
   );

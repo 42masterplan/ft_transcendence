@@ -5,6 +5,7 @@ import {userType} from '@/types/user';
 import useAxios from '@/hooks/useAxios';
 import {useEffect, useState} from 'react';
 import InvitationCardSection from '../invitation/InvitationCardSection';
+import MatchMakingTimer from './MatchMakingTimer';
 
 export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   // we are only going to search for online friends
@@ -56,19 +57,14 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
       </DialogContent>
     </Dialog>
   ) : (
-    <Dialog
-      onClose={() => {
-        setIsWaiting(false);
-        console.log('SUCCESS!!!');
-      }}
-    >
+    <Dialog onClose={() => setIsWaiting(false)}>
       <DialogContent
         className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col 
       justify-center items-center gap-[20px] inline-flex'
       >
         <div className='flex flex-col justify-center items-center'>
           <div className='text-4xl font-bold'>Waiting for opponent...</div>
-          <div className='text-2xl font-bold'>Please wait for a moment</div>
+          <MatchMakingTimer isAscending={false} />
         </div>
       </DialogContent>
     </Dialog>
