@@ -5,6 +5,7 @@ import {
   PLAYER_A_COLOR,
   PLAYER_B_COLOR,
   BACKGROUND_COLOR,
+  BACKGROUND_SHADOW_COLOR,
   RENDERING_RATE,
   GAME_TIME_LIMIT,
   SCORE_LIMIT
@@ -165,7 +166,8 @@ export default function Game() {
       c
     );
     const backgroundImage = new Image();
-    backgroundImage.src = `/gameThemes/${theme}.png`;
+    if (theme && theme !== 'Default')
+      backgroundImage.src = `/gameThemes/${theme}.png`;
     socket.on('joinedRoom', (id) => {
       listenToSocketEvents(
         socket,
@@ -185,9 +187,13 @@ export default function Game() {
     }, RENDERING_RATE);
     addEventListeners(keysPressed);
     const gameLoop = () => {
-      if (backgroundImage.complete)
-        c.drawImage(backgroundImage, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-      c.fillStyle = BACKGROUND_COLOR;
+      if (theme && theme != 'Default') {
+        if (backgroundImage.complete) {
+          console.log('complete');
+          c.drawImage(backgroundImage, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+          c.fillStyle = BACKGROUND_SHADOW_COLOR;
+        }
+      } else c.fillStyle = BACKGROUND_COLOR;
       c.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
       c.strokeStyle = 'white';
       c.lineWidth = 2;
