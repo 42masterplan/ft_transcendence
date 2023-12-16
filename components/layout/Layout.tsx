@@ -9,7 +9,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
   return (
     <>
       {router.pathname.startsWith('/welcome') ||
-      router.pathname.startsWith('/game/active') ? null : (
+      router.pathname.startsWith('/game/in-game') ? null : (
         <Header
           className={`flex flex-row w-full items-center justify-between px-3 sm:px-4 h-[5vh] sm:h-[7vh]`}
         />
@@ -21,7 +21,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
         {children}
       </main>
       {router.pathname.startsWith('/welcome') ||
-      router.pathname.startsWith('/game/active') ? null : (
+      router.pathname.startsWith('/game/in-game') ? null : (
         <Footer
           className={`hidden sm:flex flex-row w-full items-center justify-between gap-4 px-3 h-[7vh]`}
         />

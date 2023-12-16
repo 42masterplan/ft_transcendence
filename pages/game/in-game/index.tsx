@@ -18,6 +18,7 @@ import ScoreBoard from '@/components/game/ingame/ScoreBoard';
 import GameStatus from '@/components/game/ingame/GameStatus';
 import GameResult from '@/components/game/ingame/GameResult';
 import {io, Socket} from 'socket.io-client';
+import {useRouter} from 'next/router';
 
 function prepGame(
   canvas: HTMLCanvasElement,
@@ -147,6 +148,8 @@ export default function Game() {
   const [time, setTime] = useState(GAME_TIME_LIMIT);
   const [score, setScore] = useState({playerA: 0, playerB: 0});
   const [gameover, setGameOver] = useState(false);
+  const router = useRouter();
+  const {id, theme} = router.query;
 
   useEffect(() => {
     const socket = io('http://localhost:4242');
@@ -162,7 +165,7 @@ export default function Game() {
       c
     );
     const backgroundImage = new Image();
-    backgroundImage.src = '/gameThemes/swimming.png';
+    backgroundImage.src = `/gameThemes/${theme}.png`;
     socket.on('joinedRoom', (id) => {
       listenToSocketEvents(
         socket,

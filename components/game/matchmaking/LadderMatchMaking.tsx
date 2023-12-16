@@ -14,7 +14,10 @@ export default function LadderMatchMakingBtn() {
     setSocket(socket);
     socket.on('ladderMatch', (state) => {
       console.log('래더 매치 발견', state);
-      router.push(`/game/active/in-game/${state.id}`);
+      router.push({
+        pathname: '/game/in-game',
+        query: {id: state.id, theme: 'default'}
+      });
     });
     // THINK: 매치 메이킹 취소 성공 확인?
     return () => {

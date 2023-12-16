@@ -24,7 +24,10 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
     setSocket(socket);
     socket.on('normalMatch', (state) => {
       console.log('일반 매치 발견', state);
-      router.push(`/game/active/in-game/${state.id}`);
+      router.push({
+        pathname: '/game/in-game',
+        query: {id: state.id, theme: forwardTheme}
+      });
     });
     return () => {
       socket.disconnect();
@@ -32,15 +35,14 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   }, []);
 
   function stopNormalMatchMaking() {
-    console.log('노멀 매칭 취소');
+    console.log('일반 매칭 취소');
     if (socket) socket.emit('normalMatchCancel', {userName: 'daejlee'});
   }
   function startNormalMatchMaking() {
-    console.log('노멀 매칭 시작');
+    console.log('일반 매칭 시작');
     if (socket)
       socket.emit('normalMatch', {
-        userName: 'daejlee',
-        theme: forwardTheme
+        userName: 'daejlee'
       });
   }
   useEffect(() => {
