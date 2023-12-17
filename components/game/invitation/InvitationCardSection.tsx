@@ -5,11 +5,13 @@ import type {userType} from '@/types/user';
 import {useEffect, useState} from 'react';
 import useAxios from '@/hooks/useAxios';
 
-interface UserCardSectionProps {
+interface InvitationCardSectionProps {
   friends: userType[];
   searchTargetInput: string;
   className?: string;
   theme?: string;
+  setIsWaiting: any;
+  startNormalMatchMaking: any;
 }
 
 function filterUsers(users: userType[], searchTargetInput: string) {
@@ -26,26 +28,31 @@ function isUserIdInArray(userId: string, array: userType[]) {
   return array.some((user) => user.id === userId);
 }
 
-function handleCardClick(userId: string, fetchData: any, theme?: string) {
-  console.log(userId);
-  console.log(theme);
-  // TODO: Add invitation request with socket -> 구현 예정인 알림 소켓을 활용할 수 있을 것임. 그때 구현
-}
-
 export default function InvitationCardSection({
   friends,
   searchTargetInput,
   className = '',
-  theme
-}: UserCardSectionProps) {
+  theme,
+  setIsWaiting,
+  startNormalMatchMaking
+}: InvitationCardSectionProps) {
   const [users, setUsers] = useState<userType[]>([]);
   const {fetchData, response, isSuccess} = useAxios();
-
+  function handleCardClick(
+    userId: string,
+    theme: string | undefined,
+    setIsWaiting: any,
+    startNormalMatchMaking: any
+  ) {
+    console.log('useId: ', userId, 'theme: ', theme);
+    setIsWaiting(true);
+    startNormalMatchMaking();
+  }
   useEffect(() => {
     setUsers(filterUsers(friends, searchTargetInput));
   }, [searchTargetInput, friends]);
   return (
-    <ScrollableContainer className={` ${className}`}>
+    <ScrollableContainer className={`${className}`}>
       <Accordion
         type='multiple'
         className='flex flex-row flex-wrap items-center justify-center gap-3 sm:gap-5'
@@ -61,7 +68,14 @@ export default function InvitationCardSection({
               introduction={user.introduction}
               isFriend={isUserIdInArray(user.id, friends)}
               isBlocked={isUserIdInArray(user.id, [])}
-              onClick={() => handleCardClick(user.id, fetchData, theme)}
+              onClick={() =>
+                handleCardClick(
+                  user.id,
+                  theme,
+                  setIsWaiting,
+                  startNormalMatchMaking
+                )
+              }
             />
           ))}
       </Accordion>

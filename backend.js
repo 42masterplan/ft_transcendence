@@ -121,12 +121,12 @@ const gameStates = {};
 
 /**
  * @brief 소켓룸에서 사용할 게임 상태를 생성합니다.
- * @param {*} gameId 소켓룸 ID입니다.
+ * @param {*} roomId 소켓룸 ID입니다.
  * @returns 생성되어 초기화된 게임 상태를 반환합니다.
  */
-function createNewGameState(gameId) {
+function createNewGameState(roomId) {
   return {
-    gameId: gameId,
+    roomId: roomId,
     ready: false,
     players: [
       //A
@@ -176,12 +176,12 @@ function createNewGameState(gameId) {
 function resetBall(isA, state, io) {
   if (isA) state.score.playerA++;
   else state.score.playerB++;
-  io.to(state.gameId).emit('updateScore', state);
+  io.to(state.roomId).emit('updateScore', state);
   if (
     state.score.playerA === SCORE_LIMIT ||
     state.score.playerB === SCORE_LIMIT
   ) {
-    io.to(state.gameId).emit('gameOver', state);
+    io.to(state.roomId).emit('gameOver', state);
     return;
   }
   state.ball.x = SCREEN_WIDTH / 2;
@@ -198,7 +198,7 @@ function resetBall(isA, state, io) {
     const ret_x = (dx / speed) * BALL_SPEED;
     const ret_y = (dy / speed) * BALL_SPEED;
     state.ball.velocity = {x: ret_x, y: ret_y};
-    io.to(state.gameId).emit('updateBall', state);
+    io.to(state.roomId).emit('updateBall', state);
   }, 3000);
 }
 
@@ -281,39 +281,39 @@ nextApp.prepare().then(() => {
     socket.on('disconnect', (reason) => {
       console.log(reason); // 연결 끊김 원인을 출력합니다.
       // 플레이어가 배정된 게임 룸을 찾습니다.
-      const gameId = Object.keys(gameStates).find((id) => {
+      const roomId = Object.keys(gameStates).find((id) => {
         const state = gameStates[id];
         return state.players.some((player) => player.id === socket.id);
       });
-      if (!gameId) console.error('this should not happen'); // 게임 룸을 찾지 못하면 에러를 출력합니다. (로직상 불가능합니다 ;)..
-      if (!gameStates[gameId].ready) {
+      if (!roomId) console.error('this should not happen'); // 게임 룸을 찾지 못하면 에러를 출력합니다. (로직상 불가능합니다 ;)..
+      if (!gameStates[roomId].ready) {
         // 1명이 들어왔는데 두 번째 플레이어가 들어오기 전에 연결이 끊긴 경우 게임 상태를 삭제합니다.
-        delete gameStates[gameId];
+        delete gameStates[roomId];
         return;
       }
       // 플레이어 A가 연결을 끊으면 플레이어 B가 기권패합니다.
-      const state = gameStates[gameId];
+      const state = gameStates[roomId];
       if (state.players[0].id === socket.id) {
         state.score.playerB = SCORE_LIMIT;
-        io.to(state.gameId).emit('updateScore', state);
-        io.to(state.gameId).emit('gameOver', state);
+        io.to(state.roomId).emit('updateScore', state);
+        io.to(state.roomId).emit('gameOver', state);
       }
       // 플레이어 B가 연결을 끊으면 플레이어 A가 기권패합니다.
       else if (state.players[1].id === socket.id) {
         state.score.playerA = SCORE_LIMIT;
-        io.to(state.gameId).emit('updateScore', state);
-        io.to(state.gameId).emit('gameOver', state);
+        io.to(state.roomId).emit('updateScore', state);
+        io.to(state.roomId).emit('gameOver', state);
       }
     });
 
     // 플레이어가 키를 누르면 실행될 콜백 함수입니다. 프론트에서 감지한 키를 전달받습니다.
     socket.on('keyDown', (keycode) => {
       // 키를 누른 플레이어를 찾습니다.
-      const gameId = Object.keys(gameStates).find((id) => {
+      const roomId = Object.keys(gameStates).find((id) => {
         const state = gameStates[id];
         return state.players.some((player) => player.id === socket.id);
       });
-      const targetPlayer = gameStates[gameId].players.find(
+      const targetPlayer = gameStates[roomId].players.find(
         (player) => player.id === socket.id
       );
       if (!targetPlayer) return;
@@ -362,11 +362,11 @@ nextApp.prepare().then(() => {
 
     // 플레이어가 키에서 손을 떼면 실행될 콜백 함수입니다. 플레이어가 정지했으므로 dx를 0으로 초기화합니다.
     socket.on('keyUp', () => {
-      const gameId = Object.keys(gameStates).find((id) => {
+      const roomId = Object.keys(gameStates).find((id) => {
         const state = gameStates[id];
         return state.players.some((player) => player.id === socket.id);
       });
-      const targetPlayer = gameStates[gameId].players.find(
+      const targetPlayer = gameStates[roomId].players.find(
         (player) => player.id === socket.id
       );
       if (!targetPlayer) return;
@@ -377,31 +377,31 @@ nextApp.prepare().then(() => {
   // 게임 상태를 업데이트하는 렌더링 루프입니다.
   setInterval(() => {
     // 모든 게임 상태를 업데이트합니다.
-    Object.keys(gameStates).forEach((gameId) => {
-      const state = gameStates[gameId];
+    Object.keys(gameStates).forEach((roomId) => {
+      const state = gameStates[roomId];
       if (!state.ready) return; // 아직 게임이 시작되지 않은 상태라면 업데이트하지 않습니다.
       updateGameState(state, io);
-      io.to(state.gameId).emit('updatePlayers', state); // 플레이어의 위치를 업데이트합니다.
-      io.to(state.gameId).emit('updateBall', state); // 공의 위치를 업데이트합니다.
+      io.to(state.roomId).emit('updatePlayers', state); // 플레이어의 위치를 업데이트합니다.
+      io.to(state.roomId).emit('updateBall', state); // 공의 위치를 업데이트합니다.
     });
   }, RENDERING_RATE);
 
   // 게임 시간을 업데이트하는 렌더링 루프입니다. 게임 시간이 0이 되면 게임을 종료합니다.
   setInterval(() => {
-    Object.keys(gameStates).forEach((gameId) => {
-      const state = gameStates[gameId];
+    Object.keys(gameStates).forEach((roomId) => {
+      const state = gameStates[roomId];
       state.time--;
       if (!state.ready) return;
       if (state.time <= 0) {
         if (state.score.playerA > state.score.playerB)
-          io.to(state.gameId).emit('gameOver', state);
+          io.to(state.roomId).emit('gameOver', state);
         else if (state.score.playerA < state.score.playerB)
-          io.to(state.gameId).emit('gameOver', state);
+          io.to(state.roomId).emit('gameOver', state);
         //close the room
-        io.socketsLeave(gameId);
+        io.socketsLeave(roomId);
         return;
       }
-      io.to(state.gameId).emit('updateTime', state);
+      io.to(state.roomId).emit('updateTime', state);
     });
   }, 1000);
 

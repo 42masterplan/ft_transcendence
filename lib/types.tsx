@@ -56,3 +56,12 @@ export type DMType = {
   content: string;
   sendTime: Date;
 };
+
+// 원래 enum으로 하려고 했지만 TS에서 as const 형태를 지향하기에..
+export const Theme = {
+  Badminton: 'Badminton',
+  Basketball: 'Basketball',
+  Soccer: 'Soccer',
+  Swimming: 'Swimming',
+  Default: 'Default'
+} as const;
