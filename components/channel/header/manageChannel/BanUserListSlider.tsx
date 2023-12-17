@@ -1,7 +1,7 @@
 import useChatSocket from '@/hooks/useChatSocket';
 import {useCallback, useEffect, useState} from 'react';
 import AvatarIcon from '@/components/avatar/AvatarIcon';
-import {FcUnlock} from 'react-icons/fc';
+import {BiSolidXCircle} from 'react-icons/bi';
 import useSocketAction from '@/hooks/useSocketAction';
 interface BanUserListType {
   channelId: string;
@@ -39,7 +39,7 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
         {banUserList.map((banUser: BanUserListType) => {
           return (
             <div className='flex'>
-              <FcUnlock
+              <BiSolidXCircle
                 className='h-10 w-10 hover:bg-custom4 rounded-full absolute z-10 '
                 onClick={() => {
                   unBanUserAction(channelId, banUser.userId, banUser.userName);

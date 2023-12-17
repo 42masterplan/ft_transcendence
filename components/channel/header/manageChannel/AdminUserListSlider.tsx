@@ -3,24 +3,19 @@ import React from 'react';
 import useChatSocket from '@/hooks/useChatSocket';
 import {useCallback, useEffect, useState} from 'react';
 import AvatarIcon from '@/components/avatar/AvatarIcon';
-import {FcUnlock} from 'react-icons/fc';
+
 import useSocketAction from '@/hooks/useSocketAction';
+import {BiSolidXCircle} from 'react-icons/bi';
 interface userListType {
   channelId: string;
   userId: string;
   profileImage: string;
   userName: string;
 }
-export default function BanUserListSlider({channelId}: {channelId: string}) {
+export default function AdminListSlider({channelId}: {channelId: string}) {
   const [socket] = useChatSocket('channel');
   const [adminUserList, setadminUserList] = useState([] as userListType[]);
   const adminUserHandler: (res: userListType[]) => void = useCallback(
-    (res: userListType[]) => {
-      setadminUserList(res);
-    },
-    []
-  );
-  const participantsHandler: (res: userListType[]) => void = useCallback(
     (res: userListType[]) => {
       setadminUserList(res);
     },
@@ -33,24 +28,29 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
       socket.off('getAdminUsers', adminUserHandler);
     };
   }, [socket, adminUserHandler, channelId]);
-
   return (
     <div className=' border border-amber-400 h-40'>
       <p>관리자 유저 목록</p>
       <div className='flex overflow-x-auto'>
-        {adminUserList.map((banUser: userListType) => {
+        {adminUserList.map((adminUser: userListType) => {
           return (
             <div className='flex'>
-              <FcUnlock
-                className='h-10 w-10 hover:bg-custom4 rounded-full'
-                onClick={() => {}}
+              <BiSolidXCircle
+                className='h-10 w-10 hover:bg-custom4 rounded-full absolute z-10'
+                onClick={() => {
+                  socket.emit('changeAdmin', {
+                    channelId: channelId,
+                    userId: adminUser.userId,
+                    types: 'remove'
+                  });
+                }}
               />
               <p>
                 <AvatarIcon
-                  avatarName={banUser.profileImage}
+                  avatarName={adminUser.profileImage}
                   size='h-20 w-20'
                 />
-                <p>{banUser.userName}</p>
+                <p>{adminUser.userName}</p>
               </p>
             </div>
           );
