@@ -26,6 +26,8 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
 
   const participantsHandler: (res: userListType[]) => void = useCallback(
     (res: userListType[]) => {
+      //I want to filter me out of the list
+      res = res.filter((user) => user.userName !== 'joushin'); //TODO: change this to my username
       setParticipants(res);
     },
     []

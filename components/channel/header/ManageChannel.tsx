@@ -44,11 +44,6 @@ export default function ManageChannel({
           <ParticipantListSlider channelId={channelId} />
           <BanUserListSlider channelId={channelId} />
           <AdminUserListSlider channelId={channelId} />
-          {/* <FriendListSelector>밴(금지)유저 목록</FriendListSelector> */}
-          {/* TODO : 전체 유저가 나오고, 채널 관리자 임명 삭제를 할 수 있도록 함.*/}
-          {/* <FriendListSelector>관리자 수정</FriendListSelector> */}
-
-          {/* TODO : 채널 비밀번호 변경 기능 버튼 추가*/}
           <div>
             <Label htmlFor='channel_password' className='text-right'>
               비밀번호 변경
