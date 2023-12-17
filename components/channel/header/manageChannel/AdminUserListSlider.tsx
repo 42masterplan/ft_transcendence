@@ -1,6 +1,6 @@
 import React from 'react';
 
-import useChatSocket from '@/hooks/useChatSocket';
+import useSocket from '@/hooks/useSocket';
 import {useCallback, useEffect, useState} from 'react';
 import AvatarIcon from '@/components/avatar/AvatarIcon';
 
@@ -13,7 +13,7 @@ interface userListType {
   userName: string;
 }
 export default function AdminListSlider({channelId}: {channelId: string}) {
-  const [socket] = useChatSocket('channel');
+  const [socket] = useSocket('channel');
   const [adminUserList, setadminUserList] = useState([] as userListType[]);
   const adminUserHandler: (res: userListType[]) => void = useCallback(
     (res: userListType[]) => {

@@ -1,4 +1,4 @@
-import useChatSocket from '@/hooks/useChatSocket';
+import useSocket from '@/hooks/useSocket';
 import {useCallback, useEffect, useState} from 'react';
 import AvatarIcon from '@/components/avatar/AvatarIcon';
 import Image from 'next/image';
@@ -13,7 +13,7 @@ interface userListType {
 }
 
 export default function BanUserListSlider({channelId}: {channelId: string}) {
-  const [socket] = useChatSocket('channel');
+  const [socket] = useSocket('channel');
   const [participants, setParticipants] = useState([] as userListType[]);
   const [searchTerm, setSearchTerm] = useState('');
   const {toast} = useToast();

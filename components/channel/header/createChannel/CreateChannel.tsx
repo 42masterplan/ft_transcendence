@@ -31,7 +31,7 @@ import {MessageSquarePlus} from 'lucide-react';
 import Axios from '@/api';
 import {Dispatch, SetStateAction, useState} from 'react';
 import {userType, selectUserType} from '@/types/user';
-import useChatSocket from '@/hooks/useChatSocket';
+import useSocket from '@/hooks/useSocket';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 const SelectChannelType = ({
   channelType,
@@ -163,7 +163,7 @@ export default function CreateChannel() {
   const [inviteFriendList, setInviteFriendList] = useState(
     [] as selectUserType[]
   );
-  const [socket] = useChatSocket('channel');
+  const [socket] = useSocket('channel');
   const {toast} = useToast();
   const fetchUserInfos = async () => {
     try {

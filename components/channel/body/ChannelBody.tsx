@@ -5,7 +5,7 @@ import {useRef, useEffect, useCallback} from 'react';
 import {ChannelHistoryType, channelStateType} from '@/types/channel';
 import ScrollableContainer from '../../container/ScrollableContainer';
 import ChatMessage from '@/components/channel/body/ChatMessage';
-import useChatSocket from '@/hooks/useChatSocket';
+import useSocket from '@/hooks/useSocket';
 import SystemCard from './SystemCard';
 interface MessageHandlerArgs {
   channelId: string;
@@ -28,7 +28,7 @@ export default React.forwardRef(function ChannelBody(
   channelInfoRef: any
 ) {
   const messageEndRef = useRef<HTMLDivElement>();
-  const [socket] = useChatSocket('channel');
+  const [socket] = useSocket('channel');
   function handleMessageAdd(payload: any) {
     messageDispatch({
       type: 'MESSAGE_ADD',

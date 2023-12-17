@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useReducer, useRef} from 'react';
 import Image from 'next/image';
 import WaitImage from '@/public/postcss.config.png';
-import useChatSocket from '@/hooks/useChatSocket';
+import useSocket from '@/hooks/useSocket';
 import ChannelBody from '@/components/channel/body/ChannelBody';
 import ChannelList from '@/components/channel/list/ChannelList';
 import ChannelHeader from '@/components/channel/header/ChannelHeader';
@@ -70,7 +70,7 @@ export default function ChannelPage() {
     initialStateInfo
   );
   const [messageState, messageDispatch] = useReducer(messageReducer, []);
-  const [socket] = useChatSocket('channel');
+  const [socket] = useSocket('channel');
   const {channelName, channelId} = channelInfoState;
   const channelInfoRef = useRef(channelInfoState);
   const router = useRouter();

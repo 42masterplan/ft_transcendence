@@ -4,7 +4,7 @@ import PublicRoomList from './publicRoom/PublicRoomList';
 import {CiLogout} from 'react-icons/ci';
 import {Button} from '@/components/shadcn/ui/button';
 import {channelStateType} from '@/types/channel';
-import useChatSocket from '@/hooks/useChatSocket';
+import useSocket from '@/hooks/useSocket';
 export default function ChannelHeader({
   channelInfoState,
   infoDispatch
@@ -13,7 +13,7 @@ export default function ChannelHeader({
   infoDispatch: any;
 }) {
   console.log('channelState.channelName', channelInfoState.channelName);
-  const [socket] = useChatSocket('channel');
+  const [socket] = useSocket('channel');
   return (
     <div className='bg-custom2 w-full'>
       <div className='bg-custom2 w-full flex justify-between font-bold text-3xl'>

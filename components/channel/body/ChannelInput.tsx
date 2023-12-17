@@ -3,9 +3,9 @@ import {Button} from '@/components/shadcn/ui/button';
 import {Send} from 'lucide-react';
 import {useState} from 'react';
 
-import useChatSocket from '@/hooks/useChatSocket';
+import useSocket from '@/hooks/useSocket';
 const ChannelInput = ({channelId}: {channelId: string}) => {
-  const [socket] = useChatSocket('channel');
+  const [socket] = useSocket('channel');
   const [content, setContent] = useState('');
   const inputLength = content.trim().length;
   return (

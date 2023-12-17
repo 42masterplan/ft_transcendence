@@ -1,4 +1,4 @@
-import useChatSocket from '@/hooks/useChatSocket';
+import useSocket from '@/hooks/useSocket';
 import {useCallback, useEffect, useState} from 'react';
 import AvatarIcon from '@/components/avatar/AvatarIcon';
 import {BiSolidXCircle} from 'react-icons/bi';
@@ -10,7 +10,7 @@ interface BanUserListType {
   userName: string;
 }
 export default function BanUserListSlider({channelId}: {channelId: string}) {
-  const [socket] = useChatSocket('channel');
+  const [socket] = useSocket('channel');
   const [banUserList, setBanUserList] = useState([] as BanUserListType[]);
   const banUserHandler: (res: BanUserListType[]) => void = useCallback(
     (res: BanUserListType[]) => {

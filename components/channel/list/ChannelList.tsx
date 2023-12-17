@@ -1,5 +1,5 @@
 import {Button} from '@/components/shadcn/ui/button';
-import useChatSocket from '@/hooks/useChatSocket';
+import useSocket from '@/hooks/useSocket';
 import {EngagedChannelType} from '@/types/channel';
 import {cn} from '@/lib/utils';
 import {ChannelHistoryType, channelStateType} from '@/types/channel';
@@ -18,7 +18,7 @@ export default React.forwardRef(function ChannelList(
   },
   ref: any
 ) {
-  const [socket] = useChatSocket('channel');
+  const [socket] = useSocket('channel');
   const router = useRouter();
   const myChannelsListener = useCallback((data: EngagedChannelType[]) => {
     console.log('myChannelsListener', data);

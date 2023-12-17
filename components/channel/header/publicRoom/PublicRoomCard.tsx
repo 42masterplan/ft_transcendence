@@ -1,7 +1,7 @@
 import {Input} from '@/components/shadcn/ui/input';
 import {Button} from '@/components/shadcn/ui/button';
 import {useState} from 'react';
-import useChatSocket from '@/hooks/useChatSocket';
+import useSocket from '@/hooks/useSocket';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 export default function PublicRoomCard({
   name,
@@ -16,7 +16,7 @@ export default function PublicRoomCard({
   isLocked: boolean;
   setOpen: any;
 }) {
-  const [socket] = useChatSocket('channel');
+  const [socket] = useSocket('channel');
   const [password, SetPassword] = useState('');
   const {toast} = useToast();
   function handleSubmit(id: string, password: string) {

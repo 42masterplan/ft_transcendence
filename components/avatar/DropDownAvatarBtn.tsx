@@ -25,7 +25,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from '@/components/shadcn/ui/dropdown-menu';
-import useChatSocket from '@/hooks/useChatSocket';
+import useSocket from '@/hooks/useSocket';
 
 const UserDropdownGroup = ({
   userId,
@@ -116,7 +116,7 @@ export default function DropdownAvatarBtn({
   role,
   isMe
 }: DropdownAvatarBtnProps) {
-  const [socket] = useChatSocket('channel');
+  const [socket] = useSocket('channel');
   const {toast} = useToast();
   const banAction = useSocketAction(
     'banUser',

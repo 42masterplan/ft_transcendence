@@ -1,5 +1,5 @@
 import {useEffect, useCallback} from 'react';
-import useChatSocket from './useChatSocket';
+import useSocket from './useSocket';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 
 interface SocketAction {
@@ -13,7 +13,7 @@ const useSocketAction = (
   failureTitle: string,
   failureDescription: string
 ) => {
-  const [socket, disconnect] = useChatSocket('channel');
+  const [socket, disconnect] = useSocket('channel');
   const {toast} = useToast();
 
   const executeAction: SocketAction = useCallback(
