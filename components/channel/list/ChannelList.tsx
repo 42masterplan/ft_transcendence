@@ -26,6 +26,13 @@ export default React.forwardRef(function ChannelList(
       type: 'ENGAGED_SET',
       payload: data
     });
+    if (data.length > 0) {
+      //current.channelId is not in data?
+      if (data.find((channel) => channel.id === ref.current.channelId))
+        infoDispatch({
+          type: 'CHANNEL_LEAVE'
+        });
+    }
   }, []);
   const channelHistoryHandler = useCallback((data: ChannelHistoryType[]) => {
     console.log('channelHistoryListener', data);
