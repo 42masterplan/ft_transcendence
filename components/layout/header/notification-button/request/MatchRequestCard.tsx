@@ -4,26 +4,33 @@ import * as dummyAPI from '@/DummyBackend/notificationAPI';
 import * as Type from '@/lib/types';
 import {Game} from '@/lib/classes/Game';
 import {User} from '@/lib/classes/User';
+import useSocket from '@/hooks/useSocket';
 
 type NotificationCardProps = {
-  request: dummyAPI.matchRequest;
+  request: dummyAPI.gameRequest;
 };
 
 export default function MatchRequestCard({request}: NotificationCardProps) {
   const newMatch: Type.GameInfo = new Game();
   const notificationShooter: Type.UserInfo = new User();
-  notificationShooter.name = request.friend_id;
+  const [socket] = useSocket('alarm');
+  notificationShooter.name = request.userName;
   notificationShooter.profileImage = request.profileImage;
-  newMatch.id = request.game_id;
-  // TODO: add game type
+  newMatch.id = request.matchId;
+  newMatch.theme = request.theme;
 
-  // TODO: implement this
   const handleAccept = () => {
-    console.log('Match accepted');
+    socket.emit('gameResponse', {
+      isAccept: true,
+      matchId: newMatch.id
+    });
   };
 
   const handleReject = () => {
-    console.log('Match rejected');
+    socket.emit('gameResponse', {
+      isAccept: true,
+      matchId: newMatch.id
+    });
   };
 
   return (

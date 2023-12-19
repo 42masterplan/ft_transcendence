@@ -26,6 +26,7 @@ export type GameInfo = {
   player2Score: number;
   startTime: Date | null;
   endTime: Date | null;
+  theme: string;
   // title: string; // TODO: Decide: Do we really need this?
   // mode: "mode1" | "mode2" | "mode3" // TODO: Decide: Do we really need this?
 };
