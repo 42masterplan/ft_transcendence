@@ -14,6 +14,7 @@
 import DropDownAvatarBtn from '@/components/avatar/DropDownAvatarBtn';
 import {sizeType} from '@/lib/ResponsiveDesign';
 import React from 'react';
+
 type ChatMessageProps = {
   size?: sizeType;
   side?: string;
@@ -21,6 +22,7 @@ type ChatMessageProps = {
   stretch?: boolean;
   className?: string;
   user_name: string;
+  user_id: string;
   profileImage: string;
   channelId: string;
   role: string;
@@ -39,7 +41,8 @@ export default React.forwardRef(function ChatMessage(
     channelId = '',
     role = '',
     message = '',
-    isMe
+    isMe,
+    user_id = ''
   }: ChatMessageProps,
   ref: any
 ) {
@@ -140,7 +143,6 @@ export default React.forwardRef(function ChatMessage(
       </div>
     );
   }
-
   return (
     <div
       className={`flex ${widthFit} ${flexAlign} ${className} rounded-xl p-1 sm:p-2`}
@@ -148,6 +150,7 @@ export default React.forwardRef(function ChatMessage(
     >
       <div>
         <DropDownAvatarBtn
+          user_id={user_id}
           profileImage={profileImage}
           user_name={user_name}
           channel_id={channelId}

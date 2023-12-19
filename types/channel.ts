@@ -23,7 +23,7 @@ export interface ChannelHistoryType {
 
 export interface channelStateType {
   channelName: string;
-  channelID: string;
+  channelId: string;
   role: string;
   engagedChannels: EngagedChannelType[];
 }

@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useReducer, useRef} from 'react';
 import Image from 'next/image';
 import WaitImage from '@/public/postcss.config.png';
-import useChatSocket from '@/hooks/useChatSocket';
+import useSocket from '@/hooks/useSocket';
 import ChannelBody from '@/components/channel/body/ChannelBody';
 import ChannelList from '@/components/channel/list/ChannelList';
 import ChannelHeader from '@/components/channel/header/ChannelHeader';
@@ -13,8 +13,8 @@ import {ChannelHistoryType} from '@/types/channel';
 import {useRouter} from 'next/router';
 const initialStateInfo: channelStateType = {
   channelName: '',
-  channelID: '',
-  role: 'admin',
+  channelId: '',
+  role: 'owner',
   engagedChannels: []
 };
 
@@ -24,7 +24,7 @@ function channelInfoReducer(state: any, action: any) {
       console.log('ID_SET', action.payload);
       return {
         ...state,
-        channelID: action.payload
+        channelId: action.payload
       };
     case 'NAME_SET': // channelName 변경됨
       return {
@@ -40,6 +40,13 @@ function channelInfoReducer(state: any, action: any) {
       return {
         ...state,
         engagedChannels: action.payload
+      };
+    case 'CHANNEL_LEAVE': // 참여중인 채널 떠남
+      return {
+        ...state,
+        channelName: '',
+        channelId: '',
+        role: 'owner'
       };
     default:
       return state;
@@ -63,8 +70,8 @@ export default function ChannelPage() {
     initialStateInfo
   );
   const [messageState, messageDispatch] = useReducer(messageReducer, []);
-  const [socket] = useChatSocket('channel');
-  const {channelName, channelID} = channelInfoState;
+  const [socket] = useSocket('channel');
+  const {channelName, channelId} = channelInfoState;
   const channelInfoRef = useRef(channelInfoState);
   const router = useRouter();
   const myRoleHandler = useCallback(({role}: any) => {
@@ -103,7 +110,10 @@ export default function ChannelPage() {
         ref={channelInfoRef}
       />
       <div className='flex flex-col h-full w-full'>
-        <ChannelHeader channelInfoState={channelInfoState} />
+        <ChannelHeader
+          channelInfoState={channelInfoState}
+          infoDispatch={infoDispatch}
+        />
         {channelName === '' ? (
           <Image
             src={WaitImage}
@@ -120,7 +130,7 @@ export default function ChannelPage() {
                 ref={channelInfoRef}
               />
             </ScrollableContainer>
-            <ChannelInput channelId={channelID} />
+            <ChannelInput channelId={channelId} />
           </>
         )}
       </div>

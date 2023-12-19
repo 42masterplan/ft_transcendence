@@ -1,8 +1,8 @@
 import {Button} from '@/components/shadcn/ui/button';
-import useChatSocket from '@/hooks/useChatSocket';
+import useSocket from '@/hooks/useSocket';
 import {EngagedChannelType} from '@/types/channel';
 import {cn} from '@/lib/utils';
-import {ChannelHistoryType} from '@/types/channel';
+import {ChannelHistoryType, channelStateType} from '@/types/channel';
 import React from 'react';
 import {useEffect, Dispatch, SetStateAction, useCallback} from 'react';
 import {useRouter} from 'next/router';
@@ -12,13 +12,13 @@ export default React.forwardRef(function ChannelList(
     infoDispatch,
     messageDispatch
   }: {
-    channelInfoState: any;
+    channelInfoState: channelStateType;
     messageDispatch: Dispatch<SetStateAction<any>>;
     infoDispatch: Dispatch<SetStateAction<any>>;
   },
   ref: any
 ) {
-  const [socket] = useChatSocket('channel');
+  const [socket] = useSocket('channel');
   const router = useRouter();
   const myChannelsListener = useCallback((data: EngagedChannelType[]) => {
     console.log('myChannelsListener', data);
@@ -26,9 +26,16 @@ export default React.forwardRef(function ChannelList(
       type: 'ENGAGED_SET',
       payload: data
     });
+    if (data.length > 0) {
+      //current.channelId is not in data?
+      if (data.find((channel) => channel.id === ref.current.channelId))
+        infoDispatch({
+          type: 'CHANNEL_LEAVE'
+        });
+    }
   }, []);
   const channelHistoryHandler = useCallback((data: ChannelHistoryType[]) => {
-    // console.log('channelHistoryListener', data);
+    console.log('channelHistoryListener', data);
     messageDispatch({
       type: 'MESSAGE_SET',
       payload: data
@@ -41,13 +48,18 @@ export default React.forwardRef(function ChannelList(
       type: 'ID_SET',
       payload: channel.id
     });
-    ref.current.channelID = channel.id;
+    ref.current.channelId = channel.id;
     infoDispatch({
       type: 'NAME_SET',
       payload: channel.name
     });
     ref.current.channelName = channel.name;
-    socket.emit('channelHistory', {roomid: channel.id}, channelHistoryHandler);
+    console.log('channelHistoryHandler', channel.id);
+    socket.emit(
+      'channelHistory',
+      {channelId: channel.id},
+      channelHistoryHandler
+    );
   }, []);
   useEffect(() => {
     socket.on('myChannels', myChannelsListener);
@@ -58,22 +70,22 @@ export default React.forwardRef(function ChannelList(
   }, [router.pathname]);
   return (
     <div className='flex flex-col min-w-[100px] h-full border overflow-y-scroll rounded-l-xl bg-custom2 w-[20vw] max-w-[300px]'>
-      <div className='min-h-[40px] text-l text-custom4 text-center sticky top-0 z-20 bg-custom2'>
+      <div className='min-h-[50px] text-l text-center sticky top-0 z-20 bg-custom2 flex justify-center items-center'>
         참여중인 채널 목록
       </div>
       {channelInfoState.engagedChannels.map((channel: EngagedChannelType) => (
         <Button
           className={cn(
-            'bg-custom2 hover:bg-custom3 border-b',
-            channel.id == channelInfoState.channelID ? 'bg-custom3' : ''
+            'bg-custom2 hover:bg-custom3 border justify-between',
+            channel.id == channelInfoState.channelId ? 'bg-custom3' : ''
           )}
           onClick={() => {
             handleChannelClick(channel);
           }}
           key={channel.id}
         >
-          <span className='text-base text-sky-300 '>{channel.name}</span>
-          <span className='text-violet-400  text-xs font-bold'>
+          <span className='text-custom4 truncate ...'>{channel.name}</span>
+          <span className='text-custom4 text-xs font-bold'>
             {channel.userCount}
           </span>
         </Button>

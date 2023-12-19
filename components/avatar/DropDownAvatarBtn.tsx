@@ -11,6 +11,7 @@ import AvatarWithStatus from '../card/userInfoCard/AvatarWithStatus';
 import {Button} from '@/components/shadcn/ui/button';
 import {useToast} from '../shadcn/ui/use-toast';
 import useAxios from '@/hooks/useAxios';
+import useSocketAction from '@/hooks/useSocketAction';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,7 +25,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from '@/components/shadcn/ui/dropdown-menu';
-import useChatSocket from '@/hooks/useChatSocket';
+import useSocket from '@/hooks/useSocket';
 
 const UserDropdownGroup = ({
   userId,
@@ -98,56 +99,95 @@ const UserDropdownGroup = ({
   );
 };
 
-const AdminDropdownGroup = () => {
-  return (
-    <DropdownMenuGroup>
-      <DropdownMenuSub>
-        <DropdownMenuSubTrigger>
-          <MdOutlineManageAccounts className='mr-2 h-4 w-4' />
-          <span>유저 관리</span>
-        </DropdownMenuSubTrigger>
-        <DropdownMenuPortal>
-          <DropdownMenuSubContent>
-            <DropdownMenuItem>
-              <Skull className='mr-2 h-4 w-4' />
-              <span
-                onClick={() => {
-                  console.log('재명');
-                }}
-              >
-                제명하기(BAN)
-              </span>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <GiBootKick className='mr-2 h-4 w-4' />
-              <span>추방하기(KICK)</span>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <IoVolumeMuteOutline className='mr-2 h-4 w-4' />
-              <span>음소거(MUTE)</span>
-            </DropdownMenuItem>
-          </DropdownMenuSubContent>
-        </DropdownMenuPortal>
-      </DropdownMenuSub>
-    </DropdownMenuGroup>
-  );
-};
+interface DropdownAvatarBtnProps {
+  profileImage: string;
+  user_name: string;
+  user_id: string;
+  channel_id: string;
+  role: string;
+  isMe: boolean;
+}
 
 export default function DropdownAvatarBtn({
   profileImage,
   user_name,
+  user_id,
   channel_id,
   role,
   isMe
-}: {
-  profileImage: string;
-  user_name: string;
-  channel_id: string;
-  role: string;
-  isMe: boolean;
-}) {
-  const [socket] = useChatSocket('channel');
+}: DropdownAvatarBtnProps) {
+  const [socket] = useSocket('channel');
+  const {toast} = useToast();
+  const banAction = useSocketAction(
+    'banUser',
+    '유저 제명',
+    '님을 제명했습니다.',
+    '유저 제명 실패',
+    '님을 제명에 실패했습니다. 일반 유저만 재명할 수 있습니다.'
+  );
+  const kickAction = useSocketAction(
+    'kickUser',
+    '유저 추방',
+    '님을 추방했습니다.',
+    '유저 추방 실패',
+    '님을 추방에 실패했습니다. 일반 유저만 추방할 수 있습니다.'
+  );
+  const muteAction = useSocketAction(
+    'muteUser',
+    '유저 음소거',
+    '님을 음소거했습니다.',
+    '유저 음소거 실패',
+    '님을 음소거에 실패했습니다. 일반 유저만 음소거할 수 있습니다.'
+  );
+
+  const AdminDropdownGroup = () => {
+    return (
+      <DropdownMenuGroup>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
+            <MdOutlineManageAccounts className='mr-2 h-4 w-4' />
+            <span>유저 관리</span>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuPortal>
+            <DropdownMenuSubContent>
+              <DropdownMenuItem>
+                <Skull className='mr-2 h-4 w-4' />
+                <span
+                  onClick={() => {
+                    banAction(channel_id, user_id, user_name);
+                  }}
+                >
+                  제명하기(BAN)
+                </span>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <GiBootKick className='mr-2 h-4 w-4' />
+                <span
+                  onClick={() => {
+                    kickAction(channel_id, user_id, user_name);
+                  }}
+                >
+                  추방하기(KICK)
+                </span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <IoVolumeMuteOutline className='mr-2 h-4 w-4' />
+                <span
+                  onClick={() => {
+                    muteAction(channel_id, user_id, user_name);
+                  }}
+                >
+                  음소거(MUTE)
+                </span>
+              </DropdownMenuItem>
+            </DropdownMenuSubContent>
+          </DropdownMenuPortal>
+        </DropdownMenuSub>
+      </DropdownMenuGroup>
+    );
+  };
+
   return isMe ? (
     <AvatarWithStatus size='sm' image={profileImage} showStatus={false} />
   ) : (
@@ -165,9 +205,9 @@ export default function DropdownAvatarBtn({
       <DropdownMenuContent>
         <DropdownMenuLabel>{user_name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <UserDropdownGroup userId='joushin' userName={user_name} />
+        <UserDropdownGroup userId={user_id} userName={user_name} />
         <DropdownMenuSeparator />
-        {role === 'admin' || role == 'owner' ? AdminDropdownGroup() : null}
+        {role === 'admin' || role == 'owner' ? <AdminDropdownGroup /> : null}
       </DropdownMenuContent>
     </DropdownMenu>
   );

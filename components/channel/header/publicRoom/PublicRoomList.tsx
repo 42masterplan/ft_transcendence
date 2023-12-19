@@ -1,7 +1,7 @@
 import {LuGlobe2} from 'react-icons/lu';
 import {Button} from '@/components/shadcn/ui/button';
 import PublicRoomCard from './PublicRoomCard';
-import useChatSocket from '@/hooks/useChatSocket';
+import useSocket from '@/hooks/useSocket';
 // import io from 'socket.io-client';
 import {
   Dialog,
@@ -29,7 +29,7 @@ const DialogBtn = ({socket}: any) => {
 };
 
 export default function PublicRoomList() {
-  const [socket] = useChatSocket('channel');
+  const [socket] = useSocket('channel');
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [publicRooms, setPublicRooms] = useState([] as PublicRoomType[]);
