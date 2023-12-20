@@ -17,12 +17,6 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
   const [participants, setParticipants] = useState([] as userListType[]);
   const [searchTerm, setSearchTerm] = useState('');
   const {toast} = useToast();
-  const adminUserHandler: (res: userListType[]) => void = useCallback(
-    (res: userListType[]) => {
-      setParticipants(res);
-    },
-    []
-  );
 
   const participantsHandler: (res: userListType[]) => void = useCallback(
     (res: userListType[]) => {
