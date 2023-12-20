@@ -6,6 +6,7 @@ import AvatarIcon from '@/components/avatar/AvatarIcon';
 
 import useSocketAction from '@/hooks/useSocketAction';
 import {BiSolidXCircle} from 'react-icons/bi';
+import {useToast} from '@/components/shadcn/ui/use-toast';
 interface userListType {
   channelId: string;
   userId: string;
@@ -15,6 +16,7 @@ interface userListType {
 export default function AdminListSlider({channelId}: {channelId: string}) {
   const [socket] = useSocket('channel');
   const [adminUserList, setadminUserList] = useState([] as userListType[]);
+  const {toast} = useToast();
   const adminUserHandler: (res: userListType[]) => void = useCallback(
     (res: userListType[]) => {
       setadminUserList(res);
@@ -38,11 +40,26 @@ export default function AdminListSlider({channelId}: {channelId: string}) {
               <BiSolidXCircle
                 className='h-10 w-10 hover:bg-custom4 rounded-full absolute z-10'
                 onClick={() => {
-                  socket.emit('changeAdmin', {
-                    channelId: channelId,
-                    userId: adminUser.userId,
-                    types: 'user'
-                  });
+                  socket.emit(
+                    'changeAdmin',
+                    {
+                      channelId: channelId,
+                      userId: adminUser.userId,
+                      types: 'user'
+                    },
+                    (res: string) => {
+                      if (res === 'changeAdminSuccess!')
+                        toast({
+                          title: '관리자 권한이 해제되었습니다.',
+                          description: '관리자 권한이 해제되었습니다.'
+                        });
+                      else
+                        toast({
+                          title: '관리자 권한 해제 실패',
+                          description: res
+                        });
+                    }
+                  );
                 }}
               />
               <p>
