@@ -83,7 +83,7 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
                             socket.emit('changeAdmin', {
                               channelId: channelId,
                               userId: user.userId,
-                              types: 'add'
+                              types: 'admin'
                             });
                           }}
                         >

@@ -34,14 +34,14 @@ export default function AdminListSlider({channelId}: {channelId: string}) {
       <div className='flex overflow-x-auto'>
         {adminUserList.map((adminUser: userListType) => {
           return (
-            <div className='flex'>
+            <div className='flex' key={adminUser.userId}>
               <BiSolidXCircle
                 className='h-10 w-10 hover:bg-custom4 rounded-full absolute z-10'
                 onClick={() => {
                   socket.emit('changeAdmin', {
                     channelId: channelId,
                     userId: adminUser.userId,
-                    types: 'remove'
+                    types: 'user'
                   });
                 }}
               />
