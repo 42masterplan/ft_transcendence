@@ -53,6 +53,10 @@ export default React.forwardRef(function ChannelBody(
           content: content
         });
       }
+      if (content.startsWith('[system]')) {
+        console.log('시스템 메세지가 도착했습니다.');
+        if (!content.includes('뮤트함.')) socket.emit('myChannels');
+      }
     },
     []
   );
