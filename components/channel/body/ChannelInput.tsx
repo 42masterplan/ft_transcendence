@@ -16,13 +16,13 @@ const ChannelInput = ({channelId}: {channelId: string}) => {
         if (inputLength === 0) return;
         console.log('내!!channelId', channelId);
         socket.emit('newMessage', {content, channelId}, (msg: string) => {
-          if (msg === 'success') setContent('');
-          else {
+          if (msg !== 'success') {
             toast({
               title: 'Error',
               description: msg
             });
           }
+          setContent('');
         });
       }}
       className='flex w-full items-center space-x-2'
