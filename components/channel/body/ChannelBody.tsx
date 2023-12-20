@@ -72,7 +72,7 @@ export default React.forwardRef(function ChannelBody(
         <div>
           {messageState?.map((msg: ChannelHistoryType, idx: number) =>
             msg.content.startsWith('[system]') ? (
-              <SystemCard ref={messageEndRef}>
+              <SystemCard ref={messageEndRef} key={idx}>
                 {msg.content.substring(8)}
               </SystemCard>
             ) : (
