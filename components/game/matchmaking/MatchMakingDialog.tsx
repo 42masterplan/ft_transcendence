@@ -67,7 +67,10 @@ const DialogContent = React.forwardRef<
       data-[state=open]:text-muted-foreground'
       >
         <span className='sr-only'>Close</span>
-        <Button size='lg'>매치 취소</Button>
+        <span className='text-lg font-semibold leading-none tracking-tight'>
+          매치 취소
+        </span>
+        {/* <Button size='lg'>매치 취소</Button> */}
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </DialogPortal>
