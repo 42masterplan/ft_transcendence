@@ -1,10 +1,12 @@
 import {RiChatSettingsLine} from 'react-icons/ri';
 import {Button} from '@/components/shadcn/ui/button';
 import {Input} from '@/components/shadcn/ui/input';
-
+import {useState} from 'react';
 import AdminUserListSlider from '@/components/channel/header/manageChannel/AdminUserListSlider';
 import BanUserListSlider from '@/components/channel/header/manageChannel/BanUserListSlider';
 import ParticipantListSlider from '@/components/channel/header/manageChannel/ParticipantListSlider';
+import useSocket from '@/hooks/useSocket';
+import {useToast} from '@/components/shadcn/ui/use-toast';
 import {
   Dialog,
   DialogContent,
@@ -22,6 +24,9 @@ export default function ManageChannel({
   channel_name: string;
   channelId: string;
 }) {
+  const [socket] = useSocket('channel');
+  const [channelPassword, setChannelPassword] = useState('');
+  const {toast} = useToast();
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -49,8 +54,40 @@ export default function ManageChannel({
               비밀번호 변경
             </Label>
             <div className='flex space-x-4 text-start flex-row items-center'>
-              <Input id='channel_password' className='col-span-3' />
-              <Button variant='default' className='w-20'>
+              <Input
+                id='channel_password'
+                className='col-span-3'
+                value={channelPassword}
+                onChange={(e) => setChannelPassword(e.target.value)}
+              />
+              <Button
+                variant='default'
+                className='w-20'
+                onClick={() => {
+                  // TODO : 비밀번호 변경 기능 구현
+                  socket.emit(
+                    'changePassword',
+                    {
+                      channelId: channelId,
+                      password: channelPassword
+                    },
+                    (res: string) => {
+                      if (res === 'changePassword Success!') {
+                        toast({
+                          title: '비밀번호가 변경되었습니다.',
+                          description: '비밀번호가 변경되었습니다.'
+                        });
+                      } else {
+                        toast({
+                          title: '비밀번호 변경 실패',
+                          description: res
+                        });
+                      }
+                      setChannelPassword('');
+                    }
+                  );
+                }}
+              >
                 변경
               </Button>
             </div>

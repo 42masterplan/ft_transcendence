@@ -53,6 +53,10 @@ export default React.forwardRef(function ChannelBody(
           content: content
         });
       }
+      if (content.startsWith('[system]')) {
+        console.log('시스템 메세지가 도착했습니다.');
+        if (!content.endsWith('뮤트되었습니다.')) socket.emit('myChannels');
+      }
     },
     []
   );
@@ -72,7 +76,7 @@ export default React.forwardRef(function ChannelBody(
         <div>
           {messageState?.map((msg: ChannelHistoryType, idx: number) =>
             msg.content.startsWith('[system]') ? (
-              <SystemCard ref={messageEndRef}>
+              <SystemCard ref={messageEndRef} key={idx}>
                 {msg.content.substring(8)}
               </SystemCard>
             ) : (

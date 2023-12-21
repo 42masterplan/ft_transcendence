@@ -33,7 +33,6 @@ export default function ButtonGroup({
     return (
       <>
         <FollowButton userId={userId} />
-        <MatchRequestButton userId={userId} />
         <BlockButton userId={userId} />
       </>
     );

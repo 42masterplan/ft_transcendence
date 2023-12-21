@@ -199,7 +199,7 @@ export default function CreateChannel() {
       'createChannel',
       {
         name: channelName,
-        password: password,
+        password: password.replace(/\s/g, ''),
         invitedFriendIds: inviteUsers,
         status: channelType
       },
