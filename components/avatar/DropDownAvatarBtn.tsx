@@ -63,7 +63,32 @@ const UserDropdownGroup = ({
       </DropdownMenuItem>
       <DropdownMenuItem>
         <Gamepad2 className='mr-2 h-4 w-4' />
-        <span onClick={() => setIsThemeSelecting(true)}>일대일 게임</span>
+
+        <span
+          onClick={() => {
+            alarm_sock.emit(
+              'gameRequest',
+              {
+                userId: userId,
+                gameMode: 'normal',
+                theme: 'default'
+              },
+              (state: any) => {
+                console.log(state);
+                if (state.msg == 'gameRequestSuccess!') {
+                  setIsWaiting(true);
+                  setMatchId(state.matchId);
+                } else
+                  toast({
+                    title: '게임 요청 실패',
+                    description: '게임 요청에 실패했습니다.'
+                  });
+              }
+            );
+          }}
+        >
+          일대일 게임
+        </span>
       </DropdownMenuItem>
       <DropdownMenuItem>
         <PiSmileyAngry className='mr-2 h-4 w-4' />
@@ -206,12 +231,7 @@ export default function DropdownAvatarBtn({
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
-            className='w-14 h-14 rounded-full'
-            onClick={() => {
-              socket.emit('myRole', channel_id);
-            }}
-          >
+          <Button className='w-14 h-14 rounded-full'>
             <AvatarWithStatus
               size='sm'
               image={profileImage}

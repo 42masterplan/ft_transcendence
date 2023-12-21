@@ -9,6 +9,7 @@ export interface EngagedChannelType {
   id: string; //random uuid
   name: string; //채널방 이름
   userCount: number; //현재 참여중인 유저 수
+  role: 'owner' | 'admin' | 'user' | ''; //내가 채널방에서의 역할
   isUnread?: boolean; //읽지 않은 메세지가 있는지
 }
 
@@ -23,6 +24,5 @@ export interface MsgHistoryType {
 export interface channelStateType {
   channelName: string;
   channelId: string;
-  role: string;
   engagedChannels: EngagedChannelType[];
 }
