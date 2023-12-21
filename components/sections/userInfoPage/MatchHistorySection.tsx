@@ -35,10 +35,10 @@ export default function MatchHistorySection({
    * * * match[]
    * * * Match:
    * * * * createdAt: string
-   * * * * player1Name: string
-   * * * * player2Name: string
-   * * * * player1Score: number
-   * * * * player2Score: number
+   * * * * playerAName: string
+   * * * * playerBName: string
+   * * * * playerAScore: number
+   * * * * playerBScore: number
    * * error: 404 if user does not exist
    * * error: 500 if server error
    */
@@ -57,6 +57,8 @@ export default function MatchHistorySection({
       setMatchHistory(response.data);
     }
   }, [userName]);
+
+  // render --------------------------------------------------------------------
 
   if (loading === true) {
     return <SpinningLoader />;

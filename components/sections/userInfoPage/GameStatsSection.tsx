@@ -79,6 +79,8 @@ export default function GameStatsSection({
     tierStringColor = 'text-black';
   }
 
+  // render --------------------------------------------------------------------
+
   if (loading === true)
     return (
       <Card

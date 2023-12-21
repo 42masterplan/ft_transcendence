@@ -16,8 +16,8 @@ export interface challenge {
 // API: GET /user/matches
 export interface match {
   createdAt: string;
-  player1Name: string;
-  player2Name: string;
-  player1Score: number;
-  player2Score: number;
+  playerAName: string;
+  playerBName: string;
+  playerAScore: number;
+  playerBScore: number;
 }
