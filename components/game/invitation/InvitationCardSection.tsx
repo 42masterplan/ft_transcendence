@@ -46,7 +46,7 @@ export default function InvitationCardSection({
   ) {
     console.log('useId: ', userId, 'theme: ', theme);
     setIsWaiting(true);
-    startNormalMatchMaking();
+    startNormalMatchMaking(userId, theme);
   }
   useEffect(() => {
     setUsers(filterUsers(friends, searchTargetInput));
