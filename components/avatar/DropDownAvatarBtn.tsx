@@ -80,12 +80,11 @@ const UserDropdownGroup = ({
                 if (state.msg == 'gameRequestSuccess!') {
                   setIsWaiting(true);
                   setMatchId(state.matchId);
-                }
-               else
-								toast({
-									title: '게임 요청 실패',
-									description: '게임 요청에 실패했습니다.'
-								})
+                } else
+                  toast({
+                    title: '게임 요청 실패',
+                    description: '게임 요청에 실패했습니다.'
+                  });
               }
             );
           }}
@@ -232,12 +231,7 @@ export default function DropdownAvatarBtn({
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
-            className='w-14 h-14 rounded-full'
-            onClick={() => {
-              socket.emit('myRole', channel_id);
-            }}
-          >
+          <Button className='w-14 h-14 rounded-full'>
             <AvatarWithStatus
               size='sm'
               image={profileImage}

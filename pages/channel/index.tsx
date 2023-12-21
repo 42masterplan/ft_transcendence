@@ -14,7 +14,6 @@ import {useRouter} from 'next/router';
 const initialStateInfo: channelStateType = {
   channelName: '',
   channelId: '',
-  role: 'owner',
   engagedChannels: []
 };
 
@@ -31,11 +30,6 @@ function channelInfoReducer(state: any, action: any) {
         ...state,
         channelName: action.payload
       };
-    case 'ROLE_SET': // role 변경됨
-      return {
-        ...state,
-        role: action.payload
-      };
     case 'ENGAGED_SET': // engagedChannels 변경됨
       return {
         ...state,
@@ -45,8 +39,7 @@ function channelInfoReducer(state: any, action: any) {
       return {
         ...state,
         channelName: '',
-        channelId: '',
-        role: 'owner'
+        channelId: ''
       };
     default:
       return state;
@@ -73,33 +66,28 @@ export default function ChannelPage() {
   const [socket] = useSocket('channel');
   const {channelName, channelId} = channelInfoState;
   const channelInfoRef = useRef(channelInfoState);
-  const router = useRouter();
-  const myRoleHandler = useCallback(({role}: any) => {
-    console.log('myRole', role);
-    infoDispatch({
-      type: 'ROLE_SET',
-      payload: role
-    });
-  }, []);
-  const errorHandler = useCallback(({error}: any) => {
-    console.log('error', error);
-    toast(error);
-  }, []);
+
+  const errorHandler = useCallback(
+    ({error}: any) => {
+      console.log('error', error);
+      toast(error);
+    },
+    [socket]
+  );
   useEffect(() => {
     socket.on('connect', () => {
       console.log('---------connected----------');
-      socket.on('myRole', myRoleHandler);
-      socket.on('error_exist', errorHandler);
     });
+
+    socket.on('error_exist', errorHandler);
     socket.on('disconnect', () => {
       console.log('---------disconnected----------');
     });
     return () => {
       console.log('---------off----------');
-      socket.off('myRole', myRoleHandler);
       socket.off('error_exist', errorHandler);
     };
-  }, [router.pathname]);
+  }, []);
 
   return (
     <div className='flex h-full'>

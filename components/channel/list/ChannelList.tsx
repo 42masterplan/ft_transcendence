@@ -21,6 +21,7 @@ export default React.forwardRef(function ChannelList(
   const [socket] = useSocket('channel');
   const router = useRouter();
   const myChannelsListener = useCallback((data: EngagedChannelType[]) => {
+    console.log('인게이지:', data);
     console.log('myChannelsListener', data);
     infoDispatch({
       type: 'ENGAGED_SET',
@@ -35,7 +36,6 @@ export default React.forwardRef(function ChannelList(
     }
   }, []);
   const channelHistoryHandler = useCallback((data: ChannelHistoryType[]) => {
-    console.log('channelHistoryListener', data);
     messageDispatch({
       type: 'MESSAGE_SET',
       payload: data
@@ -57,7 +57,7 @@ export default React.forwardRef(function ChannelList(
     console.log('channelHistoryHandler', channel.id);
     socket.emit(
       'channelHistory',
-      {channelId: channel.id},
+      {channelId: ref.current.channelId},
       channelHistoryHandler
     );
   }, []);

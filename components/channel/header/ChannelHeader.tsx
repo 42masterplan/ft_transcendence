@@ -12,7 +12,7 @@ export default function ChannelHeader({
   channelInfoState: channelStateType;
   infoDispatch: any;
 }) {
-  console.log('channelState.channelName', channelInfoState.channelName);
+  // console.log('channelState.channelName', channelInfoState.channelName);
   const [socket] = useSocket('channel');
   return (
     <div className='bg-custom2 w-full'>
@@ -53,13 +53,17 @@ export default function ChannelHeader({
             채널 나가기
           </Button>
           {channelInfoState.channelName}
-          {channelInfoState.role === 'owner' ? (
+          {channelInfoState.engagedChannels.find(
+            (channel) => channel.id === channelInfoState.channelId
+          )?.role === 'owner' ? (
             <ManageChannel
               channel_name={channelInfoState.channelName}
               channelId={channelInfoState.channelId}
             />
           ) : (
-            channelInfoState.role
+            channelInfoState.engagedChannels.find(
+              (channel) => channel.id === channelInfoState.channelId
+            )?.role
           )}
         </div>
       )}
