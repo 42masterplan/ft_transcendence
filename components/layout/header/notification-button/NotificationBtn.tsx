@@ -53,6 +53,7 @@ export default function NotificationBtn() {
     matchRequests.length + friendRequests.length
   );
   useEffect(() => {
+    // 여기 2번 실행됨
     socket.on('gameRequest', (state: gameRequest) => {
       setMatchRequests((prev) => [...prev, state]);
       setNotificationCount((prev) => prev + 1);
@@ -63,7 +64,11 @@ export default function NotificationBtn() {
         query: {id: gameId, theme}
       });
     });
-  }, [socket]);
+    return () => {
+      socket.off('gameRequest');
+      socket.off('gameStart');
+    };
+  }, []);
   return (
     <Sheet>
       <SheetTrigger asChild>
