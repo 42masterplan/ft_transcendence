@@ -33,22 +33,37 @@ import {
   SheetTrigger
 } from '@/components/shadcn/ui/sheet';
 import {Separator} from '@/components/shadcn/ui/separator';
-
 import * as dummyAPI from '@/DummyBackend/notificationAPI';
-
 import FriendRequestCard from './request/FriendRequestCard';
 import MatchRequestCard from './request/MatchRequestCard';
 import ScrollableContainer from '@/components/container/ScrollableContainer';
+import useSocket from '@/hooks/useSocket';
+import {useEffect, useState} from 'react';
+import {useRouter} from 'next/router';
+import {gameRequest} from '@/DummyBackend/notificationAPI';
 
 export default function NotificationBtn() {
-  // TODO: FIX: get MatchRequests and FriendRequests from server ---------------
-
-  const matchRequests = dummyAPI.notification__getMatchRequests();
-  const friendRequests = dummyAPI.notification__getFriendRequests();
-  const notificationCount = matchRequests.length + friendRequests.length;
-
-  // ---------------------------------------------------------------------------
-
+  const router = useRouter();
+  const [socket] = useSocket('alarm');
+  const [matchRequests, setMatchRequests] = useState<gameRequest[]>([]);
+  const [friendRequests, setFriendRequests] = useState(
+    dummyAPI.notification__getFriendRequests()
+  );
+  const [notificationCount, setNotificationCount] = useState(
+    matchRequests.length + friendRequests.length
+  );
+  useEffect(() => {
+    socket.on('gameRequest', (state: gameRequest) => {
+      setMatchRequests((prev) => [...prev, state]);
+      setNotificationCount((prev) => prev + 1);
+    });
+    socket.on('gameStart', ({theme, gameId}) => {
+      router.push({
+        pathname: 'game/in-game',
+        query: {id: gameId, theme}
+      });
+    });
+  }, [socket]);
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -112,7 +127,7 @@ export default function NotificationBtn() {
             {/* match request list */}
             {matchRequests.map((matchRequest) => (
               <MatchRequestCard
-                key={matchRequest.game_id}
+                key={matchRequest.matchId}
                 request={matchRequest}
               />
             ))}

@@ -38,7 +38,7 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
       <div className='flex overflow-x-auto'>
         {banUserList.map((banUser: BanUserListType) => {
           return (
-            <div className='flex'>
+            <div className='flex' key={banUser.userId}>
               <BiSolidXCircle
                 className='h-10 w-10 hover:bg-custom4 rounded-full absolute z-10 '
                 onClick={() => {

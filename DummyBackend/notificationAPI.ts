@@ -141,3 +141,11 @@ export interface matchRequest {
   friend_id: string;
   profileImage: string;
 }
+
+export interface gameRequest {
+  profileImage: string;
+  userName: string;
+  matchId: string;
+  gameMode: 'normal' | 'ladder';
+  theme: 'default' | 'soccer' | 'swimming' | 'badminton' | 'basketball';
+}

@@ -1,6 +1,10 @@
 import {User} from 'lucide-react';
 import {Gamepad2, Skull} from 'lucide-react';
 
+import {
+  Dialog,
+  DialogContent
+} from '@/components/game/matchmaking/MatchMakingDialog';
 import {GiBootKick} from 'react-icons/gi';
 import {MdOutlineManageAccounts} from 'react-icons/md';
 import {IoVolumeMuteOutline} from 'react-icons/io5';
@@ -12,6 +16,7 @@ import {Button} from '@/components/shadcn/ui/button';
 import {useToast} from '../shadcn/ui/use-toast';
 import useAxios from '@/hooks/useAxios';
 import useSocketAction from '@/hooks/useSocketAction';
+import MatchMakingTimer from '../game/matchmaking/MatchMakingTimer';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,17 +31,26 @@ import {
   DropdownMenuTrigger
 } from '@/components/shadcn/ui/dropdown-menu';
 import useSocket from '@/hooks/useSocket';
-
+import {Socket} from 'socket.io-client';
+import {useEffect, useState} from 'react';
 const UserDropdownGroup = ({
   userId,
-  userName
+  userName,
+  isWaiting,
+  setIsWaiting,
+  setMatchId
 }: {
   userId: string;
   userName: string;
+  isWaiting: boolean;
+  setIsWaiting: any;
+  setMatchId: any;
 }) => {
   const router = useRouter();
   const {toast} = useToast();
   const {fetchData} = useAxios();
+  const [alarm_sock] = useSocket('alarm');
+
   return (
     <DropdownMenuGroup className=''>
       <DropdownMenuItem>
@@ -51,12 +65,29 @@ const UserDropdownGroup = ({
       </DropdownMenuItem>
       <DropdownMenuItem>
         <Gamepad2 className='mr-2 h-4 w-4' />
+
         <span
           onClick={() => {
-            toast({
-              title: '게임 신청',
-              description: '준비중인 기능입니다. 다른 기능을 이용해주세요.'
-            });
+            alarm_sock.emit(
+              'gameRequest',
+              {
+                userId: userId,
+                gameMode: 'normal',
+                theme: 'default'
+              },
+              (state: any) => {
+                console.log(state);
+                if (state.msg == 'gameRequestSuccess!') {
+                  setIsWaiting(true);
+                  setMatchId(state.matchId);
+                }
+               else
+								toast({
+									title: '게임 요청 실패',
+									description: '게임 요청에 실패했습니다.'
+								})
+              }
+            );
           }}
         >
           일대일 게임
@@ -116,8 +147,11 @@ export default function DropdownAvatarBtn({
   role,
   isMe
 }: DropdownAvatarBtnProps) {
+  const [alarm_sock] = useSocket('alarm');
+  const [isWaiting, setIsWaiting] = useState(false);
   const [socket] = useSocket('channel');
   const {toast} = useToast();
+  const [matchId, setMatchId] = useState('');
   const banAction = useSocketAction(
     'banUser',
     '유저 제명',
@@ -140,6 +174,10 @@ export default function DropdownAvatarBtn({
     '님을 음소거에 실패했습니다. 일반 유저만 음소거할 수 있습니다.'
   );
 
+  function stopNormalMatchMaking() {
+    console.log('일반 매칭 취소');
+    if (alarm_sock) alarm_sock.emit('gameCancel', {matchId: matchId});
+  }
   const AdminDropdownGroup = () => {
     return (
       <DropdownMenuGroup>
@@ -191,24 +229,56 @@ export default function DropdownAvatarBtn({
   return isMe ? (
     <AvatarWithStatus size='sm' image={profileImage} showStatus={false} />
   ) : (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          className='w-14 h-14 rounded-full'
-          onClick={() => {
-            socket.emit('myRole', channel_id);
-          }}
-        >
-          <AvatarWithStatus size='sm' image={profileImage} showStatus={false} />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuLabel>{user_name}</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <UserDropdownGroup userId={user_id} userName={user_name} />
-        <DropdownMenuSeparator />
-        {role === 'admin' || role == 'owner' ? <AdminDropdownGroup /> : null}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            className='w-14 h-14 rounded-full'
+            onClick={() => {
+              socket.emit('myRole', channel_id);
+            }}
+          >
+            <AvatarWithStatus
+              size='sm'
+              image={profileImage}
+              showStatus={false}
+            />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuLabel>{user_name}</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <UserDropdownGroup
+            userId={user_id}
+            userName={user_name}
+            isWaiting={isWaiting}
+            setIsWaiting={setIsWaiting}
+            setMatchId={setMatchId}
+          />
+          <DropdownMenuSeparator />
+          {role === 'admin' || role == 'owner' ? <AdminDropdownGroup /> : null}
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <Dialog
+        onClose={() => {
+          stopNormalMatchMaking();
+          setIsWaiting(false);
+        }}
+        open={isWaiting}
+        onOpenChange={setIsWaiting}
+      >
+        <DialogContent className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col justify-center items-center gap-[110px] inline-flex'>
+          <h1 className='text-[40px] font-bold font-[Roboto Mono]'>
+            매칭을 수락하길 기다리는중
+          </h1>
+          <MatchMakingTimer
+            isAscending={false}
+            stopNormalMatchMaking={stopNormalMatchMaking}
+            setIsWaiting={setIsWaiting}
+          />
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
