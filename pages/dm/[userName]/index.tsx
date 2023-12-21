@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import SpinningLoader from '@/components/loader/SpinningLoader';
 import {useRouter} from 'next/router';
 import ScrollableContainer from '@/components/container/ScrollableContainer';
@@ -6,14 +6,49 @@ import MessageInputBar from '@/components/input/MessageInputBar';
 import DMCard from '@/components/card/cardUsedInDMPage/DMCard';
 import {DMType} from '@/lib/types';
 import {DM} from '@/lib/classes/DM';
+import useSocket from '@/hooks/useSocket';
+import Axios from '@/api';
 
 export default function DMPage() {
   const router = useRouter();
   const [isSending, setIsSending] = useState(false);
   const [msg, setMsg] = useState('');
   const [DMData, setDMData] = useState<DMType[] | null>(null);
+  const [socket] = useSocket('alarm');
+  const [blockUsers, setBlockUsers] = useState<string[]>([]);
+  const [friendUsers, setFriendUsers] = useState<string[]>([]);
 
-  // IMPLEMENTING --------------------------------------------------------------
+  //친구인지 아닌지 알기 위해서
+  useEffect(() => {
+    console.log(router.query.userName);
+    socket.on('newDm', (dm: DM) => {
+      console.log(dm);
+    });
+    socket.on('DmHistory', (dm: DM[]) => {
+      console.log(dm);
+    });
+    Axios.get('users/block')
+      .then((res) => {
+        const data = res.data?.map((user: any) => user.name);
+        setBlockUsers(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    Axios.get('users/friends')
+      .then((res) => {
+        const data = res.data?.map((user: any) => user.name);
+        console.log(res.data);
+        setFriendUsers(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    return () => {
+      socket.off('newDm');
+      socket.off('DmHistory');
+    };
+  }, [router.pathname, router.query.userName, socket]);
 
   // check if the current user is friend with the user in the url
   // if not, redirect to /social
