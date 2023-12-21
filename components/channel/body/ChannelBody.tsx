@@ -80,16 +80,16 @@ export default React.forwardRef(function ChannelBody(
                 key={idx}
                 className={cn(
                   'flex w-max max-w-[90%] rounded-lg px-3 text-sm',
-                  msg.name === 'joushin' ? 'ml-auto' : 'p-2'
+                  msg.name === 'hkong' ? 'ml-auto' : 'p-2'
                 )}
               >
                 {/* TODO 채팅 메시지 내 정보랑 비교하기
                  */}
                 <ChatMessage
-                  isMe={msg.name === 'joushin'}
+                  isMe={msg.name === 'hkong'}
                   size='md'
                   message={msg.content}
-                  side={msg.name === 'joushin' ? 'right' : 'left'}
+                  side={msg.name === 'hkong' ? 'right' : 'left'}
                   className='m-2 hover:scale-[1.02] duration-200 hover:-translate-y-1 bg-custom4'
                   ref={messageEndRef as any}
                   profileImage={msg.profileImage}
