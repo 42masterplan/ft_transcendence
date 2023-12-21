@@ -76,7 +76,6 @@ const UserDropdownGroup = ({
                 theme: 'default'
               },
               (state: any) => {
-                console.log(state);
                 if (state.msg == 'gameRequestSuccess!') {
                   setIsWaiting(true);
                   setMatchId(state.matchId);

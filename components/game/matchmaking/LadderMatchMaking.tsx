@@ -19,7 +19,7 @@ export default function LadderMatchMakingBtn() {
     });
     // THINK: 매치 메이킹 취소 성공 확인?
     return () => {
-      socket.disconnect();
+      socket.off('ladderMatch');
     };
   }, []);
   function startLadderMatchMaking() {
