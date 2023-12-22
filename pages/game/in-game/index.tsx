@@ -153,7 +153,7 @@ export default function Game() {
   const {id, theme} = router.query;
 
   useEffect(() => {
-    const socket = io('http://localhost:4242');
+    const socket = io('http://localhost:4242'); // TODO: re-use socket
     const canvas = canvasRef.current;
     if (!canvas) return;
     const c = canvas.getContext('2d');
@@ -189,7 +189,6 @@ export default function Game() {
     const gameLoop = () => {
       if (theme && theme != 'Default') {
         if (backgroundImage.complete) {
-          console.log('complete');
           c.drawImage(backgroundImage, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
           c.fillStyle = BACKGROUND_SHADOW_COLOR;
         }
