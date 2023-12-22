@@ -62,31 +62,28 @@ export default function DMPage() {
       socket.off('DmHistory');
     };
   }, []);
+
+  //여기서 차단 여부, 친구 여부 확인해서 아니면 페이지를 이동시켜버림.
   useEffect(() => {
-    if (blockUsers !== null && !blockUsers?.includes(chatUser as string)) {
+    if (blockUsers !== null && blockUsers?.includes(chatUser as string)) {
       toast({
         title: 'DM 실패!',
         variant: 'destructive',
         description: '차단한 사용자입니다.'
       });
-      console.log('DM 실패! 차단한 사용자입니다.');
       router.replace('/social', undefined, {shallow: true});
-    }
-  }, [blockUsers]);
-  useEffect(() => {
-    if (friendUsers !== null && !friendUsers?.includes(chatUser as string)) {
+    } else if (
+      friendUsers !== null &&
+      !friendUsers?.includes(chatUser as string)
+    ) {
       toast({
         title: 'DM 실패!',
         variant: 'destructive',
         description: '친구가 아닙니다.'
       });
-      console.log('DM 실패! 친구가 아닙니다.');
       router.replace('/social', undefined, {shallow: true});
     }
-  }, [friendUsers]);
-  // check if the current user is friend with the user in the url
-  // if not, redirect to /social
-  // if yes, render the DM page
+  }, [blockUsers, friendUsers]);
 
   // fetch DM data from server
   async function getDMData(): Promise<any> {
