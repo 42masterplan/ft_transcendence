@@ -6,8 +6,8 @@ import useAxios from '@/hooks/useAxios';
 import {useEffect, useState} from 'react';
 import InvitationCardSection from '../invitation/InvitationCardSection';
 import MatchMakingTimer from './MatchMakingTimer';
-import {io, Socket} from 'socket.io-client';
-import {useRouter} from 'next/router';
+import useSocket from '@/hooks/useSocket';
+import {useToast} from '@/components/shadcn/ui/use-toast';
 
 export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   // we are only going to search for online friends
@@ -15,35 +15,41 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   const {fetchData, response, isSuccess} = useAxios();
   const [friends, setFriends] = useState<userType[]>([]);
   const [isWaiting, setIsWaiting] = useState(false);
+  const [socket] = useSocket('alarm');
   const forwardTheme = theme;
-  const [socket, setSocket] = useState<Socket | null>(null);
-  const router = useRouter();
+  const {toast} = useToast();
+  let matchId = '';
 
-  useEffect(() => {
-    const socket = io('http://localhost:4242');
-    setSocket(socket);
-    socket.on('normalMatch', (state) => {
-      console.log('일반 매치 발견', state);
-      router.push({
-        pathname: '/game/in-game',
-        query: {id: state.id, theme: forwardTheme}
-      });
-    });
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
-
-  function stopNormalMatchMaking() {
-    console.log('일반 매칭 취소');
-    if (socket) socket.emit('normalMatchCancel', {userName: 'daejlee'});
+  function stopNormalMatchMaking(matchId: string) {
+    socket.emit('gameCancel', {matchId});
   }
-  function startNormalMatchMaking() {
-    console.log('일반 매칭 시작');
-    if (socket)
-      socket.emit('normalMatch', {
-        userName: 'daejlee'
-      });
+  function startNormalMatchMaking({
+    userId,
+    theme
+  }: {
+    userId: string;
+    theme: string;
+  }) {
+    socket.emit(
+      'gameRequest',
+      {
+        userId,
+        gameMode: 'normal',
+        theme
+      },
+      (state: any) => {
+        if (state.msg === 'gameRequestSuccess!') {
+          setIsWaiting(true);
+          matchId = state.requestId;
+        } else {
+          toast({
+            title: '매칭 실패',
+            description: '매칭에 실패했습니다.',
+            variant: 'destructive'
+          });
+        }
+      }
+    );
   }
   useEffect(() => {
     fetchData({
@@ -89,12 +95,13 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   ) : (
     <Dialog
       onClose={() => {
-        stopNormalMatchMaking();
+        stopNormalMatchMaking(matchId);
         setIsWaiting(false);
       }}
     >
       <DialogContent className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col justify-center items-center gap-[110px] inline-flex'>
-        <h1 className='text-[40px] font-bold font-[Roboto Mono]'>
+        <h1 className='text-[40px] font-bold font-[Roboto Mono] items-center'>
+          {/* TODO: 위에 거 CSS 수정 필요 */}
           매칭을 수락하길 기다리는중
         </h1>
         <MatchMakingTimer

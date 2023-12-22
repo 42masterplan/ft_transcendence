@@ -2,12 +2,13 @@ import {Input} from '@/components/shadcn/ui/input';
 import {Button} from '@/components/shadcn/ui/button';
 import {Send} from 'lucide-react';
 import {useState} from 'react';
-
+import {useToast} from '@/components/shadcn/ui/use-toast';
 import useSocket from '@/hooks/useSocket';
 const ChannelInput = ({channelId}: {channelId: string}) => {
   const [socket] = useSocket('channel');
   const [content, setContent] = useState('');
   const inputLength = content.trim().length;
+  const {toast} = useToast();
   return (
     <form
       onSubmit={(event) => {
@@ -15,7 +16,13 @@ const ChannelInput = ({channelId}: {channelId: string}) => {
         if (inputLength === 0) return;
         console.log('내!!channelId', channelId);
         socket.emit('newMessage', {content, channelId}, (msg: string) => {
-          if (msg === 'success') setContent('');
+          if (msg !== 'success') {
+            toast({
+              title: 'Error',
+              description: msg
+            });
+          }
+          setContent('');
         });
       }}
       className='flex w-full items-center space-x-2'

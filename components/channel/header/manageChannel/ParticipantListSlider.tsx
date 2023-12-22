@@ -17,12 +17,6 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
   const [participants, setParticipants] = useState([] as userListType[]);
   const [searchTerm, setSearchTerm] = useState('');
   const {toast} = useToast();
-  const adminUserHandler: (res: userListType[]) => void = useCallback(
-    (res: userListType[]) => {
-      setParticipants(res);
-    },
-    []
-  );
 
   const participantsHandler: (res: userListType[]) => void = useCallback(
     (res: userListType[]) => {
@@ -80,11 +74,26 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
                         <ToastAction
                           altText='관리자 임명'
                           onClick={() => {
-                            socket.emit('changeAdmin', {
-                              channelId: channelId,
-                              userId: user.userId,
-                              types: 'add'
-                            });
+                            socket.emit(
+                              'changeAdmin',
+                              {
+                                channelId: channelId,
+                                userId: user.userId,
+                                types: 'admin'
+                              },
+                              (res: string) => {
+                                if (res === 'changeAdmin Success!')
+                                  toast({
+                                    title: '관리자 권한이 부여되었습니다.',
+                                    description: '관리자 권한이 부여되었습니다.'
+                                  });
+                                else
+                                  toast({
+                                    title: '관리자 권한 부여 실패',
+                                    description: res
+                                  });
+                              }
+                            );
                           }}
                         >
                           관리자 임명
