@@ -30,14 +30,16 @@ export default function SocialPage() {
           id: '1'
         },
         errorTitle: '유저 정보 조회 실패',
-        errorDescription: '유저 정보 조회에 실패했습니다.'
+        errorDescription: '유저 정보 조회에 실패했습니다.',
+        disableSuccessToast: true
       });
     } else if (searchTarget === 'all users') {
       fetchData({
         method: 'get',
         url: '/users',
         errorTitle: '유저 정보 조회 실패',
-        errorDescription: '유저 정보 조회에 실패했습니다.'
+        errorDescription: '유저 정보 조회에 실패했습니다.',
+        disableSuccessToast: true
       });
     }
   }, [searchTarget, searchTargetStatus]);

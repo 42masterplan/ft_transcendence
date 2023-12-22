@@ -63,23 +63,23 @@ export default function DMPage() {
     };
   }, []);
   useEffect(() => {
-    if (!blockUsers?.includes(chatUser as string)) {
-      // toast({
-      //   title: 'DM 실패!',
-      //   variant: 'destructive',
-      //   description: '차단한 사용자입니다.'
-      // });
+    if (blockUsers !== null && !blockUsers?.includes(chatUser as string)) {
+      toast({
+        title: 'DM 실패!',
+        variant: 'destructive',
+        description: '차단한 사용자입니다.'
+      });
       console.log('DM 실패! 차단한 사용자입니다.');
       router.replace('/social', undefined, {shallow: true});
     }
   }, [blockUsers]);
   useEffect(() => {
-    if (!friendUsers?.includes(chatUser as string)) {
-      // toast({
-      //   title: 'DM 실패!',
-      //   variant: 'destructive',
-      //   description: '친구가 아닙니다.'
-      // });
+    if (friendUsers !== null && !friendUsers?.includes(chatUser as string)) {
+      toast({
+        title: 'DM 실패!',
+        variant: 'destructive',
+        description: '친구가 아닙니다.'
+      });
       console.log('DM 실패! 친구가 아닙니다.');
       router.replace('/social', undefined, {shallow: true});
     }
