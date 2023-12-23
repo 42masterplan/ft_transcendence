@@ -150,7 +150,9 @@ export default function Game() {
   const [score, setScore] = useState({playerA: 0, playerB: 0});
   const [gameover, setGameOver] = useState(false);
   const router = useRouter();
-  const {id, theme} = router.query;
+  // const {id, theme} = router.query;
+  const id = '0';
+  const theme = 'swimming';
 
   useEffect(() => {
     const socket = io('http://localhost:4242'); // TODO: re-use socket
@@ -166,7 +168,7 @@ export default function Game() {
       c
     );
     const backgroundImage = new Image();
-    if (theme && theme !== 'Default')
+    if (theme && theme != 'default')
       backgroundImage.src = `/gameThemes/${theme}.png`;
     socket.on('joinedRoom', (id) => {
       listenToSocketEvents(
@@ -187,7 +189,7 @@ export default function Game() {
     }, RENDERING_RATE);
     addEventListeners(keysPressed);
     const gameLoop = () => {
-      if (theme && theme != 'Default') {
+      if (theme && theme != 'default') {
         if (backgroundImage.complete) {
           c.drawImage(backgroundImage, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
           c.fillStyle = BACKGROUND_SHADOW_COLOR;
