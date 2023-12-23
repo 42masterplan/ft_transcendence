@@ -48,7 +48,7 @@ export default function UserPage() {
     });
   }, [userName]);
   useEffect(() => {
-    if (error !== null) {
+    if (error === true) {
       // user not found -> redirect to 404 page
       router.push('/404');
     }
