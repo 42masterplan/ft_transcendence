@@ -2,7 +2,7 @@ import MatchMakingTimer from './MatchMakingTimer';
 import {Button} from '@/components/shadcn/ui/button';
 import {Dialog, DialogContent, DialogTrigger} from './MatchMakingDialog';
 import {useRouter} from 'next/router';
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import useSocket from '@/hooks/useSocket';
 
 export default function LadderMatchMakingBtn() {
@@ -24,11 +24,11 @@ export default function LadderMatchMakingBtn() {
   }, []);
   function startLadderMatchMaking() {
     console.log('래더 매칭 시작');
-    if (socket) socket.emit('ladderMatch', {userName: 'daejlee'});
+    if (socket) socket.emit('ladderMatch');
   }
   function stopLadderMatchMaking() {
     console.log('래더 매칭 취소');
-    if (socket) socket.emit('ladderMatchCancel', {userName: 'daejlee'});
+    if (socket) socket.emit('ladderMatchCancel');
   }
 
   return (

@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import ChildTab from '../../components/game/ChildTab';
 import MatchMakingBtn from '../../components/game/matchmaking/LadderMatchMaking';
 import NormalMatchMakingBtn from '@/components/game/matchmaking/NormalMatchMaking';

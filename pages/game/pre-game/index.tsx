@@ -52,11 +52,10 @@ export default function PreGame() {
         }
       : {};
   return (
-    <div className='flex items-center justify-center pt-8'>
+    <div className='flex flex-col items-center justify-center pt-8 gap-10 h-full'>
       <h1 className='text-4xl text-white font-bold'>게임 시작까지: {time}</h1>
       <div
-        className='absolute left-1/2 top-1/2 transform translate-x-[-50%] translate-y-[-50%] w-[400px] h-[600px] py-[50px] bg-slate-800 rounded-[10px]
-      shadow border border-black flex flex-col justify-between items-center'
+        className='w-[400px] h-[600px] py-[50px] bg-slate-800 rounded-[10px] shadow border border-black flex flex-col justify-between items-center'
         style={style}
       >
         <PlayerPortrait {...PLAYER_DUMMY_1} />

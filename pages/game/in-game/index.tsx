@@ -69,6 +69,8 @@ function listenToSocketEvents(
   setScore: any,
   setGameOver: any,
   setTime: any,
+  setForfeit: any,
+  setDeuce: any,
   animationId: number,
   particles: Particle[]
 ) {
@@ -103,6 +105,7 @@ function listenToSocketEvents(
   });
   socket.on('gameOver', (state) => {
     if (state.roomId != roomId) return;
+    if (state.forfeit) setForfeit(true);
     setGameOver(true);
     cancelAnimationFrame(animationId);
     socket.off('connect');
@@ -113,6 +116,10 @@ function listenToSocketEvents(
     if (state.roomId != roomId) return;
     const backendTime = state.time;
     setTime(backendTime);
+  });
+  socket.on('deuce', (state) => {
+    if (state.roomId != roomId) return;
+    setDeuce(true);
   });
 }
 
@@ -149,10 +156,10 @@ export default function Game() {
   const [time, setTime] = useState(GAME_TIME_LIMIT);
   const [score, setScore] = useState({playerA: 0, playerB: 0});
   const [gameover, setGameOver] = useState(false);
+  const [forfeit, setForfeit] = useState(false);
+  const [deuce, setDeuce] = useState(false);
   const router = useRouter();
-  // const {id, theme} = router.query;
-  const id = '0';
-  const theme = 'swimming';
+  const {id, theme} = router.query;
 
   useEffect(() => {
     const socket = io('http://localhost:4242'); // TODO: re-use socket
@@ -180,6 +187,8 @@ export default function Game() {
         setScore,
         setGameOver,
         setTime,
+        setForfeit,
+        setDeuce,
         animationId,
         particles
       );
@@ -226,6 +235,7 @@ export default function Game() {
           score={score}
           time={time}
           winner={score.playerA == SCORE_LIMIT ? true : false}
+          forfeit={forfeit}
         />
       ) : (
         <>
@@ -235,6 +245,7 @@ export default function Game() {
               gameover={gameover}
               setGameOver={setGameOver}
               time={time}
+              deuce={deuce}
             />
           </div>
           <ScoreBoard AScore={score.playerA} BScore={score.playerB} />
