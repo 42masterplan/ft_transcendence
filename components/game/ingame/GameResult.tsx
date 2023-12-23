@@ -47,6 +47,7 @@ export default function GameResult(props: {
         </div>
       </div>
       <span className={textcss}>
+        게임 지속 시간-
         {time >= 60 ? Math.floor(time / 60) + ':' + (time % 60) : '0:' + time}
       </span>
       <div className='flex flex-row justify-center gap-20'>
