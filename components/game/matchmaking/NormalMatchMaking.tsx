@@ -101,7 +101,6 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
     >
       <DialogContent className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col justify-center items-center gap-[110px] inline-flex'>
         <h1 className='text-[40px] font-bold font-[Roboto Mono] items-center'>
-          {/* TODO: 위에 거 CSS 수정 필요 */}
           매칭을 수락하길 기다리는중
         </h1>
         <MatchMakingTimer

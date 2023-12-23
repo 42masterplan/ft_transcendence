@@ -13,13 +13,13 @@ export default function LadderMatchMakingBtn() {
     socket.on('ladderMatch', (state) => {
       console.log('래더 매치 발견', state);
       router.push({
-        pathname: '/game/in-game',
+        pathname: '/game/pre-game',
         query: {id: state.id, theme: 'default'}
       });
     });
     // THINK: 매치 메이킹 취소 성공 확인?
     return () => {
-      socket.disconnect();
+      socket.off('ladderMatch');
     };
   }, []);
   function startLadderMatchMaking() {
