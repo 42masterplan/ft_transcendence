@@ -27,6 +27,7 @@ export default function DMPage() {
     });
     socket.on('DmHistory', (dm: DM[]) => {
       console.log(dm);
+      setDMData(dm);
     });
     Axios.get('users/block')
       .then((res) => {
@@ -57,6 +58,7 @@ export default function DMPage() {
         });
         router.replace('/social');
       });
+
     return () => {
       socket.off('newDm');
       socket.off('DmHistory');
@@ -85,120 +87,11 @@ export default function DMPage() {
     }
   }, [blockUsers, friendUsers]);
 
-  // fetch DM data from server
-  async function getDMData(): Promise<any> {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    const response = true; // change to false to test friend request failed
-    if (response) {
-      const dummyData: DMType[] = [
-        {
-          id: '1',
-          senderName: 'receiver',
-          senderProfileImage: '',
-          receiverName: 'receiver',
-          receiverProfileImage: '',
-          content: 'Hello',
-          sendTime: new Date()
-        },
-        {
-          id: '2',
-          senderName: 'sender',
-          senderProfileImage: '',
-          receiverName: 'receiver',
-          receiverProfileImage: '',
-          content: 'Hello',
-          sendTime: new Date()
-        },
-        {
-          id: '3',
-          senderName: 'receiver',
-          senderProfileImage: '',
-          receiverName: 'receiver',
-          receiverProfileImage: '',
-          content: 'Hello',
-          sendTime: new Date()
-        },
-        {
-          id: '4',
-          senderName: 'sender',
-          senderProfileImage: '',
-          receiverName: 'receiver',
-          receiverProfileImage: '',
-          content: 'Hello',
-          sendTime: new Date()
-        },
-        {
-          id: '5',
-          senderName: 'receiver',
-          senderProfileImage: '',
-          receiverName: 'receiver',
-          receiverProfileImage: '',
-          content: 'Hello',
-          sendTime: new Date()
-        },
-        {
-          id: '6',
-          senderName: 'sender',
-          senderProfileImage: '',
-          receiverName: 'receiver',
-          receiverProfileImage: '',
-          content:
-            'receiverrece iverr e c eiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiverreceiver',
-          sendTime: new Date()
-        },
-        {
-          id: '7',
-          senderName: 'sender',
-          senderProfileImage: '',
-          receiverName: 'receiver',
-          receiverProfileImage: '',
-          content: 'Hello',
-          sendTime: new Date()
-        },
-        {
-          id: '8',
-          senderName: 'sender',
-          senderProfileImage: '',
-          receiverName: 'receiver',
-          receiverProfileImage: '',
-          content: 'Hello',
-          sendTime: new Date()
-        },
-        {
-          id: '9',
-          senderName: 'receiver',
-          senderProfileImage: '',
-          receiverName: 'receiver',
-          receiverProfileImage: '',
-          content: 'Hello',
-          sendTime: new Date()
-        },
-        {
-          id: '10',
-          senderName: 'sender',
-          senderProfileImage: '',
-          receiverName: 'receiver',
-          receiverProfileImage: '',
-          content: 'Hello',
-          sendTime: new Date()
-        }
-      ];
-      return dummyData;
-    } else {
-      return null;
-    }
-  }
-
   // when getDMData() is done, setDMData() to the result
 
   if (blockUsers === null || friendUsers === null) return <SpinningLoader />;
 
-  getDMData().then((result) => {
-    setDMData(result);
-  });
-  if (!DMData) {
-    return <SpinningLoader />;
-  }
+  if (!DMData) return <SpinningLoader />;
 
   async function handleSendDM() {
     // wait for 1 sec

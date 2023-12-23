@@ -12,7 +12,7 @@ export interface EngagedChannelType {
   isUnread?: boolean; //읽지 않은 메세지가 있는지
 }
 
-export interface ChannelHistoryType {
+export interface MsgHistoryType {
   id: string; //random uuid
   createdAt?: Date; //채팅이 생성된 시간
   name: string; //채팅을 보낸 사람의 이름
