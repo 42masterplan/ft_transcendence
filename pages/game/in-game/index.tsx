@@ -69,6 +69,7 @@ function listenToSocketEvents(
   setScore: any,
   setGameOver: any,
   setTime: any,
+  setForfeitPlayer: any,
   animationId: number,
   particles: Particle[]
 ) {
@@ -103,6 +104,7 @@ function listenToSocketEvents(
   });
   socket.on('gameOver', (state) => {
     if (state.roomId != roomId) return;
+    if (state.forfeitPlayer) setForfeitPlayer(state.forfeitPlayer);
     setGameOver(true);
     cancelAnimationFrame(animationId);
     socket.off('connect');
@@ -149,6 +151,7 @@ export default function Game() {
   const [time, setTime] = useState(GAME_TIME_LIMIT);
   const [score, setScore] = useState({playerA: 0, playerB: 0});
   const [gameover, setGameOver] = useState(false);
+  const [forfeitPlayer, setForfeitPlayer] = useState('');
   const router = useRouter();
   const {id, theme} = router.query;
 
@@ -178,6 +181,7 @@ export default function Game() {
         setScore,
         setGameOver,
         setTime,
+        setForfeitPlayer,
         animationId,
         particles
       );
@@ -224,6 +228,7 @@ export default function Game() {
           score={score}
           time={time}
           winner={score.playerA == SCORE_LIMIT ? true : false}
+          forfeitPlayer={forfeitPlayer}
         />
       ) : (
         <>
