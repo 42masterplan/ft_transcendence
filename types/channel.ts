@@ -18,7 +18,6 @@ export interface MsgHistoryType {
   name: string; //채팅을 보낸 사람의 이름
   profileImage: string; //채팅을 보낸 사람의 프로필 사진
   content: string; //채팅 내용
-  isBlocked?: boolean;
 }
 
 export interface channelStateType {
