@@ -2,7 +2,7 @@ import MatchMakingTimer from './MatchMakingTimer';
 import {Button} from '@/components/shadcn/ui/button';
 import {Dialog, DialogContent, DialogTrigger} from './MatchMakingDialog';
 import {useRouter} from 'next/router';
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import useSocket from '@/hooks/useSocket';
 
 export default function LadderMatchMakingBtn() {
