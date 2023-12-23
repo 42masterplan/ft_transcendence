@@ -13,7 +13,7 @@ export default function UserPage() {
   const router = Router;
   // get user name from url
   const userName = router.query.userName as string;
-  const {fetchData, response, isSuccess, loading} = useAxios();
+  const {fetchData, response, isSuccess, loading, error} = useAxios();
   const [currentUser, setCurrentUser] = useState<User>(new User());
 
   // fetch data from server ----------------------------------------------------
@@ -48,6 +48,10 @@ export default function UserPage() {
     });
   }, [userName]);
   useEffect(() => {
+    if (error !== null) {
+      // user not found -> redirect to 404 page
+      router.push('/404');
+    }
     if (isSuccess === true) {
       // when user is found
       currentUser.id = response.id;
@@ -56,9 +60,6 @@ export default function UserPage() {
       currentUser.currentStatus = response.currentStatus;
       currentUser.introduction = response.introduction;
       setCurrentUser(currentUser);
-    } else {
-      // user not found -> redirect to 404 page
-      router.push('/404');
     }
   }, [isSuccess, response]);
 
