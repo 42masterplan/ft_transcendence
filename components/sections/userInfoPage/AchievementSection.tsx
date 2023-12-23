@@ -51,6 +51,9 @@ export default function AchievementSection({
    */
 
   useEffect(() => {
+    if (userName === undefined) {
+      return;
+    }
     fetchData({
       method: 'get',
       url: '/users/challenges',

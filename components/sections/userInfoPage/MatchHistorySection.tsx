@@ -44,6 +44,9 @@ export default function MatchHistorySection({
    */
 
   useEffect(() => {
+    if (userName === undefined) {
+      return;
+    }
     fetchData({
       method: 'get',
       url: '/users/matches',

@@ -34,6 +34,9 @@ export default function UserPage() {
    * * error: 500 if server error
    */
   useEffect(() => {
+    if (userName === undefined) {
+      return;
+    }
     fetchData({
       method: 'get',
       url: '/users',

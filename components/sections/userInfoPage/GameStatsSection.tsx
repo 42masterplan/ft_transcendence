@@ -45,6 +45,9 @@ export default function GameStatsSection({
    */
 
   useEffect(() => {
+    if (userName === undefined) {
+      return;
+    }
     fetchData({
       method: 'get',
       url: '/users/rank',
