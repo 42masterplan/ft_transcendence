@@ -150,9 +150,7 @@ export default function Game() {
   const [score, setScore] = useState({playerA: 0, playerB: 0});
   const [gameover, setGameOver] = useState(false);
   const router = useRouter();
-  // const {id, theme} = router.query;
-  const id = '0';
-  const theme = 'swimming';
+  const {id, theme} = router.query;
 
   useEffect(() => {
     const socket = io('http://localhost:4242'); // TODO: re-use socket
