@@ -11,9 +11,9 @@ export default function GameResult(props: {
   score: {playerA: number; playerB: number};
   time: number;
   winner: boolean; // if true, playerA won
-  forfeitPlayer: string;
+  forfeit: boolean;
 }) {
-  const {score, winner, forfeitPlayer} = props;
+  const {score, winner, forfeit} = props;
   const time = GAME_TIME_LIMIT - props.time; // how long the game lasted
   return (
     <div className='w-[600px] px-20 pt-5 pb-8 bg-slate-600 rounded-[10px] border  border-black flex flex-col gap-10'>
@@ -38,7 +38,7 @@ export default function GameResult(props: {
           {!winner ? ( // A lost
             <>
               <PlayerPortrait {...PLAYER_DUMMY_1} />
-              {forfeitPlayer === 'A' ? (
+              {forfeit ? (
                 <h3 className={textcss}>기권패</h3>
               ) : (
                 <h3 className={textcss}>{score.playerA}</h3>
@@ -48,7 +48,7 @@ export default function GameResult(props: {
             // B lost
             <>
               <PlayerPortrait {...PLAYER_DUMMY_2} />
-              {forfeitPlayer === 'B' ? (
+              {forfeit ? (
                 <h3 className={textcss}>기권패</h3>
               ) : (
                 <h3 className={textcss}>{score.playerB}</h3>

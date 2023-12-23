@@ -161,7 +161,7 @@ function createNewGameState(roomId) {
       playerB: 0
     },
     time: GAME_TIME_LIMIT,
-    forfeitPlayer: ''
+    forfeit: false
   };
 }
 
@@ -296,14 +296,14 @@ nextApp.prepare().then(() => {
       const state = gameStates[roomId];
       if (state.players[0].id === socket.id) {
         state.score.playerB = SCORE_LIMIT;
-        state.forfeitPlayer = 'A';
+        state.forfeit = true;
         io.to(state.roomId).emit('updateScore', state);
         io.to(state.roomId).emit('gameOver', state);
       }
       // 플레이어 B가 연결을 끊으면 플레이어 A가 기권승합니다.
       else if (state.players[1].id === socket.id) {
         state.score.playerA = SCORE_LIMIT;
-        state.forfeitPlayer = 'B';
+        state.forfeit = true;
         io.to(state.roomId).emit('updateScore', state);
         io.to(state.roomId).emit('gameOver', state);
       }
