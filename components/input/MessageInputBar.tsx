@@ -22,7 +22,7 @@ interface MessageInputBarProps {
   setIsSending: (isSending: boolean) => void;
   msg: string;
   setMsg: (msg: string) => void;
-  handleSendMsg: () => Promise<void>;
+  handleSendMsg: () => void;
 }
 
 export default function MessageInputBar({
