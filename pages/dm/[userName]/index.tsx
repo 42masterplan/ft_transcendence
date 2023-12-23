@@ -1,18 +1,17 @@
-import {useEffect, useState, useRef, useCallback} from 'react';
+import {useEffect, useState, useRef} from 'react';
 import SpinningLoader from '@/components/loader/SpinningLoader';
 import {useRouter} from 'next/router';
 import ScrollableContainer from '@/components/container/ScrollableContainer';
-import MessageInputBar from '@/components/input/MessageInputBar';
 import ChatMessage from '@/components/channel/body/ChatMessage';
 import useSocket from '@/hooks/useSocket';
 import Axios from '@/api';
 import {MsgHistoryType} from '@/types/channel';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 import {cn} from '@/lib/utils';
+import DMInput from '@/components/input/DmInput';
 
 export default function DMPage() {
   const router = useRouter();
-  const [isSending, setIsSending] = useState(false);
   const [msg, setMsg] = useState('');
   const [DMData, setDMData] = useState<MsgHistoryType[] | null>(null);
   const [socket] = useSocket('alarm');
@@ -21,7 +20,7 @@ export default function DMPage() {
   const messageEndRef = useRef<HTMLDivElement>();
   const {toast} = useToast();
   //친구인지 아닌지 알기 위해서
-  const chatUser = router.query.userName;
+  const chatUser = router.query.userName || '';
   useEffect(() => {
     socket.on(
       'newDm',
@@ -38,11 +37,8 @@ export default function DMPage() {
       'DmHistory',
       chatUser,
       ({msg, dm}: {msg: string; dm: MsgHistoryType[]}) => {
-        if (msg === 'DmHistory Success!') {
-          setDMData(dm);
-        } else {
-          console.log(msg);
-        }
+        if (msg === 'DmHistory Success!') setDMData(dm);
+        else console.log(msg);
       }
     );
     return () => {
@@ -110,19 +106,7 @@ export default function DMPage() {
 
   if (blockUsers === null || friendUsers === null) return <SpinningLoader />;
 
-  if (!DMData) return <SpinningLoader />;
-
-  async function handleSendDM() {
-    // wait for 1 sec
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    const response = true; // change to false to test friend request failed
-    if (response) {
-      // if success,
-    } else {
-      // if failed, show error message
-    }
-  }
-
+  // if (!DMData) return <SpinningLoader />;
   // ---------------------------------------------------------------------------
 
   return (
@@ -159,12 +143,11 @@ export default function DMPage() {
           </div>
         </ScrollableContainer>
       </div>
-      <MessageInputBar
-        isSending={isSending}
-        setIsSending={setIsSending}
+      <DMInput
         msg={msg}
+        chatUser={chatUser}
+        setDMData={setDMData}
         setMsg={setMsg}
-        handleSendMsg={handleSendDM}
       />
     </>
   );
