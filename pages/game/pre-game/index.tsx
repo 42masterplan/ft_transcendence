@@ -17,22 +17,31 @@ export default function PreGame() {
   const router = useRouter();
   const {id, theme} = router.query;
   const [backgroundImage, setBackgroundImage] = useState(''); // 상태로 배경 이미지 URL을 관리
+  const [time, setTime] = useState(PRE_GAME_TIME);
 
   useEffect(() => {
-    setTimeout(() => {
-      router.push({
-        pathname: '/game/in-game',
-        query: {id, theme}
+    const timer = setInterval(() => {
+      setTime((prevTime) => {
+        if (prevTime === 1) {
+          clearInterval(timer); // 타이머를 여기서 정지
+          router.push({
+            pathname: '/game/in-game',
+            query: {id, theme}
+          });
+          return 0; // 시간이 0이 되었으므로 0을 반환
+        }
+        return prevTime - 1; // 시간을 감소시킴
       });
-    }, PRE_GAME_TIME * 1000);
+    }, 1000);
     if (theme && theme !== 'Default') {
       const imageSrc = `/gameThemes/${theme}.png`;
       const img = new Image();
       img.onload = () => {
-        setBackgroundImage(imageSrc); // 이미지가 로드되면 상태를 업데이트
+        setBackgroundImage(imageSrc);
       };
       img.src = imageSrc;
     }
+    return () => clearInterval(timer);
   }, []);
   const style =
     backgroundImage != ''
@@ -43,14 +52,17 @@ export default function PreGame() {
         }
       : {};
   return (
-    <div
-      className='absolute left-1/2 top-1/2 transform translate-x-[-50%] translate-y-[-50%] w-[400px] h-[800px] py-[50px] bg-slate-800 rounded-[10px]
+    <div className='flex items-center justify-center pt-8'>
+      <h1 className='text-4xl text-white font-bold'>게임 시작까지: {time}</h1>
+      <div
+        className='absolute left-1/2 top-1/2 transform translate-x-[-50%] translate-y-[-50%] w-[400px] h-[600px] py-[50px] bg-slate-800 rounded-[10px]
       shadow border border-black flex flex-col justify-between items-center'
-      style={style}
-    >
-      <PlayerPortrait {...PLAYER_DUMMY_1} />
-      <Divider />
-      <PlayerPortrait {...PLAYER_DUMMY_2} />
+        style={style}
+      >
+        <PlayerPortrait {...PLAYER_DUMMY_1} />
+        <Divider />
+        <PlayerPortrait {...PLAYER_DUMMY_2} />
+      </div>
     </div>
   );
 }
