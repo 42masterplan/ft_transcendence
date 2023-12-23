@@ -1,8 +1,8 @@
-import * as API from '@/DummyBackend/mainAPI';
+import {match} from '@/components/sections/userInfoPage/forDataFetching/interfaces';
 import {Card, CardHeader} from '../../shadcn/ui/card';
 
 interface MatchHistoryCardProps {
-  match: API.match;
+  match: match;
 }
 
 interface SingleSideCardProps {
@@ -38,10 +38,10 @@ function SingleSideCard({name, score, result}: SingleSideCardProps) {
 export default function MatchHistoryCard({match}: MatchHistoryCardProps) {
   let player1Status: 'win' | 'lose' | 'draw';
   let player2Status: 'win' | 'lose' | 'draw';
-  if (match.player1Score > match.player2Score) {
+  if (match.playerAScore > match.playerBScore) {
     player1Status = 'win';
     player2Status = 'lose';
-  } else if (match.player1Score < match.player2Score) {
+  } else if (match.playerAScore < match.playerBScore) {
     player1Status = 'lose';
     player2Status = 'win';
   } else {
@@ -58,16 +58,16 @@ export default function MatchHistoryCard({match}: MatchHistoryCardProps) {
       </CardHeader>
       <div className='flex flex-row justify-around items-center'>
         <SingleSideCard
-          name={match.player1Name}
-          score={match.player1Score}
+          name={match.playerAName}
+          score={match.playerAScore}
           result={player1Status}
         />
         <div className='flex flex-row justify-center items-center'>
           <p>:</p>
         </div>
         <SingleSideCard
-          name={match.player2Name}
-          score={match.player2Score}
+          name={match.playerBName}
+          score={match.playerBScore}
           result={player2Status}
         />
       </div>

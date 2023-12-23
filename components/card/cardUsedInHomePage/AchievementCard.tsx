@@ -1,9 +1,9 @@
-import * as API from '@/DummyBackend/mainAPI';
+import {challenge} from '@/components/sections/userInfoPage/forDataFetching/interfaces';
 import {Card, CardDescription, CardTitle} from '@/components/shadcn/ui/card';
 import DynamicProgressBar from '@/components/graph/DynamicProgressBar';
 
 interface AchievementCardProps {
-  achievementRate: API.challenge;
+  achievementRate: challenge;
   type: 'myProgress' | 'successRate';
 }
 
