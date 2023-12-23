@@ -53,14 +53,13 @@ export default function NotificationBtn() {
     matchRequests.length + friendRequests.length
   );
   useEffect(() => {
-    // 여기 2번 실행됨
     socket.on('gameRequest', (state: gameRequest) => {
       setMatchRequests((prev) => [...prev, state]);
       setNotificationCount((prev) => prev + 1);
     });
     socket.on('gameStart', ({theme, gameId}) => {
       router.push({
-        pathname: 'game/in-game',
+        pathname: 'game/pre-game',
         query: {id: gameId, theme}
       });
     });
@@ -134,6 +133,8 @@ export default function NotificationBtn() {
               <MatchRequestCard
                 key={matchRequest.matchId}
                 request={matchRequest}
+                setMatchRequests={setMatchRequests}
+                setNotificationCount={setNotificationCount}
               />
             ))}
           </div>
