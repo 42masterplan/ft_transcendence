@@ -1,22 +1,10 @@
 import {User} from 'lucide-react';
 import {Gamepad2, Skull} from 'lucide-react';
-
-import {
-  Dialog,
-  DialogContent
-} from '@/components/game/matchmaking/MatchMakingDialog';
 import {GiBootKick} from 'react-icons/gi';
 import {MdOutlineManageAccounts} from 'react-icons/md';
 import {IoVolumeMuteOutline} from 'react-icons/io5';
 import {PiPaperPlaneTiltBold, PiSmileyAngry} from 'react-icons/pi';
 // 여기까진 아이콘 임포트
-import {useRouter} from 'next/router';
-import AvatarWithStatus from '../card/userInfoCard/AvatarWithStatus';
-import {Button} from '@/components/shadcn/ui/button';
-import {useToast} from '../shadcn/ui/use-toast';
-import useAxios from '@/hooks/useAxios';
-import useSocketAction from '@/hooks/useSocketAction';
-import MatchMakingTimer from '../game/matchmaking/MatchMakingTimer';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,19 +18,28 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from '@/components/shadcn/ui/dropdown-menu';
+import {useToast} from '../shadcn/ui/use-toast';
+import {Button} from '@/components/shadcn/ui/button';
+import {
+  Dialog,
+  DialogContent
+} from '@/components/game/matchmaking/MatchMakingDialog';
+import {useRouter} from 'next/router';
+import AvatarWithStatus from '../card/userInfoCard/AvatarWithStatus';
+import useAxios from '@/hooks/useAxios';
+import useSocketAction from '@/hooks/useSocketAction';
+import MatchMakingTimer from '../game/matchmaking/MatchMakingTimer';
 import useSocket from '@/hooks/useSocket';
-import {Socket} from 'socket.io-client';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
+
 const UserDropdownGroup = ({
   userId,
   userName,
-  isWaiting,
   setIsWaiting,
   setMatchId
 }: {
   userId: string;
   userName: string;
-  isWaiting: boolean;
   setIsWaiting: any;
   setMatchId: any;
 }) => {
@@ -149,7 +146,6 @@ export default function DropdownAvatarBtn({
   const [alarm_sock] = useSocket('alarm');
   const [isWaiting, setIsWaiting] = useState(false);
   const [socket] = useSocket('channel');
-  const {toast} = useToast();
   const [matchId, setMatchId] = useState('');
   const banAction = useSocketAction(
     'banUser',
@@ -250,7 +246,6 @@ export default function DropdownAvatarBtn({
           <UserDropdownGroup
             userId={user_id}
             userName={user_name}
-            isWaiting={isWaiting}
             setIsWaiting={setIsWaiting}
             setMatchId={setMatchId}
           />
