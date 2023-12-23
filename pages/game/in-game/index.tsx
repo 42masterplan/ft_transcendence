@@ -70,6 +70,7 @@ function listenToSocketEvents(
   setGameOver: any,
   setTime: any,
   setForfeit: any,
+  setDeuce: any,
   animationId: number,
   particles: Particle[]
 ) {
@@ -116,6 +117,10 @@ function listenToSocketEvents(
     const backendTime = state.time;
     setTime(backendTime);
   });
+  socket.on('deuce', (state) => {
+    if (state.roomId != roomId) return;
+    setDeuce(true);
+  });
 }
 
 function handleKeys(
@@ -152,6 +157,7 @@ export default function Game() {
   const [score, setScore] = useState({playerA: 0, playerB: 0});
   const [gameover, setGameOver] = useState(false);
   const [forfeit, setForfeit] = useState(false);
+  const [deuce, setDeuce] = useState(false);
   const router = useRouter();
   const {id, theme} = router.query;
 
@@ -182,6 +188,7 @@ export default function Game() {
         setGameOver,
         setTime,
         setForfeit,
+        setDeuce,
         animationId,
         particles
       );
@@ -238,6 +245,7 @@ export default function Game() {
               gameover={gameover}
               setGameOver={setGameOver}
               time={time}
+              deuce={deuce}
             />
           </div>
           <ScoreBoard AScore={score.playerA} BScore={score.playerB} />

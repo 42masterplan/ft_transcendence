@@ -161,7 +161,8 @@ function createNewGameState(roomId) {
       playerB: 0
     },
     time: GAME_TIME_LIMIT,
-    forfeit: false
+    forfeit: false,
+    isDeuce: false
   };
 }
 
@@ -179,10 +180,18 @@ function resetBall(isA, state, io) {
   else state.score.playerB++;
   io.to(state.roomId).emit('updateScore', state);
   if (
-    state.score.playerA === SCORE_LIMIT ||
+    (!state.deuce && state.score.playerA === SCORE_LIMIT) ||
     state.score.playerB === SCORE_LIMIT
   ) {
     io.to(state.roomId).emit('gameOver', state);
+    io.socketsLeave(state.roomId);
+    return;
+  } else if (
+    state.isDeuce &&
+    Math.abs(state.score.playerA - state.score.playerB) >= 2
+  ) {
+    io.to(state.roomId).emit('gameOver', state);
+    io.socketsLeave(state.roomId);
     return;
   }
   state.ball.x = SCREEN_WIDTH / 2;
@@ -390,7 +399,7 @@ nextApp.prepare().then(() => {
   }, RENDERING_RATE);
 
   // 게임 시간을 업데이트하는 렌더링 루프입니다. 게임 시간이 0이 되면 게임을 종료합니다.
-  setInterval(() => {
+  const timerId = setInterval(() => {
     Object.keys(gameStates).forEach((roomId) => {
       const state = gameStates[roomId];
       state.time--;
@@ -400,10 +409,21 @@ nextApp.prepare().then(() => {
           io.to(state.roomId).emit('gameOver', state);
         else if (state.score.playerA < state.score.playerB)
           io.to(state.roomId).emit('gameOver', state);
-        //close the room
+        else {
+          // 듀스!! 공의 속력이 1.5배로 증가합니다. 먼저 2점차를 만들면 승리합니다.
+          state.isDeuce = true;
+          state.ball.velocity.x *= 1.5;
+          state.ball.velocity.y *= 1.5;
+          BALL_SPEED *= 1.5;
+          io.to(state.roomId).emit('deuce', state);
+          clearInterval(timerId);
+          return;
+        }
+        clearInterval(timerId);
         io.socketsLeave(roomId);
         return;
       }
+
       io.to(state.roomId).emit('updateTime', state);
     });
   }, 1000);
