@@ -16,7 +16,7 @@ export default function UserPage() {
   const {fetchData, response, isSuccess, loading} = useAxios();
   const [currentUser, setCurrentUser] = useState<User>(new User());
 
-  // fetch data from server -----------------------------------------------------
+  // fetch data from server ----------------------------------------------------
 
   /**
    * API: GET /users
