@@ -33,11 +33,16 @@ export default function SetAvatar({setProfileImage}: {setProfileImage: any}) {
   const handleSuccess = () => {
     setProfileImage(avatarList[selected]);
     setSelected(15);
-
+    console.log('성공한 경우');
+    console.log(response);
+    console.log(response.profileImage);
     if (response != null) {
-      setAvatarList([...avatarList, response.profileImage]);
-      setCustomAvatar(response.profileImage);
-      setProfileImage(response.profileImage);
+      const customAvatar =
+        process.env.NEXT_PUBLIC_API_ENDPOINT + '/' + response.profileImage;
+      console.log(customAvatar);
+      setAvatarList([...avatarList, customAvatar]);
+      setCustomAvatar(customAvatar);
+      setProfileImage(customAvatar);
     }
   };
   const uploadAvatar = (file: File) => {
@@ -59,9 +64,7 @@ export default function SetAvatar({setProfileImage}: {setProfileImage: any}) {
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!fileUploadRef.current?.files || !fileUploadRef.current.files[0])
       return;
-    console.log('Uploading to Server');
     uploadAvatar(fileUploadRef.current.files[0]);
-    console.log('Done?');
   };
   const renderAvatarContainer = () => {
     const rows = [];
