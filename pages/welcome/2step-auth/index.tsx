@@ -10,7 +10,8 @@ import useAxios from '@/hooks/useAxios';
 export default function Validation() {
   const [code, setCode] = useState('');
   const [cookie, setCookie] = useCookies();
-  const {fetchData, response, isSuccess} = useAxios();
+  const {fetchData: requestCode, response} = useAxios();
+  const {fetchData: postCode, isSuccess} = useAxios();
   useEffect(() => {
     const isTwoFactorDone = cookie.isTwoFactorDone;
 
@@ -21,15 +22,19 @@ export default function Validation() {
       });
       Router.push('/');
     } else {
-      fetchData({
+      requestCode({
         method: 'post',
         url: '/users/two-factor-auth',
         errorTitle: '인증코드 전송 실패',
         errorDescription: '인증코드 전송 실패했습니다. 다시 새로고침 해주세요',
-        disableSuccessToast: true 
+        disableSuccessToast: true
       });
     }
   }, []);
+  useEffect(() => {
+    if (isSuccess === true) Router.push('/');
+  }, [isSuccess]);
+
   const handleClick = () => {
     setCode('');
     toast({
@@ -37,8 +42,17 @@ export default function Validation() {
       description: '2단계 인증이 완료되었습니다'
     });
     setCookie('isTwoFactorDone', true, {path: '/'});
-    Router.push('/');
+    postCode({
+      method: 'post',
+      url: '/users/two-factor-auth/validate',
+      body: {code: parseInt(code, 10)},
+      errorTitle: '인증 실패',
+      errorDescription: '인증에 실패했습니다. 다시 시도해주세요',
+      successTitle: '인증 성공',
+      successDescription: '인증에 성공했습니다.'
+    });
   };
+
   return (
     <>
       <div className='flex-col justify-center'>
@@ -61,7 +75,7 @@ export default function Validation() {
             className='font-roboto-mono text-[20px]
             font-semibold text-center'
           >
-            amazing_pong@student.42seoul.kr
+            {response?.data?.email}
           </h3>
           <p>이메일로 인증 코드를 보냈습니다</p>
           <Input
