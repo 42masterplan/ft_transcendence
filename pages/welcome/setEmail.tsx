@@ -77,7 +77,7 @@ export default function SetEmail() {
                 } else {
                   fetchEmail({
                     method: 'put',
-                    url: '/users/two-factor-auth',
+                    url: '/users/two-factor-auth/email',
                     body: {email: email},
                     errorDescription: '이메일 설정에 실패 했습니다.',
                     errorTitle: '이메일 설정 실패',

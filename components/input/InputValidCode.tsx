@@ -32,7 +32,7 @@ export default function InputValidCode({
         onClick={() => {
           fetchData({
             method: 'post',
-            url: '/users/two-factor-auth/validate',
+            url: '/users/two-factor-auth/email/validate',
             body: {code: code},
             errorDescription: '인증 코드가 올바르지 않습니다.',
             errorTitle: '인증 실패',
