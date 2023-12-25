@@ -9,6 +9,14 @@ import MatchMakingTimer from './MatchMakingTimer';
 import useSocket from '@/hooks/useSocket';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 
+interface UserType {
+  id: string;
+  profileImage: string;
+  name: string;
+  currentStatus: string;
+  introduction: string;
+}
+
 export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   // we are only going to search for online friends
   const [searchTargetInput, setSearchTargetInput] = useState('');
@@ -54,9 +62,6 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   useEffect(() => {
     fetchData({
       method: 'get',
-      // NOTICE: it supposed to be /users/friends but using all for now because of scrollable feature testing !!
-      // TODO: we are only going to search for online friends so we need to change this later !!
-      // socket will be used for this feature -> 알림 소켓이 구현되면 그때 바꿔야함.
       url: '/users',
       params: {
         id: '1'
@@ -65,6 +70,10 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
       errorDescription: '유저 정보 조회에 실패했습니다.',
       disableSuccessToast: true
     });
+    // socket.emit('onlineFriends', (state: UserType[]) => {
+    //   // 이 부분을 나중에 써야함. 지금은 임시로 쓰는거임
+    //   setFriends(state);
+    // });
   }, []); // ignore eslint warning. we only want to fetch data once ^^
   useEffect(() => {
     if (isSuccess === true) setFriends(response);
@@ -75,15 +84,11 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
       <DialogTrigger asChild>
         <Button>Start Match</Button>
       </DialogTrigger>
-      <DialogContent
-        className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col 
-      justify-center items-center gap-[20px] inline-flex'
-      >
+      <DialogContent className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col justify-center items-center gap-[20px] inline-flex'>
         <div className='flex flex-col w-full h-[390px] px-3 gap-2'>
           <InvitationNavBar setSearchTargetInput={setSearchTargetInput} />
           <InvitationCardSection
             searchTargetInput={searchTargetInput}
-            className=''
             friends={friends}
             theme={forwardTheme}
             setIsWaiting={setIsWaiting}
@@ -101,7 +106,6 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
     >
       <DialogContent className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col justify-center items-center gap-[110px] inline-flex'>
         <h1 className='text-[40px] font-bold font-[Roboto Mono] items-center'>
-          {/* TODO: 위에 거 CSS 수정 필요 */}
           매칭을 수락하길 기다리는중
         </h1>
         <MatchMakingTimer

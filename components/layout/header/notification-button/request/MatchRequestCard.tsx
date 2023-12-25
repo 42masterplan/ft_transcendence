@@ -8,9 +8,12 @@ import useSocket from '@/hooks/useSocket';
 
 type NotificationCardProps = {
   request: dummyAPI.gameRequest;
+  setMatchRequests: any;
+  setNotificationCount: any;
 };
 
-export default function MatchRequestCard({request}: NotificationCardProps) {
+export default function MatchRequestCard(props: NotificationCardProps) {
+  const {request, setMatchRequests, setNotificationCount} = props;
   const newMatch: Type.GameInfo = new Game();
   const notificationShooter: Type.UserInfo = new User();
   const [socket] = useSocket('alarm');
@@ -19,11 +22,16 @@ export default function MatchRequestCard({request}: NotificationCardProps) {
   newMatch.id = request.matchId;
   newMatch.theme = request.theme;
 
+  //reduce notification count
   const handleAccept = () => {
     socket.emit('gameResponse', {
       isAccept: true,
       matchId: newMatch.id
     });
+    setMatchRequests((prev: any) =>
+      prev.filter((match: any) => match.id !== newMatch.id)
+    );
+    setNotificationCount((prev: number) => prev - 1);
   };
 
   const handleReject = () => {
@@ -31,6 +39,10 @@ export default function MatchRequestCard({request}: NotificationCardProps) {
       isAccept: true,
       matchId: newMatch.id
     });
+    setMatchRequests((prev: any) =>
+      prev.filter((match: any) => match.id !== newMatch.id)
+    );
+    setNotificationCount((prev: number) => prev - 1);
   };
 
   return (

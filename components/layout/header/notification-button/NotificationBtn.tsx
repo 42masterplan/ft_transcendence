@@ -59,11 +59,15 @@ export default function NotificationBtn() {
     });
     socket.on('gameStart', ({theme, gameId}) => {
       router.push({
-        pathname: 'game/in-game',
+        pathname: 'game/pre-game',
         query: {id: gameId, theme}
       });
     });
-  }, [socket]);
+    return () => {
+      socket.off('gameRequest');
+      socket.off('gameStart');
+    };
+  }, []);
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -129,6 +133,8 @@ export default function NotificationBtn() {
               <MatchRequestCard
                 key={matchRequest.matchId}
                 request={matchRequest}
+                setMatchRequests={setMatchRequests}
+                setNotificationCount={setNotificationCount}
               />
             ))}
           </div>
