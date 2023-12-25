@@ -6,9 +6,11 @@ import {useEffect, useState} from 'react';
 import {toast} from '@/components/shadcn/ui/use-toast';
 import {useCookies} from 'react-cookie';
 import Router from 'next/router';
+import useAxios from '@/hooks/useAxios';
 export default function Validation() {
   const [code, setCode] = useState('');
   const [cookie, setCookie] = useCookies();
+  const {fetchData, response, isSuccess} = useAxios();
   useEffect(() => {
     const isTwoFactorDone = cookie.isTwoFactorDone;
 
@@ -18,6 +20,14 @@ export default function Validation() {
         description: '이미 2단계 인증이 완료되었습니다'
       });
       Router.push('/');
+    } else {
+      fetchData({
+        method: 'post',
+        url: '/users/two-factor-auth',
+        errorTitle: '인증코드 전송 실패',
+        errorDescription: '인증코드 전송 실패했습니다. 다시 새로고침 해주세요',
+        disableSuccessToast: true 
+      });
     }
   }, []);
   const handleClick = () => {
@@ -57,6 +67,7 @@ export default function Validation() {
           <Input
             placeholder='인증 코드를 입력해주세여'
             className='w-1/2'
+            type={'number'}
             value={code}
             onChange={(e) => setCode(e.target.value)}
           />

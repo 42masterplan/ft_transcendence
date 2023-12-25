@@ -1,7 +1,5 @@
 import {Input} from '../shadcn/ui/input';
-import {Label} from '../shadcn/ui/label';
 import {Button} from '../shadcn/ui/button';
-import {useRouter} from 'next/router';
 import {useState} from 'react';
 
 export default function InputValidCode({
@@ -15,7 +13,7 @@ export default function InputValidCode({
   return (
     <div className='flex w-full max-w-sm gap-2'>
       <Input
-        type='text'
+        type='number'
         id='text'
         placeholder='인증 코드를 입력해주세요'
         value={code}
@@ -33,7 +31,7 @@ export default function InputValidCode({
           fetchData({
             method: 'post',
             url: '/users/two-factor-auth/email/validate',
-            body: {code: code},
+            body: {code: parseInt(code, 10)},
             errorDescription: '인증 코드가 올바르지 않습니다.',
             errorTitle: '인증 실패',
             successTitle: '인증 성공',
