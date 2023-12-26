@@ -77,6 +77,7 @@ export default function SocialCard(props: SocialCardProps) {
               userId={props.id}
               isFriend={props.isFriend}
               isBlocked={props.isBlocked}
+              userName={props.name}
             />
           </div>
         </TooltipProvider>

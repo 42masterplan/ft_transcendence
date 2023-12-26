@@ -8,6 +8,8 @@ import {cn} from '@/lib/utils';
 interface DialogProps {
   onClose?: () => void;
   children: React.ReactNode;
+  open?: any;
+  onOpenChange?: any;
   // 다른 필요한 props 타입들을 여기에 추가
 }
 

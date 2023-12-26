@@ -9,7 +9,7 @@ import ScrollableContainer from '@/components/container/ScrollableContainer';
 import ChannelInput from '@/components/channel/body/ChannelInput';
 import {toast} from '@/components/shadcn/ui/use-toast';
 import {channelStateType} from '@/types/channel';
-import {ChannelHistoryType} from '@/types/channel';
+import {MsgHistoryType} from '@/types/channel';
 import {useRouter} from 'next/router';
 const initialStateInfo: channelStateType = {
   channelName: '',
@@ -53,7 +53,7 @@ function channelInfoReducer(state: any, action: any) {
   }
 }
 
-const messageReducer = (state: ChannelHistoryType[], action: any) => {
+const messageReducer = (state: MsgHistoryType[], action: any) => {
   switch (action.type) {
     case 'MESSAGE_SET': // message 변경됨
       return action.payload;

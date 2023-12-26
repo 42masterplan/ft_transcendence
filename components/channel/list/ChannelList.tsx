@@ -2,7 +2,7 @@ import {Button} from '@/components/shadcn/ui/button';
 import useSocket from '@/hooks/useSocket';
 import {EngagedChannelType} from '@/types/channel';
 import {cn} from '@/lib/utils';
-import {ChannelHistoryType, channelStateType} from '@/types/channel';
+import {MsgHistoryType, channelStateType} from '@/types/channel';
 import React from 'react';
 import {useEffect, Dispatch, SetStateAction, useCallback} from 'react';
 import {useRouter} from 'next/router';
@@ -34,7 +34,7 @@ export default React.forwardRef(function ChannelList(
         });
     }
   }, []);
-  const channelHistoryHandler = useCallback((data: ChannelHistoryType[]) => {
+  const channelHistoryHandler = useCallback((data: MsgHistoryType[]) => {
     console.log('channelHistoryListener', data);
     messageDispatch({
       type: 'MESSAGE_SET',

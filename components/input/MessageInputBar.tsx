@@ -22,7 +22,7 @@ interface MessageInputBarProps {
   setIsSending: (isSending: boolean) => void;
   msg: string;
   setMsg: (msg: string) => void;
-  handleSendMsg: () => Promise<void>;
+  handleSendMsg: () => void;
 }
 
 export default function MessageInputBar({
@@ -38,10 +38,10 @@ export default function MessageInputBar({
       if (msg.trim().length > 0) {
         e.preventDefault(); // Prevent the default action of the enter key
         setIsSending(true);
-        await handleSendMsg().then(() => {
-          setIsSending(false);
-          setMsg('');
-        });
+        // await handleSendMsg().then(() => {
+        // setIsSending(false);
+        // setMsg('');
+        // });
       }
     }
   };
@@ -64,10 +64,10 @@ export default function MessageInputBar({
               className='w-14 h-14 rounded-full'
               onClick={async () => {
                 setIsSending(true);
-                await handleSendMsg().then(() => {
-                  setIsSending(false);
-                  setMsg('');
-                });
+                // await handleSendMsg().then(() => {
+                //   setIsSending(false);
+                //   setMsg('');
+                // });
               }}
             >
               {isSending ? <SpinningLoader2 /> : <ArrowUp />}

@@ -1,22 +1,10 @@
 import {User} from 'lucide-react';
 import {Gamepad2, Skull} from 'lucide-react';
-
-import {
-  Dialog,
-  DialogContent
-} from '@/components/game/matchmaking/MatchMakingDialog';
 import {GiBootKick} from 'react-icons/gi';
 import {MdOutlineManageAccounts} from 'react-icons/md';
 import {IoVolumeMuteOutline} from 'react-icons/io5';
 import {PiPaperPlaneTiltBold, PiSmileyAngry} from 'react-icons/pi';
 // 여기까진 아이콘 임포트
-import {useRouter} from 'next/router';
-import AvatarWithStatus from '../card/userInfoCard/AvatarWithStatus';
-import {Button} from '@/components/shadcn/ui/button';
-import {useToast} from '../shadcn/ui/use-toast';
-import useAxios from '@/hooks/useAxios';
-import useSocketAction from '@/hooks/useSocketAction';
-import MatchMakingTimer from '../game/matchmaking/MatchMakingTimer';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,18 +18,26 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from '@/components/shadcn/ui/dropdown-menu';
+import {useToast} from '../shadcn/ui/use-toast';
+import {Button} from '@/components/shadcn/ui/button';
+import {
+  Dialog,
+  DialogContent
+} from '@/components/game/matchmaking/MatchMakingDialog';
+import {useRouter} from 'next/router';
+import AvatarWithStatus from '../card/userInfoCard/AvatarWithStatus';
+import useAxios from '@/hooks/useAxios';
+import useSocketAction from '@/hooks/useSocketAction';
+import MatchMakingTimer from '../game/matchmaking/MatchMakingTimer';
 import useSocket from '@/hooks/useSocket';
 import {Theme} from '@/lib/types';
 import ChildTab from '../game/ChildTab';
 import {useState} from 'react';
-import {tree} from 'next/dist/build/templates/app-page';
-import {set} from 'react-hook-form';
+
 const UserDropdownGroup = ({
   userId,
   userName,
-  setIsThemeSelecting,
-  setIsWaiting,
-  setMatchId
+  setIsThemeSelecting
 }: {
   userId: string;
   userName: string;
@@ -52,7 +48,6 @@ const UserDropdownGroup = ({
   const router = useRouter();
   const {toast} = useToast();
   const {fetchData} = useAxios();
-  const [alarm_sock] = useSocket('alarm');
 
   return (
     <DropdownMenuGroup className=''>
@@ -127,11 +122,10 @@ export default function DropdownAvatarBtn({
   const [alarm_sock] = useSocket('alarm');
   const [isWaiting, setIsWaiting] = useState(false);
   const [socket] = useSocket('channel');
-  const {toast} = useToast();
   const [matchId, setMatchId] = useState('');
   const [isThemeSelect, setIsThemeSelect] = useState(false);
   const [theme, setTheme] = useState(Theme.Default);
-
+  const {toast} = useToast();
   const banAction = useSocketAction(
     'banUser',
     '유저 제명',

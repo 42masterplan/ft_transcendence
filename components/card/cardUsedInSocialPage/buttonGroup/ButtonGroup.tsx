@@ -1,5 +1,3 @@
-import {Button} from '@/components/shadcn/ui/button';
-import {ReactComponentElement} from 'react';
 import BlockButton from './buttons/BlockButton';
 import UnblockButton from './buttons/UnblockButton';
 import FollowButton from './buttons/FollowButton';
@@ -11,18 +9,20 @@ type buttonGroupProps = {
   userId: string;
   isFriend: boolean;
   isBlocked: boolean;
+  userName: string;
 };
 
 export default function ButtonGroup({
   userId,
   isFriend,
-  isBlocked
+  isBlocked,
+  userName
 }: buttonGroupProps) {
   if (isFriend && !isBlocked) {
     // friend: DM, unfollow, match request, block
     return (
       <>
-        <DMButton userId={userId} />
+        <DMButton userName={userName} />
         <UnfollowButton userId={userId} />
         <MatchRequestButton userId={userId} />
         <BlockButton userId={userId} />
