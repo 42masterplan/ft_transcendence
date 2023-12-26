@@ -43,13 +43,13 @@ export default function SetEmail() {
   }, [emailDone, response]);
   useEffect(() => {
     if (codeResponse === true) Router.push('/');
-    else
+    else if (codeDone === true)
       toast({
         title: '인증 실패',
         description: '인증에 실패하였습니다.',
         variant: 'destructive'
       });
-  }, [codeResponse]);
+  }, [codeResponse, codeDone]);
   if (loading == true) return <SpinningLoader />;
   return (
     <>
