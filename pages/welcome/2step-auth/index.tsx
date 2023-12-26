@@ -7,11 +7,13 @@ import {toast} from '@/components/shadcn/ui/use-toast';
 import {useCookies} from 'react-cookie';
 import Router from 'next/router';
 import useAxios from '@/hooks/useAxios';
+import SpinningLoader from '@/components/loader/SpinningLoader';
 export default function Validation() {
   const [code, setCode] = useState('');
   const [cookie, setCookie] = useCookies();
-  const {fetchData: requestCode, response} = useAxios();
+  const {fetchData: requestCode, isSuccess: success, response} = useAxios();
   const {fetchData: postCode, isSuccess} = useAxios();
+  const [email, setEmail] = useState('');
   useEffect(() => {
     const isTwoFactorDone = cookie.isTwoFactorDone;
 
@@ -31,6 +33,10 @@ export default function Validation() {
       });
     }
   }, []);
+  useEffect(() => {
+    if (success === true) setEmail(response.email);
+    console.log(response);
+  }, [success]);
   useEffect(() => {
     if (isSuccess === true) Router.push('/');
   }, [isSuccess]);
@@ -52,7 +58,7 @@ export default function Validation() {
       successDescription: '인증에 성공했습니다.'
     });
   };
-
+  if (success === false) return <SpinningLoader />;
   return (
     <>
       <div className='flex-col justify-center'>
@@ -75,7 +81,7 @@ export default function Validation() {
             className='font-roboto-mono text-[20px]
             font-semibold text-center'
           >
-            {response?.data?.email}
+            {email}
           </h3>
           <p>이메일로 인증 코드를 보냈습니다</p>
           <Input

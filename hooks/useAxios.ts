@@ -55,7 +55,7 @@ const useAxios = () => {
         setSuccess(true);
 
         // Log the response data (for debugging purposes)
-        console.log('Response Data:', res.data);
+        // console.log('Response Data:', res.data);
         if (res.data.message)
           successDescription = res.data.message + successDescription;
         if (disableSuccessToast) return;
