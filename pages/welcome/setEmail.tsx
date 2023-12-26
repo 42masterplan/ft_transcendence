@@ -8,13 +8,21 @@ import Image from 'next/image';
 import {Input} from '@/components/shadcn/ui/input';
 import {Label} from '@/components/shadcn/ui/label';
 import InputValidCode from '@/components/input/InputValidCode';
+import SpinningLoader from '@/components/loader/SpinningLoader';
+import {useCookies} from 'react-cookie';
 export default function SetEmail() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-  const {fetchData: fetchEmail, response, isSuccess: emailDone} = useAxios();
+  const {
+    fetchData: fetchEmail,
+    response,
+    isSuccess: emailDone,
+    loading
+  } = useAxios();
   const {fetchData: fetchCode, isSuccess: codeDone} = useAxios();
   const [fixEmail, setFixEmail] = useState(false);
   const Router = useRouter();
+  const [cookie, setCookie, removeCookie] = useCookies();
   const validateEmail = (e: ChangeEvent<HTMLInputElement>) => {
     const email = e.target.value;
     if (isEmail(email)) {
@@ -30,6 +38,7 @@ export default function SetEmail() {
   useEffect(() => {
     if (codeDone === true) Router.push('/');
   }, [codeDone]);
+  if (loading == true) return <SpinningLoader />;
   return (
     <>
       <div>

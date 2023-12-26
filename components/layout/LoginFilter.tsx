@@ -57,8 +57,10 @@ export default function LoginFilter({children}: {children: React.ReactNode}) {
         });
 
         router.push('/welcome');
-      }
-      if (hasAccount === false) {
+      } else if (
+        router.pathname !== 'welcome/setEmail' &&
+        hasAccount === false
+      ) {
         router.push('/welcome/register');
         toast({
           title: '계정 생성 필요',
