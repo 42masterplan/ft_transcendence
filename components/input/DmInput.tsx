@@ -3,6 +3,7 @@ import {Button} from '@/components/shadcn/ui/button';
 import {Send} from 'lucide-react';
 import {useState} from 'react';
 import useSocket from '@/hooks/useSocket';
+import {useToast} from '@/components/shadcn/ui/use-toast';
 const DMInput = ({
   msg,
   chatUser,
@@ -17,6 +18,7 @@ const DMInput = ({
   const [content, setContent] = useState('');
   const inputLength = content.trim().length;
   const [socket] = useSocket('alarm');
+  const {toast} = useToast();
   return (
     <form
       onSubmit={(event) => {
@@ -31,7 +33,7 @@ const DMInput = ({
           ({msg}: {msg: string}) => {
             if (msg === 'sendDm Success!') {
               setMsg('');
-              setDMData((prev) => {
+              setDMData((prev: any) => {
                 if (prev === null) return null;
                 return [
                   ...prev,

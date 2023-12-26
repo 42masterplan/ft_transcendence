@@ -125,7 +125,7 @@ export default function DropdownAvatarBtn({
   const [matchId, setMatchId] = useState('');
   const [isThemeSelect, setIsThemeSelect] = useState(false);
   const [theme, setTheme] = useState(Theme.Default);
-
+  const {toast} = useToast();
   const banAction = useSocketAction(
     'banUser',
     '유저 제명',
