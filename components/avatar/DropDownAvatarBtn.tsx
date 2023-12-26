@@ -33,14 +33,11 @@ import useSocket from '@/hooks/useSocket';
 import {Theme} from '@/lib/types';
 import ChildTab from '../game/ChildTab';
 import {useState} from 'react';
-import {tree} from 'next/dist/build/templates/app-page';
-import {set} from 'react-hook-form';
+
 const UserDropdownGroup = ({
   userId,
   userName,
-  setIsThemeSelecting,
-  setIsWaiting,
-  setMatchId
+  setIsThemeSelecting
 }: {
   userId: string;
   userName: string;
@@ -51,7 +48,6 @@ const UserDropdownGroup = ({
   const router = useRouter();
   const {toast} = useToast();
   const {fetchData} = useAxios();
-  const [alarm_sock] = useSocket('alarm');
 
   return (
     <DropdownMenuGroup className=''>
