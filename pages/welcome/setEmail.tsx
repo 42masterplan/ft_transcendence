@@ -10,16 +10,22 @@ import {Label} from '@/components/shadcn/ui/label';
 import InputValidCode from '@/components/input/InputValidCode';
 import SpinningLoader from '@/components/loader/SpinningLoader';
 import {useCookies} from 'react-cookie';
+import {useToast} from '@/components/shadcn/ui/use-toast';
 export default function SetEmail() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const {toast} = useToast();
   const {
     fetchData: fetchEmail,
     response,
     isSuccess: emailDone,
     loading
   } = useAxios();
-  const {fetchData: fetchCode, isSuccess: codeDone} = useAxios();
+  const {
+    fetchData: fetchCode,
+    isSuccess: codeDone,
+    response: codeResponse
+  } = useAxios();
   const [fixEmail, setFixEmail] = useState(false);
   const Router = useRouter();
   const [cookie, setCookie, removeCookie] = useCookies();
@@ -36,8 +42,14 @@ export default function SetEmail() {
     if (response == true) setFixEmail(true);
   }, [emailDone, response]);
   useEffect(() => {
-    if (codeDone === true) Router.push('/');
-  }, [codeDone]);
+    if (codeResponse === true) Router.push('/');
+    else
+      toast({
+        title: '인증 실패',
+        description: '인증에 실패하였습니다.',
+        variant: 'destructive'
+      });
+  }, [codeResponse]);
   if (loading == true) return <SpinningLoader />;
   return (
     <>
