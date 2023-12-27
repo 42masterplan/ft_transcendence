@@ -54,7 +54,8 @@ export default function NotificationBtn() {
   useEffect(() => {
     fetchData({
       method: 'get',
-      url: '/users/friends/request'
+      url: '/users/friends/request',
+      disableSuccessToast: true
     });
     socket.on('gameRequest', (state: gameRequest) => {
       setMatchRequests((prev) => [...prev, state]);

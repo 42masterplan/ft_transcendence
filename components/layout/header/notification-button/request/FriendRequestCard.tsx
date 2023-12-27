@@ -36,10 +36,6 @@ export default function FriendRequestCard({request}: {request: friendRequest}) {
         title: 'Friend request accepted',
         description: 'You are now friends with ' + notificationShooter.name
       });
-    } else {
-      toast({
-        title: 'Friend request acception failed'
-      });
     }
   }, [isAcceptSuccess]);
   useEffect(() => {
@@ -47,10 +43,6 @@ export default function FriendRequestCard({request}: {request: friendRequest}) {
       toast({
         title: 'Friend request rejected',
         description: 'You are not friends with ' + notificationShooter.name
-      });
-    } else {
-      toast({
-        title: 'Friend request rejection failed'
       });
     }
   }, [isRejectSuccess]);
