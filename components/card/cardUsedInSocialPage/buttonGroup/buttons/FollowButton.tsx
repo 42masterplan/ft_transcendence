@@ -7,7 +7,6 @@ type FollowButtonProps = {
 };
 
 export default function FollowButton({userId}: FollowButtonProps) {
-  // function to send friend request: TODO: implement this
   const {fetchData} = useAxios();
   return (
     <Button
