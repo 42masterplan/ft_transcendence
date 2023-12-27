@@ -4,21 +4,28 @@ import {useRouter} from 'next/router';
 import ScrollableContainer from '@/components/container/ScrollableContainer';
 import ChatMessage from '@/components/channel/body/ChatMessage';
 import useSocket from '@/hooks/useSocket';
-import Axios from '@/api';
 import {MsgHistoryType} from '@/types/channel';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 import {cn} from '@/lib/utils';
 import DMInput from '@/components/input/DmInput';
 import {dmMessageType, dmInfoType} from '@/types/dm';
+import useAxios from '@/hooks/useAxios';
 export default function DMPage() {
-  const router = useRouter();
+  const messageEndRef = useRef<HTMLDivElement>();
   const [msg, setMsg] = useState('');
   const [DMData, setDMData] = useState<dmMessageType[] | null>(null);
-  const [socket] = useSocket('alarm');
-  const [friendUsers, setFriendUsers] = useState<string[] | null>(null);
-  const messageEndRef = useRef<HTMLDivElement>();
-  const [dmInfo, setDMInfo] = useState<dmInfoType | null>(null);
+  const [dmInfo, setDMInfo] = useState<dmInfoType >({
+			dmId: '',
+			myId: '',
+			myName: '',
+			myProfileImage: '',
+			FriendName: '',
+			FriendProfileImage: '',
+		});
+  const router = useRouter();
   const {toast} = useToast();
+  const [socket] = useSocket('alarm');
+  const {fetchData, loading, response, isSuccess, error} = useAxios();
   //친구인지 아닌지 알기 위해서
   const chatUser = router.query.userName || '';
   useEffect(() => {
@@ -32,7 +39,12 @@ export default function DMPage() {
         });
       }
     );
-    dataFetch();
+    fetchData({
+      method: 'get',
+      url: `users/isFriend`,
+      params: {name: chatUser}
+    });
+
     socket.emit('DmHistory', chatUser, (data) => {
       if (data === 'DmHistory Fail!')
         toast({
@@ -40,51 +52,38 @@ export default function DMPage() {
           variant: 'destructive',
           description: 'DM 가져오기 실패!'
         });
-      else if (data) setDMData(data.messages);
-      //TODO dmId가 현재 내 DM ID인지 확인
+      else if (data) {
+        setDMData(data.messages);
+				setDMInfo({
+					...dmInfo,
+					dmId: data.dmId,
+					
+				})
+      }
     });
     return () => {
       socket.off('newDm');
     };
   }, []);
 
-  //여기서 차단 여부, 친구 여부 확인해서 아니면 페이지를 이동시켜버림.
   useEffect(() => {
-    if (friendUsers !== null && !friendUsers?.includes(chatUser as string)) {
+    messageEndRef.current?.scrollIntoView({behavior: 'smooth'});
+  }, [DMData]);
+
+  useEffect(() => {
+    if (isSuccess && response.isFriends === false) {
       toast({
         title: 'DM 실패!',
         variant: 'destructive',
         description: '친구가 아닙니다.'
       });
-      router.replace('/social', undefined, {shallow: true});
+      router.replace('/social');
+    } else if (error === true) {
+      router.replace('/social');
     }
-  }, [friendUsers]);
-  useEffect(() => {
-    messageEndRef.current?.scrollIntoView({behavior: 'smooth'});
-  }, [DMData]);
+  }, [isSuccess, error]);
 
-  const dataFetch = () => {
-    Axios.get('users/friends')
-      .then((res) => {
-        const data = res.data?.map((user: any) => user.name);
-        console.log(res.data);
-        setFriendUsers(data);
-      })
-      .catch((err) => {
-        console.log(err);
-        toast({
-          title: '친구 목록을 불러오는데 실패했습니다.',
-          variant: 'destructive',
-          description: '친구 목록을 불러오는데 실패했습니다.'
-        });
-        router.replace('/social');
-      });
-  };
-
-  if (friendUsers === null) return <SpinningLoader />;
-
-  // if (!DMData) return <SpinningLoader />;
-  // ---------------------------------------------------------------------------
+  if (loading) return <SpinningLoader />;
 
   return (
     <>

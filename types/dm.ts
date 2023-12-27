@@ -6,3 +6,12 @@ export interface dmMessageType {
   profileImage: string;
   name: string;
 }
+
+export interface dmInfoType {
+  dmId: string; //uuid
+  myId: string; //uuid
+  myName: string;
+  myProfileImage: string;
+  FriendName: string;
+  FriendProfileImage: string;
+}
