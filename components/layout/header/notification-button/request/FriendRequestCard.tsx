@@ -11,11 +11,12 @@ export default function FriendRequestCard({request}: {request: friendRequest}) {
   const notificationShooter: Type.UserInfo = new User();
   notificationShooter.name = request.friend.name;
   notificationShooter.profileImage = request.friend.profileImage;
-  const {fetchData, response, isSuccess} = useAxios();
+  const {fetchData: accept, isSuccess: isAcceptSuccess} = useAxios();
+  const {fetchData: reject, isSuccess: isRejectSuccess} = useAxios();
   const {toast} = useToast();
 
   const handleAccept = () => {
-    fetchData({
+    accept({
       method: 'put',
       url: '/users/friends/request',
       body: {
@@ -24,24 +25,35 @@ export default function FriendRequestCard({request}: {request: friendRequest}) {
     });
   };
   const handleReject = () => {
-    fetchData({
+    reject({
       method: 'delete',
       url: `/users/friends/request/${request.id}`
     });
   };
   useEffect(() => {
-    if (isSuccess) {
+    if (isAcceptSuccess) {
       toast({
         title: 'Friend request accepted',
         description: 'You are now friends with ' + notificationShooter.name
       });
     } else {
       toast({
+        title: 'Friend request acception failed'
+      });
+    }
+  }, [isAcceptSuccess]);
+  useEffect(() => {
+    if (isRejectSuccess) {
+      toast({
         title: 'Friend request rejected',
         description: 'You are not friends with ' + notificationShooter.name
       });
+    } else {
+      toast({
+        title: 'Friend request rejection failed'
+      });
     }
-  }, [isSuccess]);
+  }, [isRejectSuccess]);
   return (
     <div className='flex flex-row justify-between items-center'>
       <UserInfoCard
