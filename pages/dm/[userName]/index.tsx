@@ -14,14 +14,14 @@ export default function DMPage() {
   const messageEndRef = useRef<HTMLDivElement>();
   const [msg, setMsg] = useState('');
   const [DMData, setDMData] = useState<dmMessageType[] | null>(null);
-  const [dmInfo, setDMInfo] = useState<dmInfoType >({
-			dmId: '',
-			myId: '',
-			myName: '',
-			myProfileImage: '',
-			FriendName: '',
-			FriendProfileImage: '',
-		});
+  const [dmInfo, setDMInfo] = useState<dmInfoType>({
+    dmId: '',
+    myId: '',
+    myName: '',
+    myProfileImage: '',
+    FriendName: '',
+    FriendProfileImage: ''
+  });
   const router = useRouter();
   const {toast} = useToast();
   const [socket] = useSocket('alarm');
@@ -54,12 +54,21 @@ export default function DMPage() {
         });
       else if (data) {
         setDMData(data.messages);
-				setDMInfo({
-					...dmInfo,
-					dmId: data.dmId,
-					
-				})
+        setDMInfo({
+          ...dmInfo,
+          dmId: data.dmId,
+          FriendProfileImage: data.FriendProfileImage,
+          FriendName: data.FriendName
+        });
       }
+    });
+    socket.emit('myInfo', (data) => {
+      setDMInfo({
+        ...dmInfo,
+        myId: data.id,
+        myName: data.name,
+        myProfileImage: data.profileImage
+      });
     });
     return () => {
       socket.off('newDm');
@@ -83,8 +92,8 @@ export default function DMPage() {
     }
   }, [isSuccess, error]);
 
-  if (loading) return <SpinningLoader />;
-
+  if (loading || dmInfo.dmId === '' || dmInfo.myId === '')
+    return <SpinningLoader />;
   return (
     <>
       <div className='bg-custom4'>header</div>
@@ -102,17 +111,17 @@ export default function DMPage() {
                 {/* TODO 채팅 메시지 내 정보랑 비교하기
                  */}
                 <ChatMessage
-                  isMe={msg.name === 'hkong'}
+                  isMe={msg.name === dmInfo.myName}
                   size='md'
                   message={msg.content}
-                  side={msg.name === 'hkong' ? 'right' : 'left'}
+                  side={msg.name === dmInfo.myName ? 'right' : 'left'}
                   className='m-2 hover:scale-[1.02] duration-200 hover:-translate-y-1 bg-custom4'
                   ref={messageEndRef as any}
                   profileImage={msg.profileImage}
                   user_name={msg.name}
                   channelId={''}
                   role={'user'}
-                  user_id={'1111'}
+                  user_id={msg.participantId}
                 />
               </div>
             ))}
