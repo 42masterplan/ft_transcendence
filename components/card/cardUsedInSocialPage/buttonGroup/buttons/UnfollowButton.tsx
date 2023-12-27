@@ -22,12 +22,10 @@ export default function UnfollowButton({userId}: UnfollowButtonProps) {
             <ToastAction
               altText='Unfriend User'
               onClick={() => {
+                console.log('unfriend user');
                 fetchData({
                   method: 'delete',
-                  url: '/users/friends/request',
-                  params: {
-                    id: userId
-                  },
+                  url: '/users/friends/' + userId,
                   errorTitle: 'Unfriend user failed',
                   errorDescription: 'Please try again later.',
                   successTitle: 'User unfriended',
