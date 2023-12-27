@@ -6,8 +6,12 @@ type UnblockButtonProps = {
 };
 
 export default function UnblockButton({userId}: UnblockButtonProps) {
-  // function to send unblock request: TODO: implement this
-  const {fetchData} = useAxios();
+  const {fetchData, isSuccess} = useAxios();
+  useEffect(() => {
+    if (isSuccess) {
+      location.reload();
+    }
+  }, [isSuccess]);
   return (
     <Button
       size='icon'

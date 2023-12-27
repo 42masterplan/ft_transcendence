@@ -3,14 +3,19 @@ import {UserX} from 'lucide-react';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 import {ToastAction} from '@/components/shadcn/ui/toast';
 import useAxios from '@/hooks/useAxios';
+import {useEffect} from 'react';
 type UnfollowButtonProps = {
   userId: string;
 };
 
 export default function UnfollowButton({userId}: UnfollowButtonProps) {
-  // function to send unfriend request: TODO: implement this
-  const {fetchData} = useAxios();
+  const {fetchData, isSuccess} = useAxios();
   const {toast} = useToast();
+  useEffect(() => {
+    if (isSuccess) {
+      location.reload();
+    }
+  }, [isSuccess]);
   return (
     <Button
       size='icon'
