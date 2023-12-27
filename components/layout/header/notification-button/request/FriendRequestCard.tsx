@@ -26,7 +26,7 @@ export default function FriendRequestCard({request}: {request: friendRequest}) {
   const handleReject = () => {
     fetchData({
       method: 'delete',
-      url: `/users/friends/request/${request.id}}`
+      url: `/users/friends/request/${request.id}`
     });
   };
   useEffect(() => {
