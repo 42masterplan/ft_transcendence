@@ -9,15 +9,15 @@ import {MsgHistoryType} from '@/types/channel';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 import {cn} from '@/lib/utils';
 import DMInput from '@/components/input/DmInput';
-import {dmMessageType} from '@/types/dm';
+import {dmMessageType, dmInfoType} from '@/types/dm';
 export default function DMPage() {
   const router = useRouter();
   const [msg, setMsg] = useState('');
   const [DMData, setDMData] = useState<dmMessageType[] | null>(null);
   const [socket] = useSocket('alarm');
-  const [blockUsers, setBlockUsers] = useState<string[] | null>(null);
   const [friendUsers, setFriendUsers] = useState<string[] | null>(null);
   const messageEndRef = useRef<HTMLDivElement>();
+  const [dmInfo, setDMInfo] = useState<dmInfoType | null>(null);
   const {toast} = useToast();
   //친구인지 아닌지 알기 위해서
   const chatUser = router.query.userName || '';
@@ -33,10 +33,15 @@ export default function DMPage() {
       }
     );
     dataFetch();
-    socket.emit('DmHistory', chatUser, ({message}: dmMessageType[]) => {
+    socket.emit('DmHistory', chatUser, (data) => {
+      if (data === 'DmHistory Fail!')
+        toast({
+          title: 'DM 가져오기 실패!',
+          variant: 'destructive',
+          description: 'DM 가져오기 실패!'
+        });
+      else if (data) setDMData(data.messages);
       //TODO dmId가 현재 내 DM ID인지 확인
-			setDMData(message);
-      else console.log('디엠 가져오기 실패');
     });
     return () => {
       socket.off('newDm');
@@ -45,17 +50,7 @@ export default function DMPage() {
 
   //여기서 차단 여부, 친구 여부 확인해서 아니면 페이지를 이동시켜버림.
   useEffect(() => {
-    if (blockUsers !== null && blockUsers?.includes(chatUser as string)) {
-      toast({
-        title: 'DM 실패!',
-        variant: 'destructive',
-        description: '차단한 사용자입니다.'
-      });
-      router.replace('/social', undefined, {shallow: true});
-    } else if (
-      friendUsers !== null &&
-      !friendUsers?.includes(chatUser as string)
-    ) {
+    if (friendUsers !== null && !friendUsers?.includes(chatUser as string)) {
       toast({
         title: 'DM 실패!',
         variant: 'destructive',
@@ -63,26 +58,12 @@ export default function DMPage() {
       });
       router.replace('/social', undefined, {shallow: true});
     }
-  }, [blockUsers, friendUsers]);
+  }, [friendUsers]);
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({behavior: 'smooth'});
   }, [DMData]);
 
   const dataFetch = () => {
-    Axios.get('users/block')
-      .then((res) => {
-        const data = res.data?.map((user: any) => user.name);
-        setBlockUsers(data);
-      })
-      .catch((err) => {
-        console.log(err);
-        toast({
-          title: '차단 목록을 불러오는데 실패했습니다.',
-          variant: 'destructive',
-          description: '차단 목록을 불러오는데 실패했습니다.'
-        });
-        router.replace('/social');
-      });
     Axios.get('users/friends')
       .then((res) => {
         const data = res.data?.map((user: any) => user.name);
@@ -100,7 +81,7 @@ export default function DMPage() {
       });
   };
 
-  if (blockUsers === null || friendUsers === null) return <SpinningLoader />;
+  if (friendUsers === null) return <SpinningLoader />;
 
   // if (!DMData) return <SpinningLoader />;
   // ---------------------------------------------------------------------------
@@ -132,7 +113,7 @@ export default function DMPage() {
                   user_name={msg.name}
                   channelId={''}
                   role={'user'}
-                  user_id={msg.id}
+                  user_id={'1111'}
                 />
               </div>
             ))}
