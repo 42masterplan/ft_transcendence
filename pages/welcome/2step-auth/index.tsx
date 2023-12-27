@@ -3,7 +3,7 @@ import {Button} from '@/components/shadcn/ui/button';
 import Image from 'next/image';
 import Title from '@/components/Title';
 import {useEffect, useState} from 'react';
-import {toast} from '@/components/shadcn/ui/use-toast';
+import {useToast} from '@/components/shadcn/ui/use-toast';
 import {useCookies} from 'react-cookie';
 import Router from 'next/router';
 import useAxios from '@/hooks/useAxios';
@@ -12,8 +12,9 @@ export default function Validation() {
   const [code, setCode] = useState('');
   const [cookie, setCookie] = useCookies();
   const {fetchData: requestCode, isSuccess: success, response} = useAxios();
-  const {fetchData: postCode, isSuccess} = useAxios();
+  const {fetchData: postCode, isSuccess, response: codeSuccess} = useAxios();
   const [email, setEmail] = useState('');
+  const {toast} = useToast();
   useEffect(() => {
     const isTwoFactorDone = cookie.isTwoFactorDone;
 
@@ -23,7 +24,8 @@ export default function Validation() {
         description: '이미 2단계 인증이 완료되었습니다'
       });
       Router.push('/');
-    } else {
+    } else if (success === false) {
+      console.log('hi');
       requestCode({
         method: 'post',
         url: '/users/two-factor-auth',
@@ -36,26 +38,30 @@ export default function Validation() {
   useEffect(() => {
     if (success === true) setEmail(response.email);
     console.log(response);
-  }, [success]);
+  }, [response]);
   useEffect(() => {
-    if (isSuccess === true) Router.push('/');
-  }, [isSuccess]);
+    if (isSuccess === true && codeSuccess === true) {
+      setCookie('isTwoFactorDone', true, {path: '/'});
+      Router.push('/');
+    } else if (codeSuccess === false) {
+      toast({
+        variant: 'destructive',
+        title: '인증 실패',
+        description: '인증 코드가 틀렸습니다!'
+      });
+    }
+    console.log(codeSuccess);
+  }, [codeSuccess]);
 
   const handleClick = () => {
     setCode('');
-    toast({
-      title: '인증 완료',
-      description: '2단계 인증이 완료되었습니다'
-    });
-    setCookie('isTwoFactorDone', true, {path: '/'});
     postCode({
       method: 'post',
       url: '/users/two-factor-auth/validate',
       body: {code: parseInt(code, 10)},
       errorTitle: '인증 실패',
       errorDescription: '인증에 실패했습니다. 다시 시도해주세요',
-      successTitle: '인증 성공',
-      successDescription: '인증에 성공했습니다.'
+      disableSuccessToast: true
     });
   };
   if (success === false) return <SpinningLoader />;
