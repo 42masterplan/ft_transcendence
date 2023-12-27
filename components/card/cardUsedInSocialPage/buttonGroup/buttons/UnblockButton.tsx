@@ -1,13 +1,18 @@
 import {Button} from '@/components/shadcn/ui/button';
 import {ShieldMinus} from 'lucide-react';
+import {useEffect} from 'react';
 import useAxios from '@/hooks/useAxios';
 type UnblockButtonProps = {
   userId: string;
 };
 
 export default function UnblockButton({userId}: UnblockButtonProps) {
-  // function to send unblock request: TODO: implement this
-  const {fetchData} = useAxios();
+  const {fetchData, isSuccess} = useAxios();
+  useEffect(() => {
+    if (isSuccess) {
+      location.reload();
+    }
+  }, [isSuccess]);
   return (
     <Button
       size='icon'
@@ -15,10 +20,7 @@ export default function UnblockButton({userId}: UnblockButtonProps) {
       onClick={() => {
         fetchData({
           method: 'delete',
-          url: '/users/block',
-          body: {
-            id: userId
-          },
+          url: '/users/block/' + userId,
           successTitle: 'User unblocked',
           successDescription: "well you can't see their posts anymore.",
           errorTitle: 'Unblock user failed',

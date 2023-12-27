@@ -1,28 +1,59 @@
 import UserInfoCard from '@/components/card/userInfoCard/UserInfoCard';
 import RequestButton from './RequestButton';
-import * as dummyAPI from '@/DummyBackend/notificationAPI';
+import {friendRequest} from '@/DummyBackend/notificationAPI';
 import * as Type from '@/lib/types';
 import {User} from '@/lib/classes/User';
+import useAxios from '@/hooks/useAxios';
+import {useEffect} from 'react';
+import {useToast} from '@/components/shadcn/ui/use-toast';
 
-interface FriendRequestCardProps {
-  request: dummyAPI.friendRequest;
-}
-
-export default function FriendRequestCard({request}: FriendRequestCardProps) {
+export default function FriendRequestCard({
+  request,
+  fetchList
+}: {
+  request: friendRequest;
+  fetchList: () => void;
+}) {
   const notificationShooter: Type.UserInfo = new User();
-  notificationShooter.name = request.id;
-  // notificationShooter.introduction = request.introduction; // TODO: do we need this? this will ruin the design
-  notificationShooter.profileImage = request.profileImage;
+  notificationShooter.name = request.friend.name;
+  notificationShooter.profileImage = request.friend.profileImage;
+  const {fetchData: accept, isSuccess: isAcceptSuccess} = useAxios();
+  const {fetchData: reject, isSuccess: isRejectSuccess} = useAxios();
+  const {toast} = useToast();
 
-  // TODO: implement this
   const handleAccept = () => {
-    console.log('Friend accepted');
+    accept({
+      method: 'put',
+      url: '/users/friends/request',
+      body: {
+        requestId: request.id
+      }
+    });
   };
-
   const handleReject = () => {
-    console.log('Friend rejected');
+    reject({
+      method: 'delete',
+      url: `/users/friends/request/${request.id}`
+    });
   };
-
+  useEffect(() => {
+    if (isAcceptSuccess) {
+      toast({
+        title: 'Friend request accepted',
+        description: 'You are now friends with ' + notificationShooter.name
+      });
+      fetchList();
+    }
+  }, [isAcceptSuccess]);
+  useEffect(() => {
+    if (isRejectSuccess) {
+      toast({
+        title: 'Friend request rejected',
+        description: 'You are not friends with ' + notificationShooter.name
+      });
+      fetchList();
+    }
+  }, [isRejectSuccess]);
   return (
     <div className='flex flex-row justify-between items-center'>
       <UserInfoCard
