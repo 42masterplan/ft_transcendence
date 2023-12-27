@@ -19,10 +19,7 @@ export default function UnblockButton({userId}: UnblockButtonProps) {
       onClick={() => {
         fetchData({
           method: 'delete',
-          url: '/users/block',
-          body: {
-            id: userId
-          },
+          url: '/users/block/' + userId,
           successTitle: 'User unblocked',
           successDescription: "well you can't see their posts anymore.",
           errorTitle: 'Unblock user failed',
