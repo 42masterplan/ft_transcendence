@@ -19,7 +19,7 @@ export default function FriendRequestCard({request}: {request: friendRequest}) {
       method: 'put',
       url: '/users/friends/request',
       body: {
-        friendId: request.id
+        requestId: request.id
       }
     });
   };
