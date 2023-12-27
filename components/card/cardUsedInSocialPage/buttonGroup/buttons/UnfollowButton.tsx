@@ -24,7 +24,7 @@ export default function UnfollowButton({userId}: UnfollowButtonProps) {
               onClick={() => {
                 fetchData({
                   method: 'delete',
-                  url: '/users/friends',
+                  url: '/users/friends/request',
                   params: {
                     id: userId
                   },

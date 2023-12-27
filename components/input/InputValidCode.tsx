@@ -34,8 +34,7 @@ export default function InputValidCode({
             body: {code: parseInt(code, 10)},
             errorDescription: '인증 코드가 올바르지 않습니다.',
             errorTitle: '인증 실패',
-            successTitle: '인증 성공',
-            successDescription: '인증에 성공했습니다.'
+            disableSuccessToast: true
           });
         }}
       >
