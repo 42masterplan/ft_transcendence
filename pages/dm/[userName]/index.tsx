@@ -41,7 +41,7 @@ export default function DMPage() {
     );
     fetchData({
       method: 'get',
-      url: `users/isFriend`,
+      url: `users/friends/isFriend`,
       params: {name: chatUser}
     });
 
