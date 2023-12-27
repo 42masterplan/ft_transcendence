@@ -86,6 +86,13 @@ export default function NotificationBtn() {
           variant='iconBtn'
           size='headerBtn'
           className='flex relative flex-row justify-center items-center'
+          onClick={() =>
+            fetchData({
+              method: 'get',
+              url: '/users/friends/request',
+              disableSuccessToast: true
+            })
+          }
         >
           {/* This div is for match request -> if notification count is 0 -> do not display */}
           {notificationCount === 0 ? null : (
@@ -132,6 +139,13 @@ export default function NotificationBtn() {
               <FriendRequestCard
                 key={friendRequest.id}
                 request={friendRequest}
+                fetchList={() => {
+                  fetchData({
+                    method: 'get',
+                    url: '/users/friends/request',
+                    disableSuccessToast: true
+                  });
+                }}
               />
             ))}
           </div>

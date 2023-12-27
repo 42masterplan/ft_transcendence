@@ -7,7 +7,13 @@ import useAxios from '@/hooks/useAxios';
 import {useEffect} from 'react';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 
-export default function FriendRequestCard({request}: {request: friendRequest}) {
+export default function FriendRequestCard({
+  request,
+  fetchList
+}: {
+  request: friendRequest;
+  fetchList: () => void;
+}) {
   const notificationShooter: Type.UserInfo = new User();
   notificationShooter.name = request.friend.name;
   notificationShooter.profileImage = request.friend.profileImage;
@@ -36,6 +42,7 @@ export default function FriendRequestCard({request}: {request: friendRequest}) {
         title: 'Friend request accepted',
         description: 'You are now friends with ' + notificationShooter.name
       });
+      fetchList();
     }
   }, [isAcceptSuccess]);
   useEffect(() => {
@@ -44,6 +51,7 @@ export default function FriendRequestCard({request}: {request: friendRequest}) {
         title: 'Friend request rejected',
         description: 'You are not friends with ' + notificationShooter.name
       });
+      fetchList();
     }
   }, [isRejectSuccess]);
   return (
