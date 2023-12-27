@@ -9,11 +9,11 @@ import {MsgHistoryType} from '@/types/channel';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 import {cn} from '@/lib/utils';
 import DMInput from '@/components/input/DmInput';
-
+import {dmMessageType} from '@/types/dm';
 export default function DMPage() {
   const router = useRouter();
   const [msg, setMsg] = useState('');
-  const [DMData, setDMData] = useState<MsgHistoryType[] | null>(null);
+  const [DMData, setDMData] = useState<dmMessageType[] | null>(null);
   const [socket] = useSocket('alarm');
   const [blockUsers, setBlockUsers] = useState<string[] | null>(null);
   const [friendUsers, setFriendUsers] = useState<string[] | null>(null);
@@ -33,17 +33,13 @@ export default function DMPage() {
       }
     );
     dataFetch();
-    socket.emit(
-      'DmHistory',
-      chatUser,
-      ({msg, dm}: {msg: string; dm: MsgHistoryType[]}) => {
-        if (msg === 'DmHistory Success!') setDMData(dm);
-        else console.log(msg);
-      }
-    );
+    socket.emit('DmHistory', chatUser, ({message}: dmMessageType[]) => {
+      //TODO dmId가 현재 내 DM ID인지 확인
+			setDMData(message);
+      else console.log('디엠 가져오기 실패');
+    });
     return () => {
       socket.off('newDm');
-      socket.off('DmHistory');
     };
   }, []);
 
@@ -115,7 +111,7 @@ export default function DMPage() {
       <div className='h-full'>
         <ScrollableContainer className='rounded-none'>
           <div>
-            {DMData?.map((msg: MsgHistoryType, idx: number) => (
+            {DMData?.map((msg: dmMessageType, idx: number) => (
               <div
                 key={idx}
                 className={cn(
