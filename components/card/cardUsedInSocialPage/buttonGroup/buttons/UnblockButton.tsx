@@ -1,5 +1,6 @@
 import {Button} from '@/components/shadcn/ui/button';
 import {ShieldMinus} from 'lucide-react';
+import {useEffect} from 'react';
 import useAxios from '@/hooks/useAxios';
 type UnblockButtonProps = {
   userId: string;
