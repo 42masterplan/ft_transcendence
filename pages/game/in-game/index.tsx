@@ -20,6 +20,7 @@ import GameStatus from '@/components/game/ingame/GameStatus';
 import GameResult from '@/components/game/ingame/GameResult';
 import {io, Socket} from 'socket.io-client';
 import {useRouter} from 'next/router';
+import useSocket from '@/hooks/useSocket';
 
 function prepGame(
   canvas: HTMLCanvasElement,
@@ -160,9 +161,9 @@ export default function Game() {
   const [deuce, setDeuce] = useState(false);
   const router = useRouter();
   const {id, theme} = router.query;
+  const [socket] = useSocket('game');
 
   useEffect(() => {
-    const socket = io('http://localhost:4242'); // TODO: re-use socket
     const canvas = canvasRef.current;
     if (!canvas) return;
     const c = canvas.getContext('2d');
