@@ -160,7 +160,8 @@ export default function Game() {
   const [forfeit, setForfeit] = useState(false);
   const [deuce, setDeuce] = useState(false);
   const router = useRouter();
-  const {id, theme} = router.query;
+  const theme = 'default';
+  // const {id, theme} = router.query;
   const [socket] = useSocket('game');
 
   useEffect(() => {
