@@ -170,6 +170,7 @@ export default function Game() {
     const c = canvas.getContext('2d');
     if (!c) return;
     let animationId: number;
+    console.log('socket: ', socket);
     const {playerA, playerB, ball, particles} = prepGame(
       canvas,
       contextRef,
