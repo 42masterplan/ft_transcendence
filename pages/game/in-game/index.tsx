@@ -160,10 +160,9 @@ export default function Game() {
   const [forfeit, setForfeit] = useState(false);
   const [deuce, setDeuce] = useState(false);
   const router = useRouter();
-  const theme = 'soccer';
+  const theme = 'badminton';
   // const {id, theme} = router.query;
   const [socket] = useSocket('game');
-  console.log(socket);
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -223,10 +222,10 @@ export default function Game() {
     };
     gameLoop();
     return () => {
-      cancelAnimationFrame(animationId);
-      socket.off('connect');
-      socket.off('disconnect');
-      socket.disconnect();
+      // cancelAnimationFrame(animationId);
+      // socket.off('connect');
+      // socket.off('disconnect');
+      // socket.disconnect();
     };
   }, []);
 
