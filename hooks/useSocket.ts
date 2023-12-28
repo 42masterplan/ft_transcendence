@@ -1,6 +1,6 @@
 import {Socket, io} from 'socket.io-client';
 import {useCallback} from 'react';
-type SocketNamespace = 'channel' | 'dm' | 'game' | 'alarm';
+type SocketNamespace = 'channel' | 'dm' | 'game' | 'alarm' | 'ladder';
 const socketUrl = process.env.NEXT_PUBLIC_CHAT_SOCKET ?? '';
 const sockets: {[key: string]: Socket} = {};
 import getAuthorization from '@/lib/utils/cookieUtils';

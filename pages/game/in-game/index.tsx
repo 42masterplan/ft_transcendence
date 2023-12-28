@@ -160,17 +160,16 @@ export default function Game() {
   const [forfeit, setForfeit] = useState(false);
   const [deuce, setDeuce] = useState(false);
   const router = useRouter();
-  const theme = 'default';
+  const theme = 'soccer';
   // const {id, theme} = router.query;
   const [socket] = useSocket('game');
-
+  console.log(socket);
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const c = canvas.getContext('2d');
     if (!c) return;
     let animationId: number;
-    console.log('socket: ', socket);
     const {playerA, playerB, ball, particles} = prepGame(
       canvas,
       contextRef,

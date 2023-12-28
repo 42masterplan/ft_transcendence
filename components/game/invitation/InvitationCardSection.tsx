@@ -38,7 +38,6 @@ export default function InvitationCardSection({
     theme: string,
     startNormalMatchMaking: any
   ) {
-    console.log('userId: ', userId, 'theme: ', theme);
     startNormalMatchMaking({userId, theme});
   }
   useEffect(() => {
