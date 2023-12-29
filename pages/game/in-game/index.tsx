@@ -76,10 +76,8 @@ function listenToSocketEvents(
   particles: Particle[]
 ) {
   socket.on('updatePlayers', (state) => {
-    // console.log('UPDATE PLAYERS!!: ', state.matchId, matchId);
     if (state.matchId != matchId) return;
     if (!state.isReady) return;
-    // console.log('updatePlayers', state);
     if (!playerA.id) playerA.id = state.playerA.id;
     if (!playerB.id) playerB.id = state.playerB.id;
     playerA.x = state.playerA.x;
@@ -92,15 +90,12 @@ function listenToSocketEvents(
   socket.on('updateBall', (state) => {
     if (state.matchId != matchId) return;
     const backendBall = state.ball;
-    // console.log('updateBall', backendBall);
     ball.x = backendBall.x;
     ball.y = backendBall.y;
-    // console.log('front ball: ', ball.x, ball.y);
     ball.velocity = backendBall.velocity;
     ball.lastCollision = backendBall.lastCollision;
   });
   socket.on('updateScore', (state) => {
-    // console.log('updateScore');
     if (state.matchId != matchId) return;
     const backendScore = state.score;
     ball.resetPosition(particles);
@@ -116,7 +111,6 @@ function listenToSocketEvents(
     socket.disconnect();
   });
   socket.on('updateTime', (state) => {
-    // console.log('updateTime');
     if (state.matchId != matchId) return;
     const backendTime = state.time;
     setTime(backendTime);
@@ -163,8 +157,7 @@ export default function Game() {
   const [forfeit, setForfeit] = useState(false);
   const [deuce, setDeuce] = useState(false);
   const router = useRouter();
-  const theme = 'badminton';
-  // const {id, theme} = router.query;
+  const {id, theme} = router.query;
   const [socket] = useSocket('game');
   console.log('socket: ', socket);
 
@@ -185,8 +178,6 @@ export default function Game() {
     if (theme && theme != 'default')
       backgroundImage.src = `/gameThemes/${theme}.png`;
     socket.on('joinedRoom', (id: string) => {
-      // if 게임이 아직 준비되있지 않다면 return -> 이중으로 이벤트 리스너가 등록되는 것을 방지
-      console.log('joinedRoom: ', id);
       listenToSocketEvents(
         socket,
         id,
@@ -231,6 +222,14 @@ export default function Game() {
     gameLoop();
     return () => {
       console.log('game unmounted');
+      socket.off('updatePlayers');
+      socket.off('updateBall');
+      socket.off('updateScore');
+      socket.off('gameOver');
+      socket.off('updateTime');
+      socket.off('deuce');
+      socket.off('connect');
+      socket.off('disconnect');
       cancelAnimationFrame(animationId);
     };
   }, []);
