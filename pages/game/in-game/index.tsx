@@ -63,7 +63,7 @@ function prepGame(
 
 function listenToSocketEvents(
   socket: Socket,
-  roomId: number,
+  matchId: string,
   playerA: Player,
   playerB: Player,
   ball: Ball,
@@ -76,36 +76,38 @@ function listenToSocketEvents(
   particles: Particle[]
 ) {
   socket.on('updatePlayers', (state) => {
-    if (state.roomId != roomId) return;
-    const backendPlayers = state.players;
-    if (backendPlayers.length < 2) return;
-    if (!playerA.id) playerA.id = backendPlayers[0].id;
-    if (!playerB.id) playerB.id = backendPlayers[1].id;
-    playerA.x = backendPlayers[0].x;
-    playerA.y = backendPlayers[0].y;
-    playerB.x = backendPlayers[1].x;
-    playerB.y = backendPlayers[1].y;
-    playerA.dx = backendPlayers[0].dx;
-    playerB.dx = backendPlayers[1].dx;
-    if (!(playerA.id in backendPlayers)) delete backendPlayers[playerA.id];
-    if (!(playerB.id in backendPlayers)) delete backendPlayers[playerB.id];
+    // console.log('UPDATE PLAYERS!!: ', state.matchId, matchId);
+    if (state.matchId != matchId) return;
+    if (!state.isReady) return;
+    // console.log('updatePlayers', state);
+    if (!playerA.id) playerA.id = state.playerA.id;
+    if (!playerB.id) playerB.id = state.playerB.id;
+    playerA.x = state.playerA.x;
+    playerA.y = state.playerA.y;
+    playerA.dx = state.playerA.dx;
+    playerB.x = state.playerB.x;
+    playerB.y = state.playerB.y;
+    playerB.dx = state.playerB.dx;
   });
   socket.on('updateBall', (state) => {
-    if (state.roomId != roomId) return;
+    if (state.matchId != matchId) return;
     const backendBall = state.ball;
+    // console.log('updateBall', backendBall);
     ball.x = backendBall.x;
     ball.y = backendBall.y;
+    // console.log('front ball: ', ball.x, ball.y);
     ball.velocity = backendBall.velocity;
     ball.lastCollision = backendBall.lastCollision;
   });
   socket.on('updateScore', (state) => {
-    if (state.roomId != roomId) return;
+    // console.log('updateScore');
+    if (state.matchId != matchId) return;
     const backendScore = state.score;
     ball.resetPosition(particles);
     setScore(backendScore);
   });
   socket.on('gameOver', (state) => {
-    if (state.roomId != roomId) return;
+    if (state.matchId != matchId) return;
     if (state.forfeit) setForfeit(true);
     setGameOver(true);
     cancelAnimationFrame(animationId);
@@ -114,12 +116,13 @@ function listenToSocketEvents(
     socket.disconnect();
   });
   socket.on('updateTime', (state) => {
-    if (state.roomId != roomId) return;
+    // console.log('updateTime');
+    if (state.matchId != matchId) return;
     const backendTime = state.time;
     setTime(backendTime);
   });
   socket.on('deuce', (state) => {
-    if (state.roomId != roomId) return;
+    if (state.matchId != matchId) return;
     setDeuce(true);
   });
 }
@@ -163,11 +166,14 @@ export default function Game() {
   const theme = 'badminton';
   // const {id, theme} = router.query;
   const [socket] = useSocket('game');
+  console.log('socket: ', socket);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const c = canvas.getContext('2d');
     if (!c) return;
+    console.log('game mounted');
     let animationId: number;
     const {playerA, playerB, ball, particles} = prepGame(
       canvas,
@@ -178,7 +184,9 @@ export default function Game() {
     const backgroundImage = new Image();
     if (theme && theme != 'default')
       backgroundImage.src = `/gameThemes/${theme}.png`;
-    socket.on('joinedRoom', (id) => {
+    socket.on('joinedRoom', (id: string) => {
+      // if 게임이 아직 준비되있지 않다면 return -> 이중으로 이벤트 리스너가 등록되는 것을 방지
+      console.log('joinedRoom: ', id);
       listenToSocketEvents(
         socket,
         id,
@@ -222,10 +230,8 @@ export default function Game() {
     };
     gameLoop();
     return () => {
-      // cancelAnimationFrame(animationId);
-      // socket.off('connect');
-      // socket.off('disconnect');
-      // socket.disconnect();
+      console.log('game unmounted');
+      cancelAnimationFrame(animationId);
     };
   }, []);
 
