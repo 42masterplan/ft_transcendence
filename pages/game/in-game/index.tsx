@@ -156,11 +156,30 @@ export default function Game() {
   const [gameover, setGameOver] = useState(false);
   const [forfeit, setForfeit] = useState(false);
   const [deuce, setDeuce] = useState(false);
+  const [matchId, setMatchId] = useState<string>('');
+  const [theme, setTheme] = useState<string>('');
+
   const router = useRouter();
-  const {id, theme} = router.query;
-  const [socket] = useSocket('game');
 
   useEffect(() => {
+    if (router.query.id) {
+      setMatchId(router.query.id as string);
+    }
+    if (router.query.theme) {
+      setTheme(router.query.theme as string);
+    }
+  }, [router]);
+
+  const initSocket = matchId != '' && theme != '';
+  console.log('initSocket', initSocket);
+  console.log('matchId', matchId);
+  console.log('@@@@@');
+  const [socket] = useSocket('game', {
+    autoConnect: initSocket
+  });
+
+  useEffect(() => {
+    if (!initSocket) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const c = canvas.getContext('2d');
@@ -175,11 +194,12 @@ export default function Game() {
     const backgroundImage = new Image();
     if (theme && theme != 'default')
       backgroundImage.src = `/gameThemes/${theme}.png`;
+    console.log('matchId', matchId);
+    socket.emit('joinRoom', {matchId: matchId});
     socket.on('joinedRoom', () => {
-      socket.emit('joinRoom', {matchId: id});
       listenToSocketEvents(
         socket,
-        id,
+        matchId,
         playerA,
         playerB,
         ball,
@@ -220,17 +240,17 @@ export default function Game() {
     gameLoop();
     return () => {
       console.log('game unmounted');
-      socket.off('updatePlayers');
-      socket.off('updateBall');
-      socket.off('updateScore');
-      socket.off('gameOver');
-      socket.off('updateTime');
-      socket.off('deuce');
-      socket.off('connect');
-      socket.off('disconnect');
+      // socket.off('updatePlayers');
+      // socket.off('updateBall');
+      // socket.off('updateScore');
+      // socket.off('gameOver');
+      // socket.off('updateTime');
+      // socket.off('deuce');
+      // socket.off('connect');
+      // socket.off('disconnect');
       cancelAnimationFrame(animationId);
     };
-  }, []);
+  }, [socket, initSocket]);
 
   return (
     <div className='relative min-h-screen flex justify-center items-center'>
