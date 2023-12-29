@@ -86,11 +86,12 @@ export default React.forwardRef(function ChannelList(
           onClick={() => {
             handleChannelClick(channel);
           }}
+          variant='ghost'
           key={channel.id}
         >
-          <span className='text-custom4 truncate ...'>{channel.name}</span>
-          <span className='text-custom4 text-xs font-bold'>
-            {channel.userCount}
+          <span className='truncate ...'>{channel.name}</span>
+          <span className='text-xs font-bold'>
+            {'(' + channel.userCount + ')'}
           </span>
         </Button>
       ))}
