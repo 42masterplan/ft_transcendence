@@ -19,7 +19,7 @@ export default function PreGame() {
   const {id, theme, gameMode} = router.query;
   const [backgroundImage, setBackgroundImage] = useState(''); // 상태로 배경 이미지 URL을 관리
   const [time, setTime] = useState(PRE_GAME_TIME);
-  const {fetchData, response, isSuccess} = useAxios(); // 게임 플레이어 2명의 정보를 위한 axios
+  const {fetchData, response, isSuccess} = useAxios(); // TODO: 게임 플레이어 2명의 정보를 위한 axios
 
   useEffect(() => {
     const timer = setInterval(() => {
