@@ -25,4 +25,7 @@ export interface channelStateType {
   channelName: string;
   channelId: string;
   engagedChannels: EngagedChannelType[];
+  myProfileImage: string;
+  myName: string;
+  myId: string;
 }
