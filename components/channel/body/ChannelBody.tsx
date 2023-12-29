@@ -2,7 +2,7 @@ import {cn} from '@/lib/utils';
 
 import React from 'react';
 import {useRef, useEffect, useCallback} from 'react';
-import {ChannelHistoryType, channelStateType} from '@/types/channel';
+import {MsgHistoryType, channelStateType} from '@/types/channel';
 import ScrollableContainer from '../../container/ScrollableContainer';
 import ChatMessage from '@/components/channel/body/ChatMessage';
 import useSocket from '@/hooks/useSocket';
@@ -22,7 +22,7 @@ export default React.forwardRef(function ChannelBody(
     messageDispatch
   }: {
     channelInfoState: channelStateType;
-    messageState: ChannelHistoryType[];
+    messageState: MsgHistoryType[];
     messageDispatch: any;
   },
   channelInfoRef: any
@@ -74,7 +74,7 @@ export default React.forwardRef(function ChannelBody(
     <div className='h-full'>
       <ScrollableContainer className='rounded-none'>
         <div>
-          {messageState?.map((msg: ChannelHistoryType, idx: number) =>
+          {messageState?.map((msg: MsgHistoryType, idx: number) =>
             msg.content.startsWith('[system]') ? (
               <SystemCard ref={messageEndRef} key={idx}>
                 {msg.content.substring(8)}

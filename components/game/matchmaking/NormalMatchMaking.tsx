@@ -6,8 +6,16 @@ import useAxios from '@/hooks/useAxios';
 import {useEffect, useState} from 'react';
 import InvitationCardSection from '../invitation/InvitationCardSection';
 import MatchMakingTimer from './MatchMakingTimer';
-import {io, Socket} from 'socket.io-client';
-import {useRouter} from 'next/router';
+import useSocket from '@/hooks/useSocket';
+import {useToast} from '@/components/shadcn/ui/use-toast';
+
+interface UserType {
+  id: string;
+  profileImage: string;
+  name: string;
+  currentStatus: string;
+  introduction: string;
+}
 
 export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   // we are only going to search for online friends
@@ -15,42 +23,45 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   const {fetchData, response, isSuccess} = useAxios();
   const [friends, setFriends] = useState<userType[]>([]);
   const [isWaiting, setIsWaiting] = useState(false);
+  const [socket] = useSocket('alarm');
   const forwardTheme = theme;
-  const [socket, setSocket] = useState<Socket | null>(null);
-  const router = useRouter();
+  const {toast} = useToast();
+  let matchId = '';
 
-  useEffect(() => {
-    const socket = io('http://localhost:4242');
-    setSocket(socket);
-    socket.on('normalMatch', (state) => {
-      console.log('일반 매치 발견', state);
-      router.push({
-        pathname: '/game/in-game',
-        query: {id: state.id, theme: forwardTheme}
-      });
-    });
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
-
-  function stopNormalMatchMaking() {
-    console.log('일반 매칭 취소');
-    if (socket) socket.emit('normalMatchCancel', {userName: 'daejlee'});
+  function stopNormalMatchMaking(matchId: string) {
+    socket.emit('gameCancel', {matchId});
   }
-  function startNormalMatchMaking() {
-    console.log('일반 매칭 시작');
-    if (socket)
-      socket.emit('normalMatch', {
-        userName: 'daejlee'
-      });
+  function startNormalMatchMaking({
+    userId,
+    theme
+  }: {
+    userId: string;
+    theme: string;
+  }) {
+    socket.emit(
+      'gameRequest',
+      {
+        userId,
+        gameMode: 'normal',
+        theme
+      },
+      (state: any) => {
+        if (state.msg === 'gameRequestSuccess!') {
+          setIsWaiting(true);
+          matchId = state.requestId;
+        } else {
+          toast({
+            title: '매칭 실패',
+            description: '매칭에 실패했습니다.',
+            variant: 'destructive'
+          });
+        }
+      }
+    );
   }
   useEffect(() => {
     fetchData({
       method: 'get',
-      // NOTICE: it supposed to be /users/friends but using all for now because of scrollable feature testing !!
-      // TODO: we are only going to search for online friends so we need to change this later !!
-      // socket will be used for this feature -> 알림 소켓이 구현되면 그때 바꿔야함.
       url: '/users',
       params: {
         id: '1'
@@ -59,6 +70,10 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
       errorDescription: '유저 정보 조회에 실패했습니다.',
       disableSuccessToast: true
     });
+    // socket.emit('onlineFriends', (state: UserType[]) => {
+    //   // 이 부분을 나중에 써야함. 지금은 임시로 쓰는거임
+    //   setFriends(state);
+    // });
   }, []); // ignore eslint warning. we only want to fetch data once ^^
   useEffect(() => {
     if (isSuccess === true) setFriends(response);
@@ -69,15 +84,11 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
       <DialogTrigger asChild>
         <Button>Start Match</Button>
       </DialogTrigger>
-      <DialogContent
-        className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col 
-      justify-center items-center gap-[20px] inline-flex'
-      >
+      <DialogContent className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col justify-center items-center gap-[20px] inline-flex'>
         <div className='flex flex-col w-full h-[390px] px-3 gap-2'>
           <InvitationNavBar setSearchTargetInput={setSearchTargetInput} />
           <InvitationCardSection
             searchTargetInput={searchTargetInput}
-            className=''
             friends={friends}
             theme={forwardTheme}
             setIsWaiting={setIsWaiting}
@@ -89,12 +100,12 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   ) : (
     <Dialog
       onClose={() => {
-        stopNormalMatchMaking();
+        stopNormalMatchMaking(matchId);
         setIsWaiting(false);
       }}
     >
       <DialogContent className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col justify-center items-center gap-[110px] inline-flex'>
-        <h1 className='text-[40px] font-bold font-[Roboto Mono]'>
+        <h1 className='text-[40px] font-bold font-[Roboto Mono] items-center'>
           매칭을 수락하길 기다리는중
         </h1>
         <MatchMakingTimer

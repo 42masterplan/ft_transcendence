@@ -2,13 +2,14 @@
 
 import * as React from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import {Button} from '@/components/shadcn/ui/button';
 
 import {cn} from '@/lib/utils';
 
 interface DialogProps {
   onClose?: () => void;
   children: React.ReactNode;
+  open?: any;
+  onOpenChange?: any;
   // 다른 필요한 props 타입들을 여기에 추가
 }
 
@@ -66,11 +67,7 @@ const DialogContent = React.forwardRef<
       focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent
       data-[state=open]:text-muted-foreground'
       >
-        <span className='sr-only'>Close</span>
-        <span className='text-lg font-semibold leading-none tracking-tight'>
-          매치 취소
-        </span>
-        {/* <Button size='lg'>매치 취소</Button> */}
+        매치 취소
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </DialogPortal>

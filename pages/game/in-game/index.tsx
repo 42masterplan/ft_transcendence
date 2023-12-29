@@ -69,6 +69,8 @@ function listenToSocketEvents(
   setScore: any,
   setGameOver: any,
   setTime: any,
+  setForfeit: any,
+  setDeuce: any,
   animationId: number,
   particles: Particle[]
 ) {
@@ -103,6 +105,7 @@ function listenToSocketEvents(
   });
   socket.on('gameOver', (state) => {
     if (state.roomId != roomId) return;
+    if (state.forfeit) setForfeit(true);
     setGameOver(true);
     cancelAnimationFrame(animationId);
     socket.off('connect');
@@ -113,6 +116,10 @@ function listenToSocketEvents(
     if (state.roomId != roomId) return;
     const backendTime = state.time;
     setTime(backendTime);
+  });
+  socket.on('deuce', (state) => {
+    if (state.roomId != roomId) return;
+    setDeuce(true);
   });
 }
 
@@ -149,11 +156,13 @@ export default function Game() {
   const [time, setTime] = useState(GAME_TIME_LIMIT);
   const [score, setScore] = useState({playerA: 0, playerB: 0});
   const [gameover, setGameOver] = useState(false);
+  const [forfeit, setForfeit] = useState(false);
+  const [deuce, setDeuce] = useState(false);
   const router = useRouter();
   const {id, theme} = router.query;
 
   useEffect(() => {
-    const socket = io('http://localhost:4242');
+    const socket = io('http://localhost:4242'); // TODO: re-use socket
     const canvas = canvasRef.current;
     if (!canvas) return;
     const c = canvas.getContext('2d');
@@ -166,7 +175,7 @@ export default function Game() {
       c
     );
     const backgroundImage = new Image();
-    if (theme && theme !== 'Default')
+    if (theme && theme != 'default')
       backgroundImage.src = `/gameThemes/${theme}.png`;
     socket.on('joinedRoom', (id) => {
       listenToSocketEvents(
@@ -178,6 +187,8 @@ export default function Game() {
         setScore,
         setGameOver,
         setTime,
+        setForfeit,
+        setDeuce,
         animationId,
         particles
       );
@@ -187,9 +198,8 @@ export default function Game() {
     }, RENDERING_RATE);
     addEventListeners(keysPressed);
     const gameLoop = () => {
-      if (theme && theme != 'Default') {
+      if (theme && theme != 'default') {
         if (backgroundImage.complete) {
-          console.log('complete');
           c.drawImage(backgroundImage, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
           c.fillStyle = BACKGROUND_SHADOW_COLOR;
         }
@@ -225,6 +235,7 @@ export default function Game() {
           score={score}
           time={time}
           winner={score.playerA == SCORE_LIMIT ? true : false}
+          forfeit={forfeit}
         />
       ) : (
         <>
@@ -234,6 +245,7 @@ export default function Game() {
               gameover={gameover}
               setGameOver={setGameOver}
               time={time}
+              deuce={deuce}
             />
           </div>
           <ScoreBoard AScore={score.playerA} BScore={score.playerB} />

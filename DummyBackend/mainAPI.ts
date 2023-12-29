@@ -317,7 +317,7 @@ export function main__getUserInfo(): currentUserData {
 
 export async function main__getUserInfoAsync(): Promise<currentUserData> {
   // delay 1 sec
-  setTimeout(() => {}, 1000);
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   return dummyUserData;
 }
 
@@ -327,6 +327,6 @@ export function main__getGameHistory(): match[] {
 
 export async function main__getGameHistoryAsync(): Promise<match[]> {
   // delay 1 sec
-  setTimeout(() => {}, 1000);
+  await new Promise((resolve) => setTimeout(resolve, 2000));
   return dummyGameHistory;
 }

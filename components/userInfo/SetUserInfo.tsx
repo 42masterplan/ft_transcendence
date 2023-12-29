@@ -1,11 +1,11 @@
 import SetAvatar from '@/components/avatar/SetAvatar';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Input} from '@/components/shadcn/ui/input';
 import {Button} from '@/components/shadcn/ui/button';
 import SetUserName from './SetUserName';
 import {useRouter} from 'next/router';
 import {useToast} from '@/components/shadcn/ui/use-toast';
-
+import {useCookies} from 'react-cookie';
 import useAxios from '@/hooks/useAxios';
 
 interface SetUserInfoProps {
@@ -29,16 +29,27 @@ export default function SetUserInfo({
   const [profileImage, setProfileImage] = useState(
     process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI1 || ''
   );
-
+  const [cookie, setCookie, removeCookie] = useCookies();
   const router = useRouter();
-  if (isSuccess === true) {
-    if (mode == 'register') router.push('/welcome/setEmail');
-    else
-      return (
-        <div className='text-4xl font-bold'>회원정보가 변경되었습니다.</div>
-      );
-  }
-
+  useEffect(() => {
+    if (isSuccess === true) {
+      if (mode == 'register') {
+        setCookie('hasAccount', true, {
+          path: '/',
+          sameSite: 'strict',
+          secure: true
+        });
+        setCookie('isTwoFactorDone', true, {
+          path: '/',
+          sameSite: 'strict',
+          secure: true
+        });
+        router.push('/welcome/setEmail');
+      }
+    }
+  }, [isSuccess]);
+  if (mode !== 'register' && userInfo)
+    return <div className='text-4xl font-bold'>회원정보가 변경되었습니다.</div>;
   const handleSubmit = (e: any) => {
     e.preventDefault();
     fetchData({

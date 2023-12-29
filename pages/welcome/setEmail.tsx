@@ -8,13 +8,27 @@ import Image from 'next/image';
 import {Input} from '@/components/shadcn/ui/input';
 import {Label} from '@/components/shadcn/ui/label';
 import InputValidCode from '@/components/input/InputValidCode';
+import SpinningLoader from '@/components/loader/SpinningLoader';
+import {useCookies} from 'react-cookie';
+import {useToast} from '@/components/shadcn/ui/use-toast';
 export default function SetEmail() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-  const {fetchData: fetchEmail, response, isSuccess: emailDone} = useAxios();
-  const {fetchData: fetchCode, isSuccess: codeDone} = useAxios();
+  const {toast} = useToast();
+  const {
+    fetchData: fetchEmail,
+    response,
+    isSuccess: emailDone,
+    loading
+  } = useAxios();
+  const {
+    fetchData: fetchCode,
+    isSuccess: codeDone,
+    response: codeResponse
+  } = useAxios();
   const [fixEmail, setFixEmail] = useState(false);
   const Router = useRouter();
+  const [cookie, setCookie, removeCookie] = useCookies();
   const validateEmail = (e: ChangeEvent<HTMLInputElement>) => {
     const email = e.target.value;
     if (isEmail(email)) {
@@ -28,8 +42,15 @@ export default function SetEmail() {
     if (response == true) setFixEmail(true);
   }, [emailDone, response]);
   useEffect(() => {
-    if (codeDone === true) Router.push('/');
-  }, [codeDone]);
+    if (codeResponse === true) Router.push('/');
+    else if (codeDone === true)
+      toast({
+        title: '인증 실패',
+        description: '인증에 실패하였습니다.',
+        variant: 'destructive'
+      });
+  }, [codeResponse, codeDone]);
+  if (loading == true) return <SpinningLoader />;
   return (
     <>
       <div>
@@ -77,7 +98,7 @@ export default function SetEmail() {
                 } else {
                   fetchEmail({
                     method: 'put',
-                    url: '/users/two-factor-auth',
+                    url: '/users/two-factor-auth/email',
                     body: {email: email},
                     errorDescription: '이메일 설정에 실패 했습니다.',
                     errorTitle: '이메일 설정 실패',

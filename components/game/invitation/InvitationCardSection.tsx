@@ -3,13 +3,11 @@ import InvitationCard from './InvitationCard';
 import {Accordion} from '@/components/shadcn/ui/accordion';
 import type {userType} from '@/types/user';
 import {useEffect, useState} from 'react';
-import useAxios from '@/hooks/useAxios';
 
 interface InvitationCardSectionProps {
   friends: userType[];
   searchTargetInput: string;
-  className?: string;
-  theme?: string;
+  theme: string;
   setIsWaiting: any;
   startNormalMatchMaking: any;
 }
@@ -31,28 +29,23 @@ function isUserIdInArray(userId: string, array: userType[]) {
 export default function InvitationCardSection({
   friends,
   searchTargetInput,
-  className = '',
   theme,
-  setIsWaiting,
   startNormalMatchMaking
 }: InvitationCardSectionProps) {
   const [users, setUsers] = useState<userType[]>([]);
-  const {fetchData, response, isSuccess} = useAxios();
   function handleCardClick(
     userId: string,
-    theme: string | undefined,
-    setIsWaiting: any,
+    theme: string,
     startNormalMatchMaking: any
   ) {
     console.log('useId: ', userId, 'theme: ', theme);
-    setIsWaiting(true);
-    startNormalMatchMaking();
+    startNormalMatchMaking(userId, theme);
   }
   useEffect(() => {
     setUsers(filterUsers(friends, searchTargetInput));
   }, [searchTargetInput, friends]);
   return (
-    <ScrollableContainer className={`${className}`}>
+    <ScrollableContainer>
       <Accordion
         type='multiple'
         className='flex flex-row flex-wrap items-center justify-center gap-3 sm:gap-5'
@@ -69,12 +62,7 @@ export default function InvitationCardSection({
               isFriend={isUserIdInArray(user.id, friends)}
               isBlocked={isUserIdInArray(user.id, [])}
               onClick={() =>
-                handleCardClick(
-                  user.id,
-                  theme,
-                  setIsWaiting,
-                  startNormalMatchMaking
-                )
+                handleCardClick(user.id, theme, startNormalMatchMaking)
               }
             />
           ))}

@@ -2,35 +2,33 @@ import MatchMakingTimer from './MatchMakingTimer';
 import {Button} from '@/components/shadcn/ui/button';
 import {Dialog, DialogContent, DialogTrigger} from './MatchMakingDialog';
 import {useRouter} from 'next/router';
-import {Socket, io} from 'socket.io-client';
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
+import useSocket from '@/hooks/useSocket';
 
 export default function LadderMatchMakingBtn() {
-  const [socket, setSocket] = useState<Socket | null>(null);
+  const [socket] = useSocket('game');
   const router = useRouter();
 
   useEffect(() => {
-    const socket = io('http://localhost:4242');
-    setSocket(socket);
     socket.on('ladderMatch', (state) => {
       console.log('래더 매치 발견', state);
       router.push({
-        pathname: '/game/in-game',
+        pathname: '/game/pre-game',
         query: {id: state.id, theme: 'default'}
       });
     });
     // THINK: 매치 메이킹 취소 성공 확인?
     return () => {
-      socket.disconnect();
+      socket.off('ladderMatch');
     };
   }, []);
   function startLadderMatchMaking() {
     console.log('래더 매칭 시작');
-    if (socket) socket.emit('ladderMatch', {userName: 'daejlee'});
+    if (socket) socket.emit('ladderMatch');
   }
   function stopLadderMatchMaking() {
     console.log('래더 매칭 취소');
-    if (socket) socket.emit('ladderMatchCancel', {userName: 'daejlee'});
+    if (socket) socket.emit('ladderMatchCancel');
   }
 
   return (

@@ -9,9 +9,15 @@ export default function PlayerPortrait(Player: Player) {
         showStatus={false}
         size='md'
       />
-      <h3 className='text-zinc-300 text-[22.06px] font-bold font-roboto-mono'>
+      <h3 className='text-zinc-300 text-[22.06px] font-bold font-roboto-mono text-stroke'>
         {Player.name}
       </h3>
+      <style jsx>{`
+        .text-stroke {
+          text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+            1px 1px 0 #000; /* 검정색 테두리를 위한 그림자 설정 */
+        }
+      `}</style>
     </div>
   );
 }
