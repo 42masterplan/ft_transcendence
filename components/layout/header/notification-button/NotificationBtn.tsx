@@ -61,10 +61,10 @@ export default function NotificationBtn() {
       setMatchRequests((prev) => [...prev, state]);
       setNotificationCount((prev) => prev + 1);
     });
-    socket.on('gameStart', ({matchId, theme}) => {
+    socket.on('gameStart', ({matchId, theme, gameMode}) => {
       router.push({
         pathname: 'game/pre-game',
-        query: {id: matchId, theme: theme}
+        query: {id: matchId, theme: theme, gameMode: gameMode}
       });
     });
     return () => {

@@ -156,10 +156,11 @@ export default function Game() {
   const [gameover, setGameOver] = useState(false);
   const [forfeit, setForfeit] = useState(false);
   const [deuce, setDeuce] = useState(false);
-  const [matchId, setMatchId] = useState<string>('');
-  const [theme, setTheme] = useState<string>('');
+  const [matchId, setMatchId] = useState('');
+  const [theme, setTheme] = useState('');
+  const [gameMode, setGameMode] = useState('');
   const router = useRouter();
-  const initSocket = matchId != '' && theme != '';
+  const initSocket = matchId != '' && theme != '' && gameMode != '';
   const [socket] = useSocket('game', {
     autoConnect: initSocket
   });
@@ -170,6 +171,9 @@ export default function Game() {
     }
     if (router.query.theme) {
       setTheme(router.query.theme as string);
+    }
+    if (router.query.gameMode) {
+      setGameMode(router.query.gameMode as string);
     }
   }, [router]);
 
@@ -193,7 +197,7 @@ export default function Game() {
     const backgroundImage = new Image();
     if (theme && theme != 'Default')
       backgroundImage.src = `/gameThemes/${theme}.png`;
-    socket.emit('joinRoom', {matchId: matchId});
+    socket.emit('joinRoom', {matchId: matchId, gameMode: gameMode});
     socket.on('joinedRoom', () => {
       listenToSocketEvents(
         socket,
