@@ -28,16 +28,21 @@ export default function DMPage() {
   //친구인지 아닌지 알기 위해서
   const chatUser = router.query.userName || '';
   useEffect(() => {
-    socket.on(
-      'DMNewMessage',
-      ({dm, sendFrom}: {dm: MsgHistoryType; sendFrom: string}) => {
-        if (sendFrom !== chatUser) return;
-        setDMData((prev) => {
-          if (prev === null) return [dm];
-          return [...prev, dm];
-        });
-      }
-    );
+    socket.on('DMNewMessage', ({dmId, participantId, content}) => {
+      console.log('DMNewMessage', dmId, participantId, content);
+      if (dmId !== dmInfo.dmId) return;
+      setDMData((prev) => {
+        return [
+          ...prev,
+          {
+            _participantId: participantId,
+            _content: content,
+            _id: prev.length,
+            _dmId: dmId
+          }
+        ];
+      });
+    });
 
     socket.emit('myInfo', (data) => {
       setDMInfo((prev) => ({
@@ -48,7 +53,7 @@ export default function DMPage() {
       }));
     });
     return () => {
-      socket.off('newDm');
+      socket.off('DMNewMessage');
     };
   }, []);
   useEffect(() => {
@@ -98,7 +103,7 @@ export default function DMPage() {
   return (
     <>
       <div className=' bg-custom3 text-center text-lg'>{chatUser}</div>
-      <div className='h-full'>
+      <div className=' h-5/6'>
         <ScrollableContainer className='rounded-none bg-custom2'>
           <div>
             {DMData?.map((msg: dmMessageType, idx: number) => (
@@ -134,8 +139,8 @@ export default function DMPage() {
             ))}
           </div>
         </ScrollableContainer>
+        <DMInput setDMData={setDMData} dmInfo={dmInfo} />
       </div>
-      <DMInput setDMData={setDMData} dmInfo={dmInfo} />
     </>
   );
 }
