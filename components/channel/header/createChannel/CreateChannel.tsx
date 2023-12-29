@@ -185,7 +185,6 @@ export default function CreateChannel() {
     }
   };
   const createChannel = () => {
-    let inviteUsers: Array<String> = [];
     if (channelName.length === 0 || channelType.length === 0) {
       toast({
         title: '채널 생성 실패',
@@ -200,7 +199,9 @@ export default function CreateChannel() {
       {
         name: channelName,
         password: password.replace(/\s/g, ''),
-        invitedFriendIds: inviteUsers,
+        invitedFriendIds: inviteFriendList.map((friendInfo) => {
+          if (friendInfo.checked) return friendInfo.id;
+        }),
         status: channelType
       },
       (msg: string) => {
@@ -209,12 +210,7 @@ export default function CreateChannel() {
             title: '채널 생성 성공',
             description: msg
           });
-          console.log({
-            name: channelName,
-            password: password,
-            invitedFriendIds: inviteUsers,
-            status: channelType
-          });
+
           setChannelName('');
           setPassword('');
           setChannelType('');
@@ -229,9 +225,6 @@ export default function CreateChannel() {
         }
       }
     );
-    // socket.once('error_exist', (error: string) => {
-    //   alert(error);
-    // });
   };
 
   return (
