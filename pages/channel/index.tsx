@@ -14,7 +14,10 @@ import {useRouter} from 'next/router';
 const initialStateInfo: channelStateType = {
   channelName: '',
   channelId: '',
-  engagedChannels: []
+  engagedChannels: [],
+  myProfileImage: '',
+  myName: '',
+  myId: ''
 };
 
 function channelInfoReducer(state: any, action: any) {
@@ -41,6 +44,13 @@ function channelInfoReducer(state: any, action: any) {
         channelName: '',
         channelId: ''
       };
+    case 'MY_INFO_SET': // 내 프로필 이미지 변경됨
+      return {
+        ...state,
+        myProfileImage: action.payload.profileImage,
+        myName: action.payload.name,
+        myId: action.payload.id
+      };
     default:
       return state;
   }
@@ -66,7 +76,7 @@ export default function ChannelPage() {
   const [socket] = useSocket('channel');
   const {channelName, channelId} = channelInfoState;
   const channelInfoRef = useRef(channelInfoState);
-
+  const [myInfoSocket] = useSocket('alarm');
   const errorHandler = useCallback(
     ({error}: any) => {
       console.log('error', error);
@@ -78,7 +88,18 @@ export default function ChannelPage() {
     socket.on('connect', () => {
       console.log('---------connected----------');
     });
-
+    myInfoSocket.emit('myInfo', (data) => {
+      infoDispatch({
+        type: 'MY_INFO_SET',
+        payload: data
+      });
+      channelInfoRef.current = {
+        ...channelInfoRef.current,
+        myProfileImage: data.profileImage,
+        myName: data.name,
+        myId: data.id
+      };
+    });
     socket.on('error_exist', errorHandler);
     socket.on('disconnect', () => {
       console.log('---------disconnected----------');

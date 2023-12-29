@@ -55,7 +55,7 @@ export default React.forwardRef(function ChannelBody(
       }
       if (content.startsWith('[system]')) {
         console.log('시스템 메세지가 도착했습니다.');
-        // if (!content.endsWith('뮤트되었습니다.')) socket.emit('myChannels');
+        if (!content.endsWith('뮤트되었습니다.')) socket.emit('myChannels');
       }
     },
     []
@@ -65,11 +65,12 @@ export default React.forwardRef(function ChannelBody(
   }, [messageState]);
   useEffect(() => {
     socket.on('newMessage', newMessageHandler);
+
     return () => {
       socket.off('newMessage', newMessageHandler);
     };
   }, []);
-
+  console.log('messageState', channelInfoRef);
   return (
     <div className='h-full'>
       <ScrollableContainer className='rounded-none'>
@@ -84,16 +85,16 @@ export default React.forwardRef(function ChannelBody(
                 key={idx}
                 className={cn(
                   'flex w-max max-w-[90%] rounded-lg px-3 text-sm',
-                  msg.name === 'joushin' ? 'ml-auto' : 'p-2'
+                  msg.id === channelInfoRef.current.myId ? 'ml-auto' : 'p-2'
                 )}
               >
-                {/* TODO 채팅 메시지 내 정보랑 비교하기
-                 */}
                 <ChatMessage
-                  isMe={msg.name === 'joushin'}
+                  isMe={msg.id === channelInfoRef.current.myId}
                   size='md'
                   message={msg.content}
-                  side={msg.name === 'joushin' ? 'right' : 'left'}
+                  side={
+                    msg.id === channelInfoRef.current.myId ? 'right' : 'left'
+                  }
                   className='m-2 hover:scale-[1.02] duration-200 hover:-translate-y-1 bg-custom4'
                   ref={messageEndRef as any}
                   profileImage={msg.profileImage}
