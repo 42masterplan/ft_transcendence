@@ -33,26 +33,30 @@ import {
   SheetTrigger
 } from '@/components/shadcn/ui/sheet';
 import {Separator} from '@/components/shadcn/ui/separator';
-import * as dummyAPI from '@/DummyBackend/notificationAPI';
 import FriendRequestCard from './request/FriendRequestCard';
 import MatchRequestCard from './request/MatchRequestCard';
 import ScrollableContainer from '@/components/container/ScrollableContainer';
 import useSocket from '@/hooks/useSocket';
 import {useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
-import {gameRequest} from '@/DummyBackend/notificationAPI';
+import {gameRequest, friendRequest} from '@/DummyBackend/notificationAPI';
+import useAxios from '@/hooks/useAxios';
 
 export default function NotificationBtn() {
   const router = useRouter();
   const [socket] = useSocket('alarm');
   const [matchRequests, setMatchRequests] = useState<gameRequest[]>([]);
-  const [friendRequests, setFriendRequests] = useState(
-    dummyAPI.notification__getFriendRequests()
-  );
+  const [friendRequests, setFriendRequests] = useState<friendRequest[]>([]);
   const [notificationCount, setNotificationCount] = useState(
     matchRequests.length + friendRequests.length
   );
+  const {fetchData, response, isSuccess} = useAxios();
   useEffect(() => {
+    fetchData({
+      method: 'get',
+      url: '/users/friends/request',
+      disableSuccessToast: true
+    });
     socket.on('gameRequest', (state: gameRequest) => {
       setMatchRequests((prev) => [...prev, state]);
       setNotificationCount((prev) => prev + 1);
@@ -68,6 +72,12 @@ export default function NotificationBtn() {
       socket.off('gameStart');
     };
   }, []);
+  useEffect(() => {
+    if (isSuccess) {
+      setFriendRequests(response);
+      setNotificationCount((prev) => prev + 1);
+    }
+  }, [isSuccess]);
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -76,6 +86,13 @@ export default function NotificationBtn() {
           variant='iconBtn'
           size='headerBtn'
           className='flex relative flex-row justify-center items-center'
+          onClick={() =>
+            fetchData({
+              method: 'get',
+              url: '/users/friends/request',
+              disableSuccessToast: true
+            })
+          }
         >
           {/* This div is for match request -> if notification count is 0 -> do not display */}
           {notificationCount === 0 ? null : (
@@ -122,6 +139,13 @@ export default function NotificationBtn() {
               <FriendRequestCard
                 key={friendRequest.id}
                 request={friendRequest}
+                fetchList={() => {
+                  fetchData({
+                    method: 'get',
+                    url: '/users/friends/request',
+                    disableSuccessToast: true
+                  });
+                }}
               />
             ))}
           </div>

@@ -3,13 +3,19 @@ import {ShieldAlert} from 'lucide-react';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 import {ToastAction} from '@/components/shadcn/ui/toast';
 import useAxios from '@/hooks/useAxios';
+import {useEffect} from 'react';
 type BlockButtonProps = {
   userId: string;
 };
 
 export default function BlockButton({userId}: BlockButtonProps) {
-  const {fetchData} = useAxios();
-  // function to send block request: TODO: implement this
+  const {fetchData, isSuccess} = useAxios();
+  useEffect(() => {
+    if (isSuccess) {
+      location.reload();
+    }
+  }, [isSuccess]);
+
   const sendBlockRequest = async () => {
     fetchData({
       method: 'post',

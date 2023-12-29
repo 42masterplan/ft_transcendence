@@ -105,17 +105,17 @@ const dummyFriendRequestsData = [
   }
 ];
 
-export function notification__getFriendRequests(): friendRequest[] {
-  return dummyFriendRequestsData;
-}
+// export function notification__getFriendRequests(): friendRequest[] {
+//   // return dummyFriendRequestsData;
+// }
 
-export async function notification__getFriendRequestsAsync(): Promise<
-  friendRequest[]
-> {
-  // delay 1 second
-  setTimeout(() => {}, 1000);
-  return dummyFriendRequestsData;
-}
+// export async function notification__getFriendRequestsAsync(): Promise<
+//   friendRequest[]
+// > {
+//   // delay 1 second
+//   setTimeout(() => {}, 1000);
+//   // return dummyFriendRequestsData;
+// }
 
 export function notification__getMatchRequests(): matchRequest[] {
   return dummyMatchRequestsData;
@@ -131,8 +131,11 @@ export async function notification__getMatchRequestsAsync(): Promise<
 
 export interface friendRequest {
   id: string;
-  profileImage: string;
-  introduction: string;
+  friend: {
+    name: string;
+    profileImage: string;
+    introduction: string;
+  };
 }
 
 export interface matchRequest {
