@@ -13,7 +13,7 @@ import useAxios from '@/hooks/useAxios';
 export default function DMPage() {
   const messageEndRef = useRef<HTMLDivElement>();
   const [msg, setMsg] = useState('');
-  const [DMData, setDMData] = useState<dmMessageType[] | null>(null);
+  const [DMData, setDMData] = useState<dmMessageType[]>([]);
   const [dmInfo, setDMInfo] = useState<dmInfoType>({
     dmId: '',
     myId: '',
@@ -39,12 +39,26 @@ export default function DMPage() {
         });
       }
     );
+
+    socket.emit('myInfo', (data) => {
+      setDMInfo((prev) => ({
+        ...prev,
+        myId: data.id,
+        myName: data.name,
+        myProfileImage: data.profileImage
+      }));
+    });
+    return () => {
+      socket.off('newDm');
+    };
+  }, []);
+  useEffect(() => {
+    if (chatUser === '') return;
     fetchData({
       method: 'get',
       url: `users/friends/isFriend`,
       params: {name: chatUser}
     });
-
     socket.emit('DmHistory', chatUser, (data) => {
       if (data === 'DmHistory Fail!')
         toast({
@@ -52,29 +66,17 @@ export default function DMPage() {
           variant: 'destructive',
           description: 'DM 가져오기 실패!'
         });
-      else if (data) {
+      else {
         setDMData(data.messages);
-        setDMInfo({
-          ...dmInfo,
+        setDMInfo((prev) => ({
+          ...prev,
           dmId: data.dmId,
-          FriendProfileImage: data.FriendProfileImage,
-          FriendName: data.FriendName
-        });
+          FriendProfileImage: data.profileImage,
+          FriendName: data.name
+        }));
       }
     });
-    socket.emit('myInfo', (data) => {
-      setDMInfo({
-        ...dmInfo,
-        myId: data.id,
-        myName: data.name,
-        myProfileImage: data.profileImage
-      });
-    });
-    return () => {
-      socket.off('newDm');
-    };
-  }, []);
-
+  }, [chatUser]);
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({behavior: 'smooth'});
   }, [DMData]);
@@ -91,7 +93,7 @@ export default function DMPage() {
       router.replace('/social');
     }
   }, [isSuccess, error]);
-
+  console.log('dmInfo', dmInfo);
   if (loading || dmInfo.dmId === '' || dmInfo.myId === '')
     return <SpinningLoader />;
   return (
@@ -108,8 +110,6 @@ export default function DMPage() {
                   msg.name === 'hkong' ? 'ml-auto' : 'p-2'
                 )}
               >
-                {/* TODO 채팅 메시지 내 정보랑 비교하기
-                 */}
                 <ChatMessage
                   isMe={msg.name === dmInfo.myName}
                   size='md'
