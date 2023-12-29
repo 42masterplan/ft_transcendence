@@ -4,7 +4,7 @@ import {Send} from 'lucide-react';
 import {useState} from 'react';
 import useSocket from '@/hooks/useSocket';
 import {useToast} from '@/components/shadcn/ui/use-toast';
-import {dmInfoType} from '@/types/dm';
+import {dmInfoType, dmMessageType} from '@/types/dm';
 const DMInput = ({setDMData, dmInfo}: {setDMData: any; dmInfo: dmInfoType}) => {
   const [content, setContent] = useState('');
   const inputLength = content.trim().length;
@@ -23,16 +23,16 @@ const DMInput = ({setDMData, dmInfo}: {setDMData: any; dmInfo: dmInfoType}) => {
             content: content
           },
           (ret: any) => {
-            console.log('dm 보냄', ret);
             if (ret === 'DmNewMessage Success!') {
-              setDMData((prev: any) => {
+              console.log('dm 보냄 성공', ret);
+              setDMData((prev: dmMessageType[]) => {
                 return [
                   ...prev,
                   {
-                    content: content,
-                    name: dmInfo.myName,
-                    id: dmInfo.myId,
-                    profileImage: dmInfo.myProfileImage
+                    _id: prev.length,
+                    _content: content,
+                    _name: dmInfo.myName,
+                    _participantId: dmInfo.myId
                   }
                 ];
               });

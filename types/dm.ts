@@ -1,10 +1,8 @@
 export interface dmMessageType {
-  id: number;
-  content: string;
-  participantId: string;
-  dmId: string;
-  profileImage: string;
-  name: string;
+  _id: number;
+  _content: string;
+  _participantId: string;
+  _dmId: string;
 }
 
 export interface dmInfoType {

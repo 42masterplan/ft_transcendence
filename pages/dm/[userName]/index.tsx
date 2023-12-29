@@ -59,6 +59,7 @@ export default function DMPage() {
       params: {name: chatUser}
     });
     socket.emit('DmHistory', chatUser, (data) => {
+      console.log('DmHistory', data);
       if (data === 'DmHistory Fail!')
         toast({
           title: 'DM 가져오기 실패!',
@@ -96,30 +97,38 @@ export default function DMPage() {
     return <SpinningLoader />;
   return (
     <>
-      <div className='bg-custom4'>header</div>
+      <div className=' bg-custom3 text-center text-lg'>{chatUser}</div>
       <div className='h-full'>
-        <ScrollableContainer className='rounded-none'>
+        <ScrollableContainer className='rounded-none bg-custom2'>
           <div>
             {DMData?.map((msg: dmMessageType, idx: number) => (
               <div
                 key={idx}
                 className={cn(
                   'flex w-max max-w-[90%] rounded-lg px-3 text-sm',
-                  msg.name === 'hkong' ? 'ml-auto' : 'p-2'
+                  msg._participantId === dmInfo.myId ? 'ml-auto' : 'p-2'
                 )}
               >
                 <ChatMessage
-                  isMe={msg.name === dmInfo.myName}
+                  isMe={msg._participantId === dmInfo.myId}
                   size='md'
-                  message={msg.content}
-                  side={msg.name === dmInfo.myName ? 'right' : 'left'}
+                  message={msg._content}
+                  side={msg.participantId === dmInfo.myId ? 'right' : 'left'}
                   className='m-2 hover:scale-[1.02] duration-200 hover:-translate-y-1 bg-custom4'
                   ref={messageEndRef as any}
-                  profileImage={msg.profileImage}
-                  user_name={msg.name}
+                  profileImage={
+                    msg._participantId === dmInfo.myId
+                      ? dmInfo.myProfileImage
+                      : dmInfo.FriendProfileImage
+                  }
+                  user_name={
+                    msg._participantId === dmInfo.myId
+                      ? dmInfo.myName
+                      : dmInfo.FriendName
+                  }
                   channelId={''}
                   role={'user'}
-                  user_id={msg.participantId}
+                  user_id={msg._participantId}
                 />
               </div>
             ))}
