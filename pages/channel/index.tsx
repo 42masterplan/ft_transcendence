@@ -10,7 +10,7 @@ import ChannelInput from '@/components/channel/body/ChannelInput';
 import {toast} from '@/components/shadcn/ui/use-toast';
 import {channelStateType} from '@/types/channel';
 import {MsgHistoryType} from '@/types/channel';
-import {useRouter} from 'next/router';
+
 const initialStateInfo: channelStateType = {
   channelName: '',
   channelId: '',
