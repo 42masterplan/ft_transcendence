@@ -72,7 +72,6 @@ export default function GameStatsSection({
 
   function StatSection() {
     const winRate = (rank.win / (rank.win + rank.lose)) * 100;
-    let win;
     return (
       <div className='flex flex-col w-full justify-center items-center px-2'>
         <div className='flex flex-row w-full justify-between py-3'>

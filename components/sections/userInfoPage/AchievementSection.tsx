@@ -67,9 +67,9 @@ export default function AchievementSection({
 
   if (loading === true) {
     return (
-      <div className={`${className}`}>
+      <Card className={`${className}`}>
         <SpinningLoader />
-      </div>
+      </Card>
     );
   }
 
