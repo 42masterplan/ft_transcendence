@@ -158,6 +158,7 @@ export default function Game() {
   const [deuce, setDeuce] = useState(false);
   const router = useRouter();
   const {id, theme} = router.query;
+  console.log('id: ', id, 'theme: ', theme);
   const [socket] = useSocket('game', {matchId: id});
 
   useEffect(() => {
