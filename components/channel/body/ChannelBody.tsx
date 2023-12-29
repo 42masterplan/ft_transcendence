@@ -70,7 +70,6 @@ export default React.forwardRef(function ChannelBody(
       socket.off('newMessage', newMessageHandler);
     };
   }, []);
-  console.log('messageState', channelInfoRef);
   return (
     <div className='h-full'>
       <ScrollableContainer className='rounded-none'>
