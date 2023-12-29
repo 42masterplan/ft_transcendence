@@ -158,8 +158,11 @@ export default function Game() {
   const [deuce, setDeuce] = useState(false);
   const [matchId, setMatchId] = useState<string>('');
   const [theme, setTheme] = useState<string>('');
-
   const router = useRouter();
+  const initSocket = matchId != '' && theme != '';
+  const [socket] = useSocket('game', {
+    autoConnect: initSocket
+  });
 
   useEffect(() => {
     if (router.query.id) {
@@ -170,20 +173,16 @@ export default function Game() {
     }
   }, [router]);
 
-  const initSocket = matchId != '' && theme != '';
-  console.log('initSocket', initSocket);
-  console.log('matchId', matchId);
-  console.log('@@@@@');
-  const [socket] = useSocket('game', {
-    autoConnect: initSocket
-  });
-
   useEffect(() => {
     if (!initSocket) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const c = canvas.getContext('2d');
     if (!c) return;
+    socket.on('gameFull', () => {
+      router.push('/');
+      // TODO: layout으로 보내서 로그아웃 시키기
+    });
     let animationId: number;
     const {playerA, playerB, ball, particles} = prepGame(
       canvas,
@@ -192,9 +191,8 @@ export default function Game() {
       c
     );
     const backgroundImage = new Image();
-    if (theme && theme != 'default')
+    if (theme && theme != 'Default')
       backgroundImage.src = `/gameThemes/${theme}.png`;
-    console.log('matchId', matchId);
     socket.emit('joinRoom', {matchId: matchId});
     socket.on('joinedRoom', () => {
       listenToSocketEvents(
@@ -217,7 +215,7 @@ export default function Game() {
     }, RENDERING_RATE);
     addEventListeners(keysPressed);
     const gameLoop = () => {
-      if (theme && theme != 'default') {
+      if (theme && theme != 'Default') {
         if (backgroundImage.complete) {
           c.drawImage(backgroundImage, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
           c.fillStyle = BACKGROUND_SHADOW_COLOR;

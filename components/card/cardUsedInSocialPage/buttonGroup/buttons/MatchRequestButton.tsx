@@ -7,10 +7,8 @@ type MatchRequestButtonProps = {
 };
 
 export default function MatchRequestButton({userId}: MatchRequestButtonProps) {
-  // function to send match request: TODO: implement this
   const sendMatchRequest = async () => {
     console.log("sendMatchRequest's userId: ", userId);
-    // dummy function to test
     const response = await new Promise((resolve) =>
       setTimeout(resolve, 1000)
     ).then(() => false); // change to false to test match request failed

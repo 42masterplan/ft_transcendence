@@ -14,7 +14,6 @@ const useSocket = (
     delete sockets[namespace];
   }, [namespace]);
   let url = socketUrl + '/' + namespace;
-  console.log('autoConnectOption', options?.autoConnect);
   const autoConnectOption =
     options?.autoConnect === undefined ? options?.autoConnect : true;
   if (sockets[namespace]) return [sockets[namespace], disconnect];
