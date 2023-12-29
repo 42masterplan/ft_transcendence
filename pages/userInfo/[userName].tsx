@@ -78,7 +78,7 @@ export default function UserPage() {
   } else {
     return (
       <>
-        <ScrollableContainer className=''>
+        <ScrollableContainer className='w-full max-w-5xl'>
           <div className='p-4'>
             <UserInfoCard
               userInfo={currentUser}
@@ -87,115 +87,22 @@ export default function UserPage() {
               printIntro
               showStatus={false}
               stretch
-              className={animation}
+              className={`${animation}`}
             />
           </div>
           <GameStatsSection userName={currentUser.name} className={animation} />
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
-          <p>askdjfh</p>
+          <div className='flex flex-col sm:flex-row gap-3 w-full'>
+            <AchievementSection
+              userName={currentUser.name}
+              className={`flex-1 ${animation}`}
+            />
+            <MatchHistorySection
+              userName={currentUser.name}
+              className={`flex-1 ${animation}`}
+            />
+          </div>
         </ScrollableContainer>
       </>
     );
   }
 }
-
-//   return (
-//     <>
-//       <ScrollableContainer className='w-full h-96 sm:h-84'>
-//         <UserInfoCard
-//           userInfo={currentUser}
-//           size='lg'
-//           printIntro
-//           stretch
-//           className={`m-2 hover:scale-[1.02] duration-200 hover:-translate-y-1 `}
-//         />
-//         <div className='flex flex-col sm:flex-row gap-2 sm:gap-0 h-full'>
-//           <div className='flex flex-col flex-1 h-full justify-evenly'>
-//             {/* left side */}
-//             <GameStatsSection userName={currentUser.name} />
-//             <AchievementSection userName={currentUser.name} />
-//           </div>
-//           <div className='flex flex-col flex-1 h-full justify-evenly'>
-//             {/* right side */}
-//             {/* <MatchHistorySection userName={currentUser.name} /> */}
-//           </div>
-//         </div>
-//       </ScrollableContainer>
-//     </>
-//   );
-// }

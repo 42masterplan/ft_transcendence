@@ -74,7 +74,7 @@ export default function GameStatsSection({
     const winRate = (rank.win / (rank.win + rank.lose)) * 100;
     let win;
     return (
-      <div className='flex flex-col w-full justify-center items-center'>
+      <div className='flex flex-col w-full justify-center items-center px-2'>
         <div className='flex flex-row w-full justify-between py-3'>
           <p className='text-2xl font-bold text-indigo-800'>
             {`Wins : `}
@@ -86,7 +86,7 @@ export default function GameStatsSection({
           </p>
         </div>
         <DynamicProgressBar progress={winRate} />
-        <p className='text-2xl font-bold text-green-700 py-3'>
+        <p className='text-2xl font-bold text-custom4 py-3'>
           {`Win Rate : `}
           <GradualIncreaser
             start={0}
@@ -114,8 +114,8 @@ export default function GameStatsSection({
       tierStringColor = 'text-black';
     }
     return (
-      <div className='flex flex-col w-full gap-1 items-center bg-slate-600'>
-        <Trophy className={`w-20 h-20 ${tierStringColor}`} />
+      <div className='flex flex-col w-fit justify-center items-center px-20'>
+        <Trophy className={`w-32 h-32 sm:w-40 sm:h-40 ${tierStringColor}`} />
         <p
           className={`${tierStringColor}  font-sans text-3xl font-extrabold`}
         >{`${rank.tier}`}</p>
@@ -135,7 +135,7 @@ export default function GameStatsSection({
         <CardHeader>
           <CardTitle>Game Stats</CardTitle>
         </CardHeader>
-        <CardContent className='flex flex-col sm:flex-row'>
+        <CardContent className='flex flex-col sm:flex-row justify-center items-center'>
           <StatSection />
           <TierSection />
         </CardContent>

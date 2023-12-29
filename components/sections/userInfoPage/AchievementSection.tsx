@@ -2,16 +2,10 @@ import ScrollableContainer from '@/components/container/ScrollableContainer';
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle
 } from '@/components/shadcn/ui/card';
-
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger
-} from '@/components/shadcn/ui/tabs';
 
 import useAxios from '@/hooks/useAxios';
 import {useEffect, useState} from 'react';
@@ -45,7 +39,6 @@ export default function AchievementSection({
    * * * * name: string
    * * * * description: string
    * * * * progressRate: number
-   * * * * achieveRatio: number
    * * error: 404 if user does not exist
    * * error: 500 if server error
    */
@@ -74,60 +67,26 @@ export default function AchievementSection({
 
   if (loading === true) {
     return (
-      <Card
-        className={`m-2 hover:scale-[1.02] duration-200 hover:-translate-y-1 h-96 sm:h-full ${className}`}
-      >
-        <CardHeader>
-          <CardTitle>Achievements</CardTitle>
-        </CardHeader>
-        <CardContent className='flex justify-center items-center h-full'>
-          <SpinningLoader />
-        </CardContent>
-      </Card>
+      <div className={`${className}`}>
+        <SpinningLoader />
+      </div>
     );
   }
 
   return (
-    <Card
-      className={`m-2 hover:scale-[1.02] duration-200 hover:-translate-y-1 h-96 sm:h-full ${className}`}
-    >
+    <Card className={`${className}`}>
       <CardHeader>
         <CardTitle>Achievements</CardTitle>
       </CardHeader>
-      <CardContent>
-        <Tabs defaultValue='myProgress' className='px-2'>
-          <TabsList className='grid w-full grid-cols-2'>
-            <TabsTrigger value='myProgress'>My progress</TabsTrigger>
-            <TabsTrigger value='successRate'>Success rate</TabsTrigger>
-          </TabsList>
-          <TabsContent value='myProgress'>
-            <ScrollableContainer className='w-full h-96 sm:h-84'>
-              <CardContent className='flex flex-col gap-3'>
-                {achievements.map((achievement) => (
-                  <AchievementCard
-                    key={achievement.name}
-                    achievementRate={achievement}
-                    type='myProgress'
-                  />
-                ))}
-              </CardContent>
-            </ScrollableContainer>
-          </TabsContent>
-          <TabsContent value='successRate'>
-            <ScrollableContainer className='w-full h-96 sm:h-84'>
-              <CardContent className='flex flex-col gap-3'>
-                {achievements.map((achievement) => (
-                  <AchievementCard
-                    key={achievement.name}
-                    achievementRate={achievement}
-                    type='successRate'
-                  />
-                ))}
-              </CardContent>
-            </ScrollableContainer>
-          </TabsContent>
-        </Tabs>
-      </CardContent>
+      <CardDescription>
+        <CardContent>
+          <ScrollableContainer className='h-[50vh]'>
+            {achievements.map((achievement) => (
+              <AchievementCard key={achievement.name} challenge={achievement} />
+            ))}
+          </ScrollableContainer>
+        </CardContent>
+      </CardDescription>
     </Card>
   );
 }

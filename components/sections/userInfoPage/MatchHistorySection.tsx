@@ -1,6 +1,7 @@
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle
 } from '@/components/shadcn/ui/card';
@@ -39,6 +40,7 @@ export default function MatchHistorySection({
    * * * * playerBName: string
    * * * * playerAScore: number
    * * * * playerBScore: number
+   * * * * matchId: string
    * * error: 404 if user does not exist
    * * error: 500 if server error
    */
@@ -57,29 +59,36 @@ export default function MatchHistorySection({
       errorDescription: '매치 정보 조회에 실패했습니다.'
     });
     if (isSuccess === true) {
-      setMatchHistory(response.data);
+      setMatchHistory(response);
     }
   }, [userName]);
 
   // render --------------------------------------------------------------------
 
   if (loading === true) {
-    return <SpinningLoader />;
+    return (
+      <Card className={`${className}`}>
+        <SpinningLoader />
+      </Card>
+    );
   }
   return (
-    <Card
-      className={`m-2 hover:scale-[1.02] duration-200 hover:-translate-y-1 ${className}`}
-    >
+    <Card className={`${className}`}>
       <CardHeader>
-        <CardTitle>Match history</CardTitle>
+        <CardTitle>Match History</CardTitle>
       </CardHeader>
-      <ScrollableContainer className='w-full h-[47rem]'>
-        <CardContent className='flex flex-col gap-3'>
-          {matchHistory.map((match) => (
-            <MatchHistoryCard key={match.createdAt} match={match} />
-          ))}
+      <CardDescription>
+        <CardContent>
+          <ScrollableContainer className='h-[50vh]'>
+            {matchHistory.map((match) => (
+              <MatchHistoryCard
+                key={match.matchId}
+                match={match}
+              ></MatchHistoryCard>
+            ))}
+          </ScrollableContainer>
         </CardContent>
-      </ScrollableContainer>
+      </CardDescription>
     </Card>
   );
 }

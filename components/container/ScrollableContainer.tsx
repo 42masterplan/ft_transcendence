@@ -30,9 +30,7 @@ export default function ScrollableContainer({
     roundedClassName = '';
   }
   return (
-    <ScrollArea
-      className={`w-full h-full p-1 ${roundedClassName} ${className}`}
-    >
+    <ScrollArea className={`w-full p-1 ${roundedClassName} ${className}`}>
       <div className={`flex w-full h-full gap-${gap} ${flexOrientation}`}>
         {children}
       </div>
