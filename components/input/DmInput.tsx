@@ -4,17 +4,8 @@ import {Send} from 'lucide-react';
 import {useState} from 'react';
 import useSocket from '@/hooks/useSocket';
 import {useToast} from '@/components/shadcn/ui/use-toast';
-const DMInput = ({
-  msg,
-  chatUser,
-  setMsg,
-  setDMData
-}: {
-  msg: string;
-  chatUser: any;
-  setMsg: any;
-  setDMData: any;
-}) => {
+import {dmInfoType} from '@/types/dm';
+const DMInput = ({setDMData, dmInfo}: {setDMData: any; dmInfo: dmInfoType}) => {
   const [content, setContent] = useState('');
   const inputLength = content.trim().length;
   const [socket] = useSocket('alarm');
@@ -23,29 +14,29 @@ const DMInput = ({
     <form
       onSubmit={(event) => {
         event.preventDefault();
-        if (msg === '') return;
+        if (content === '') return;
         socket.emit(
-          'sendDm',
+          'DmNewMessage',
           {
-            sendTo: chatUser,
-            content: msg
+            dmId: dmInfo.dmId,
+            participantId: dmInfo.myId,
+            content: content
           },
-          ({msg}: {msg: string}) => {
-            if (msg === 'sendDm Success!') {
-              setMsg('');
+          (ret: any) => {
+            console.log('dm 보냄', ret);
+            if (ret === 'DmNewMessage Success!') {
               setDMData((prev: any) => {
-                if (prev === null) return null;
                 return [
                   ...prev,
                   {
-                    content: msg,
-                    name: 'hkong',
-                    id: '123',
-                    profileImage:
-                      'https://avatars.githubusercontent.com/u/76761029?v=4'
+                    content: content,
+                    name: dmInfo.myName,
+                    id: dmInfo.myId,
+                    profileImage: dmInfo.myProfileImage
                   }
                 ];
               });
+              setContent('');
             } else {
               toast({
                 title: 'DM 전송 실패!',

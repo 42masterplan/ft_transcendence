@@ -12,7 +12,6 @@ import {dmMessageType, dmInfoType} from '@/types/dm';
 import useAxios from '@/hooks/useAxios';
 export default function DMPage() {
   const messageEndRef = useRef<HTMLDivElement>();
-  const [msg, setMsg] = useState('');
   const [DMData, setDMData] = useState<dmMessageType[]>([]);
   const [dmInfo, setDMInfo] = useState<dmInfoType>({
     dmId: '',
@@ -30,7 +29,7 @@ export default function DMPage() {
   const chatUser = router.query.userName || '';
   useEffect(() => {
     socket.on(
-      'newDm',
+      'DMNewMessage',
       ({dm, sendFrom}: {dm: MsgHistoryType; sendFrom: string}) => {
         if (sendFrom !== chatUser) return;
         setDMData((prev) => {
@@ -93,7 +92,6 @@ export default function DMPage() {
       router.replace('/social');
     }
   }, [isSuccess, error]);
-  console.log('dmInfo', dmInfo);
   if (loading || dmInfo.dmId === '' || dmInfo.myId === '')
     return <SpinningLoader />;
   return (
@@ -128,12 +126,7 @@ export default function DMPage() {
           </div>
         </ScrollableContainer>
       </div>
-      <DMInput
-        msg={msg}
-        chatUser={chatUser}
-        setDMData={setDMData}
-        setMsg={setMsg}
-      />
+      <DMInput setDMData={setDMData} dmInfo={dmInfo} />
     </>
   );
 }
