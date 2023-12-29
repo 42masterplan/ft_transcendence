@@ -4,151 +4,165 @@ import {useRouter} from 'next/router';
 import ScrollableContainer from '@/components/container/ScrollableContainer';
 import ChatMessage from '@/components/channel/body/ChatMessage';
 import useSocket from '@/hooks/useSocket';
-import Axios from '@/api';
 import {MsgHistoryType} from '@/types/channel';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 import {cn} from '@/lib/utils';
 import DMInput from '@/components/input/DmInput';
-
+import {dmMessageType, dmInfoType} from '@/types/dm';
+import useAxios from '@/hooks/useAxios';
 export default function DMPage() {
-  const router = useRouter();
-  const [msg, setMsg] = useState('');
-  const [DMData, setDMData] = useState<MsgHistoryType[] | null>(null);
-  const [socket] = useSocket('alarm');
-  const [blockUsers, setBlockUsers] = useState<string[] | null>(null);
-  const [friendUsers, setFriendUsers] = useState<string[] | null>(null);
   const messageEndRef = useRef<HTMLDivElement>();
+  const [DMData, setDMData] = useState<dmMessageType[]>([]);
+  const [dmInfo, setDMInfo] = useState<dmInfoType>({
+    dmId: '',
+    myId: '',
+    myName: '',
+    myProfileImage: '',
+    FriendName: '',
+    FriendProfileImage: ''
+  });
+
+  const router = useRouter();
   const {toast} = useToast();
+  const [socket] = useSocket('alarm');
+  const {fetchData, loading, response, isSuccess, error} = useAxios();
+  const dmInfoRef = useRef(dmInfo);
   //친구인지 아닌지 알기 위해서
   const chatUser = router.query.userName || '';
   useEffect(() => {
-    socket.on(
-      'newDm',
-      ({dm, sendFrom}: {dm: MsgHistoryType; sendFrom: string}) => {
-        if (sendFrom !== chatUser) return;
-        setDMData((prev) => {
-          if (prev === null) return [dm];
-          return [...prev, dm];
-        });
-      }
-    );
-    dataFetch();
-    socket.emit(
-      'DmHistory',
-      chatUser,
-      ({msg, dm}: {msg: string; dm: MsgHistoryType[]}) => {
-        if (msg === 'DmHistory Success!') setDMData(dm);
-        else console.log(msg);
-      }
-    );
+    socket.on('DMNewMessage', ({dmId, participantId, content}) => {
+      console.log('DMNewMessage', dmId, participantId, content);
+      console.log('되나?', dmId, '인포', dmInfoRef.current.dmId);
+      if (dmId !== dmInfoRef.current.dmId) return;
+      setDMData((prev) => {
+        return [
+          ...prev,
+          {
+            _participantId: participantId,
+            _content: content,
+            _id: prev.length,
+            _dmId: dmId
+          }
+        ];
+      });
+    });
+
+    socket.emit('myInfo', (data) => {
+      setDMInfo((prev) => ({
+        ...prev,
+        myId: data.id,
+        myName: data.name,
+        myProfileImage: data.profileImage
+      }));
+      dmInfoRef.current = {
+        ...dmInfoRef.current,
+        myId: data.id,
+        myName: data.name,
+        myProfileImage: data.profileImage
+      };
+    });
     return () => {
-      socket.off('newDm');
-      socket.off('DmHistory');
+      socket.off('DMNewMessage');
     };
   }, []);
-
-  //여기서 차단 여부, 친구 여부 확인해서 아니면 페이지를 이동시켜버림.
   useEffect(() => {
-    if (blockUsers !== null && blockUsers?.includes(chatUser as string)) {
-      toast({
-        title: 'DM 실패!',
-        variant: 'destructive',
-        description: '차단한 사용자입니다.'
-      });
-      router.replace('/social', undefined, {shallow: true});
-    } else if (
-      friendUsers !== null &&
-      !friendUsers?.includes(chatUser as string)
-    ) {
+    if (chatUser === '') return;
+    fetchData({
+      method: 'get',
+      url: `users/friends/isFriend`,
+      params: {name: chatUser}
+    });
+    socket.emit('DmHistory', chatUser, (data) => {
+      console.log('DmHistory', data);
+      if (data === 'DmHistory Fail!')
+        toast({
+          title: 'DM 가져오기 실패!',
+          variant: 'destructive',
+          description: 'DM 가져오기 실패!'
+        });
+      else if (data === 'Not Friend!') {
+        toast({
+          title: 'DM 가져오기 실패!',
+          variant: 'destructive',
+          description: '친구가 아닙니다.'
+        });
+        router.replace('/social');
+      } else {
+        setDMData(data.messages);
+        setDMInfo((prev) => ({
+          ...prev,
+          dmId: data.dmId,
+          FriendProfileImage: data.profileImage,
+          FriendName: data.name
+        }));
+        dmInfoRef.current = {
+          ...dmInfoRef.current,
+          dmId: data.dmId,
+          FriendProfileImage: data.profileImage,
+          FriendName: data.name
+        };
+      }
+    });
+  }, [chatUser]);
+  useEffect(() => {
+    messageEndRef.current?.scrollIntoView({behavior: 'smooth'});
+  }, [DMData]);
+
+  useEffect(() => {
+    if (isSuccess && response.isFriends === false) {
       toast({
         title: 'DM 실패!',
         variant: 'destructive',
         description: '친구가 아닙니다.'
       });
-      router.replace('/social', undefined, {shallow: true});
+      router.replace('/social');
+    } else if (error === true) {
+      router.replace('/social');
     }
-  }, [blockUsers, friendUsers]);
-  useEffect(() => {
-    messageEndRef.current?.scrollIntoView({behavior: 'smooth'});
-  }, [DMData]);
-
-  const dataFetch = () => {
-    Axios.get('users/block')
-      .then((res) => {
-        const data = res.data?.map((user: any) => user.name);
-        setBlockUsers(data);
-      })
-      .catch((err) => {
-        console.log(err);
-        toast({
-          title: '차단 목록을 불러오는데 실패했습니다.',
-          variant: 'destructive',
-          description: '차단 목록을 불러오는데 실패했습니다.'
-        });
-        router.replace('/social');
-      });
-    Axios.get('users/friends')
-      .then((res) => {
-        const data = res.data?.map((user: any) => user.name);
-        console.log(res.data);
-        setFriendUsers(data);
-      })
-      .catch((err) => {
-        console.log(err);
-        toast({
-          title: '친구 목록을 불러오는데 실패했습니다.',
-          variant: 'destructive',
-          description: '친구 목록을 불러오는데 실패했습니다.'
-        });
-        router.replace('/social');
-      });
-  };
-
-  if (blockUsers === null || friendUsers === null) return <SpinningLoader />;
-
-  // if (!DMData) return <SpinningLoader />;
-  // ---------------------------------------------------------------------------
-
+  }, [isSuccess, error]);
+  if (loading || dmInfo.dmId === '' || dmInfo.myId === '')
+    return <SpinningLoader />;
   return (
     <>
-      <div className='bg-custom4'>header</div>
-      <div className='h-full'>
-        <ScrollableContainer className='rounded-none'>
+      <div className=' bg-custom3 text-center text-lg'>{chatUser}</div>
+      <div className=' h-5/6'>
+        <ScrollableContainer className='rounded-none bg-custom2'>
           <div>
-            {DMData?.map((msg: MsgHistoryType, idx: number) => (
+            {DMData?.map((msg: dmMessageType, idx: number) => (
               <div
                 key={idx}
                 className={cn(
                   'flex w-max max-w-[90%] rounded-lg px-3 text-sm',
-                  msg.name === 'hkong' ? 'ml-auto' : 'p-2'
+                  msg._participantId === dmInfo.myId ? 'ml-auto' : 'p-2'
                 )}
               >
-                {/* TODO 채팅 메시지 내 정보랑 비교하기
-                 */}
                 <ChatMessage
-                  isMe={msg.name === 'hkong'}
+                  isMe={msg._participantId === dmInfo.myId}
                   size='md'
-                  message={msg.content}
-                  side={msg.name === 'hkong' ? 'right' : 'left'}
+                  message={msg._content}
+                  side={msg.participantId === dmInfo.myId ? 'right' : 'left'}
                   className='m-2 hover:scale-[1.02] duration-200 hover:-translate-y-1 bg-custom4'
                   ref={messageEndRef as any}
-                  profileImage={msg.profileImage}
-                  user_name={msg.name}
+                  profileImage={
+                    msg._participantId === dmInfo.myId
+                      ? dmInfo.myProfileImage
+                      : dmInfo.FriendProfileImage
+                  }
+                  user_name={
+                    msg._participantId === dmInfo.myId
+                      ? dmInfo.myName
+                      : dmInfo.FriendName
+                  }
                   channelId={''}
                   role={'user'}
-                  user_id={msg.id}
+                  user_id={msg._participantId}
                 />
               </div>
             ))}
           </div>
         </ScrollableContainer>
+        <DMInput setDMData={setDMData} dmInfo={dmInfo} />
       </div>
-      <DMInput
-        msg={msg}
-        chatUser={chatUser}
-        setDMData={setDMData}
-        setMsg={setMsg}
-      />
     </>
   );
 }

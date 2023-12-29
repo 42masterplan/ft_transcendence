@@ -1,51 +1,51 @@
 import {Input} from '@/components/shadcn/ui/input';
 import {Button} from '@/components/shadcn/ui/button';
-import {Send} from 'lucide-react';
+import {Router, Send} from 'lucide-react';
 import {useState} from 'react';
 import useSocket from '@/hooks/useSocket';
 import {useToast} from '@/components/shadcn/ui/use-toast';
-const DMInput = ({
-  msg,
-  chatUser,
-  setMsg,
-  setDMData
-}: {
-  msg: string;
-  chatUser: any;
-  setMsg: any;
-  setDMData: any;
-}) => {
+import {dmInfoType, dmMessageType} from '@/types/dm';
+import {useRouter} from 'next/router';
+const DMInput = ({setDMData, dmInfo}: {setDMData: any; dmInfo: dmInfoType}) => {
   const [content, setContent] = useState('');
   const inputLength = content.trim().length;
   const [socket] = useSocket('alarm');
   const {toast} = useToast();
+  const router = useRouter();
   return (
     <form
       onSubmit={(event) => {
         event.preventDefault();
-        if (msg === '') return;
+        if (content === '') return;
         socket.emit(
-          'sendDm',
+          'DmNewMessage',
           {
-            sendTo: chatUser,
-            content: msg
+            dmId: dmInfo.dmId,
+            participantId: dmInfo.myId,
+            content: content
           },
-          ({msg}: {msg: string}) => {
-            if (msg === 'sendDm Success!') {
-              setMsg('');
-              setDMData((prev: any) => {
-                if (prev === null) return null;
+          (ret: any) => {
+            if (ret === 'DmNewMessage Success!') {
+              console.log('dm 보냄 성공', ret);
+              setDMData((prev: dmMessageType[]) => {
                 return [
                   ...prev,
                   {
-                    content: msg,
-                    name: 'hkong',
-                    id: '123',
-                    profileImage:
-                      'https://avatars.githubusercontent.com/u/76761029?v=4'
+                    _id: prev.length,
+                    _content: content,
+                    _name: dmInfo.myName,
+                    _participantId: dmInfo.myId
                   }
                 ];
               });
+              setContent('');
+            } else if (ret === 'Not Friend!') {
+              toast({
+                title: 'DM 전송 실패!',
+                variant: 'destructive',
+                description: '친구가 아닙니다'
+              });
+              router.push('/social');
             } else {
               toast({
                 title: 'DM 전송 실패!',
