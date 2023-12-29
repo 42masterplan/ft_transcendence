@@ -80,7 +80,14 @@ export default function DMPage() {
           variant: 'destructive',
           description: 'DM 가져오기 실패!'
         });
-      else {
+      else if (data === 'Not Friend!') {
+        toast({
+          title: 'DM 가져오기 실패!',
+          variant: 'destructive',
+          description: '친구가 아닙니다.'
+        });
+        router.replace('/social');
+      } else {
         setDMData(data.messages);
         setDMInfo((prev) => ({
           ...prev,

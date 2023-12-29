@@ -1,15 +1,17 @@
 import {Input} from '@/components/shadcn/ui/input';
 import {Button} from '@/components/shadcn/ui/button';
-import {Send} from 'lucide-react';
+import {Router, Send} from 'lucide-react';
 import {useState} from 'react';
 import useSocket from '@/hooks/useSocket';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 import {dmInfoType, dmMessageType} from '@/types/dm';
+import {useRouter} from 'next/router';
 const DMInput = ({setDMData, dmInfo}: {setDMData: any; dmInfo: dmInfoType}) => {
   const [content, setContent] = useState('');
   const inputLength = content.trim().length;
   const [socket] = useSocket('alarm');
   const {toast} = useToast();
+  const router = useRouter();
   return (
     <form
       onSubmit={(event) => {
@@ -37,6 +39,13 @@ const DMInput = ({setDMData, dmInfo}: {setDMData: any; dmInfo: dmInfoType}) => {
                 ];
               });
               setContent('');
+            } else if (ret === 'Not Friend!') {
+              toast({
+                title: 'DM 전송 실패!',
+                variant: 'destructive',
+                description: '친구가 아닙니다'
+              });
+              router.push('/social');
             } else {
               toast({
                 title: 'DM 전송 실패!',
