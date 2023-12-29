@@ -10,8 +10,7 @@ export default function LogOutBtn({children}: {children: React.ReactNode}) {
   const [cookie, setCookie, removeCookie] = useCookies();
 
   return (
-    <Button
-      className='w-full h-12 bg-custom2/70 text-custom4 rounded-lg'
+    <div
       onClick={() => {
         toast({
           title: 'Are you sure you want to log out?',
@@ -36,6 +35,6 @@ export default function LogOutBtn({children}: {children: React.ReactNode}) {
       }}
     >
       {children}
-    </Button>
+    </div>
   );
 }
