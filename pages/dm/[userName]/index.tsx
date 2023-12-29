@@ -21,16 +21,19 @@ export default function DMPage() {
     FriendName: '',
     FriendProfileImage: ''
   });
+
   const router = useRouter();
   const {toast} = useToast();
   const [socket] = useSocket('alarm');
   const {fetchData, loading, response, isSuccess, error} = useAxios();
+  const dmInfoRef = useRef(dmInfo);
   //친구인지 아닌지 알기 위해서
   const chatUser = router.query.userName || '';
   useEffect(() => {
     socket.on('DMNewMessage', ({dmId, participantId, content}) => {
       console.log('DMNewMessage', dmId, participantId, content);
-      if (dmId !== dmInfo.dmId) return;
+      console.log('되나?', dmId, '인포', dmInfoRef.current.dmId);
+      if (dmId !== dmInfoRef.current.dmId) return;
       setDMData((prev) => {
         return [
           ...prev,
@@ -51,6 +54,12 @@ export default function DMPage() {
         myName: data.name,
         myProfileImage: data.profileImage
       }));
+      dmInfoRef.current = {
+        ...dmInfoRef.current,
+        myId: data.id,
+        myName: data.name,
+        myProfileImage: data.profileImage
+      };
     });
     return () => {
       socket.off('DMNewMessage');
@@ -79,6 +88,12 @@ export default function DMPage() {
           FriendProfileImage: data.profileImage,
           FriendName: data.name
         }));
+        dmInfoRef.current = {
+          ...dmInfoRef.current,
+          dmId: data.dmId,
+          FriendProfileImage: data.profileImage,
+          FriendName: data.name
+        };
       }
     });
   }, [chatUser]);
