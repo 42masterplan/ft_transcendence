@@ -158,15 +158,13 @@ export default function Game() {
   const [deuce, setDeuce] = useState(false);
   const router = useRouter();
   const {id, theme} = router.query;
-  const [socket] = useSocket('game');
-  console.log('socket: ', socket);
+  const [socket] = useSocket('game', {matchId: id});
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const c = canvas.getContext('2d');
     if (!c) return;
-    console.log('game mounted');
     let animationId: number;
     const {playerA, playerB, ball, particles} = prepGame(
       canvas,
@@ -211,7 +209,6 @@ export default function Game() {
       playerA.draw();
       playerB.draw();
       ball.draw();
-      // remove particles that fade out
       particles.forEach((particle) => {
         if (particle.alpha <= 0.01) {
           particles.splice(particles.indexOf(particle), 1);

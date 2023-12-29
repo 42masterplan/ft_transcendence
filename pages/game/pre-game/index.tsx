@@ -6,6 +6,7 @@ import {PLAYER_DUMMY_2} from '@/DummyBackend/APIData';
 import {useRouter} from 'next/router';
 import {useEffect, useState} from 'react';
 import {PRE_GAME_TIME} from '@/lib/game/macros';
+import useAxios from '@/hooks/useAxios';
 
 interface GameInfo {
   map: string;
@@ -18,6 +19,7 @@ export default function PreGame() {
   const {id, theme} = router.query;
   const [backgroundImage, setBackgroundImage] = useState(''); // 상태로 배경 이미지 URL을 관리
   const [time, setTime] = useState(PRE_GAME_TIME);
+  const {fetchData, response, isSuccess} = useAxios(); // 게임 플레이어 2명의 정보를 위한 axios
 
   useEffect(() => {
     const timer = setInterval(() => {

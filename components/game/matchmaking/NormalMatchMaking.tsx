@@ -62,19 +62,13 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   }
   useEffect(() => {
     fetchData({
+      // API로 받을거임.
       method: 'get',
-      url: '/users',
-      params: {
-        id: '1'
-      },
+      url: '/users/friends',
       errorTitle: '유저 정보 조회 실패',
       errorDescription: '유저 정보 조회에 실패했습니다.',
       disableSuccessToast: true
     });
-    // socket.emit('onlineFriends', (state: UserType[]) => {
-    //   // 이 부분을 나중에 써야함. 지금은 임시로 쓰는거임
-    //   setFriends(state);
-    // });
   }, []); // ignore eslint warning. we only want to fetch data once ^^
   useEffect(() => {
     if (isSuccess === true) setFriends(response);
