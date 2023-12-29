@@ -63,7 +63,7 @@ function prepGame(
 
 function listenToSocketEvents(
   socket: Socket,
-  matchId: string,
+  matchId: string | string[] | undefined,
   playerA: Player,
   playerB: Player,
   ball: Ball,
@@ -158,8 +158,7 @@ export default function Game() {
   const [deuce, setDeuce] = useState(false);
   const router = useRouter();
   const {id, theme} = router.query;
-  console.log('id: ', id, 'theme: ', theme);
-  const [socket] = useSocket('game', {matchId: id});
+  const [socket] = useSocket('game');
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -176,7 +175,8 @@ export default function Game() {
     const backgroundImage = new Image();
     if (theme && theme != 'default')
       backgroundImage.src = `/gameThemes/${theme}.png`;
-    socket.on('joinedRoom', (id: string) => {
+    socket.on('joinedRoom', () => {
+      socket.emit('joinRoom', {matchId: id});
       listenToSocketEvents(
         socket,
         id,
