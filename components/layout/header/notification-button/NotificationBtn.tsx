@@ -64,7 +64,7 @@ export default function NotificationBtn() {
     socket.on('gameStart', ({matchId, theme}) => {
       router.push({
         pathname: 'game/pre-game',
-        query: {id: matchId, theme}
+        query: {id: matchId, theme: theme}
       });
     });
     return () => {
