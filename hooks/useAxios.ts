@@ -3,6 +3,8 @@ import {useState, useCallback} from 'react';
 
 import Axios from '../api';
 import {useToast} from '@/components/shadcn/ui/use-toast';
+import {useCookies} from 'react-cookie';
+import {useRouter} from 'next/router';
 
 interface fetchDataType {
   url: string;
@@ -24,7 +26,8 @@ const useAxios = () => {
   const [loading, setLoading] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
   const {toast} = useToast();
-
+  const [cookie, setCookie, removeCookie] = useCookies();
+  const router = useRouter();
   const fetchData = useCallback(
     async ({
       url,
@@ -80,6 +83,13 @@ const useAxios = () => {
           description: error_description + errorDescription,
           variant: 'destructive'
         });
+        if (error.response.status === 401) {
+          removeCookie('accessToken');
+          removeCookie('isTwoFactorDone');
+          removeCookie('hasAccount');
+          removeCookie('intraId');
+          router.push('/welcome');
+        }
       } finally {
         setLoading(false);
       }
