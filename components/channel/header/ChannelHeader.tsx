@@ -46,7 +46,9 @@ export default function ChannelHeader({
             <CiLogout className='h-6 w-6' />
             채널 나가기
           </Button>
-          <span>{channelInfoState.channelName}</span>
+          <span className='w-3/5 text-center'>
+            {channelInfoState.channelName}
+          </span>
           {channelInfoState.engagedChannels.find(
             (channel) => channel.id === channelInfoState.channelId
           )?.role === 'owner' ? (
