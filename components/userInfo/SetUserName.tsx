@@ -15,6 +15,7 @@ export default function SetUserName({
   isValidName: boolean;
   setIsValidName: Dispatch<SetStateAction<boolean>>;
 }) {
+  let regExp = /[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/gi;
   const {fetchData, response} = useAxios();
   const {toast} = useToast();
   useEffect(() => {
@@ -74,6 +75,13 @@ export default function SetUserName({
           value={nickname.trim()}
           disabled={isValidName}
           onChange={(e) => {
+            if (regExp.test(e.target.value)) {
+              toast({
+                title: '닉네임에 특수문자는 사용할 수 없습니다.',
+                variant: 'destructive'
+              });
+              return;
+            }
             if (e.target.value.length > 10) {
               toast({
                 title: '닉네임은 최대 10자까지 입력 가능합니다.',
