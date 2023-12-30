@@ -55,7 +55,7 @@ const UserDropdownGroup = ({
         <User className='mr-2 h-4 w-4' />
         <span
           onClick={() => {
-            router.push(`/${userName}`);
+            router.push(`userInfo/${userName}`);
           }}
         >
           프로필 보기
