@@ -20,18 +20,12 @@ import {
 } from '@/components/shadcn/ui/dropdown-menu';
 import {useToast} from '../shadcn/ui/use-toast';
 import {Button} from '@/components/shadcn/ui/button';
-import {
-  Dialog,
-  DialogContent
-} from '@/components/game/matchmaking/MatchMakingDialog';
 import {useRouter} from 'next/router';
 import AvatarWithStatus from '../card/userInfoCard/AvatarWithStatus';
 import useAxios from '@/hooks/useAxios';
 import useSocketAction from '@/hooks/useSocketAction';
-import MatchMakingTimer from '../game/matchmaking/MatchMakingTimer';
 import useSocket from '@/hooks/useSocket';
-import {Theme} from '@/lib/types';
-import ChildTab from '../game/ChildTab';
+import NormalMatchMakingDialog from '../game/matchmaking/NormalMatchMakingDialog';
 import {useEffect, useState} from 'react';
 
 const UserDropdownGroup = ({
@@ -42,8 +36,6 @@ const UserDropdownGroup = ({
   userId: string;
   userName: string;
   setIsThemeSelecting: any;
-  setIsWaiting: any;
-  setMatchId: any;
 }) => {
   const router = useRouter();
   const {toast} = useToast();
@@ -75,6 +67,7 @@ const UserDropdownGroup = ({
       </DropdownMenuItem>
       <DropdownMenuItem>
         <Gamepad2 className='mr-2 h-4 w-4' />
+
         <span onClick={() => setIsThemeSelecting(true)}>일대일 게임</span>
       </DropdownMenuItem>
       <DropdownMenuItem>
@@ -138,11 +131,8 @@ export default function DropdownAvatarBtn({
 }: DropdownAvatarBtnProps) {
   const [alarm_sock] = useSocket('alarm');
   const [isWaiting, setIsWaiting] = useState(false);
-  const [socket] = useSocket('channel');
   const [matchId, setMatchId] = useState('');
-  const [isThemeSelect, setIsThemeSelect] = useState(false);
-  const [theme, setTheme] = useState(Theme.Default);
-  const {toast} = useToast();
+  const [isThemeSelecting, setIsThemeSelecting] = useState(false);
   const banAction = useSocketAction(
     'banUser',
     '유저 제명',
@@ -165,10 +155,6 @@ export default function DropdownAvatarBtn({
     '님을 음소거에 실패했습니다. 일반 유저만 음소거할 수 있습니다.'
   );
 
-  function stopNormalMatchMaking() {
-    console.log('일반 매칭 취소');
-    if (alarm_sock) alarm_sock.emit('gameCancel', {matchId: matchId});
-  }
   const AdminDropdownGroup = () => {
     return (
       <DropdownMenuGroup>
@@ -237,74 +223,22 @@ export default function DropdownAvatarBtn({
           <UserDropdownGroup
             userId={user_id}
             userName={user_name}
-            setIsThemeSelecting={setIsThemeSelect}
-            setIsWaiting={setIsWaiting}
-            setMatchId={setMatchId}
+            setIsThemeSelecting={setIsThemeSelecting}
           />
           <DropdownMenuSeparator />
           {role === 'admin' || role == 'owner' ? <AdminDropdownGroup /> : null}
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <Dialog
-        onClose={() => setIsThemeSelect(false)}
-        open={isThemeSelect}
-        onOpenChange={setIsThemeSelect}
-      >
-        <DialogContent className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col justify-center items-center gap-[50px] inline-flex'>
-          <h1 className='text-[40px] font-bold font-[Roboto Mono]'>
-            테마를 선택해주세요!
-          </h1>
-          <ChildTab setTheme={setTheme} />
-          <Button
-            onClick={() => {
-              setIsThemeSelect(false);
-              setIsWaiting(true);
-              console.log('theme: ', theme);
-              alarm_sock.emit(
-                'gameRequest',
-                {
-                  userId: user_id,
-                  gameMode: 'normal',
-                  theme: theme
-                },
-                (state: any) => {
-                  if (state.msg == 'gameRequestSuccess!') {
-                    setIsWaiting(true);
-                    setMatchId(state.matchId);
-                  } else
-                    toast({
-                      title: '게임 요청 실패',
-                      description: '게임 요청에 실패했습니다.'
-                    });
-                }
-              );
-            }}
-            className=' w-[200px] h-[50px] rounded-[10px] text-[20px] font-bold font-[Roboto Mono]'
-          >
-            매칭 시작
-          </Button>
-        </DialogContent>
-      </Dialog>
-      <Dialog
-        onClose={() => {
-          stopNormalMatchMaking();
-          setIsWaiting(false);
-        }}
-        open={isWaiting}
-        onOpenChange={setIsWaiting}
-      >
-        <DialogContent className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col justify-center items-center gap-[110px] inline-flex'>
-          <h1 className='text-[40px] font-bold font-[Roboto Mono]'>
-            매칭을 수락하길 기다리는 중
-          </h1>
-          <MatchMakingTimer
-            isAscending={false}
-            stopNormalMatchMaking={stopNormalMatchMaking}
-            setIsWaiting={setIsWaiting}
-          />
-        </DialogContent>
-      </Dialog>
+      <NormalMatchMakingDialog
+        isWaiting={isWaiting}
+        setIsWaiting={setIsWaiting}
+        matchId={matchId}
+        setMatchId={setMatchId}
+        userId={user_id}
+        isThemeSelecting={isThemeSelecting}
+        setIsThemeSelecting={setIsThemeSelecting}
+      />
     </>
   );
 }

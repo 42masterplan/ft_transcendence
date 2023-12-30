@@ -1,50 +1,35 @@
 import {Button} from '@/components/shadcn/ui/button';
 import {Gamepad2} from 'lucide-react';
-import {useToast} from '@/components/shadcn/ui/use-toast';
+import NormalMatchMakingDialog from '@/components/game/matchmaking/NormalMatchMakingDialog';
+import {useState} from 'react';
 
 type MatchRequestButtonProps = {
   userId: string;
 };
 
 export default function MatchRequestButton({userId}: MatchRequestButtonProps) {
-  const sendMatchRequest = async () => {
-    console.log("sendMatchRequest's userId: ", userId);
-    const response = await new Promise((resolve) =>
-      setTimeout(resolve, 1000)
-    ).then(() => false); // change to false to test match request failed
-    if (response) {
-      console.log('match request sent');
-      return true;
-    } else {
-      console.log('match request failed');
-      return false;
-    }
-  };
-
-  const {toast} = useToast();
+  const [isWaiting, setIsWaiting] = useState(false);
+  const [matchId, setMatchId] = useState('');
+  const [isThemeSelect, setIsThemeSelect] = useState(false);
   return (
-    <Button
-      size='icon'
-      variant='outline'
-      className='hover:scale-[115%] duration-200'
-      onClick={async () => {
-        const sendMatchRequestResult = await sendMatchRequest();
-        if (sendMatchRequestResult) {
-          toast({
-            title: 'Match request sent'
-          });
-          // IMPORTANT: TODO: change page to waiting page to prevent multiple match request
-        } else {
-          // TODO: Add actions to manage error.
-          toast({
-            title: 'Match request failed',
-            description: 'Please try again later.',
-            variant: 'destructive'
-          });
-        }
-      }}
-    >
-      <Gamepad2 />
-    </Button>
+    <>
+      <Button
+        size='icon'
+        variant='outline'
+        className='hover:scale-[115%] duration-200'
+        onClick={() => setIsThemeSelect(true)}
+      >
+        <Gamepad2 />
+      </Button>
+      <NormalMatchMakingDialog
+        isWaiting={isWaiting}
+        setIsWaiting={setIsWaiting}
+        matchId={matchId}
+        setMatchId={setMatchId}
+        userId={userId}
+        isThemeSelecting={isThemeSelect}
+        setIsThemeSelecting={setIsThemeSelect}
+      />
+    </>
   );
 }

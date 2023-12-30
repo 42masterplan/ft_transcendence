@@ -26,7 +26,7 @@ export default function PreGame() {
       setTime((prevTime) => {
         if (prevTime === 1) {
           clearInterval(timer); // 타이머를 여기서 정지
-          router.push({
+          router.replace({
             pathname: '/game/in-game',
             query: {id, theme, gameMode}
           });
