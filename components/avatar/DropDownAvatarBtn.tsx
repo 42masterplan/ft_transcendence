@@ -21,8 +21,8 @@ import {
 import {useToast} from '../shadcn/ui/use-toast';
 import {Button} from '@/components/shadcn/ui/button';
 import {
-  Dialog,
-  DialogContent
+  MatchMakingDialog,
+  MatchMakingDialogContent
 } from '@/components/game/matchmaking/MatchMakingDialog';
 import {useRouter} from 'next/router';
 import AvatarWithStatus from '../card/userInfoCard/AvatarWithStatus';
@@ -234,12 +234,12 @@ export default function DropdownAvatarBtn({
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <Dialog
+      <MatchMakingDialog
         onClose={() => setIsThemeSelect(false)}
         open={isThemeSelect}
         onOpenChange={setIsThemeSelect}
       >
-        <DialogContent className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col justify-center items-center gap-[50px] inline-flex'>
+        <MatchMakingDialogContent className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col justify-center items-center gap-[50px] inline-flex'>
           <h1 className='text-[40px] font-bold font-[Roboto Mono]'>
             테마를 선택해주세요!
           </h1>
@@ -272,9 +272,9 @@ export default function DropdownAvatarBtn({
           >
             매칭 시작
           </Button>
-        </DialogContent>
-      </Dialog>
-      <Dialog
+        </MatchMakingDialogContent>
+      </MatchMakingDialog>
+      <MatchMakingDialog
         onClose={() => {
           stopNormalMatchMaking();
           setIsWaiting(false);
@@ -282,7 +282,7 @@ export default function DropdownAvatarBtn({
         open={isWaiting}
         onOpenChange={setIsWaiting}
       >
-        <DialogContent className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col justify-center items-center gap-[110px] inline-flex'>
+        <MatchMakingDialogContent className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col justify-center items-center gap-[110px] inline-flex'>
           <h1 className='text-[40px] font-bold font-[Roboto Mono]'>
             매칭을 수락하길 기다리는 중
           </h1>
@@ -291,8 +291,8 @@ export default function DropdownAvatarBtn({
             stopNormalMatchMaking={stopNormalMatchMaking}
             setIsWaiting={setIsWaiting}
           />
-        </DialogContent>
-      </Dialog>
+        </MatchMakingDialogContent>
+      </MatchMakingDialog>
     </>
   );
 }
