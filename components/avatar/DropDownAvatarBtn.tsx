@@ -20,28 +20,24 @@ import {
 } from '@/components/shadcn/ui/dropdown-menu';
 import {useToast} from '../shadcn/ui/use-toast';
 import {Button} from '@/components/shadcn/ui/button';
-import {
-  MatchMakingDialog,
-  MatchMakingDialogContent
-} from '@/components/game/matchmaking/MatchMakingDialog';
 import {useRouter} from 'next/router';
 import AvatarWithStatus from '../card/userInfoCard/AvatarWithStatus';
 import useAxios from '@/hooks/useAxios';
 import useSocketAction from '@/hooks/useSocketAction';
-import MatchMakingTimer from '../game/matchmaking/MatchMakingTimer';
 import useSocket from '@/hooks/useSocket';
-import {Theme} from '@/lib/types';
-import ChildTab from '../game/ChildTab';
 import {useState} from 'react';
+import NormalMatchMakingDialog from '../game/matchmaking/NormalMatchMakingDialog';
 
 const UserDropdownGroup = ({
   userId,
   userName,
-  setIsThemeSelecting
+  alarm_sock,
+  setIsWaiting,
+  setMatchId
 }: {
   userId: string;
   userName: string;
-  setIsThemeSelecting: any;
+  alarm_sock: any;
   setIsWaiting: any;
   setMatchId: any;
 }) => {
@@ -146,11 +142,8 @@ export default function DropdownAvatarBtn({
 }: DropdownAvatarBtnProps) {
   const [alarm_sock] = useSocket('alarm');
   const [isWaiting, setIsWaiting] = useState(false);
-  const [socket] = useSocket('channel');
   const [matchId, setMatchId] = useState('');
   const [isThemeSelect, setIsThemeSelect] = useState(false);
-  const [theme, setTheme] = useState(Theme.Default);
-  const {toast} = useToast();
   const banAction = useSocketAction(
     'banUser',
     '유저 제명',
@@ -173,10 +166,6 @@ export default function DropdownAvatarBtn({
     '님을 음소거에 실패했습니다. 일반 유저만 음소거할 수 있습니다.'
   );
 
-  function stopNormalMatchMaking() {
-    console.log('일반 매칭 취소');
-    if (alarm_sock) alarm_sock.emit('gameCancel', {matchId: matchId});
-  }
   const AdminDropdownGroup = () => {
     return (
       <DropdownMenuGroup>
@@ -245,7 +234,7 @@ export default function DropdownAvatarBtn({
           <UserDropdownGroup
             userId={user_id}
             userName={user_name}
-            setIsThemeSelecting={setIsThemeSelect}
+            alarm_sock={alarm_sock}
             setIsWaiting={setIsWaiting}
             setMatchId={setMatchId}
           />
@@ -254,65 +243,15 @@ export default function DropdownAvatarBtn({
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <MatchMakingDialog
-        onClose={() => setIsThemeSelect(false)}
-        open={isThemeSelect}
-        onOpenChange={setIsThemeSelect}
-      >
-        <MatchMakingDialogContent className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col justify-center items-center gap-[50px] inline-flex'>
-          <h1 className='text-[40px] font-bold font-[Roboto Mono]'>
-            테마를 선택해주세요!
-          </h1>
-          <ChildTab setTheme={setTheme} />
-          <Button
-            onClick={() => {
-              setIsThemeSelect(false);
-              setIsWaiting(true);
-              console.log('theme: ', theme);
-              alarm_sock.emit(
-                'gameRequest',
-                {
-                  userId: user_id,
-                  gameMode: 'normal',
-                  theme: theme
-                },
-                (state: any) => {
-                  if (state.msg == 'gameRequestSuccess!') {
-                    setIsWaiting(true);
-                    setMatchId(state.matchId);
-                  } else
-                    toast({
-                      title: '게임 요청 실패',
-                      description: '게임 요청에 실패했습니다.'
-                    });
-                }
-              );
-            }}
-            className=' w-[200px] h-[50px] rounded-[10px] text-[20px] font-bold font-[Roboto Mono]'
-          >
-            매칭 시작
-          </Button>
-        </MatchMakingDialogContent>
-      </MatchMakingDialog>
-      <MatchMakingDialog
-        onClose={() => {
-          stopNormalMatchMaking();
-          setIsWaiting(false);
-        }}
-        open={isWaiting}
-        onOpenChange={setIsWaiting}
-      >
-        <MatchMakingDialogContent className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col justify-center items-center gap-[110px] inline-flex'>
-          <h1 className='text-[40px] font-bold font-[Roboto Mono]'>
-            매칭을 수락하길 기다리는 중
-          </h1>
-          <MatchMakingTimer
-            isAscending={false}
-            stopNormalMatchMaking={stopNormalMatchMaking}
-            setIsWaiting={setIsWaiting}
-          />
-        </MatchMakingDialogContent>
-      </MatchMakingDialog>
+      <NormalMatchMakingDialog
+        isWaiting={isWaiting}
+        setIsWaiting={setIsWaiting}
+        matchId={matchId}
+        setMatchId={setMatchId}
+        userId={user_id}
+        isThemeSelecting={isThemeSelect}
+        setIsThemeSelecting={setIsThemeSelect}
+      />
     </>
   );
 }
