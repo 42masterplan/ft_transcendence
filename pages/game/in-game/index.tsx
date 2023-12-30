@@ -76,6 +76,7 @@ function listenToSocketEvents(
   particles: Particle[]
 ) {
   socket.on('updatePlayers', (state) => {
+    console.log('updatePlayers');
     if (state.matchId != matchId) return;
     if (!state.isReady) return;
     if (!playerA.id) playerA.id = state.playerA.id;
