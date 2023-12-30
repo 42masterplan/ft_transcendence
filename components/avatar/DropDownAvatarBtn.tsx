@@ -32,7 +32,7 @@ import MatchMakingTimer from '../game/matchmaking/MatchMakingTimer';
 import useSocket from '@/hooks/useSocket';
 import {Theme} from '@/lib/types';
 import ChildTab from '../game/ChildTab';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 
 const UserDropdownGroup = ({
   userId,
@@ -48,7 +48,19 @@ const UserDropdownGroup = ({
   const router = useRouter();
   const {toast} = useToast();
   const {fetchData} = useAxios();
-
+  const {fetchData: isFriend, response, isSuccess} = useAxios();
+  useEffect(() => {
+    if (isSuccess) {
+      if (response?.isFriends) {
+        router.push(`/dm/${userName}`);
+      } else {
+        toast({
+          title: 'DM 실패',
+          description: '친구가 아닌 상대와 채팅 할 수 없습니다.'
+        });
+      }
+    }
+  }, [isSuccess]);
   return (
     <DropdownMenuGroup className=''>
       <DropdownMenuItem>
@@ -89,9 +101,14 @@ const UserDropdownGroup = ({
         <PiPaperPlaneTiltBold className='mr-2 h-4 w-4' />
         <span
           onClick={() => {
-            toast({
-              title: 'DM 보내기',
-              description: '준비중인 기능입니다. 다른 기능을 이용해주세요.'
+            isFriend({
+              url: '/users/friends/isFriend',
+              method: 'get',
+              params: {
+                name: userName
+              },
+              disableSuccessToast: true,
+              disableErrorToast: true
             });
           }}
         >
