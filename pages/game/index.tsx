@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import ChildTab from '../../components/game/ChildTab';
 import MatchMakingBtn from '../../components/game/matchmaking/LadderMatchMaking';
-import NormalMatchMakingBtn from '@/components/game/matchmaking/NormalMatchMaking';
+import NormalMatchMakingBtn from '@/components/game/matchmaking/NormalMatchMakingBtn';
 import {
   Card,
   CardContent,
