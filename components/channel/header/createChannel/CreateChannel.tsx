@@ -148,7 +148,9 @@ const PasswordInput = ({
       <Input
         id='password'
         value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={(e) => {
+          setPassword(e.target.value);
+        }}
         className='col-span-3'
       />
     </div>
@@ -185,11 +187,16 @@ export default function CreateChannel() {
     }
   };
   const createChannel = () => {
-    let inviteUsers: Array<String> = [];
-    if (channelName.length === 0 || channelType.length === 0) {
+    if (
+      channelName.length === 0 ||
+      channelType.length === 0 ||
+      channelName.length > 16 ||
+      password.length > 16
+    ) {
       toast({
         title: '채널 생성 실패',
-        description: '채널 이름과 채널 유형을 입력해주세요.',
+        description:
+          '채널 이름과 채널 유형을 입력해주세요! 채널명과 비밀번호의 최대 길이는 16자입니다.(비밀번호는 선택사항입니다.)',
         variant: 'destructive',
         duration: 3000
       });
@@ -200,7 +207,9 @@ export default function CreateChannel() {
       {
         name: channelName,
         password: password.replace(/\s/g, ''),
-        invitedFriendIds: inviteUsers,
+        invitedFriendIds: inviteFriendList.map((friendInfo) => {
+          if (friendInfo.checked) return friendInfo.id;
+        }),
         status: channelType
       },
       (msg: string) => {
@@ -209,12 +218,7 @@ export default function CreateChannel() {
             title: '채널 생성 성공',
             description: msg
           });
-          console.log({
-            name: channelName,
-            password: password,
-            invitedFriendIds: inviteUsers,
-            status: channelType
-          });
+
           setChannelName('');
           setPassword('');
           setChannelType('');
@@ -229,9 +233,6 @@ export default function CreateChannel() {
         }
       }
     );
-    // socket.once('error_exist', (error: string) => {
-    //   alert(error);
-    // });
   };
 
   return (

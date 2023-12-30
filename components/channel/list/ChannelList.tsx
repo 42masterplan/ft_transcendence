@@ -21,14 +21,19 @@ export default React.forwardRef(function ChannelList(
   const [socket] = useSocket('channel');
   const router = useRouter();
   const myChannelsListener = useCallback((data: EngagedChannelType[]) => {
-    console.log('myChannelsListener', data);
     infoDispatch({
       type: 'ENGAGED_SET',
       payload: data
     });
     if (data.length > 0) {
       //current.channelId is not in data?
-      if (data.find((channel) => channel.id === ref.current.channelId))
+      let isExist = false;
+      data.filter((channel: EngagedChannelType) => {
+        if (channel.id == ref.current.channelId) {
+          isExist = true;
+        }
+      });
+      if (!isExist)
         infoDispatch({
           type: 'CHANNEL_LEAVE'
         });
@@ -57,7 +62,7 @@ export default React.forwardRef(function ChannelList(
     console.log('channelHistoryHandler', channel.id);
     socket.emit(
       'channelHistory',
-      {channelId: channel.id},
+      {channelId: ref.current.channelId},
       channelHistoryHandler
     );
   }, []);
@@ -82,11 +87,12 @@ export default React.forwardRef(function ChannelList(
           onClick={() => {
             handleChannelClick(channel);
           }}
+          variant='ghost'
           key={channel.id}
         >
-          <span className='text-custom4 truncate ...'>{channel.name}</span>
-          <span className='text-custom4 text-xs font-bold'>
-            {channel.userCount}
+          <span className='truncate ...'>{channel.name}</span>
+          <span className='text-xs font-bold'>
+            {'(' + channel.userCount + ')'}
           </span>
         </Button>
       ))}

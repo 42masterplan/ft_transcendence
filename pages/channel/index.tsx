@@ -10,12 +10,14 @@ import ChannelInput from '@/components/channel/body/ChannelInput';
 import {toast} from '@/components/shadcn/ui/use-toast';
 import {channelStateType} from '@/types/channel';
 import {MsgHistoryType} from '@/types/channel';
-import {useRouter} from 'next/router';
+
 const initialStateInfo: channelStateType = {
   channelName: '',
   channelId: '',
-  role: 'owner',
-  engagedChannels: []
+  engagedChannels: [],
+  myProfileImage: '',
+  myName: '',
+  myId: ''
 };
 
 function channelInfoReducer(state: any, action: any) {
@@ -31,11 +33,6 @@ function channelInfoReducer(state: any, action: any) {
         ...state,
         channelName: action.payload
       };
-    case 'ROLE_SET': // role 변경됨
-      return {
-        ...state,
-        role: action.payload
-      };
     case 'ENGAGED_SET': // engagedChannels 변경됨
       return {
         ...state,
@@ -45,8 +42,14 @@ function channelInfoReducer(state: any, action: any) {
       return {
         ...state,
         channelName: '',
-        channelId: '',
-        role: 'owner'
+        channelId: ''
+      };
+    case 'MY_INFO_SET': // 내 프로필 이미지 변경됨
+      return {
+        ...state,
+        myProfileImage: action.payload.profileImage,
+        myName: action.payload.name,
+        myId: action.payload.id
       };
     default:
       return state;
@@ -73,33 +76,39 @@ export default function ChannelPage() {
   const [socket] = useSocket('channel');
   const {channelName, channelId} = channelInfoState;
   const channelInfoRef = useRef(channelInfoState);
-  const router = useRouter();
-  const myRoleHandler = useCallback(({role}: any) => {
-    console.log('myRole', role);
-    infoDispatch({
-      type: 'ROLE_SET',
-      payload: role
-    });
-  }, []);
-  const errorHandler = useCallback(({error}: any) => {
-    console.log('error', error);
-    toast(error);
-  }, []);
+  const [myInfoSocket] = useSocket('alarm');
+  const errorHandler = useCallback(
+    ({error}: any) => {
+      console.log('error', error);
+      toast(error);
+    },
+    [socket]
+  );
   useEffect(() => {
     socket.on('connect', () => {
       console.log('---------connected----------');
-      socket.on('myRole', myRoleHandler);
-      socket.on('error_exist', errorHandler);
     });
+    myInfoSocket.emit('myInfo', (data) => {
+      infoDispatch({
+        type: 'MY_INFO_SET',
+        payload: data
+      });
+      channelInfoRef.current = {
+        ...channelInfoRef.current,
+        myProfileImage: data.profileImage,
+        myName: data.name,
+        myId: data.id
+      };
+    });
+    socket.on('error_exist', errorHandler);
     socket.on('disconnect', () => {
       console.log('---------disconnected----------');
     });
     return () => {
       console.log('---------off----------');
-      socket.off('myRole', myRoleHandler);
       socket.off('error_exist', errorHandler);
     };
-  }, [router.pathname]);
+  }, []);
 
   return (
     <div className='flex h-full'>
@@ -122,7 +131,7 @@ export default function ChannelPage() {
           />
         ) : (
           <>
-            <ScrollableContainer className='bg-custom2 rounded-none'>
+            <ScrollableContainer className='bg-custom2 rounded-none h-full'>
               <ChannelBody
                 channelInfoState={channelInfoState}
                 messageState={messageState}

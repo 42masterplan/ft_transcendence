@@ -71,7 +71,7 @@ export default function SetUserName({
         <Input
           placeholder='당신의 창의성을 믿어봐요'
           id='nickname'
-          value={nickname}
+          value={nickname.trim()}
           disabled={isValidName}
           onChange={(e) => {
             if (e.target.value.length > 10) {

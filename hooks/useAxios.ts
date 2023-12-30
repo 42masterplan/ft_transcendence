@@ -71,7 +71,7 @@ const useAxios = () => {
         setError(err);
 
         // Log the error stack trace (for debugging purposes)
-        console.error('Error Stack Trace:', err);
+        console.log('Error Stack Trace:', err);
 
         let error_description = err.response
           ? err.response.data.message
@@ -83,7 +83,8 @@ const useAxios = () => {
           description: error_description + errorDescription,
           variant: 'destructive'
         });
-        if (error.response.status === 401) {
+
+        if (err.response.status === 401) {
           removeCookie('accessToken');
           removeCookie('isTwoFactorDone');
           removeCookie('hasAccount');

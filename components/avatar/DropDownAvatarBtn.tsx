@@ -55,7 +55,7 @@ const UserDropdownGroup = ({
         <User className='mr-2 h-4 w-4' />
         <span
           onClick={() => {
-            router.push(`/${userName}`);
+            router.push(`userInfo/${userName}`);
           }}
         >
           프로필 보기
@@ -206,12 +206,7 @@ export default function DropdownAvatarBtn({
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
-            className='w-14 h-14 rounded-full'
-            onClick={() => {
-              socket.emit('myRole', channel_id);
-            }}
-          >
+          <Button className='w-14 h-14 rounded-full'>
             <AvatarWithStatus
               size='sm'
               image={profileImage}

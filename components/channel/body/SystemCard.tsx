@@ -5,7 +5,7 @@ export default React.forwardRef(function SystemCard(
   ref: any
 ) {
   return (
-    <div className='flex w-full text-xl justify-center' ref={ref}>
+    <div className='flex w-full text-l justify-center text-gray-400' ref={ref}>
       {children}
     </div>
   );

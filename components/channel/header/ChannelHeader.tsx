@@ -12,7 +12,6 @@ export default function ChannelHeader({
   channelInfoState: channelStateType;
   infoDispatch: any;
 }) {
-  console.log('channelState.channelName', channelInfoState.channelName);
   const [socket] = useSocket('channel');
   return (
     <div className='bg-custom2 w-full'>
@@ -29,11 +28,6 @@ export default function ChannelHeader({
             variant='iconBtn'
             className='bg-custom4'
             onClick={() => {
-              console.log(
-                '채널 나가기 버튼 클릭 채널명:',
-                channelInfoState.channelName,
-                channelInfoState.channelId
-              );
               socket.emit(
                 'leaveChannel',
                 {
@@ -52,14 +46,21 @@ export default function ChannelHeader({
             <CiLogout className='h-6 w-6' />
             채널 나가기
           </Button>
-          {channelInfoState.channelName}
-          {channelInfoState.role === 'owner' ? (
+          <span className='w-3/5 text-center'>
+            {channelInfoState.channelName}
+          </span>
+          {channelInfoState.engagedChannels.find(
+            (channel) => channel.id === channelInfoState.channelId
+          )?.role === 'owner' ? (
             <ManageChannel
               channel_name={channelInfoState.channelName}
               channelId={channelInfoState.channelId}
             />
           ) : (
-            channelInfoState.role
+            'role : ' +
+            channelInfoState.engagedChannels.find(
+              (channel) => channel.id === channelInfoState.channelId
+            )?.role
           )}
         </div>
       )}
