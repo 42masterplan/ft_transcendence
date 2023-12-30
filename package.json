@@ -35,6 +35,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
+    "embla-carousel-react": "^8.0.0-rc17",
     "express": "^4.18.2",
     "framer-motion": "^10.16.5",
     "immer": "^10.0.3",

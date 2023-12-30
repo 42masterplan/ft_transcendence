@@ -1,22 +1,21 @@
 import {challenge} from '@/components/sections/userInfoPage/forDataFetching/interfaces';
-import {Card, CardDescription, CardTitle} from '@/components/shadcn/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription
+} from '@/components/shadcn/ui/card';
 import DynamicProgressBar from '@/components/graph/DynamicProgressBar';
 
 interface AchievementCardProps {
-  achievementRate: challenge;
-  type: 'myProgress' | 'successRate';
+  challenge: challenge;
 }
 
 export default function AchievementCard({
-  achievementRate: achievement,
-  type
+  challenge: achievement
 }: AchievementCardProps) {
-  let rate: number;
-  if (type === 'myProgress') {
-    rate = achievement.progressRate;
-  } else {
-    rate = achievement.achieveRatio * 100;
-  }
+  const rate = achievement.progressRate;
 
   let myProgressComment: string;
   if (achievement.progressRate < 25) {
@@ -50,21 +49,12 @@ export default function AchievementCard({
       <CardDescription className='text-sm'>
         {achievement.description}
       </CardDescription>
-      {type === 'myProgress' ? (
-        <div>
-          <div className='flex justify-between py-0.5 '>
-            <div>{myProgressComment}</div>
-            <div>{rate}%</div>
-          </div>
+      <div>
+        <div className='flex justify-between py-0.5 '>
+          <div>{myProgressComment}</div>
+          <div>{rate}%</div>
         </div>
-      ) : (
-        <div>
-          <div className='flex justify-between py-0.5'>
-            <div>achieved / total</div>
-            <div>{rate}%</div>
-          </div>
-        </div>
-      )}
+      </div>
       <DynamicProgressBar progress={rate} />
     </Card>
   );
