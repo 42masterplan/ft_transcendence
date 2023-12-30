@@ -1,6 +1,10 @@
 import MatchMakingTimer from './MatchMakingTimer';
 import {Button} from '@/components/shadcn/ui/button';
-import {Dialog, DialogContent, DialogTrigger} from './MatchMakingDialog';
+import {
+  MatchMakingDialog,
+  MatchMakingDialogContent,
+  MatchMakingDialogTrigger
+} from './MatchMakingDialog';
 import {useRouter} from 'next/router';
 import {useEffect} from 'react';
 import useSocket from '@/hooks/useSocket';
@@ -32,16 +36,16 @@ export default function LadderMatchMakingBtn() {
   }
 
   return (
-    <Dialog onClose={() => stopLadderMatchMaking()}>
-      <DialogTrigger asChild>
+    <MatchMakingDialog onClose={() => stopLadderMatchMaking()}>
+      <MatchMakingDialogTrigger asChild>
         <Button onClick={() => startLadderMatchMaking()}>Start Match</Button>
-      </DialogTrigger>
-      <DialogContent className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col justify-center items-center gap-[110px] inline-flex'>
+      </MatchMakingDialogTrigger>
+      <MatchMakingDialogContent className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col justify-center items-center gap-[110px] inline-flex'>
         <h1 className='text-[40px] font-bold font-[Roboto Mono]'>
           래더 게임 매칭중
         </h1>
         <MatchMakingTimer isAscending={true} />
-      </DialogContent>
-    </Dialog>
+      </MatchMakingDialogContent>
+    </MatchMakingDialog>
   );
 }
