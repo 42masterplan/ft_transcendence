@@ -61,6 +61,12 @@ export default function NotificationBtn() {
       setMatchRequests((prev) => [...prev, state]);
       setNotificationCount((prev) => prev + 1);
     });
+    socket.on('gameCancel', (matchId: string) => {
+      setMatchRequests((prev) =>
+        prev.filter((match) => match.matchId != matchId)
+      );
+      setNotificationCount((prev) => prev - 1);
+    });
     socket.on('gameStart', ({matchId, theme, gameMode}) => {
       router.push({
         pathname: 'game/pre-game',
@@ -70,6 +76,7 @@ export default function NotificationBtn() {
     return () => {
       socket.off('gameRequest');
       socket.off('gameStart');
+      socket.off('gameCancel');
     };
   }, []);
   useEffect(() => {
