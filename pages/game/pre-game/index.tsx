@@ -1,25 +1,25 @@
 import PlayerPortrait from '../../../components/game/PlayerPortrait';
 import Divider from '../../../components/game/ingame/Divider';
-import {Player} from '@/DummyBackend/APIData';
 import {PLAYER_DUMMY_1} from '@/DummyBackend/APIData';
 import {PLAYER_DUMMY_2} from '@/DummyBackend/APIData';
 import {useRouter} from 'next/router';
 import {useEffect, useState} from 'react';
 import {PRE_GAME_TIME} from '@/lib/game/macros';
-import useAxios from '@/hooks/useAxios';
-
-interface GameInfo {
-  map: string;
-  player_1: Player;
-  player_2: Player;
-}
 
 export default function PreGame() {
   const router = useRouter();
-  const {id, theme, gameMode} = router.query;
+  const {
+    matchId,
+    aName,
+    aProfileImage,
+    bName,
+    bProfileImage,
+    side,
+    gameMode,
+    theme
+  } = router.query;
   const [backgroundImage, setBackgroundImage] = useState(''); // 상태로 배경 이미지 URL을 관리
   const [time, setTime] = useState(PRE_GAME_TIME);
-  const {fetchData, response, isSuccess} = useAxios(); // TODO: 게임 플레이어 2명의 정보를 위한 axios
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -28,7 +28,16 @@ export default function PreGame() {
           clearInterval(timer); // 타이머를 여기서 정지
           router.replace({
             pathname: '/game/in-game',
-            query: {id, theme, gameMode}
+            query: {
+              matchId,
+              aName,
+              aProfileImage,
+              bName,
+              bProfileImage,
+              side,
+              gameMode,
+              theme
+            }
           });
           return 0; // 시간이 0이 되었으므로 0을 반환
         }
@@ -60,9 +69,24 @@ export default function PreGame() {
         className='w-[400px] h-[600px] py-[50px] bg-slate-800 rounded-[10px] shadow border border-black flex flex-col justify-between items-center'
         style={style}
       >
-        <PlayerPortrait {...PLAYER_DUMMY_1} />
-        <Divider />
-        <PlayerPortrait {...PLAYER_DUMMY_2} />
+        {aName &&
+        aProfileImage &&
+        bName &&
+        bProfileImage &&
+        side &&
+        gameMode ? (
+          <>
+            <PlayerPortrait name={aName} profileImage={aProfileImage} />
+            <Divider />
+            <PlayerPortrait name={bName} profileImage={bProfileImage} />
+          </>
+        ) : (
+          <>
+            <PlayerPortrait {...PLAYER_DUMMY_1} />
+            <Divider />
+            <PlayerPortrait {...PLAYER_DUMMY_2} />
+          </>
+        )}
       </div>
     </div>
   );

@@ -29,9 +29,8 @@ export interface blockUserType {
 }
 
 export interface Player {
-  id: number;
-  name: string;
-  profileImage: string;
+  name: any;
+  profileImage: any;
 }
 
 export const PLAYER_DUMMY_1 = {

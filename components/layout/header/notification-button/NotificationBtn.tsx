@@ -42,6 +42,17 @@ import {useRouter} from 'next/router';
 import {gameRequest, friendRequest} from '@/DummyBackend/notificationAPI';
 import useAxios from '@/hooks/useAxios';
 
+interface gameStartState {
+  matchId: string;
+  aName: string;
+  aProfileImage: string;
+  bName: string;
+  bProfileImage: string;
+  side: string;
+  gameMode: string;
+  theme: string;
+}
+
 export default function NotificationBtn() {
   const router = useRouter();
   const [socket] = useSocket('alarm');
@@ -67,12 +78,33 @@ export default function NotificationBtn() {
       );
       setNotificationCount((prev) => prev - 1);
     });
-    socket.on('gameStart', ({matchId, theme, gameMode}) => {
-      router.push({
-        pathname: 'game/pre-game',
-        query: {id: matchId, theme: theme, gameMode: gameMode}
-      });
-    });
+    socket.on(
+      'gameStart',
+      ({
+        matchId,
+        aName,
+        aProfileImage,
+        bName,
+        bProfileImage,
+        side,
+        gameMode,
+        theme
+      }: gameStartState) => {
+        router.push({
+          pathname: 'game/pre-game',
+          query: {
+            matchId,
+            aName,
+            aProfileImage,
+            bName,
+            bProfileImage,
+            side,
+            gameMode,
+            theme
+          }
+        });
+      }
+    );
     return () => {
       socket.off('gameRequest');
       socket.off('gameStart');

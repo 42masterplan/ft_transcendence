@@ -159,22 +159,36 @@ export default function Game() {
   const [matchId, setMatchId] = useState('');
   const [theme, setTheme] = useState('');
   const [gameMode, setGameMode] = useState('');
+  const [aName, setAName] = useState('');
+  const [aProfileImage, setAProfileImage] = useState('');
+  const [bName, setBName] = useState('');
+  const [bProfileImage, setBProfileImage] = useState('');
+  const [side, setSide] = useState('' as string);
   const router = useRouter();
-  const initSocket = matchId != '' && theme != '' && gameMode != '';
+  const initSocket =
+    matchId != '' &&
+    theme != '' &&
+    gameMode != '' &&
+    aName != '' &&
+    aProfileImage != '' &&
+    bName != '' &&
+    bProfileImage != '' &&
+    side != '';
   const [socket] = useSocket('game', {
     autoConnect: initSocket
   });
 
   useEffect(() => {
-    if (router.query.id) {
-      setMatchId(router.query.id as string);
-    }
-    if (router.query.theme) {
-      setTheme(router.query.theme as string);
-    }
-    if (router.query.gameMode) {
-      setGameMode(router.query.gameMode as string);
-    }
+    if (router.query.id) setMatchId(router.query.id as string);
+    if (router.query.theme) setTheme(router.query.theme as string);
+    if (router.query.gameMode) setGameMode(router.query.gameMode as string);
+    if (router.query.aName) setAName(router.query.aName as string);
+    if (router.query.aProfileImage)
+      setAProfileImage(router.query.aProfileImage as string);
+    if (router.query.bName) setBName(router.query.bName as string);
+    if (router.query.bProfileImage)
+      setBProfileImage(router.query.bProfileImage as string);
+    if (router.query.side) setSide(router.query.side as string);
   }, [router]);
 
   useEffect(() => {
@@ -197,7 +211,7 @@ export default function Game() {
     const backgroundImage = new Image();
     if (theme && theme != 'Default')
       backgroundImage.src = `/gameThemes/${theme}.png`;
-    socket.emit('joinRoom', {matchId: matchId, gameMode: gameMode});
+    socket.emit('joinRoom', {matchId: matchId, gameMode: gameMode, side: side});
     socket.on('joinedRoom', () => {
       listenToSocketEvents(
         socket,
@@ -272,6 +286,8 @@ export default function Game() {
               setGameOver={setGameOver}
               time={time}
               deuce={deuce}
+              playerA={{name: aName, profileImage: aProfileImage}}
+              playerB={{name: bName, profileImage: bProfileImage}}
             />
           </div>
           <ScoreBoard AScore={score.playerA} BScore={score.playerB} />
