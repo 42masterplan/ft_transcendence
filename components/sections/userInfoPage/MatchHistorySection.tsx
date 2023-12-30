@@ -40,7 +40,7 @@ export default function MatchHistorySection({
    * * * * playerBName: string
    * * * * playerAScore: number
    * * * * playerBScore: number
-   * * * * matchId: string
+   * * * * gameId: string
    * * error: 404 if user does not exist
    * * error: 500 if server error
    */
@@ -82,7 +82,7 @@ export default function MatchHistorySection({
           <ScrollableContainer className='h-[50vh]'>
             {matchHistory.map((match) => (
               <MatchHistoryCard
-                key={match.matchId}
+                key={match.gameId}
                 match={match}
               ></MatchHistoryCard>
             ))}
