@@ -10,7 +10,6 @@ export interface challenge {
   name: string;
   description: string;
   progressRate: number;
-  achieveRatio: number;
 }
 
 // API: GET /user/matches
@@ -20,5 +19,5 @@ export interface match {
   playerBName: string;
   playerAScore: number;
   playerBScore: number;
-  matchId: string;
+  gameId: string;
 }
