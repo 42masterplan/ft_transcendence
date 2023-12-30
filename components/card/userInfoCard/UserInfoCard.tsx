@@ -61,7 +61,7 @@ export default function UserInfoCard({
         introWidthFit = 'w-5/6';
         break;
       case 'lg':
-        introWidthFit = 'w-3/4';
+        introWidthFit = 'w-11/12';
         break;
       default:
         introWidthFit = 'w-5/6';
@@ -143,7 +143,7 @@ export default function UserInfoCard({
   return (
     <>
       <div
-        className={`flex ${widthFit} ${flexAlign} ${className} rounded-xl p-1 sm:p-2`}
+        className={`flex ${widthFit} ${flexAlign} rounded-xl p-1 sm:p-2 ${className}`}
       >
         <AvatarWithStatus
           status={userInfo.currentStatus}

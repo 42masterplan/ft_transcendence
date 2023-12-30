@@ -20,4 +20,5 @@ export interface match {
   playerBName: string;
   playerAScore: number;
   playerBScore: number;
+  matchId: string;
 }

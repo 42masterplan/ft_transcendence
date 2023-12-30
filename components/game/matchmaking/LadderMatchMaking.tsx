@@ -6,7 +6,7 @@ import {useEffect} from 'react';
 import useSocket from '@/hooks/useSocket';
 
 export default function LadderMatchMakingBtn() {
-  const [socket] = useSocket('game');
+  const [socket] = useSocket('ladder');
   const router = useRouter();
 
   useEffect(() => {
