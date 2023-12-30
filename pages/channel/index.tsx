@@ -7,7 +7,6 @@ import ChannelList from '@/components/channel/list/ChannelList';
 import ChannelHeader from '@/components/channel/header/ChannelHeader';
 import ScrollableContainer from '@/components/container/ScrollableContainer';
 import ChannelInput from '@/components/channel/body/ChannelInput';
-import {toast} from '@/components/shadcn/ui/use-toast';
 import {channelStateType} from '@/types/channel';
 import {MsgHistoryType} from '@/types/channel';
 
@@ -77,13 +76,7 @@ export default function ChannelPage() {
   const {channelName, channelId} = channelInfoState;
   const channelInfoRef = useRef(channelInfoState);
   const [myInfoSocket] = useSocket('alarm');
-  const errorHandler = useCallback(
-    ({error}: any) => {
-      console.log('error', error);
-      toast(error);
-    },
-    [socket]
-  );
+
   useEffect(() => {
     socket.on('connect', () => {
       console.log('---------connected----------');
@@ -100,13 +93,13 @@ export default function ChannelPage() {
         myId: data.id
       };
     });
-    socket.on('error_exist', errorHandler);
     socket.on('disconnect', () => {
       console.log('---------disconnected----------');
     });
     return () => {
       console.log('---------off----------');
-      socket.off('error_exist', errorHandler);
+      socket.off('connect');
+      socket.off('disconnect');
     };
   }, []);
 

@@ -1,5 +1,4 @@
 import {cn} from '@/lib/utils';
-
 import React from 'react';
 import {useRef, useEffect, useCallback} from 'react';
 import {MsgHistoryType, channelStateType} from '@/types/channel';
@@ -7,6 +6,7 @@ import ScrollableContainer from '../../container/ScrollableContainer';
 import ChatMessage from '@/components/channel/body/ChatMessage';
 import useSocket from '@/hooks/useSocket';
 import SystemCard from './SystemCard';
+
 interface MessageHandlerArgs {
   channelId: string;
   userId: string;
@@ -102,7 +102,7 @@ export default React.forwardRef(function ChannelBody(
                   role={
                     channelInfoState.engagedChannels?.find(
                       (channel) => channel.id === channelInfoState.channelId
-                    )?.role || '으악'
+                    )?.role || 'user'
                   }
                   user_id={msg.id}
                 />
