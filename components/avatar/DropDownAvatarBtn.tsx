@@ -31,15 +31,11 @@ import NormalMatchMakingDialog from '../game/matchmaking/NormalMatchMakingDialog
 const UserDropdownGroup = ({
   userId,
   userName,
-  alarm_sock,
-  setIsWaiting,
-  setMatchId
+  setIsThemeSelecting
 }: {
   userId: string;
   userName: string;
-  alarm_sock: any;
-  setIsWaiting: any;
-  setMatchId: any;
+  setIsThemeSelecting: any;
 }) => {
   const router = useRouter();
   const {toast} = useToast();
@@ -60,31 +56,7 @@ const UserDropdownGroup = ({
       <DropdownMenuItem>
         <Gamepad2 className='mr-2 h-4 w-4' />
 
-        <span
-          onClick={() => {
-            alarm_sock.emit(
-              'gameRequest',
-              {
-                userId: userId,
-                gameMode: 'normal',
-                theme: 'default'
-              },
-              (state: any) => {
-                console.log(state);
-                if (state.msg == 'gameRequestSuccess!') {
-                  setIsWaiting(true);
-                  setMatchId(state.matchId);
-                } else
-                  toast({
-                    title: '게임 요청 실패',
-                    description: '게임 요청에 실패했습니다.'
-                  });
-              }
-            );
-          }}
-        >
-          일대일 게임
-        </span>
+        <span onClick={() => setIsThemeSelecting(true)}>일대일 게임</span>
       </DropdownMenuItem>
       <DropdownMenuItem>
         <PiSmileyAngry className='mr-2 h-4 w-4' />
@@ -143,7 +115,7 @@ export default function DropdownAvatarBtn({
   const [alarm_sock] = useSocket('alarm');
   const [isWaiting, setIsWaiting] = useState(false);
   const [matchId, setMatchId] = useState('');
-  const [isThemeSelect, setIsThemeSelect] = useState(false);
+  const [isThemeSelecting, setIsThemeSelecting] = useState(false);
   const banAction = useSocketAction(
     'banUser',
     '유저 제명',
@@ -234,9 +206,7 @@ export default function DropdownAvatarBtn({
           <UserDropdownGroup
             userId={user_id}
             userName={user_name}
-            alarm_sock={alarm_sock}
-            setIsWaiting={setIsWaiting}
-            setMatchId={setMatchId}
+            setIsThemeSelecting={setIsThemeSelecting}
           />
           <DropdownMenuSeparator />
           {role === 'admin' || role == 'owner' ? <AdminDropdownGroup /> : null}
@@ -249,8 +219,8 @@ export default function DropdownAvatarBtn({
         matchId={matchId}
         setMatchId={setMatchId}
         userId={user_id}
-        isThemeSelecting={isThemeSelect}
-        setIsThemeSelecting={setIsThemeSelect}
+        isThemeSelecting={isThemeSelecting}
+        setIsThemeSelecting={setIsThemeSelecting}
       />
     </>
   );
