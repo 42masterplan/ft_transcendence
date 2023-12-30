@@ -64,7 +64,13 @@ export default function Validation() {
       disableSuccessToast: true
     });
   };
-  if (success === false) return <SpinningLoader />;
+  if (success === false)
+    return (
+      <div className='flex justify-center items-center w-full h-full'>
+        <SpinningLoader />;
+      </div>
+    );
+
   return (
     <>
       <div className='flex-col justify-center'>
