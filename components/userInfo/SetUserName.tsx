@@ -8,12 +8,16 @@ export default function SetUserName({
   nickname,
   setNickname,
   isValidName,
-  setIsValidName
+  setIsValidName,
+  titleFontStyle,
+  hoverEffect
 }: {
   nickname: string;
   setNickname: Dispatch<SetStateAction<string>>;
   isValidName: boolean;
   setIsValidName: Dispatch<SetStateAction<boolean>>;
+  titleFontStyle: string;
+  hoverEffect: string;
 }) {
   const {fetchData, response} = useAxios();
   const {toast} = useToast();
@@ -60,14 +64,13 @@ export default function SetUserName({
   };
 
   return (
-    <>
-      <label
-        htmlFor='nickname'
-        className='font-roboto-mono text-1xl font-semibold leading-10 tracking-normal  text-custom4'
-      >
-        닉네임
-      </label>
-      <div className='flex gap-1'>
+    <div className={`w-full ${hoverEffect}`}>
+      <div className=''>
+        <label htmlFor='nickname' className={titleFontStyle}>
+          닉네임
+        </label>
+      </div>
+      <div className='flex flex-row gap-2'>
         <Input
           placeholder='당신의 창의성을 믿어봐요'
           id='nickname'
@@ -85,6 +88,7 @@ export default function SetUserName({
           }}
         />
         <Button
+          variant='default'
           disabled={isValidName}
           onClick={() => {
             checkNickname();
@@ -93,6 +97,6 @@ export default function SetUserName({
           중복 확인
         </Button>
       </div>
-    </>
+    </div>
   );
 }
