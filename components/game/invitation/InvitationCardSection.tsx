@@ -38,8 +38,7 @@ export default function InvitationCardSection({
     theme: string,
     startNormalMatchMaking: any
   ) {
-    console.log('useId: ', userId, 'theme: ', theme);
-    startNormalMatchMaking(userId, theme);
+    startNormalMatchMaking({userId, theme});
   }
   useEffect(() => {
     setUsers(filterUsers(friends, searchTargetInput));

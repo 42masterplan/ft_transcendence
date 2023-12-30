@@ -20,6 +20,7 @@ import GameStatus from '@/components/game/ingame/GameStatus';
 import GameResult from '@/components/game/ingame/GameResult';
 import {io, Socket} from 'socket.io-client';
 import {useRouter} from 'next/router';
+import useSocket from '@/hooks/useSocket';
 
 function prepGame(
   canvas: HTMLCanvasElement,
@@ -62,7 +63,7 @@ function prepGame(
 
 function listenToSocketEvents(
   socket: Socket,
-  roomId: number,
+  matchId: string | string[] | undefined,
   playerA: Player,
   playerB: Player,
   ball: Ball,
@@ -75,22 +76,19 @@ function listenToSocketEvents(
   particles: Particle[]
 ) {
   socket.on('updatePlayers', (state) => {
-    if (state.roomId != roomId) return;
-    const backendPlayers = state.players;
-    if (backendPlayers.length < 2) return;
-    if (!playerA.id) playerA.id = backendPlayers[0].id;
-    if (!playerB.id) playerB.id = backendPlayers[1].id;
-    playerA.x = backendPlayers[0].x;
-    playerA.y = backendPlayers[0].y;
-    playerB.x = backendPlayers[1].x;
-    playerB.y = backendPlayers[1].y;
-    playerA.dx = backendPlayers[0].dx;
-    playerB.dx = backendPlayers[1].dx;
-    if (!(playerA.id in backendPlayers)) delete backendPlayers[playerA.id];
-    if (!(playerB.id in backendPlayers)) delete backendPlayers[playerB.id];
+    if (state.matchId != matchId) return;
+    if (!state.isReady) return;
+    if (!playerA.id) playerA.id = state.playerA.id;
+    if (!playerB.id) playerB.id = state.playerB.id;
+    playerA.x = state.playerA.x;
+    playerA.y = state.playerA.y;
+    playerA.dx = state.playerA.dx;
+    playerB.x = state.playerB.x;
+    playerB.y = state.playerB.y;
+    playerB.dx = state.playerB.dx;
   });
   socket.on('updateBall', (state) => {
-    if (state.roomId != roomId) return;
+    if (state.matchId != matchId) return;
     const backendBall = state.ball;
     ball.x = backendBall.x;
     ball.y = backendBall.y;
@@ -98,13 +96,13 @@ function listenToSocketEvents(
     ball.lastCollision = backendBall.lastCollision;
   });
   socket.on('updateScore', (state) => {
-    if (state.roomId != roomId) return;
+    if (state.matchId != matchId) return;
     const backendScore = state.score;
     ball.resetPosition(particles);
     setScore(backendScore);
   });
   socket.on('gameOver', (state) => {
-    if (state.roomId != roomId) return;
+    if (state.matchId != matchId) return;
     if (state.forfeit) setForfeit(true);
     setGameOver(true);
     cancelAnimationFrame(animationId);
@@ -113,12 +111,12 @@ function listenToSocketEvents(
     socket.disconnect();
   });
   socket.on('updateTime', (state) => {
-    if (state.roomId != roomId) return;
+    if (state.matchId != matchId) return;
     const backendTime = state.time;
     setTime(backendTime);
   });
   socket.on('deuce', (state) => {
-    if (state.roomId != roomId) return;
+    if (state.matchId != matchId) return;
     setDeuce(true);
   });
 }
@@ -158,15 +156,37 @@ export default function Game() {
   const [gameover, setGameOver] = useState(false);
   const [forfeit, setForfeit] = useState(false);
   const [deuce, setDeuce] = useState(false);
+  const [matchId, setMatchId] = useState('');
+  const [theme, setTheme] = useState('');
+  const [gameMode, setGameMode] = useState('');
   const router = useRouter();
-  const {id, theme} = router.query;
+  const initSocket = matchId != '' && theme != '' && gameMode != '';
+  const [socket] = useSocket('game', {
+    autoConnect: initSocket
+  });
 
   useEffect(() => {
-    const socket = io('http://localhost:4242'); // TODO: re-use socket
+    if (router.query.id) {
+      setMatchId(router.query.id as string);
+    }
+    if (router.query.theme) {
+      setTheme(router.query.theme as string);
+    }
+    if (router.query.gameMode) {
+      setGameMode(router.query.gameMode as string);
+    }
+  }, [router]);
+
+  useEffect(() => {
+    if (!initSocket) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const c = canvas.getContext('2d');
     if (!c) return;
+    socket.on('gameFull', () => {
+      router.push('/');
+      // TODO: layout으로 보내서 로그아웃 시키기
+    });
     let animationId: number;
     const {playerA, playerB, ball, particles} = prepGame(
       canvas,
@@ -175,12 +195,13 @@ export default function Game() {
       c
     );
     const backgroundImage = new Image();
-    if (theme && theme != 'default')
+    if (theme && theme != 'Default')
       backgroundImage.src = `/gameThemes/${theme}.png`;
-    socket.on('joinedRoom', (id) => {
+    socket.emit('joinRoom', {matchId: matchId, gameMode: gameMode});
+    socket.on('joinedRoom', () => {
       listenToSocketEvents(
         socket,
-        id,
+        matchId,
         playerA,
         playerB,
         ball,
@@ -198,7 +219,7 @@ export default function Game() {
     }, RENDERING_RATE);
     addEventListeners(keysPressed);
     const gameLoop = () => {
-      if (theme && theme != 'default') {
+      if (theme && theme != 'Default') {
         if (backgroundImage.complete) {
           c.drawImage(backgroundImage, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
           c.fillStyle = BACKGROUND_SHADOW_COLOR;
@@ -211,7 +232,6 @@ export default function Game() {
       playerA.draw();
       playerB.draw();
       ball.draw();
-      // remove particles that fade out
       particles.forEach((particle) => {
         if (particle.alpha <= 0.01) {
           particles.splice(particles.indexOf(particle), 1);
@@ -221,12 +241,18 @@ export default function Game() {
     };
     gameLoop();
     return () => {
+      console.log('game unmounted');
+      // socket.off('updatePlayers');
+      // socket.off('updateBall');
+      // socket.off('updateScore');
+      // socket.off('gameOver');
+      // socket.off('updateTime');
+      // socket.off('deuce');
+      // socket.off('connect');
+      // socket.off('disconnect');
       cancelAnimationFrame(animationId);
-      socket.off('connect');
-      socket.off('disconnect');
-      socket.disconnect();
     };
-  }, []);
+  }, [socket, initSocket]);
 
   return (
     <div className='relative min-h-screen flex justify-center items-center'>

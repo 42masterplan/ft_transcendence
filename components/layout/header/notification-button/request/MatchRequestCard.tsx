@@ -24,14 +24,14 @@ export default function MatchRequestCard(props: NotificationCardProps) {
 
   //reduce notification count
   const handleAccept = () => {
-    socket.emit('gameResponse', {
-      isAccept: true,
-      matchId: newMatch.id
-    });
     setMatchRequests((prev: any) =>
       prev.filter((match: any) => match.id !== newMatch.id)
     );
     setNotificationCount((prev: number) => prev - 1);
+    socket.emit('gameResponse', {
+      isAccept: true,
+      matchId: newMatch.id
+    });
   };
 
   const handleReject = () => {
