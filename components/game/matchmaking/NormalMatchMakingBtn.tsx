@@ -1,5 +1,9 @@
 import {Button} from '@/components/shadcn/ui/button';
-import {Dialog, DialogContent, DialogTrigger} from './MatchMakingDialog';
+import {
+  MatchMakingDialog,
+  MatchMakingDialogContent,
+  MatchMakingDialogTrigger
+} from './MatchMakingDialog';
 import {InvitationNavBar} from '../invitation/InvitationNavBar';
 import {userType} from '@/types/user';
 import useAxios from '@/hooks/useAxios';
@@ -75,11 +79,11 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   }, [isSuccess, response]);
 
   return isWaiting === false ? (
-    <Dialog>
-      <DialogTrigger asChild>
+    <MatchMakingDialog>
+      <MatchMakingDialogTrigger asChild>
         <Button>Start Match</Button>
-      </DialogTrigger>
-      <DialogContent className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col justify-center items-center gap-[20px] inline-flex'>
+      </MatchMakingDialogTrigger>
+      <MatchMakingDialogContent className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col justify-center items-center gap-[20px] inline-flex'>
         <div className='flex flex-col w-full h-[390px] px-3 gap-2'>
           <InvitationNavBar setSearchTargetInput={setSearchTargetInput} />
           <InvitationCardSection
@@ -90,16 +94,16 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
             startNormalMatchMaking={startNormalMatchMaking}
           />
         </div>
-      </DialogContent>
-    </Dialog>
+      </MatchMakingDialogContent>
+    </MatchMakingDialog>
   ) : (
-    <Dialog
+    <MatchMakingDialog
       onClose={() => {
         stopNormalMatchMaking(matchId);
         setIsWaiting(false);
       }}
     >
-      <DialogContent className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col justify-center items-center gap-[110px] inline-flex'>
+      <MatchMakingDialogContent className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col justify-center items-center gap-[110px] inline-flex'>
         <h1 className='text-[40px] font-bold font-[Roboto Mono] items-center'>
           매칭을 수락하길 기다리는중
         </h1>
@@ -108,7 +112,7 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
           stopNormalMatchMaking={stopNormalMatchMaking}
           setIsWaiting={setIsWaiting}
         />
-      </DialogContent>
-    </Dialog>
+      </MatchMakingDialogContent>
+    </MatchMakingDialog>
   );
 }

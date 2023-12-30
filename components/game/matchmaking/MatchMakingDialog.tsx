@@ -5,7 +5,7 @@ import * as DialogPrimitive from '@radix-ui/react-dialog';
 
 import {cn} from '@/lib/utils';
 
-interface DialogProps {
+interface MatchMakingDialogProps {
   onClose?: () => void;
   children: React.ReactNode;
   open?: any;
@@ -13,7 +13,11 @@ interface DialogProps {
   // 다른 필요한 props 타입들을 여기에 추가
 }
 
-const Dialog = ({onClose, children, ...props}: DialogProps) => (
+const MatchMakingDialog = ({
+  onClose,
+  children,
+  ...props
+}: MatchMakingDialogProps) => (
   <DialogPrimitive.Root
     {...props}
     onOpenChange={(open) => {
@@ -24,14 +28,14 @@ const Dialog = ({onClose, children, ...props}: DialogProps) => (
   </DialogPrimitive.Root>
 );
 
-const DialogTrigger = DialogPrimitive.Trigger;
+const MatchMakingDialogTrigger = DialogPrimitive.Trigger;
 
-const DialogPortal = ({className, ...props}: any) => (
+const MatchMakingDialogPortal = ({className, ...props}: any) => (
   <DialogPrimitive.Portal className={cn(className)} {...props} />
 );
-DialogPortal.displayName = DialogPrimitive.Portal.displayName;
+MatchMakingDialogPortal.displayName = DialogPrimitive.Portal.displayName;
 
-const DialogOverlay = React.forwardRef<
+const MatchMakingDialogOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
 >(({className, ...props}, ref) => (
@@ -44,14 +48,14 @@ const DialogOverlay = React.forwardRef<
     {...props}
   />
 ));
-DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
+MatchMakingDialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
-const DialogContent = React.forwardRef<
+const MatchMakingDialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({className, children, ...props}, ref) => (
-  <DialogPortal>
-    <DialogOverlay />
+  <MatchMakingDialogPortal>
+    <MatchMakingDialogOverlay />
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
@@ -70,11 +74,11 @@ const DialogContent = React.forwardRef<
         매치 취소
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
-  </DialogPortal>
+  </MatchMakingDialogPortal>
 ));
-DialogContent.displayName = DialogPrimitive.Content.displayName;
+MatchMakingDialogContent.displayName = DialogPrimitive.Content.displayName;
 
-const DialogHeader = ({
+const MatchMakingDialogHeader = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
@@ -86,9 +90,9 @@ const DialogHeader = ({
     {...props}
   />
 );
-DialogHeader.displayName = 'DialogHeader';
+MatchMakingDialogHeader.displayName = 'MatchMakingDialogHeader';
 
-const DialogFooter = ({
+const MatchMakingDialogFooter = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
@@ -100,9 +104,9 @@ const DialogFooter = ({
     {...props}
   />
 );
-DialogFooter.displayName = 'DialogFooter';
+MatchMakingDialogFooter.displayName = 'MatchMakingDialogFooter';
 
-const DialogTitle = React.forwardRef<
+const MatchMakingDialogTitle = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
 >(({className, ...props}, ref) => (
@@ -115,9 +119,9 @@ const DialogTitle = React.forwardRef<
     {...props}
   />
 ));
-DialogTitle.displayName = DialogPrimitive.Title.displayName;
+MatchMakingDialogTitle.displayName = DialogPrimitive.Title.displayName;
 
-const DialogDescription = React.forwardRef<
+const MatchMakingDialogDescription = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
 >(({className, ...props}, ref) => (
@@ -127,14 +131,15 @@ const DialogDescription = React.forwardRef<
     {...props}
   />
 ));
-DialogDescription.displayName = DialogPrimitive.Description.displayName;
+MatchMakingDialogDescription.displayName =
+  DialogPrimitive.Description.displayName;
 
 export {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogFooter,
-  DialogTitle,
-  DialogDescription
+  MatchMakingDialog,
+  MatchMakingDialogTrigger,
+  MatchMakingDialogContent,
+  MatchMakingDialogHeader,
+  MatchMakingDialogFooter,
+  MatchMakingDialogTitle,
+  MatchMakingDialogDescription
 };

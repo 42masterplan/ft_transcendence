@@ -39,8 +39,7 @@ export default React.forwardRef(function ChannelList(
         });
     }
   }, []);
-  const channelHistoryHandler = useCallback((data: MsgHistoryType[]) => {
-    console.log('channelHistoryListener', data);
+  const channelHistoryHandler = useCallback((data: ChannelHistoryType[]) => {
     messageDispatch({
       type: 'MESSAGE_SET',
       payload: data
