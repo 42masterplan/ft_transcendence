@@ -131,7 +131,7 @@ export default function ChannelPage() {
           />
         ) : (
           <>
-            <ScrollableContainer className='bg-custom2 rounded-none'>
+            <ScrollableContainer className='bg-custom2 rounded-none h-full'>
               <ChannelBody
                 channelInfoState={channelInfoState}
                 messageState={messageState}
