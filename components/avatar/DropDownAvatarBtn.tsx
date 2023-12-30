@@ -138,7 +138,7 @@ export default function DropdownAvatarBtn({
     '유저 추방',
     '님을 추방했습니다.',
     '유저 추방 실패',
-    '님을 추방에 실패했습니다. 일반 유저만 추방할 수 있습니다.'
+    '님을 추방에 실패했습니다. 이미 나간 유저이거나 관리자는 관리자인 유저를 추방할 수 없습니다.'
   );
   const muteAction = useSocketAction(
     'muteUser',

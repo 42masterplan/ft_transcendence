@@ -6,6 +6,7 @@ import {MsgHistoryType, channelStateType} from '@/types/channel';
 import React from 'react';
 import {useEffect, Dispatch, SetStateAction, useCallback} from 'react';
 import {useRouter} from 'next/router';
+import {useToast} from '@/components/shadcn/ui/use-toast';
 export default React.forwardRef(function ChannelList(
   {
     channelInfoState,
@@ -20,23 +21,36 @@ export default React.forwardRef(function ChannelList(
 ) {
   const [socket] = useSocket('channel');
   const router = useRouter();
+  const {toast} = useToast();
   const myChannelsListener = useCallback((data: EngagedChannelType[]) => {
     infoDispatch({
       type: 'ENGAGED_SET',
       payload: data
     });
+
     if (data.length > 0) {
       //current.channelId is not in data?
-      let isExist = false;
-      data.filter((channel: EngagedChannelType) => {
-        if (channel.id == ref.current.channelId) {
-          isExist = true;
+      for (const befChannel of ref.current.engagedChannels) {
+        let isExist = false;
+        for (const channel of data) {
+          if (channel.id === befChannel.id) {
+            isExist = true;
+            break;
+          }
         }
-      });
-      if (!isExist)
-        infoDispatch({
-          type: 'CHANNEL_LEAVE'
-        });
+        if (isExist === false) {
+          toast({
+            title: '채널에서 나감',
+            description: `${befChannel.name} 채널에서 추방 또는 나왔습니다.`,
+            variant: 'destructive'
+          });
+          infoDispatch({
+            type: 'CHANNEL_LEAVE'
+          });
+          break;
+        }
+      }
+      ref.current.engagedChannels = data;
     }
   }, []);
   const channelHistoryHandler = useCallback((data: MsgHistoryType[]) => {
