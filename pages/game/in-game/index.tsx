@@ -110,6 +110,7 @@ function listenToSocketEvents(
     socket.disconnect();
   });
   socket.on('updateTime', (state) => {
+    console.log('update time');
     if (state.matchId != matchId) return;
     const backendTime = state.time;
     setTime(backendTime);
@@ -157,14 +158,14 @@ export default function Game() {
   const [deuce, setDeuce] = useState(false);
   const [matchId, setMatchId] = useState('');
   const [gameMode, setGameMode] = useState('');
-  const [theme, setTheme] = useState('');
   const [side, setSide] = useState('');
   const router = useRouter();
-  const {aName, aProfileImage, bName, bProfileImage} = router.query as {
+  const {aName, aProfileImage, bName, bProfileImage, theme} = router.query as {
     aName: string;
     aProfileImage: string;
     bName: string;
     bProfileImage: string;
+    theme: string;
   };
   const [initSocket, setInitSocket] = useState(false);
   const [socket] = useSocket('game', {
@@ -172,19 +173,20 @@ export default function Game() {
   });
 
   useEffect(() => {
-    if (gameMode != '' && theme != '' && matchId != '' && side != '')
+    if (gameMode != '' && matchId != '' && side != '') {
       setInitSocket(true);
-  }, [gameMode, theme, matchId, side]);
+      console.log('socket initialized');
+    }
+  }, [gameMode, matchId, side]);
 
   useEffect(() => {
     if (router.query.matchId) setMatchId(router.query.matchId as string);
-    if (router.query.theme) setTheme(router.query.theme as string);
     if (router.query.gameMode) setGameMode(router.query.gameMode as string);
     if (router.query.side) setSide(router.query.side as string);
-  }, [router.query]);
+  }, [router.query, router.isReady]);
 
   useEffect(() => {
-    if (!socket) return;
+    if (!initSocket) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const c = canvas.getContext('2d');
