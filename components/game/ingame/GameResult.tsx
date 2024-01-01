@@ -18,8 +18,7 @@ export default function GameResult(props: {
   const time = GAME_TIME_LIMIT - props.time; // how long the game lasted
   console.log('A won: ', winner);
   console.log('forfeit: ', forfeit);
-  console.log('A is: ', playerA);
-  console.log('B is: ', playerB);
+
   return (
     <div className='w-[600px] px-20 pt-5 pb-8 bg-slate-600 rounded-[10px] border  border-black flex flex-col gap-10'>
       <div className='flex flex-row justify-between gap-5'>
