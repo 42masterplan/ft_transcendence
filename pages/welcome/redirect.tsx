@@ -23,11 +23,6 @@ export default function Redirect() {
             sameSite: 'strict',
             secure: true
           });
-          setCookie('intraId', res.data.intraId, {
-            path: '/',
-            sameSite: 'strict',
-            secure: true
-          });
           setCookie('isTwoFactorDone', false, {
             path: '/',
             sameSite: 'strict',
@@ -50,7 +45,6 @@ export default function Redirect() {
             variant: 'destructive'
           });
           removeCookie('accessToken');
-          removeCookie('intraId');
           router.replace('/welcome');
         }
       })
