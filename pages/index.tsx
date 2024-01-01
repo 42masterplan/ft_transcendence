@@ -60,12 +60,10 @@ export default function HomePage() {
       // when user is found -> fetch user info
       fetchUserInfo({
         method: 'get',
-        url: '/users/info',
-        params: {
-          name: responseUserName
-        },
+        url: '/users/info/' + responseUserName?.name,
         errorTitle: '유저 정보 조회 실패',
-        errorDescription: '유저 정보 조회에 실패했습니다.'
+        errorDescription: '유저 정보 조회에 실패했습니다.',
+        disableSuccessToast: true
       });
     }
   }, [errorUserName, isSuccessUserName, responseUserName]);
