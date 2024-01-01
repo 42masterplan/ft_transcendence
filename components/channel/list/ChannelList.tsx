@@ -2,10 +2,12 @@ import {Button} from '@/components/shadcn/ui/button';
 import useSocket from '@/hooks/useSocket';
 import {EngagedChannelType} from '@/types/channel';
 import {cn} from '@/lib/utils';
-import {MsgHistoryType, channelStateType} from '@/types/channel';
+import {channelStateType, MsgHistoryType} from '@/types/channel';
 import React from 'react';
 import {useEffect, Dispatch, SetStateAction, useCallback} from 'react';
 import {useRouter} from 'next/router';
+import {useToast} from '@/components/shadcn/ui/use-toast';
+
 export default React.forwardRef(function ChannelList(
   {
     channelInfoState,
@@ -20,26 +22,41 @@ export default React.forwardRef(function ChannelList(
 ) {
   const [socket] = useSocket('channel');
   const router = useRouter();
+  const {toast} = useToast();
   const myChannelsListener = useCallback((data: EngagedChannelType[]) => {
     infoDispatch({
       type: 'ENGAGED_SET',
       payload: data
     });
+    console.log('마이채널 핸들러');
     if (data.length > 0) {
       //current.channelId is not in data?
-      let isExist = false;
-      data.filter((channel: EngagedChannelType) => {
-        if (channel.id == ref.current.channelId) {
-          isExist = true;
+      for (const befChannel of ref.current.engagedChannels) {
+        let isExist = false;
+        for (const channel of data) {
+          if (channel.id === befChannel.id) {
+            isExist = true;
+            break;
+          }
         }
-      });
-      if (!isExist)
-        infoDispatch({
-          type: 'CHANNEL_LEAVE'
-        });
+        if (isExist === false) {
+          toast({
+            title: '채널에서 나감',
+            description: `${befChannel.name} 채널에서 추방 또는 나왔습니다.`,
+            variant: 'destructive'
+          });
+          infoDispatch({
+            type: 'CHANNEL_LEAVE'
+          });
+          ref.current.channelId = '';
+          ref.current.engagedChannels = data;
+          break;
+        }
+      }
+      ref.current.engagedChannels = data;
     }
   }, []);
-  const channelHistoryHandler = useCallback((data: ChannelHistoryType[]) => {
+  const channelHistoryHandler = useCallback((data: MsgHistoryType[]) => {
     messageDispatch({
       type: 'MESSAGE_SET',
       payload: data
@@ -67,11 +84,14 @@ export default React.forwardRef(function ChannelList(
   }, []);
   useEffect(() => {
     socket.on('myChannels', myChannelsListener);
-    socket.emit('myChannels');
+
     return () => {
       socket.off('myChannels', myChannelsListener);
     };
-  }, [router.pathname]);
+  }, []);
+  useEffect(() => {
+    socket.emit('myChannels');
+  }, [router.pathname, socket]);
   return (
     <div className='flex flex-col min-w-[100px] h-full border overflow-y-scroll rounded-l-xl bg-custom2 w-[20vw] max-w-[300px]'>
       <div className='min-h-[50px] text-l text-center sticky top-0 z-20 bg-custom2 flex justify-center items-center'>

@@ -64,12 +64,11 @@ export default function ManageChannel({
                 variant='default'
                 className='w-20'
                 onClick={() => {
-                  // TODO : 비밀번호 변경 기능 구현
                   socket.emit(
                     'changePassword',
                     {
                       channelId: channelId,
-                      password: channelPassword
+                      password: channelPassword.replace(/\s/g, '')
                     },
                     (res: string) => {
                       if (res === 'changePassword Success!') {

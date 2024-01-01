@@ -188,7 +188,7 @@ export default function CreateChannel() {
   };
   const createChannel = () => {
     if (
-      channelName.length === 0 ||
+      channelName.trim().length === 0 ||
       channelType.length === 0 ||
       channelName.length > 16 ||
       password.length > 16
@@ -205,7 +205,7 @@ export default function CreateChannel() {
     socket.emit(
       'createChannel',
       {
-        name: channelName,
+        name: channelName.trim(),
         password: password.replace(/\s/g, ''),
         invitedFriendIds: inviteFriendList.map((friendInfo) => {
           if (friendInfo.checked) return friendInfo.id;

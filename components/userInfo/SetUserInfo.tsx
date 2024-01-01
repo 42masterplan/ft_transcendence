@@ -29,6 +29,7 @@ export default function SetUserInfo({
   const [profileImage, setProfileImage] = useState(
     process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI1 || ''
   );
+
   const [cookie, setCookie, removeCookie] = useCookies();
   const router = useRouter();
   useEffect(() => {
@@ -45,6 +46,8 @@ export default function SetUserInfo({
           secure: true
         });
         router.push('/welcome/setEmail');
+      } else {
+        location.reload();
       }
     }
   }, [isSuccess]);

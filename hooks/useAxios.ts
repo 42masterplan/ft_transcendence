@@ -84,7 +84,7 @@ const useAxios = () => {
           variant: 'destructive'
         });
 
-        if (err.response.status === 401) {
+        if (err?.response?.status === 401) {
           removeCookie('accessToken');
           removeCookie('isTwoFactorDone');
           removeCookie('hasAccount');

@@ -36,9 +36,11 @@ export default function PublicRoomList() {
   useEffect(() => {
     socket.on('getPublicChannels', (rooms) => {
       if (typeof rooms === 'undefined') rooms = [];
-      console.log(rooms);
       setPublicRooms(rooms);
     });
+		return () => {
+			socket.off('getPublicChannels');
+		}
   }, []);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
