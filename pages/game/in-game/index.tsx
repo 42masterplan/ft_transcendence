@@ -18,7 +18,7 @@ import {handleKeyDowns, handleKeyUps} from '@/lib/game/util';
 import ScoreBoard from '@/components/game/ingame/ScoreBoard';
 import GameStatus from '@/components/game/ingame/GameStatus';
 import GameResult from '@/components/game/ingame/GameResult';
-import {io, Socket} from 'socket.io-client';
+import {Socket} from 'socket.io-client';
 import {useRouter} from 'next/router';
 import useSocket from '@/hooks/useSocket';
 
@@ -103,7 +103,7 @@ function listenToSocketEvents(
   });
   socket.on('gameOver', (state) => {
     if (state.matchId != matchId) return;
-    if (state.forfeit) setForfeit(true);
+    if (state.isForfeit) setForfeit(true);
     setGameOver(true);
     cancelAnimationFrame(animationId);
     socket.off('connect');
@@ -157,28 +157,35 @@ export default function Game() {
   const [forfeit, setForfeit] = useState(false);
   const [deuce, setDeuce] = useState(false);
   const [matchId, setMatchId] = useState('');
-  const [theme, setTheme] = useState('');
   const [gameMode, setGameMode] = useState('');
+  const [theme, setTheme] = useState('');
+  const [side, setSide] = useState('');
   const router = useRouter();
-  const initSocket = matchId != '' && theme != '' && gameMode != '';
+  const {aName, aProfileImage, bName, bProfileImage} = router.query as {
+    aName: string;
+    aProfileImage: string;
+    bName: string;
+    bProfileImage: string;
+  };
+  const [initSocket, setInitSocket] = useState(false);
   const [socket] = useSocket('game', {
     autoConnect: initSocket
   });
 
   useEffect(() => {
-    if (router.query.id) {
-      setMatchId(router.query.id as string);
-    }
-    if (router.query.theme) {
-      setTheme(router.query.theme as string);
-    }
-    if (router.query.gameMode) {
-      setGameMode(router.query.gameMode as string);
-    }
+    if (gameMode != '' && theme != '' && matchId != '' && side != '')
+      setInitSocket(true);
+  }, [gameMode, theme, matchId, side]);
+
+  useEffect(() => {
+    if (router.query.matchId) setMatchId(router.query.matchId as string);
+    if (router.query.theme) setTheme(router.query.theme as string);
+    if (router.query.gameMode) setGameMode(router.query.gameMode as string);
+    if (router.query.side) setSide(router.query.side as string);
   }, [router]);
 
   useEffect(() => {
-    if (!initSocket) return;
+    if (!socket) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const c = canvas.getContext('2d');
@@ -197,7 +204,11 @@ export default function Game() {
     const backgroundImage = new Image();
     if (theme && theme != 'Default')
       backgroundImage.src = `/gameThemes/${theme}.png`;
-    socket.emit('joinRoom', {matchId: matchId, gameMode: gameMode});
+    socket.emit('joinRoom', {
+      matchId: matchId,
+      gameMode: gameMode,
+      side: side
+    });
     socket.on('joinedRoom', () => {
       listenToSocketEvents(
         socket,
@@ -272,6 +283,8 @@ export default function Game() {
               setGameOver={setGameOver}
               time={time}
               deuce={deuce}
+              playerA={{name: aName, profileImage: aProfileImage}}
+              playerB={{name: bName, profileImage: bProfileImage}}
             />
           </div>
           <ScoreBoard AScore={score.playerA} BScore={score.playerB} />

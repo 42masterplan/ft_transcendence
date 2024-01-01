@@ -1,15 +1,15 @@
 import PlayerPortrait from '@/components/game/PlayerPortrait';
-import {PLAYER_DUMMY_1} from '@/DummyBackend/APIData';
-import {PLAYER_DUMMY_2} from '@/DummyBackend/APIData';
+import {Player} from '@/DummyBackend/APIData';
 
 export default function GameStatus(props: {
   gameover: boolean;
   setGameOver: (gameOver: boolean) => void;
   time: number;
   deuce: boolean;
+  playerA: Player;
+  playerB: Player;
 }) {
-  const time = props.time;
-  const deuce = props.deuce;
+  const {gameover, setGameOver, time, deuce, playerA, playerB} = props;
   return (
     <div className='flex flex-col items-center'>
       {deuce ? (
@@ -20,11 +20,11 @@ export default function GameStatus(props: {
         </div>
       ) : null}
       <div className='w-[220px] h-[400px] py-9 bg-slate-600  rounded-[10px] border border-black flex-col justify-center items-center gap-5 inline-flex'>
-        <PlayerPortrait {...PLAYER_DUMMY_1} />
+        <PlayerPortrait {...playerA} />
         <span className='text-center text-white text-[40px] font-bold font-[Roboto Mono]'>
           {time >= 60 ? Math.floor(time / 60) + ':' + (time % 60) : '0:' + time}
         </span>
-        <PlayerPortrait {...PLAYER_DUMMY_2} />
+        <PlayerPortrait {...playerB} />
       </div>
     </div>
   );

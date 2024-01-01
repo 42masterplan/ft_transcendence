@@ -43,6 +43,17 @@ import {gameRequest, friendRequest} from '@/DummyBackend/notificationAPI';
 import useAxios from '@/hooks/useAxios';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 
+interface gameStartState {
+  matchId: string;
+  aName: string;
+  aProfileImage: string;
+  bName: string;
+  bProfileImage: string;
+  side: string;
+  gameMode: string;
+  theme: string;
+}
+
 export default function NotificationBtn() {
   const router = useRouter();
   const [socket, disconnect] = useSocket('alarm', {autoConnect: false});
@@ -79,10 +90,44 @@ export default function NotificationBtn() {
       disconnect();
       router.push('/welcome/double-tab');
     });
+    socket.on('gameCancel', (matchId: string) => {
+      setMatchRequests((prev) =>
+        prev.filter((match) => match.matchId != matchId)
+      );
+      setNotificationCount((prev) => prev - 1);
+    });
+    socket.on(
+      'gameStart',
+      ({
+        matchId,
+        aName,
+        aProfileImage,
+        bName,
+        bProfileImage,
+        side,
+        gameMode,
+        theme
+      }: gameStartState) => {
+        router.push({
+          pathname: 'game/pre-game',
+          query: {
+            matchId,
+            aName,
+            aProfileImage,
+            bName,
+            bProfileImage,
+            side,
+            gameMode,
+            theme
+          }
+        });
+      }
+    );
     return () => {
       socket.off('gameRequest');
       socket.off('gameStart');
       socket.off('error');
+      socket.off('gameCancel');
     };
   }, []);
   useEffect(() => {
