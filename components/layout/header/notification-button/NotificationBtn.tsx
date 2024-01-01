@@ -41,16 +41,18 @@ import {useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
 import {gameRequest, friendRequest} from '@/DummyBackend/notificationAPI';
 import useAxios from '@/hooks/useAxios';
+import {useToast} from '@/components/shadcn/ui/use-toast';
 
 export default function NotificationBtn() {
   const router = useRouter();
-  const [socket] = useSocket('alarm');
+  const [socket, disconnect] = useSocket('alarm', {autoConnect: false});
   const [matchRequests, setMatchRequests] = useState<gameRequest[]>([]);
   const [friendRequests, setFriendRequests] = useState<friendRequest[]>([]);
   const [notificationCount, setNotificationCount] = useState(
     matchRequests.length + friendRequests.length
   );
   const {fetchData, response, isSuccess} = useAxios();
+  const {toast} = useToast();
   useEffect(() => {
     fetchData({
       method: 'get',
@@ -67,9 +69,20 @@ export default function NotificationBtn() {
         query: {id: matchId, theme: theme, gameMode: gameMode}
       });
     });
+    socket.on('error', (error) => {
+      console.log(error);
+      toast({
+        title: 'Error',
+        description: error,
+        variant: 'destructive'
+      });
+      disconnect();
+      router.push('/welcome/double-tab');
+    });
     return () => {
       socket.off('gameRequest');
       socket.off('gameStart');
+      socket.off('error');
     };
   }, []);
   useEffect(() => {
