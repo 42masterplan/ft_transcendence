@@ -11,6 +11,8 @@ import {useEffect, useState} from 'react';
 import SpinningLoader from '@/components/loader/SpinningLoader2';
 import GradualIncreaser from '@/components/loader/GradualIncreaser';
 
+import style from './GameStatsSection.module.css';
+
 import {rank} from './forDataFetching/interfaces';
 
 interface GameStatsCardProps {
@@ -114,7 +116,9 @@ export default function GameStatsSection({
     }
     return (
       <div className='flex flex-col w-fit justify-center items-center px-20'>
-        <Trophy className={`w-32 h-32 sm:w-40 sm:h-40 ${tierStringColor}`} />
+        <div className={style.myAnimation}>
+          <Trophy className={`w-32 h-32 sm:w-40 sm:h-40 ${tierStringColor}`} />
+        </div>
         <p
           className={`${tierStringColor}  font-sans text-3xl font-extrabold`}
         >{`${rank.tier}`}</p>

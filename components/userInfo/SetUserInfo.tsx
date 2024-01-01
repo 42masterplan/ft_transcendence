@@ -7,7 +7,14 @@ import {useRouter} from 'next/router';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 import {useCookies} from 'react-cookie';
 import useAxios from '@/hooks/useAxios';
-
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '@/components/shadcn/ui/card';
 interface SetUserInfoProps {
   mode?: 'register' | 'change';
   userInfo?: {
@@ -67,52 +74,65 @@ export default function SetUserInfo({
     });
   };
 
+  const titleFontStyle = 'font-roboto-mono font-semibold text-custom4 text-3xl';
+  const subtitleFontStyle =
+    'font-roboto-mono font-semibold text-custom4 text-xl';
+
+  const hoverEffect =
+    'm-2 hover:scale-[1.02] duration-200 hover:-translate-y-1';
+
   return (
-    <div className='flex flex-col items-center justify-center h-screen'>
-      <div className='max-w-100 rounded-lg overflow-y-auto p-6 bg-custom2/70 gap-3'>
-        <h1 className='font-roboto-mono text-4xl font-semibold leading-10 tracking-normal text-custom4 m-3'>
-          회원 정보 설정
-        </h1>
+    <Card className='flex flex-col justify-center items-center p-2 bg-custom2 border-none'>
+      <CardHeader>
+        <CardTitle className={titleFontStyle}>회원 정보 설정</CardTitle>
+      </CardHeader>
+      <CardContent className='flex flex-col justify-center items-center'>
         <SetUserName
           nickname={nickname}
           setNickname={setNickname}
           isValidName={isValidName}
           setIsValidName={setIsValidName}
+          titleFontStyle={subtitleFontStyle}
+          hoverEffect={hoverEffect}
         />
-        <SetAvatar setProfileImage={setProfileImage} />
-        <label
-          htmlFor='statusMsg'
-          className='font-roboto-mono text-1xl font-semibold leading-10 tracking-normal text-custom4'
-        >
-          상태 메시지
-        </label>
-        <Input
-          id='statusMsg'
-          value={statusMsg}
-          onChange={(e) => {
-            if (e.target.value.length > 20) {
-              toast({
-                title: '상태 메시지는 최대 20자까지 입력 가능합니다.',
-                variant: 'destructive'
-              });
-              return;
-            }
-            setStatusMsg(e.target.value);
-          }}
-          placeholder='여러분을 표현해봐요'
+        <SetAvatar
+          setProfileImage={setProfileImage}
+          titleFontStyle={subtitleFontStyle}
+          hoverEffect={hoverEffect}
         />
-        <p className='text-custom4 text-xs p-3'>
-          상태 메시지는 최대 20자까지 입력 가능합니다.
-        </p>
-
+        <div className={`flex flex-col w-full ${hoverEffect}`}>
+          <label htmlFor='statusMsg' className={`${subtitleFontStyle} py-2`}>
+            상태 메시지
+          </label>
+          <Input
+            id='statusMsg'
+            value={statusMsg}
+            onChange={(e) => {
+              if (e.target.value.length > 20) {
+                toast({
+                  title: '상태 메시지는 최대 20자까지 입력 가능합니다.',
+                  variant: 'destructive'
+                });
+                return;
+              }
+              setStatusMsg(e.target.value);
+            }}
+            placeholder='여러분을 표현해봐요'
+          />
+          <p className='text-custom4 text-xs py-2'>
+            상태 메시지는 최대 20자까지 입력 가능합니다.
+          </p>
+        </div>
+      </CardContent>
+      <CardFooter>
         <Button
-          className='self-center w-full mt-4 '
+          className={`w-full ${hoverEffect}`}
           disabled={isValidName !== true}
           onClick={handleSubmit}
         >
           {mode == 'change' ? '변경하기' : '회원가입(계속)'}
         </Button>
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   );
 }

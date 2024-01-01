@@ -4,7 +4,17 @@ import {RadioGroup, RadioGroupItem} from '@/components/shadcn/ui/radio-group';
 import {useEffect, useState, useRef} from 'react';
 import useAxios from '@/hooks/useAxios';
 
-export default function SetAvatar({setProfileImage}: {setProfileImage: any}) {
+interface SetAvatarProps {
+  setProfileImage: any;
+  titleFontStyle: string;
+  hoverEffect: string;
+}
+
+export default function SetAvatar({
+  setProfileImage,
+  titleFontStyle,
+  hoverEffect
+}: SetAvatarProps) {
   const [selected, setSelected] = useState(0);
   const [customAvatar, setCustomAvatar] = useState('');
   const {fetchData, response, isSuccess} = useAxios();
@@ -117,11 +127,9 @@ export default function SetAvatar({setProfileImage}: {setProfileImage: any}) {
     }
   };
   return (
-    <>
-      <h1 className='font-roboto-mono text-1xl font-semibold leading-10 tracking-normal text-custom4'>
-        아바타 선택
-      </h1>
-      <div className='flex place-content-center'>
+    <div className={`w-full ${hoverEffect}`}>
+      <h1 className={titleFontStyle}>아바타 선택</h1>
+      <div className='flex place-content-center py-2'>
         <label htmlFor='profile-upload' />
         <form>
           <input
@@ -134,10 +142,10 @@ export default function SetAvatar({setProfileImage}: {setProfileImage: any}) {
             onChange={handleFileUpload}
           />
         </form>
-        <RadioGroup defaultValue='0' className='grid gap-4'>
+        <RadioGroup defaultValue='0' className='w-full grid gap-4'>
           {renderAvatarContainer()}
         </RadioGroup>
       </div>
-    </>
+    </div>
   );
 }
