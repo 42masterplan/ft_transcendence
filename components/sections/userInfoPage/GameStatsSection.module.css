@@ -1,0 +1,9 @@
+@keyframes bingle {
+  50% {
+    transform: rotate(3600deg);
+  }
+}
+
+.myAnimation:hover {
+  animation: bingle 10s;
+}
