@@ -18,12 +18,16 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
   const [searchTerm, setSearchTerm] = useState('');
   const {toast} = useToast();
 
-  const participantsHandler: (res: userListType[]) => void = useCallback(
-    (res: userListType[]) => {
+  const participantsHandler: (res: {
+    participants: userListType[];
+    channelId: string;
+  }) => void = useCallback(
+    (res: {participants: userListType[]; channelId: string}) => {
       //I want to filter me out of the list
-      setParticipants(res);
+      if (res.channelId !== channelId) return;
+      setParticipants(res?.participants);
     },
-    []
+    [channelId]
   );
 
   useEffect(() => {
