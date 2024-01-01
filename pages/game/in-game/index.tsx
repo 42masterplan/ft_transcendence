@@ -272,8 +272,14 @@ export default function Game() {
     <div className='relative min-h-screen flex justify-center items-center'>
       {gameover ? (
         <GameResult
-          playerA={{name: aName, profileImage: aProfileImage}}
-          playerB={{name: bName, profileImage: bProfileImage}}
+          playerA={{
+            name: forfeit ? bName : aName,
+            profileImage: forfeit ? bProfileImage : aProfileImage
+          }}
+          playerB={{
+            name: forfeit ? aName : bName,
+            profileImage: forfeit ? aProfileImage : bProfileImage
+          }}
           score={score}
           time={time}
           winner={score.playerA === SCORE_LIMIT ? true : false}
