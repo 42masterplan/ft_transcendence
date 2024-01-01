@@ -9,16 +9,18 @@ export default function InputValidCode({
   fetchData: any;
   disabled: boolean;
 }) {
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState<string>('');
   return (
     <div className='flex w-full max-w-sm gap-2'>
       <Input
         type='number'
         id='text'
-        placeholder='인증 코드를 입력해주세요'
+        placeholder='인증코드를 입력해주세요'
         value={code}
         disabled={disabled}
         onChange={(e) => {
+          if (parseInt(e.target.value) < 0 || parseInt(e.target.value) > 999999)
+            return;
           setCode(e.target.value);
         }}
       />
@@ -32,13 +34,15 @@ export default function InputValidCode({
             method: 'post',
             url: '/users/two-factor-auth/email/validate',
             body: {code: parseInt(code, 10)},
-            errorDescription: '인증 코드가 올바르지 않습니다.',
+            errorDescription:
+              '인증 코드가 올바르지 않습니다. 이메일을 다시 설정하거나 인증코드를 다시 확인해주세요.',
             errorTitle: '인증 실패',
             disableSuccessToast: true
           });
         }}
+        className='flex flex-col items-center justify-center w-1/3 h-10'
       >
-        check
+        확인
       </Button>
     </div>
   );
