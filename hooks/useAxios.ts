@@ -57,10 +57,8 @@ const useAxios = () => {
         setResponse(res.data);
         setSuccess(true);
 
-        // Log the response data (for debugging purposes)
-        // console.log('Response Data:', res.data);
-        if (res.data.message)
-          successDescription = res.data.message + successDescription;
+        if (res?.data?.message)
+          successDescription = res?.data?.message + successDescription;
         if (disableSuccessToast) return;
         toast({
           title: successTitle || 'Success',
@@ -69,18 +67,17 @@ const useAxios = () => {
         });
       } catch (err: any) {
         setError(err);
-
         // Log the error stack trace (for debugging purposes)
         console.log('Error Stack Trace:', err);
 
-        let error_description = err.response
+        let error_description = err?.response
           ? err.response.data.message
           : 'An error occurred ';
         setSuccess(false);
         if (disableErrorToast) return;
         toast({
           title: errorTitle || 'Error',
-          description: error_description + errorDescription,
+          description: error_description + ' ' + errorDescription,
           variant: 'destructive'
         });
 
@@ -88,7 +85,6 @@ const useAxios = () => {
           removeCookie('accessToken');
           removeCookie('isTwoFactorDone');
           removeCookie('hasAccount');
-          removeCookie('intraId');
           router.push('/welcome');
         }
       } finally {
