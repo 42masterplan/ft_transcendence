@@ -13,16 +13,14 @@ import {
 import Player from '@/lib/classes/Player';
 import Ball from '@/lib/classes/Ball';
 import Particle from '@/lib/classes/Particle';
-import {use, useEffect, useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {handleKeyDowns, handleKeyUps} from '@/lib/game/util';
 import ScoreBoard from '@/components/game/ingame/ScoreBoard';
 import GameStatus from '@/components/game/ingame/GameStatus';
 import GameResult from '@/components/game/ingame/GameResult';
-import {io, Socket} from 'socket.io-client';
+import {Socket} from 'socket.io-client';
 import {useRouter} from 'next/router';
 import useSocket from '@/hooks/useSocket';
-import {init} from 'next/dist/compiled/webpack/webpack';
-import {set} from 'react-hook-form';
 
 function prepGame(
   canvas: HTMLCanvasElement,
@@ -105,7 +103,7 @@ function listenToSocketEvents(
   });
   socket.on('gameOver', (state) => {
     if (state.matchId != matchId) return;
-    if (state.forfeit) setForfeit(true);
+    if (state.isForfeit) setForfeit(true);
     setGameOver(true);
     cancelAnimationFrame(animationId);
     socket.off('connect');
@@ -206,11 +204,6 @@ export default function Game() {
     const backgroundImage = new Image();
     if (theme && theme != 'Default')
       backgroundImage.src = `/gameThemes/${theme}.png`;
-    console.log('joinRoom state: ', {
-      matchId: matchId,
-      gameMode: gameMode,
-      side: side
-    });
     socket.emit('joinRoom', {
       matchId: matchId,
       gameMode: gameMode,
