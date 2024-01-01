@@ -13,7 +13,7 @@ import {
 import Player from '@/lib/classes/Player';
 import Ball from '@/lib/classes/Ball';
 import Particle from '@/lib/classes/Particle';
-import {useEffect, useRef, useState} from 'react';
+import {use, useEffect, useRef, useState} from 'react';
 import {handleKeyDowns, handleKeyUps} from '@/lib/game/util';
 import ScoreBoard from '@/components/game/ingame/ScoreBoard';
 import GameStatus from '@/components/game/ingame/GameStatus';
@@ -21,6 +21,7 @@ import GameResult from '@/components/game/ingame/GameResult';
 import {io, Socket} from 'socket.io-client';
 import {useRouter} from 'next/router';
 import useSocket from '@/hooks/useSocket';
+import {init} from 'next/dist/compiled/webpack/webpack';
 
 function prepGame(
   canvas: HTMLCanvasElement,
@@ -156,43 +157,35 @@ export default function Game() {
   const [gameover, setGameOver] = useState(false);
   const [forfeit, setForfeit] = useState(false);
   const [deuce, setDeuce] = useState(false);
-  const [matchId, setMatchId] = useState('');
-  const [theme, setTheme] = useState('');
-  const [gameMode, setGameMode] = useState('');
-  const [aName, setAName] = useState('');
-  const [aProfileImage, setAProfileImage] = useState('');
-  const [bName, setBName] = useState('');
-  const [bProfileImage, setBProfileImage] = useState('');
-  const [side, setSide] = useState('' as string);
+  const matchIdRef = useRef<string | string[] | undefined>('');
+  const gameModeRef = useRef<string | string[] | undefined>('');
+  const themeRef = useRef<string | string[] | undefined>('');
+  const sideRef = useRef<string | string[] | undefined>('');
   const router = useRouter();
+  const {aName, aProfileImage, bName, bProfileImage} = router.query as {
+    aName: string;
+    aProfileImage: string;
+    bName: string;
+    bProfileImage: string;
+  };
   const initSocket =
-    matchId != '' &&
-    theme != '' &&
-    gameMode != '' &&
-    aName != '' &&
-    aProfileImage != '' &&
-    bName != '' &&
-    bProfileImage != '' &&
-    side != '';
+    gameModeRef.current != '' &&
+    themeRef.current != '' &&
+    matchIdRef.current != '';
   const [socket] = useSocket('game', {
     autoConnect: initSocket
   });
 
   useEffect(() => {
-    if (router.query.id) setMatchId(router.query.id as string);
-    if (router.query.theme) setTheme(router.query.theme as string);
-    if (router.query.gameMode) setGameMode(router.query.gameMode as string);
-    if (router.query.aName) setAName(router.query.aName as string);
-    if (router.query.aProfileImage)
-      setAProfileImage(router.query.aProfileImage as string);
-    if (router.query.bName) setBName(router.query.bName as string);
-    if (router.query.bProfileImage)
-      setBProfileImage(router.query.bProfileImage as string);
-    if (router.query.side) setSide(router.query.side as string);
+    if (router.query.id) matchIdRef.current = router.query.id as string;
+    if (router.query.theme) themeRef.current = router.query.theme as string;
+    if (router.query.gameMode)
+      gameModeRef.current = router.query.gameMode as string;
+    if (router.query.side) sideRef.current = router.query.side as string;
   }, [router]);
 
   useEffect(() => {
-    if (!initSocket) return;
+    if (!socket) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const c = canvas.getContext('2d');
@@ -209,13 +202,17 @@ export default function Game() {
       c
     );
     const backgroundImage = new Image();
-    if (theme && theme != 'Default')
-      backgroundImage.src = `/gameThemes/${theme}.png`;
-    socket.emit('joinRoom', {matchId: matchId, gameMode: gameMode, side: side});
+    if (themeRef.current && themeRef.current != 'Default')
+      backgroundImage.src = `/gameThemes/${themeRef.current}.png`;
+    socket.emit('joinRoom', {
+      matchId: matchIdRef.current,
+      gameMode: gameModeRef.current,
+      side: sideRef.current
+    });
     socket.on('joinedRoom', () => {
       listenToSocketEvents(
         socket,
-        matchId,
+        matchIdRef.current,
         playerA,
         playerB,
         ball,
@@ -233,7 +230,7 @@ export default function Game() {
     }, RENDERING_RATE);
     addEventListeners(keysPressed);
     const gameLoop = () => {
-      if (theme && theme != 'Default') {
+      if (themeRef.current && themeRef.current != 'Default') {
         if (backgroundImage.complete) {
           c.drawImage(backgroundImage, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
           c.fillStyle = BACKGROUND_SHADOW_COLOR;
