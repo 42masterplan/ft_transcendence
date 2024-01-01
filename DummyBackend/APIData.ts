@@ -35,13 +35,13 @@ export interface Player {
 
 export const PLAYER_DUMMY_1 = {
   id: 0,
-  name: 'daejlee',
+  name: 'ERROR!!!',
   profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI4 || ''
 };
 
 export const PLAYER_DUMMY_2 = {
   id: 0,
-  name: 'joushin',
+  name: 'ERROR!!!',
   profileImage: process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI5 || ''
 };
 

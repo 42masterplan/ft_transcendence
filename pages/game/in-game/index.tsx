@@ -182,7 +182,7 @@ export default function Game() {
     if (router.query.theme) setTheme(router.query.theme as string);
     if (router.query.gameMode) setGameMode(router.query.gameMode as string);
     if (router.query.side) setSide(router.query.side as string);
-  }, [router]);
+  }, [router.query]);
 
   useEffect(() => {
     if (!socket) return;

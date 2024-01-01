@@ -46,9 +46,9 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
     socket.emit(
       'gameRequest',
       {
-        userId,
+        userId: userId,
         gameMode: 'normal',
-        theme
+        theme: theme
       },
       (state: any) => {
         if (state.msg === 'gameRequestSuccess!') {

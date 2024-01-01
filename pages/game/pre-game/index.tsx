@@ -1,23 +1,19 @@
 import PlayerPortrait from '../../../components/game/PlayerPortrait';
 import Divider from '../../../components/game/ingame/Divider';
-import {PLAYER_DUMMY_1} from '@/DummyBackend/APIData';
-import {PLAYER_DUMMY_2} from '@/DummyBackend/APIData';
 import {useRouter} from 'next/router';
 import {useEffect, useState} from 'react';
 import {PRE_GAME_TIME} from '@/lib/game/macros';
 
 export default function PreGame() {
   const router = useRouter();
-  const {
-    matchId,
-    aName,
-    aProfileImage,
-    bName,
-    bProfileImage,
-    side,
-    gameMode,
-    theme
-  } = router.query;
+  const matchId = router.query.matchId;
+  const aName = router.query.aName;
+  const aProfileImage = router.query.aProfileImage;
+  const bName = router.query.bName;
+  const bProfileImage = router.query.bProfileImage;
+  const side = router.query.side;
+  const gameMode = router.query.gameMode;
+  const theme = router.query.theme;
   const [backgroundImage, setBackgroundImage] = useState(''); // 상태로 배경 이미지 URL을 관리
   const [time, setTime] = useState(PRE_GAME_TIME);
 
@@ -26,7 +22,7 @@ export default function PreGame() {
       setTime((prevTime) => {
         if (prevTime === 1) {
           clearInterval(timer); // 타이머를 여기서 정지
-          router.replace({
+          router.push({
             pathname: '/game/in-game',
             query: {
               matchId,
@@ -44,6 +40,7 @@ export default function PreGame() {
         return prevTime - 1; // 시간을 감소시킴
       });
     }, 1000);
+
     if (theme && theme !== 'Default') {
       const imageSrc = `/gameThemes/${theme}.png`;
       const img = new Image();
@@ -52,8 +49,10 @@ export default function PreGame() {
       };
       img.src = imageSrc;
     }
+
     return () => clearInterval(timer);
   }, []);
+
   const style =
     backgroundImage != ''
       ? {
@@ -69,24 +68,9 @@ export default function PreGame() {
         className='w-[400px] h-[600px] py-[50px] bg-slate-800 rounded-[10px] shadow border border-black flex flex-col justify-between items-center'
         style={style}
       >
-        {aName &&
-        aProfileImage &&
-        bName &&
-        bProfileImage &&
-        side &&
-        gameMode ? (
-          <>
-            <PlayerPortrait name={aName} profileImage={aProfileImage} />
-            <Divider />
-            <PlayerPortrait name={bName} profileImage={bProfileImage} />
-          </>
-        ) : (
-          <>
-            <PlayerPortrait {...PLAYER_DUMMY_1} />
-            <Divider />
-            <PlayerPortrait {...PLAYER_DUMMY_2} />
-          </>
-        )}
+        <PlayerPortrait name={aName} profileImage={aProfileImage} />
+        <Divider />
+        <PlayerPortrait name={bName} profileImage={bProfileImage} />
       </div>
     </div>
   );
