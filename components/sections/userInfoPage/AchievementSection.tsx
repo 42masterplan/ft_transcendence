@@ -49,10 +49,7 @@ export default function AchievementSection({
     }
     fetchData({
       method: 'get',
-      url: '/users/challenges',
-      params: {
-        name: userName
-      },
+      url: '/users/challenges/' + userName,
       errorTitle: '유저 정보 조회 실패',
       errorDescription: '유저 정보 조회에 실패했습니다.'
     });
