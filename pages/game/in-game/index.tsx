@@ -102,12 +102,11 @@ function listenToSocketEvents(
     setScore(backendScore);
   });
   socket.on('gameOver', (state) => {
+    console.log('game over');
     if (state.matchId != matchId) return;
     if (state.isForfeit) setForfeit(true);
     setGameOver(true);
     cancelAnimationFrame(animationId);
-    socket.off('connect');
-    socket.off('disconnect');
     socket.disconnect();
   });
   socket.on('updateTime', (state) => {
@@ -253,25 +252,29 @@ export default function Game() {
     gameLoop();
     return () => {
       console.log('game unmounted');
-      // socket.off('updatePlayers');
-      // socket.off('updateBall');
-      // socket.off('updateScore');
-      // socket.off('gameOver');
-      // socket.off('updateTime');
-      // socket.off('deuce');
-      // socket.off('connect');
-      // socket.off('disconnect');
+      socket.off('updatePlayers');
+      socket.off('updateBall');
+      socket.off('updateScore');
+      socket.off('gameOver');
+      socket.off('updateTime');
+      socket.off('deuce');
+      socket.off('joinedRoom');
+      socket.off('gameFull');
+      socket.off('connect');
+      socket.off('disconnect');
       cancelAnimationFrame(animationId);
     };
-  }, [socket, initSocket]);
+  }, [initSocket]);
 
   return (
     <div className='relative min-h-screen flex justify-center items-center'>
       {gameover ? (
         <GameResult
+          playerA={{name: aName, profileImage: aProfileImage}}
+          playerB={{name: bName, profileImage: bProfileImage}}
           score={score}
           time={time}
-          winner={score.playerA == SCORE_LIMIT ? true : false}
+          winner={score.playerA === SCORE_LIMIT ? true : false}
           forfeit={forfeit}
         />
       ) : (

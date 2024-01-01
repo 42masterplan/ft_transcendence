@@ -14,7 +14,6 @@ export function handleKeyDowns(
       player.x -= PADDLE_OFFSET;
       player.dx = PADDLE_OFFSET;
       socket.emit('keyDown', 'a');
-      console.log('keyDown: a');
     }
   }
   if (keysPressed['d'] || keysPressed['D']) {
@@ -22,7 +21,6 @@ export function handleKeyDowns(
       player.x += PADDLE_OFFSET;
       player.dx = PADDLE_OFFSET;
       socket.emit('keyDown', 'd');
-      console.log('keyDown: d');
     }
   }
   if (keysPressed['w'] || keysPressed['W']) {
@@ -30,7 +28,6 @@ export function handleKeyDowns(
     else if (!isA && player.y > (SCREEN_HEIGHT / 3) * 2 - player.height)
       player.y -= PADDLE_OFFSET / 2;
     socket.emit('keyDown', 'w');
-    console.log('keyDown: w');
   }
   if (keysPressed['s'] || keysPressed['S']) {
     if (isA && player.y < SCREEN_HEIGHT / 3 - player.height) {
@@ -39,7 +36,6 @@ export function handleKeyDowns(
       player.y += PADDLE_OFFSET / 2;
     }
     socket.emit('keyDown', 's');
-    console.log('keyDown: s');
   }
 }
 
