@@ -25,8 +25,8 @@ import AvatarWithStatus from '../card/userInfoCard/AvatarWithStatus';
 import useAxios from '@/hooks/useAxios';
 import useSocketAction from '@/hooks/useSocketAction';
 import useSocket from '@/hooks/useSocket';
-import {useState} from 'react';
 import NormalMatchMakingDialog from '../game/matchmaking/NormalMatchMakingDialog';
+import {useEffect, useState} from 'react';
 
 const UserDropdownGroup = ({
   userId,
@@ -40,7 +40,19 @@ const UserDropdownGroup = ({
   const router = useRouter();
   const {toast} = useToast();
   const {fetchData} = useAxios();
-
+  const {fetchData: isFriend, response, isSuccess} = useAxios();
+  useEffect(() => {
+    if (isSuccess) {
+      if (response?.isFriends) {
+        router.push(`/dm/${userName}`);
+      } else {
+        toast({
+          title: 'DM 실패',
+          description: '친구가 아닌 상대와 채팅 할 수 없습니다.'
+        });
+      }
+    }
+  }, [isSuccess]);
   return (
     <DropdownMenuGroup className=''>
       <DropdownMenuItem>
@@ -82,9 +94,14 @@ const UserDropdownGroup = ({
         <PiPaperPlaneTiltBold className='mr-2 h-4 w-4' />
         <span
           onClick={() => {
-            toast({
-              title: 'DM 보내기',
-              description: '준비중인 기능입니다. 다른 기능을 이용해주세요.'
+            isFriend({
+              url: '/users/friends/isFriend',
+              method: 'get',
+              params: {
+                name: userName
+              },
+              disableSuccessToast: true,
+              disableErrorToast: true
             });
           }}
         >
@@ -128,7 +145,7 @@ export default function DropdownAvatarBtn({
     '유저 추방',
     '님을 추방했습니다.',
     '유저 추방 실패',
-    '님을 추방에 실패했습니다. 일반 유저만 추방할 수 있습니다.'
+    '님을 추방에 실패했습니다. 이미 나간 유저이거나 관리자는 관리자인 유저를 추방할 수 없습니다.'
   );
   const muteAction = useSocketAction(
     'muteUser',
