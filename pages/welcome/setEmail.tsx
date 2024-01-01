@@ -61,7 +61,7 @@ export default function SetEmail() {
             className='font-roboto-mono text-4xl
             font-semibold leading-10 tracking-normal text-center m-3 '
           >
-            2단계 인증
+            2단계 인증 이메일 설정
           </h1>
           <Image
             src='/space_dog.png'
