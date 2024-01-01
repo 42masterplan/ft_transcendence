@@ -18,9 +18,9 @@ import {handleKeyDowns, handleKeyUps} from '@/lib/game/util';
 import ScoreBoard from '@/components/game/ingame/ScoreBoard';
 import GameStatus from '@/components/game/ingame/GameStatus';
 import GameResult from '@/components/game/ingame/GameResult';
-import {Socket} from 'socket.io-client';
+import {io, Socket} from 'socket.io-client';
 import {useRouter} from 'next/router';
-import useSocket from '@/hooks/useSocket';
+import getAuthorization from '@/lib/utils/cookieUtils';
 
 function prepGame(
   canvas: HTMLCanvasElement,
@@ -110,7 +110,6 @@ function listenToSocketEvents(
     socket.disconnect();
   });
   socket.on('updateTime', (state) => {
-    console.log('update time');
     if (state.matchId != matchId) return;
     const backendTime = state.time;
     setTime(backendTime);
@@ -168,15 +167,9 @@ export default function Game() {
     theme: string;
   };
   const [initSocket, setInitSocket] = useState(false);
-  const [socket] = useSocket('game', {
-    autoConnect: initSocket
-  });
 
   useEffect(() => {
-    if (gameMode != '' && matchId != '' && side != '') {
-      setInitSocket(true);
-      console.log('socket initialized');
-    }
+    if (gameMode != '' && matchId != '' && side != '') setInitSocket(true);
   }, [gameMode, matchId, side]);
 
   useEffect(() => {
@@ -187,6 +180,12 @@ export default function Game() {
 
   useEffect(() => {
     if (!initSocket) return;
+    const socket = io('http://localhost:8080/game' as string, {
+      transports: ['websocket'],
+      auth: {
+        Authorization: `Bearer ${getAuthorization()}`
+      }
+    });
     const canvas = canvasRef.current;
     if (!canvas) return;
     const c = canvas.getContext('2d');
@@ -264,6 +263,7 @@ export default function Game() {
       socket.off('gameFull');
       socket.off('connect');
       socket.off('disconnect');
+      socket.disconnect();
       cancelAnimationFrame(animationId);
     };
   }, [initSocket]);
