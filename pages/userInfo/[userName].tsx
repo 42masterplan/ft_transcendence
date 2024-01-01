@@ -39,10 +39,7 @@ export default function UserPage() {
     }
     fetchData({
       method: 'get',
-      url: '/users/info',
-      params: {
-        name: userName
-      },
+      url: `/users/info/${userName}`,
       errorTitle: '유저 정보 조회 실패',
       errorDescription: '유저 정보 조회에 실패했습니다.'
     });
