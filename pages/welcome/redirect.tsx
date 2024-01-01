@@ -37,7 +37,9 @@ export default function Redirect() {
               });
               router.replace('/');
             } else router.replace('/welcome/2step-auth');
-          } else router.replace('/welcome/register');
+          } else if (res.data.hasProfile === true)
+            router.replace('/welcome/setEmail');
+          else router.replace('/welcome/register');
         } else if (res.status === 401) {
           toast({
             title: 'Error',
