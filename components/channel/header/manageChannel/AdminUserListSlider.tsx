@@ -15,13 +15,17 @@ interface userListType {
 }
 export default function AdminListSlider({channelId}: {channelId: string}) {
   const [socket] = useSocket('channel');
-  const [adminUserList, setadminUserList] = useState([] as userListType[]);
+  const [adminUserList, setAdminUserList] = useState([] as userListType[]);
   const {toast} = useToast();
-  const adminUserHandler: (res: userListType[]) => void = useCallback(
-    (res: userListType[]) => {
-      setadminUserList(res);
+  const adminUserHandler: (res: {
+    adminUsers: userListType[];
+    channelId: string;
+  }) => void = useCallback(
+    (res: {adminUsers: userListType[]; channelId: string}) => {
+      if (res.channelId !== channelId) return;
+      setAdminUserList(res.adminUsers);
     },
-    []
+    [channelId]
   );
   useEffect(() => {
     socket.on('getAdminUsers', adminUserHandler);
