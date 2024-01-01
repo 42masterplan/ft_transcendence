@@ -81,7 +81,7 @@ export default function ChannelPage() {
     socket.on('connect', () => {
       console.log('---------connected----------');
     });
-    myInfoSocket.emit('myInfo', (data) => {
+    myInfoSocket.emit('myInfo', (data: any) => {
       infoDispatch({
         type: 'MY_INFO_SET',
         payload: data
