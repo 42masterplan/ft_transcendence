@@ -47,7 +47,7 @@ export default function DMPage() {
       });
     });
 
-    socket.emit('myInfo', (data) => {
+    socket.emit('myInfo', (data: any) => {
       setDMInfo((prev) => ({
         ...prev,
         myId: data.id,
@@ -72,7 +72,7 @@ export default function DMPage() {
       url: `users/friends/isFriend`,
       params: {name: chatUser}
     });
-    socket.emit('DmHistory', chatUser, (data) => {
+    socket.emit('DmHistory', chatUser, (data: any) => {
       console.log('DmHistory', data);
       if (data === 'DmHistory Fail!')
         toast({
@@ -133,14 +133,14 @@ export default function DMPage() {
                 key={idx}
                 className={cn(
                   'flex w-max max-w-[90%] rounded-lg px-3 text-sm',
-                  msg._participantId === dmInfo.myId ? 'ml-auto' : 'p-2'
+                  msg?._participantId === dmInfo.myId ? 'ml-auto' : 'p-2'
                 )}
               >
                 <ChatMessage
-                  isMe={msg._participantId === dmInfo.myId}
+                  isMe={msg?._participantId === dmInfo.myId}
                   size='md'
-                  message={msg._content}
-                  side={msg.participantId === dmInfo.myId ? 'right' : 'left'}
+                  message={msg?._content}
+                  side={msg?._participantId === dmInfo.myId ? 'right' : 'left'}
                   className='m-2 hover:scale-[1.02] duration-200 hover:-translate-y-1 bg-custom4'
                   ref={messageEndRef as any}
                   profileImage={
