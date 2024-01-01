@@ -75,12 +75,13 @@ export default function HomePage() {
     }
     if (isSuccessUserInfo === true) {
       // when user is found
-      currentUser.id = responseUserInfo.id;
-      currentUser.name = responseUserInfo.name;
-      currentUser.profileImage = responseUserInfo.profileImage;
-      currentUser.currentStatus = responseUserInfo.currentStatus;
-      currentUser.introduction = responseUserInfo.introduction;
-      setCurrentUser(currentUser);
+      const tmp = new User();
+      tmp.id = responseUserInfo.id;
+      tmp.name = responseUserInfo.name;
+      tmp.profileImage = responseUserInfo.profileImage;
+      tmp.currentStatus = responseUserInfo.currentStatus;
+      tmp.introduction = responseUserInfo.introduction;
+      setCurrentUser(tmp);
     }
   }, [isSuccessUserInfo, responseUserInfo]);
 

@@ -44,7 +44,7 @@ export default function AchievementSection({
    */
 
   useEffect(() => {
-    if (userName === undefined) {
+    if (userName === undefined || userName === '' || userName === null) {
       return;
     }
     fetchData({
