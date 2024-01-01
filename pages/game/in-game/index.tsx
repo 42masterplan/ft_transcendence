@@ -22,6 +22,7 @@ import {io, Socket} from 'socket.io-client';
 import {useRouter} from 'next/router';
 import useSocket from '@/hooks/useSocket';
 import {init} from 'next/dist/compiled/webpack/webpack';
+import {set} from 'react-hook-form';
 
 function prepGame(
   canvas: HTMLCanvasElement,
@@ -157,10 +158,10 @@ export default function Game() {
   const [gameover, setGameOver] = useState(false);
   const [forfeit, setForfeit] = useState(false);
   const [deuce, setDeuce] = useState(false);
-  const matchIdRef = useRef<string | string[] | undefined>('');
-  const gameModeRef = useRef<string | string[] | undefined>('');
-  const themeRef = useRef<string | string[] | undefined>('');
-  const sideRef = useRef<string | string[] | undefined>('');
+  const [matchId, setMatchId] = useState('');
+  const [gameMode, setGameMode] = useState('');
+  const [theme, setTheme] = useState('');
+  const [side, setSide] = useState('');
   const router = useRouter();
   const {aName, aProfileImage, bName, bProfileImage} = router.query as {
     aName: string;
@@ -168,20 +169,21 @@ export default function Game() {
     bName: string;
     bProfileImage: string;
   };
-  const initSocket =
-    gameModeRef.current != '' &&
-    themeRef.current != '' &&
-    matchIdRef.current != '';
+  const [initSocket, setInitSocket] = useState(false);
   const [socket] = useSocket('game', {
     autoConnect: initSocket
   });
 
   useEffect(() => {
-    if (router.query.id) matchIdRef.current = router.query.id as string;
-    if (router.query.theme) themeRef.current = router.query.theme as string;
-    if (router.query.gameMode)
-      gameModeRef.current = router.query.gameMode as string;
-    if (router.query.side) sideRef.current = router.query.side as string;
+    if (gameMode != '' && theme != '' && matchId != '' && side != '')
+      setInitSocket(true);
+  }, [gameMode, theme, matchId, side]);
+
+  useEffect(() => {
+    if (router.query.matchId) setMatchId(router.query.matchId as string);
+    if (router.query.theme) setTheme(router.query.theme as string);
+    if (router.query.gameMode) setGameMode(router.query.gameMode as string);
+    if (router.query.side) setSide(router.query.side as string);
   }, [router]);
 
   useEffect(() => {
@@ -202,17 +204,22 @@ export default function Game() {
       c
     );
     const backgroundImage = new Image();
-    if (themeRef.current && themeRef.current != 'Default')
-      backgroundImage.src = `/gameThemes/${themeRef.current}.png`;
+    if (theme && theme != 'Default')
+      backgroundImage.src = `/gameThemes/${theme}.png`;
+    console.log('joinRoom state: ', {
+      matchId: matchId,
+      gameMode: gameMode,
+      side: side
+    });
     socket.emit('joinRoom', {
-      matchId: matchIdRef.current,
-      gameMode: gameModeRef.current,
-      side: sideRef.current
+      matchId: matchId,
+      gameMode: gameMode,
+      side: side
     });
     socket.on('joinedRoom', () => {
       listenToSocketEvents(
         socket,
-        matchIdRef.current,
+        matchId,
         playerA,
         playerB,
         ball,
@@ -230,7 +237,7 @@ export default function Game() {
     }, RENDERING_RATE);
     addEventListeners(keysPressed);
     const gameLoop = () => {
-      if (themeRef.current && themeRef.current != 'Default') {
+      if (theme && theme != 'Default') {
         if (backgroundImage.complete) {
           c.drawImage(backgroundImage, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
           c.fillStyle = BACKGROUND_SHADOW_COLOR;
