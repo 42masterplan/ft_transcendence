@@ -24,7 +24,6 @@ export default function LogOutBtn({children}: {children: React.ReactNode}) {
                 removeCookie('accessToken');
                 removeCookie('isTwoFactorDone');
                 removeCookie('hasAccount');
-                removeCookie('intraId');
                 router.push('/welcome');
               }}
             >
