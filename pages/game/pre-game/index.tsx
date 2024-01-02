@@ -68,9 +68,9 @@ export default function PreGame() {
         className='w-[400px] h-[600px] py-[50px] bg-slate-800 rounded-[10px] shadow border border-black flex flex-col justify-between items-center'
         style={style}
       >
-        <PlayerPortrait name={aName} profileImage={aProfileImage} />
-        <Divider />
         <PlayerPortrait name={bName} profileImage={bProfileImage} />
+        <Divider />
+        <PlayerPortrait name={aName} profileImage={aProfileImage} />
       </div>
     </div>
   );
