@@ -1,5 +1,5 @@
 import useSocket from '@/hooks/useSocket';
-import {useCallback, useEffect, useState} from 'react';
+import {useRef, useEffect, useState} from 'react';
 import AvatarIcon from '@/components/avatar/AvatarIcon';
 import Image from 'next/image';
 import {useToast} from '@/components/shadcn/ui/use-toast';
@@ -17,7 +17,7 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
   const [participants, setParticipants] = useState([] as userListType[]);
   const [searchTerm, setSearchTerm] = useState('');
   const {toast} = useToast();
-
+  const participantsRef = useRef(participants);
   useEffect(() => {
     socket.on(
       'getParticipants',
@@ -26,6 +26,7 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
         console.log('파티씨판트');
         if (res.channelId !== channelId) return;
         setParticipants(res?.participants);
+        participantsRef.current = res.participants;
       }
     );
     socket.emit('getParticipants', {channelId: channelId});

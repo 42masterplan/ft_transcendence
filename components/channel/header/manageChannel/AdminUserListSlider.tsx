@@ -1,12 +1,12 @@
 import React from 'react';
 
 import useSocket from '@/hooks/useSocket';
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useRef} from 'react';
 import AvatarIcon from '@/components/avatar/AvatarIcon';
 
-import useSocketAction from '@/hooks/useSocketAction';
 import {BiSolidXCircle} from 'react-icons/bi';
 import {useToast} from '@/components/shadcn/ui/use-toast';
+
 interface userListType {
   channelId: string;
   userId: string;
@@ -17,13 +17,14 @@ export default function AdminListSlider({channelId}: {channelId: string}) {
   const [socket] = useSocket('channel');
   const [adminUserList, setAdminUserList] = useState([] as userListType[]);
   const {toast} = useToast();
-
+  const adminUserListRef = useRef(adminUserList);
   useEffect(() => {
     socket.on(
       'getAdminUsers',
       (res: {adminUsers: userListType[]; channelId: string}) => {
         if (res.channelId !== channelId) return;
         setAdminUserList(res.adminUsers);
+        adminUserListRef.current = res.adminUsers;
       }
     );
     socket.emit('getAdminUsers', {channelId: channelId});
