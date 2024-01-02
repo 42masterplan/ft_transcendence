@@ -64,13 +64,13 @@ export default function AdminListSlider({channelId}: {channelId: string}) {
                   );
                 }}
               />
-              <p>
+              <div>
                 <AvatarIcon
                   avatarName={adminUser.profileImage}
                   size='h-20 w-20'
                 />
-                <p>{adminUser.userName}</p>
-              </p>
+                <div>{adminUser.userName}</div>
+              </div>
             </div>
           );
         })}
