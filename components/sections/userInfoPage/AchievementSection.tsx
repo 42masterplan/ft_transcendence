@@ -44,24 +44,22 @@ export default function AchievementSection({
    */
 
   useEffect(() => {
-    if (userName === undefined) {
+    if (userName === undefined || userName === '' || userName === null) {
       return;
     }
     fetchData({
       method: 'get',
-      url: '/users/challenges',
-      params: {
-        name: userName
-      },
+      url: '/users/challenges/' + userName,
       errorTitle: '유저 정보 조회 실패',
-      errorDescription: '유저 정보 조회에 실패했습니다.'
+      errorDescription: '유저 정보 조회에 실패했습니다.',
+      disableSuccessToast: true
     });
   }, [userName]);
   useEffect(() => {
     if (isSuccess === true) {
       setAchievements(response);
     }
-  }, [isSuccess, response]);
+  }, [isSuccess]);
 
   // render --------------------------------------------------------------------
 
@@ -78,15 +76,13 @@ export default function AchievementSection({
       <CardHeader>
         <CardTitle>Achievements</CardTitle>
       </CardHeader>
-      <CardDescription>
-        <CardContent>
-          <ScrollableContainer className='h-[50vh]'>
-            {achievements.map((achievement) => (
-              <AchievementCard key={achievement.name} challenge={achievement} />
-            ))}
-          </ScrollableContainer>
-        </CardContent>
-      </CardDescription>
+      <CardContent>
+        <ScrollableContainer className='h-[50vh]'>
+          {achievements.map((achievement) => (
+            <AchievementCard key={achievement.name} challenge={achievement} />
+          ))}
+        </ScrollableContainer>
+      </CardContent>
     </Card>
   );
 }

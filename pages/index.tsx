@@ -30,7 +30,6 @@ export default function HomePage() {
     error: errorUserInfo
   } = useAxios();
   const [currentUser, setCurrentUser] = useState<User>(new User());
-
   // fetch data from server ----------------------------------------------------
 
   /**
@@ -48,7 +47,8 @@ export default function HomePage() {
       method: 'get',
       url: '/users/myName',
       errorTitle: '유저 정보 조회 실패',
-      errorDescription: '유저 정보 조회에 실패했습니다.'
+      errorDescription: '유저 정보 조회에 실패했습니다.',
+      disableSuccessToast: true
     });
   }, []);
   useEffect(() => {
@@ -60,15 +60,13 @@ export default function HomePage() {
       // when user is found -> fetch user info
       fetchUserInfo({
         method: 'get',
-        url: '/users/info',
-        params: {
-          name: responseUserName
-        },
+        url: '/users/info/' + responseUserName?.name,
         errorTitle: '유저 정보 조회 실패',
-        errorDescription: '유저 정보 조회에 실패했습니다.'
+        errorDescription: '유저 정보 조회에 실패했습니다.',
+        disableSuccessToast: true
       });
     }
-  }, [errorUserName, isSuccessUserName, responseUserName]);
+  }, [isSuccessUserName]);
 
   useEffect(() => {
     if (errorUserInfo === true) {
@@ -77,20 +75,26 @@ export default function HomePage() {
     }
     if (isSuccessUserInfo === true) {
       // when user is found
-      currentUser.id = responseUserInfo.id;
-      currentUser.name = responseUserInfo.name;
-      currentUser.profileImage = responseUserInfo.profileImage;
-      currentUser.currentStatus = responseUserInfo.currentStatus;
-      currentUser.introduction = responseUserInfo.introduction;
-      setCurrentUser(currentUser);
+      const tmp = new User();
+      tmp.id = responseUserInfo.id;
+      tmp.name = responseUserInfo.name;
+      tmp.profileImage = responseUserInfo.profileImage;
+      tmp.currentStatus = responseUserInfo.currentStatus;
+      tmp.introduction = responseUserInfo.introduction;
+      setCurrentUser(tmp);
     }
-  }, [isSuccessUserInfo, responseUserInfo]);
+  }, [isSuccessUserInfo]);
 
   const animation = 'm-2 hover:scale-[1.02] duration-200 hover:-translate-y-1';
 
   // render --------------------------------------------------------------------
 
-  if (loadingUserInfo === true) {
+  if (
+    loadingUserInfo === true ||
+    loadingUserName === true ||
+    isSuccessUserInfo === false ||
+    isSuccessUserName === false
+  ) {
     return (
       <>
         <div className='flex w-full items-center justify-center'>

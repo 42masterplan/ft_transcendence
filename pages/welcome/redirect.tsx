@@ -23,11 +23,6 @@ export default function Redirect() {
             sameSite: 'strict',
             secure: true
           });
-          setCookie('intraId', res.data.intraId, {
-            path: '/',
-            sameSite: 'strict',
-            secure: true
-          });
           setCookie('isTwoFactorDone', false, {
             path: '/',
             sameSite: 'strict',
@@ -42,7 +37,9 @@ export default function Redirect() {
               });
               router.replace('/');
             } else router.replace('/welcome/2step-auth');
-          } else router.replace('/welcome/register');
+          } else if (res.data.hasProfile === true)
+            router.replace('/welcome/setEmail');
+          else router.replace('/welcome/register');
         } else if (res.status === 401) {
           toast({
             title: 'Error',
@@ -50,7 +47,6 @@ export default function Redirect() {
             variant: 'destructive'
           });
           removeCookie('accessToken');
-          removeCookie('intraId');
           router.replace('/welcome');
         }
       })

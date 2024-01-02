@@ -12,7 +12,6 @@ export default function LoginFilter({children}: {children: React.ReactNode}) {
     const token = cookie.accessToken;
     const isTwoFactorDone = cookie.isTwoFactorDone;
     const hasAccount = cookie.hasAccount;
-    const intraId = cookie.intraId;
     if (router.pathname.startsWith('/welcome')) {
       if (
         router.pathname === '/welcome' ||
@@ -21,12 +20,7 @@ export default function LoginFilter({children}: {children: React.ReactNode}) {
         setLoading(false);
         return;
       }
-      if (
-        !token ||
-        isTwoFactorDone === undefined ||
-        hasAccount === undefined ||
-        intraId === undefined
-      ) {
+      if (!token || isTwoFactorDone === undefined || hasAccount === undefined) {
         console.log('<<<<<<<🤬>>>>>>');
         router.push('/welcome');
       } else if (router.pathname === '/welcome/2step-auth') {

@@ -56,12 +56,15 @@ export default function MatchHistorySection({
         name: userName
       },
       errorTitle: '매치 정보 조회 실패',
-      errorDescription: '매치 정보 조회에 실패했습니다.'
+      errorDescription: '매치 정보 조회에 실패했습니다.',
+      disableSuccessToast: true
     });
+  }, [userName]);
+  useEffect(() => {
     if (isSuccess === true) {
       setMatchHistory(response);
     }
-  }, [userName]);
+  }, [isSuccess]);
 
   // render --------------------------------------------------------------------
 
@@ -77,18 +80,16 @@ export default function MatchHistorySection({
       <CardHeader>
         <CardTitle>Match History</CardTitle>
       </CardHeader>
-      <CardDescription>
-        <CardContent>
-          <ScrollableContainer className='h-[50vh]'>
-            {matchHistory.map((match) => (
-              <MatchHistoryCard
-                key={match.gameId}
-                match={match}
-              ></MatchHistoryCard>
-            ))}
-          </ScrollableContainer>
-        </CardContent>
-      </CardDescription>
+      <CardContent>
+        <ScrollableContainer className='h-[50vh]'>
+          {matchHistory.map((match) => (
+            <MatchHistoryCard
+              key={match.gameId}
+              match={match}
+            ></MatchHistoryCard>
+          ))}
+        </ScrollableContainer>
+      </CardContent>
     </Card>
   );
 }
