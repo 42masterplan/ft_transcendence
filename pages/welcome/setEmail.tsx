@@ -9,7 +9,6 @@ import {Input} from '@/components/shadcn/ui/input';
 import {Label} from '@/components/shadcn/ui/label';
 import InputValidCode from '@/components/input/InputValidCode';
 import SpinningLoader from '@/components/loader/SpinningLoader';
-import {useCookies} from 'react-cookie';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 export default function SetEmail() {
   const [email, setEmail] = useState('');
@@ -28,7 +27,6 @@ export default function SetEmail() {
   } = useAxios();
   const [fixEmail, setFixEmail] = useState(false);
   const Router = useRouter();
-  const [cookie, setCookie, removeCookie] = useCookies();
   const validateEmail = (e: ChangeEvent<HTMLInputElement>) => {
     const email = e.target.value;
     if (isEmail(email)) {
