@@ -24,7 +24,7 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
     return () => {
       socket.off('getBannedUsers', banUserHandler);
     };
-  }, [socket, banUserHandler, channelId]);
+  }, [socket, channelId]);
   const unBanUserAction = useSocketAction(
     'unBanUser',
     'unBanUser Success!',
