@@ -44,18 +44,18 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
           return (
             <div className='flex' key={banUser.userId}>
               <BiSolidXCircle
-                className='h-10 w-10 hover:bg-custom4 rounded-full absolute z-10 '
+                className='h-6 w-6 hover:bg-custom4 rounded-full absolute z-10 '
                 onClick={() => {
                   unBanUserAction(channelId, banUser.userId, banUser.userName);
                 }}
               />
-              <p>
+              <div>
                 <AvatarIcon
                   avatarName={banUser.profileImage}
                   size='h-20 w-20'
                 />
-                <p>{banUser.userName}</p>
-              </p>
+                <div>{banUser.userName}</div>
+              </div>
             </div>
           );
         })}

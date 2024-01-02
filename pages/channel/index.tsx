@@ -116,7 +116,8 @@ export default function ChannelPage() {
           channelInfoState={channelInfoState}
           infoDispatch={infoDispatch}
         />
-        {channelName === '' ? (
+        {channelInfoState.channelName === '' ||
+        channelInfoRef.current.channelName === '' ? (
           <Image
             src={WaitImage}
             alt='채널에 참여해주세요'

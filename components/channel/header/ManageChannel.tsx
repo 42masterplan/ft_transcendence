@@ -45,7 +45,6 @@ export default function ManageChannel({
           </DialogDescription>
         </DialogHeader>
         <div className='grid gap-6 py-6 '>
-          {/* TODO : 채널 Ban user Icon 띄우고 지우는 형식으로 만들기*/}
           <ParticipantListSlider channelId={channelId} />
           <BanUserListSlider channelId={channelId} />
           <AdminUserListSlider channelId={channelId} />
