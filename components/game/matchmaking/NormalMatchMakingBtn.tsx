@@ -13,14 +13,6 @@ import MatchMakingTimer from './MatchMakingTimer';
 import useSocket from '@/hooks/useSocket';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 
-interface UserType {
-  id: string;
-  profileImage: string;
-  name: string;
-  currentStatus: string;
-  introduction: string;
-}
-
 export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   // we are only going to search for online friends
   const [searchTargetInput, setSearchTargetInput] = useState('');
@@ -30,11 +22,10 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   const [socket] = useSocket('alarm');
   const forwardTheme = theme;
   const {toast} = useToast();
-  let matchId = '';
+  const [matchId, setMatchId] = useState('');
 
   function stopNormalMatchMaking({matchId}: {matchId: string}) {
-    socket.emit('gameCancel', matchId);
-    console.log('gameCancel: ', matchId);
+    socket.emit('gameCancel', {matchId}); // need to change this to normalGameCancel
   }
   function startNormalMatchMaking({
     userId,
@@ -53,7 +44,8 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
       (state: any) => {
         if (state.msg === 'gameRequestSuccess!') {
           setIsWaiting(true);
-          matchId = state.requestId;
+          setMatchId(state.matchId);
+          console.log('matchId has been set: ', state.matchId);
         } else {
           toast({
             title: '매칭 실패',
@@ -99,7 +91,7 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   ) : (
     <MatchMakingDialog
       onClose={() => {
-        stopNormalMatchMaking({matchId});
+        stopNormalMatchMaking({matchId: matchId});
         setIsWaiting(false);
       }}
     >

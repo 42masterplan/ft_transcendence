@@ -15,7 +15,7 @@ export default function LadderMatchMakingBtn() {
   }
   function stopLadderMatchMaking() {
     console.log('래더 매칭 취소');
-    if (socket) socket.emit('gameCancel');
+    if (socket) socket.emit('ladderGameCancel');
   }
 
   return (

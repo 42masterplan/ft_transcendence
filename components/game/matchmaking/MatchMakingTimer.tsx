@@ -26,7 +26,7 @@ export default function MatchMakingTimer(props: {
   }, []);
   useEffect(() => {
     if (!TimeNum && !isAscending) {
-      stopNormalMatchMaking({matchId});
+      stopNormalMatchMaking({matchId: matchId});
       setIsWaiting(false);
     }
   }, [TimeNum, isAscending]);
