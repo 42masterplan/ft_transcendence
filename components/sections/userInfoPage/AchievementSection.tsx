@@ -51,14 +51,15 @@ export default function AchievementSection({
       method: 'get',
       url: '/users/challenges/' + userName,
       errorTitle: '유저 정보 조회 실패',
-      errorDescription: '유저 정보 조회에 실패했습니다.'
+      errorDescription: '유저 정보 조회에 실패했습니다.',
+      disableSuccessToast: true
     });
   }, [userName]);
   useEffect(() => {
     if (isSuccess === true) {
       setAchievements(response);
     }
-  }, [isSuccess, response]);
+  }, [isSuccess]);
 
   // render --------------------------------------------------------------------
 
