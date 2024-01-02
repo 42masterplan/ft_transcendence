@@ -41,7 +41,8 @@ export default function UserPage() {
       method: 'get',
       url: `/users/info/${userName}`,
       errorTitle: '유저 정보 조회 실패',
-      errorDescription: '유저 정보 조회에 실패했습니다.'
+      errorDescription: '유저 정보 조회에 실패했습니다.',
+      disableSuccessToast: true
     });
   }, [userName]);
   useEffect(() => {
@@ -51,12 +52,14 @@ export default function UserPage() {
     }
     if (isSuccess === true) {
       // when user is found
-      currentUser.id = response.id;
-      currentUser.name = response.name;
-      currentUser.profileImage = response.profileImage;
-      currentUser.currentStatus = response.currentStatus;
-      currentUser.introduction = response.introduction;
-      setCurrentUser(currentUser);
+
+      const tmp = new User();
+      tmp.id = response.id;
+      tmp.name = response.name;
+      tmp.profileImage = response.profileImage;
+      tmp.currentStatus = response.currentStatus;
+      tmp.introduction = response.introduction;
+      setCurrentUser(tmp);
     }
   }, [isSuccess, response]);
 
