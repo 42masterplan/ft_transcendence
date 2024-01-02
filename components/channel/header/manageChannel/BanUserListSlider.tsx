@@ -22,7 +22,7 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
     );
     socket.emit('getBannedUsers', {channelId: channelId});
     return () => {
-      socket.off('getBannedUsers', banUserHandler);
+      socket.off('getBannedUsers');
     };
   }, [socket, channelId]);
   const unBanUserAction = useSocketAction(
