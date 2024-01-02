@@ -77,18 +77,16 @@ export default function MatchHistorySection({
       <CardHeader>
         <CardTitle>Match History</CardTitle>
       </CardHeader>
-      <CardDescription>
-        <CardContent>
-          <ScrollableContainer className='h-[50vh]'>
-            {matchHistory.map((match) => (
-              <MatchHistoryCard
-                key={match.gameId}
-                match={match}
-              ></MatchHistoryCard>
-            ))}
-          </ScrollableContainer>
-        </CardContent>
-      </CardDescription>
+      <CardContent>
+        <ScrollableContainer className='h-[50vh]'>
+          {matchHistory.map((match) => (
+            <MatchHistoryCard
+              key={match.gameId}
+              match={match}
+            ></MatchHistoryCard>
+          ))}
+        </ScrollableContainer>
+      </CardContent>
     </Card>
   );
 }

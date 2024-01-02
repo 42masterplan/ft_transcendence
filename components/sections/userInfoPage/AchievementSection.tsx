@@ -75,15 +75,13 @@ export default function AchievementSection({
       <CardHeader>
         <CardTitle>Achievements</CardTitle>
       </CardHeader>
-      <CardDescription>
-        <CardContent>
-          <ScrollableContainer className='h-[50vh]'>
-            {achievements.map((achievement) => (
-              <AchievementCard key={achievement.name} challenge={achievement} />
-            ))}
-          </ScrollableContainer>
-        </CardContent>
-      </CardDescription>
+      <CardContent>
+        <ScrollableContainer className='h-[50vh]'>
+          {achievements.map((achievement) => (
+            <AchievementCard key={achievement.name} challenge={achievement} />
+          ))}
+        </ScrollableContainer>
+      </CardContent>
     </Card>
   );
 }
