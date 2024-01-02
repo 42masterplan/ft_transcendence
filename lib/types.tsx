@@ -64,5 +64,6 @@ export const Theme = {
   Basketball: 'Basketball',
   Soccer: 'Soccer',
   Swimming: 'Swimming',
+  Climbing: 'Climbing',
   Default: 'Default'
 } as const;
