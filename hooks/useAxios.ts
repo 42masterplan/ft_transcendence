@@ -26,7 +26,7 @@ const useAxios = () => {
   const [loading, setLoading] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
   const {toast} = useToast();
-  const [cookie, setCookie, removeCookie] = useCookies();
+  const [, , removeCookie] = useCookies();
   const router = useRouter();
   const fetchData = useCallback(
     async ({
@@ -52,7 +52,7 @@ const useAxios = () => {
           url,
           headers,
           data: body,
-          params
+          params: params
         });
         setResponse(res.data);
         setSuccess(true);
@@ -84,19 +84,19 @@ const useAxios = () => {
         if (err?.response?.status === 401) {
           if (err.response.data.message === 'Email Required') {
             router.push('/setEmail');
+          } else {
+            removeCookie('accessToken');
+            removeCookie('isTwoFactorDone');
+            removeCookie('hasAccount');
+            router.push('/welcome');
           }
-          removeCookie('accessToken');
-          removeCookie('isTwoFactorDone');
-          removeCookie('hasAccount');
-          router.push('/welcome');
         }
       } finally {
         setLoading(false);
       }
     },
-    [toast]
+    [toast, removeCookie, router]
   );
-
   return {fetchData, response, error, loading, isSuccess};
 };
 
