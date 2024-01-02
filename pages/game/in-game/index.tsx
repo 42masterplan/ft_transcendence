@@ -18,9 +18,9 @@ import {handleKeyDowns, handleKeyUps} from '@/lib/game/util';
 import ScoreBoard from '@/components/game/ingame/ScoreBoard';
 import GameStatus from '@/components/game/ingame/GameStatus';
 import GameResult from '@/components/game/ingame/GameResult';
-import {Socket} from 'socket.io-client';
+import {io, Socket} from 'socket.io-client';
 import {useRouter} from 'next/router';
-import useSocket from '@/hooks/useSocket';
+import getAuthorization from '@/lib/utils/cookieUtils';
 
 function prepGame(
   canvas: HTMLCanvasElement,
@@ -102,12 +102,11 @@ function listenToSocketEvents(
     setScore(backendScore);
   });
   socket.on('gameOver', (state) => {
+    console.log('game over');
     if (state.matchId != matchId) return;
     if (state.isForfeit) setForfeit(true);
     setGameOver(true);
     cancelAnimationFrame(animationId);
-    socket.off('connect');
-    socket.off('disconnect');
     socket.disconnect();
   });
   socket.on('updateTime', (state) => {
@@ -158,34 +157,35 @@ export default function Game() {
   const [deuce, setDeuce] = useState(false);
   const [matchId, setMatchId] = useState('');
   const [gameMode, setGameMode] = useState('');
-  const [theme, setTheme] = useState('');
   const [side, setSide] = useState('');
   const router = useRouter();
-  const {aName, aProfileImage, bName, bProfileImage} = router.query as {
+  const {aName, aProfileImage, bName, bProfileImage, theme} = router.query as {
     aName: string;
     aProfileImage: string;
     bName: string;
     bProfileImage: string;
+    theme: string;
   };
   const [initSocket, setInitSocket] = useState(false);
-  const [socket] = useSocket('game', {
-    autoConnect: initSocket
-  });
 
   useEffect(() => {
-    if (gameMode != '' && theme != '' && matchId != '' && side != '')
-      setInitSocket(true);
-  }, [gameMode, theme, matchId, side]);
+    if (gameMode != '' && matchId != '' && side != '') setInitSocket(true);
+  }, [gameMode, matchId, side]);
 
   useEffect(() => {
     if (router.query.matchId) setMatchId(router.query.matchId as string);
-    if (router.query.theme) setTheme(router.query.theme as string);
     if (router.query.gameMode) setGameMode(router.query.gameMode as string);
     if (router.query.side) setSide(router.query.side as string);
-  }, [router]);
+  }, [router.query, router.isReady]);
 
   useEffect(() => {
-    if (!socket) return;
+    if (!initSocket) return;
+    const socket = io('http://localhost:8080/game' as string, {
+      transports: ['websocket'],
+      auth: {
+        Authorization: `Bearer ${getAuthorization()}`
+      }
+    });
     const canvas = canvasRef.current;
     if (!canvas) return;
     const c = canvas.getContext('2d');
@@ -253,25 +253,36 @@ export default function Game() {
     gameLoop();
     return () => {
       console.log('game unmounted');
-      // socket.off('updatePlayers');
-      // socket.off('updateBall');
-      // socket.off('updateScore');
-      // socket.off('gameOver');
-      // socket.off('updateTime');
-      // socket.off('deuce');
-      // socket.off('connect');
-      // socket.off('disconnect');
+      socket.off('updatePlayers');
+      socket.off('updateBall');
+      socket.off('updateScore');
+      socket.off('gameOver');
+      socket.off('updateTime');
+      socket.off('deuce');
+      socket.off('joinedRoom');
+      socket.off('gameFull');
+      socket.off('connect');
+      socket.off('disconnect');
+      socket.disconnect();
       cancelAnimationFrame(animationId);
     };
-  }, [socket, initSocket]);
+  }, [initSocket]);
 
   return (
     <div className='relative min-h-screen flex justify-center items-center'>
       {gameover ? (
         <GameResult
+          playerA={{
+            name: forfeit ? bName : aName,
+            profileImage: forfeit ? bProfileImage : aProfileImage
+          }}
+          playerB={{
+            name: forfeit ? aName : bName,
+            profileImage: forfeit ? aProfileImage : bProfileImage
+          }}
           score={score}
           time={time}
-          winner={score.playerA == SCORE_LIMIT ? true : false}
+          winner={score.playerA === SCORE_LIMIT ? true : false}
           forfeit={forfeit}
         />
       ) : (
