@@ -12,16 +12,15 @@ interface BanUserListType {
 export default function BanUserListSlider({channelId}: {channelId: string}) {
   const [socket] = useSocket('channel');
   const [banUserList, setBanUserList] = useState([] as BanUserListType[]);
-  const banUserHandler: (res: {
+
+  const banUserHandler = (res: {
     bannedUsers: BanUserListType[];
     channelId: string;
-  }) => void = useCallback(
-    (res: {bannedUsers: BanUserListType[]; channelId: string}) => {
-      if (res.channelId !== channelId) return;
-      setBanUserList(res.bannedUsers);
-    },
-    [channelId]
-  );
+  }) => {
+    if (res.channelId !== channelId) return;
+    setBanUserList(res.bannedUsers);
+  };
+
   useEffect(() => {
     socket.on('getBannedUsers', banUserHandler);
     socket.emit('getBannedUsers', {channelId: channelId});

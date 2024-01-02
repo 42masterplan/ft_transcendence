@@ -18,25 +18,21 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
   const [searchTerm, setSearchTerm] = useState('');
   const {toast} = useToast();
 
-  const participantsHandler: (res: {
-    participants: userListType[];
-    channelId: string;
-  }) => void = useCallback(
-    (res: {participants: userListType[]; channelId: string}) => {
-      //I want to filter me out of the list
-      if (res.channelId !== channelId) return;
-      setParticipants(res?.participants);
-    },
-    [channelId]
-  );
-
   useEffect(() => {
-    socket.on('getParticipants', participantsHandler);
+    socket.on(
+      'getParticipants',
+      (res: {participants: userListType[]; channelId: string}) => {
+        //I want to filter me out of the list
+        console.log('파티씨판트');
+        if (res.channelId !== channelId) return;
+        setParticipants(res?.participants);
+      }
+    );
     socket.emit('getParticipants', {channelId: channelId});
     return () => {
-      socket.off('getParticipants', participantsHandler);
+      socket.off('getParticipants');
     };
-  }, [socket, participantsHandler, channelId]);
+  }, [socket, channelId]);
 
   // Filter participants based on search term
   const filteredParticipants = participants.filter((user) =>
@@ -85,6 +81,7 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
                                 types: 'admin'
                               },
                               (res: string) => {
+                                console.log('관리자 권한????:', res);
                                 if (res === 'changeAdmin Success!')
                                   toast({
                                     title: '관리자 권한이 부여되었습니다.',
@@ -138,7 +135,7 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
                   alt={user.userName}
                   width={50}
                   height={50}
-                  className='h-7 w-7 lg:hover:scale-125 transition-transform ease-in-out duration-200 rounded-full'
+                  className='h-6 w-6 lg:hover:scale-125 transition-transform ease-in-out duration-200 rounded-full'
                   onClick={() => {
                     toast({
                       title: `${user.userName}님을 추방 하시겠습니까?`,
