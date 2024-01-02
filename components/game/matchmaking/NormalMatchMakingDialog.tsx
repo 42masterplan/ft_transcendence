@@ -6,7 +6,7 @@ import {Theme} from '@/lib/types';
 import ChildTab from '../ChildTab';
 import {Button} from '@/components/shadcn/ui/button';
 import {useToast} from '@/components/shadcn/ui/use-toast';
-
+import Image from 'next/image';
 interface NormalMatchMakingDialogProps {
   isWaiting: boolean;
   setIsWaiting: any;
