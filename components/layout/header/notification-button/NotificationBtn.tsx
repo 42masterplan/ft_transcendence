@@ -84,7 +84,7 @@ export default function NotificationBtn() {
       disconnect();
       router.push('/welcome/double-tab');
     });
-    socket.on('gameCancel', (matchId: string) => {
+    socket.on('normalGameCancel', (matchId: string) => {
       console.log('gameCanceled: ', matchId);
       setMatchRequests((prev) =>
         prev.filter((match) => {
@@ -124,7 +124,7 @@ export default function NotificationBtn() {
       socket.off('gameRequest');
       socket.off('gameStart');
       socket.off('error');
-      socket.off('gameCancel'); // need to change this to normalGameCancel
+      socket.off('normalGameCancel');
     };
   }, []);
   useEffect(() => {

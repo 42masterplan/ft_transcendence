@@ -25,7 +25,7 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   const [matchId, setMatchId] = useState('');
 
   function stopNormalMatchMaking({matchId}: {matchId: string}) {
-    socket.emit('gameCancel', {matchId}); // need to change this to normalGameCancel
+    socket.emit('normalGameCancel', {matchId});
   }
   function startNormalMatchMaking({
     userId,
