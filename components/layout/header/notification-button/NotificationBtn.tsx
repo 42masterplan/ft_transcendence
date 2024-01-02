@@ -120,6 +120,14 @@ export default function NotificationBtn() {
         });
       }
     );
+    socket.on('normalGameReject', () => {
+      console.log('normalGameReject');
+      toast({
+        title: '매칭 거절',
+        description: '상대방이 매칭을 거절했습니다.',
+        variant: 'destructive'
+      });
+    });
     return () => {
       socket.off('gameRequest');
       socket.off('gameStart');
