@@ -30,7 +30,6 @@ export default function HomePage() {
     error: errorUserInfo
   } = useAxios();
   const [currentUser, setCurrentUser] = useState<User>(new User());
-
   // fetch data from server ----------------------------------------------------
 
   /**
@@ -48,7 +47,8 @@ export default function HomePage() {
       method: 'get',
       url: '/users/myName',
       errorTitle: '유저 정보 조회 실패',
-      errorDescription: '유저 정보 조회에 실패했습니다.'
+      errorDescription: '유저 정보 조회에 실패했습니다.',
+      disableSuccessToast: true
     });
   }, []);
   useEffect(() => {
@@ -66,7 +66,7 @@ export default function HomePage() {
         disableSuccessToast: true
       });
     }
-  }, [errorUserName, isSuccessUserName, responseUserName]);
+  }, [isSuccessUserName]);
 
   useEffect(() => {
     if (errorUserInfo === true) {
@@ -83,13 +83,18 @@ export default function HomePage() {
       tmp.introduction = responseUserInfo.introduction;
       setCurrentUser(tmp);
     }
-  }, [isSuccessUserInfo, responseUserInfo]);
+  }, [isSuccessUserInfo]);
 
   const animation = 'm-2 hover:scale-[1.02] duration-200 hover:-translate-y-1';
 
   // render --------------------------------------------------------------------
 
-  if (loadingUserInfo === true) {
+  if (
+    loadingUserInfo === true ||
+    loadingUserName === true ||
+    isSuccessUserInfo === false ||
+    isSuccessUserName === false
+  ) {
     return (
       <>
         <div className='flex w-full items-center justify-center'>
