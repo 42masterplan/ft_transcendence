@@ -1,12 +1,14 @@
+import {match} from 'assert';
 import {useEffect, useState} from 'react';
 
 export default function MatchMakingTimer(props: {
   isAscending: boolean;
-  stopNormalMatchMaking?: any;
-  setIsWaiting?: any;
+  matchId: string;
+  stopNormalMatchMaking: any;
+  setIsWaiting: any;
 }) {
   const [TimeNum, setTimeNum] = useState(10);
-  const {isAscending, stopNormalMatchMaking, setIsWaiting} = props;
+  const {isAscending, stopNormalMatchMaking, setIsWaiting, matchId} = props;
   useEffect(() => {
     setTimeNum(0);
     if (isAscending === true) {
@@ -24,7 +26,7 @@ export default function MatchMakingTimer(props: {
   }, []);
   useEffect(() => {
     if (!TimeNum && !isAscending) {
-      stopNormalMatchMaking();
+      stopNormalMatchMaking({matchId});
       setIsWaiting(false);
     }
   }, [TimeNum, isAscending]);

@@ -32,8 +32,9 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   const {toast} = useToast();
   let matchId = '';
 
-  function stopNormalMatchMaking(matchId: string) {
-    socket.emit('gameCancel', {matchId});
+  function stopNormalMatchMaking({matchId}: {matchId: string}) {
+    socket.emit('gameCancel', matchId);
+    console.log('gameCancel: ', matchId);
   }
   function startNormalMatchMaking({
     userId,
@@ -99,7 +100,7 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   ) : (
     <MatchMakingDialog
       onClose={() => {
-        stopNormalMatchMaking(matchId);
+        stopNormalMatchMaking({matchId});
         setIsWaiting(false);
       }}
     >
@@ -109,6 +110,7 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
         </h1>
         <MatchMakingTimer
           isAscending={false}
+          matchId={matchId}
           stopNormalMatchMaking={stopNormalMatchMaking}
           setIsWaiting={setIsWaiting}
         />
