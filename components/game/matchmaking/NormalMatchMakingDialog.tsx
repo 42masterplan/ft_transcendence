@@ -33,7 +33,7 @@ export default function NormalMatchMakingDialog(
   const [theme, setTheme] = useState(Theme.Default);
   const {toast} = useToast();
   function stopNormalMatchMaking() {
-    if (alarm_sock) alarm_sock.emit('gameCancel', {matchId: matchId});
+    alarm_sock.emit('gameCancel', {matchId: matchId});
   }
   return (
     <>
@@ -91,6 +91,7 @@ export default function NormalMatchMakingDialog(
           </h1>
           <MatchMakingTimer
             isAscending={false}
+            matchId={matchId}
             stopNormalMatchMaking={stopNormalMatchMaking}
             setIsWaiting={setIsWaiting}
           />
