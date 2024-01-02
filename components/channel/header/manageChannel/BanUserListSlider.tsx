@@ -17,6 +17,7 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
     socket.on(
       'getBannedUsers',
       (res: {bannedUsers: BanUserListType[]; channelId: string}) => {
+        console.log('밴유저리스트', res);
         if (res.channelId !== channelId) return;
         setBanUserList(res.bannedUsers);
         banUserListRef.current = res.bannedUsers;
@@ -26,7 +27,7 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
     return () => {
       socket.off('getBannedUsers');
     };
-  }, [socket, channelId]);
+  }, [socket]);
   const unBanUserAction = useSocketAction(
     'unBanUser',
     'unBanUser Success!',
