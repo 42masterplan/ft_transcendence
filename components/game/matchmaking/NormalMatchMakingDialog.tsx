@@ -51,12 +51,10 @@ export default function NormalMatchMakingDialog(
             onClick={() => {
               setIsThemeSelecting(false);
               setIsWaiting(true);
-              console.log('theme: ', theme);
               alarm_sock.emit(
-                'gameRequest',
+                'normalGameRequest',
                 {
                   userId: userId,
-                  gameMode: 'normal',
                   theme: theme
                 },
                 (state: any) => {

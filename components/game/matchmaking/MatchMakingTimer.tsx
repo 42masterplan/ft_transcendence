@@ -3,9 +3,9 @@ import {useEffect, useState} from 'react';
 
 export default function MatchMakingTimer(props: {
   isAscending: boolean;
-  matchId: string;
-  stopNormalMatchMaking: any;
-  setIsWaiting: any;
+  matchId?: string;
+  stopNormalMatchMaking?: any;
+  setIsWaiting?: any;
 }) {
   const [TimeNum, setTimeNum] = useState(10);
   const {isAscending, stopNormalMatchMaking, setIsWaiting, matchId} = props;
