@@ -77,7 +77,7 @@ export default React.forwardRef(function ChannelList(
       payload: channel.name
     });
     ref.current.channelName = channel.name;
-    console.log('channelHistoryHandler', channel.id);
+
     socket.emit(
       'channelHistory',
       {channelId: ref.current.channelId},

@@ -13,7 +13,13 @@ interface userListType {
   profileImage: string;
   userName: string;
 }
-export default function AdminListSlider({channelId}: {channelId: string}) {
+export default function AdminListSlider({
+  channelId,
+  setOpen
+}: {
+  channelId: string;
+  setOpen: any;
+}) {
   const [socket] = useSocket('channel');
   const [adminUserList, setAdminUserList] = useState([] as userListType[]);
   const {toast} = useToast();
@@ -50,16 +56,19 @@ export default function AdminListSlider({channelId}: {channelId: string}) {
                       types: 'user'
                     },
                     (res: string) => {
-                      if (res === 'changeAdmin Success!')
+                      if (res === 'changeAdmin Success!') {
                         toast({
                           title: '관리자 권한이 해제되었습니다.',
                           description: '관리자 권한이 해제되었습니다.'
                         });
-                      else
+                        setOpen(false);
+                      } else {
                         toast({
                           title: '관리자 권한 해제 실패',
                           description: res
                         });
+                        socket.emit('getAdminUsers', {channelId: channelId});
+                      }
                     }
                   );
                 }}

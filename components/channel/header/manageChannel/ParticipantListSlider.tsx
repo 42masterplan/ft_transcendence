@@ -12,7 +12,13 @@ interface userListType {
   userName: string;
 }
 
-export default function BanUserListSlider({channelId}: {channelId: string}) {
+export default function BanUserListSlider({
+  channelId,
+  setOpen
+}: {
+  channelId: string;
+  setOpen: any;
+}) {
   const [socket] = useSocket('channel');
   const [participants, setParticipants] = useState([] as userListType[]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -82,13 +88,13 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
                                 types: 'admin'
                               },
                               (res: string) => {
-                                console.log('관리자 권한????:', res);
-                                if (res === 'changeAdmin Success!')
+                                if (res === 'changeAdmin Success!') {
                                   toast({
                                     title: '관리자 권한이 부여되었습니다.',
                                     description: '관리자 권한이 부여되었습니다.'
                                   });
-                                else
+                                  setOpen(false);
+                                } else
                                   toast({
                                     title: '관리자 권한 부여 실패',
                                     description: res
@@ -119,10 +125,27 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
                         <ToastAction
                           altText='BAN'
                           onClick={() => {
-                            socket.emit('banUser', {
-                              channelId: channelId,
-                              userId: user.userId
-                            });
+                            socket.emit(
+                              'banUser',
+                              {
+                                channelId: channelId,
+                                userId: user.userId
+                              },
+                              (res: string) => {
+                                if (res === 'banUser Success!') {
+                                  toast({
+                                    title: '유저가 BAN되었습니다.',
+                                    description: '유저가 BAN되었습니다.'
+                                  });
+                                  setOpen(false);
+                                } else {
+                                  toast({
+                                    title: '유저 BAN 실패',
+                                    description: res
+                                  });
+                                }
+                              }
+                            );
                           }}
                         >
                           유저 BAN
@@ -147,10 +170,26 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
                         <ToastAction
                           altText='KICK'
                           onClick={() => {
-                            socket.emit('kickUser', {
-                              channelId: channelId,
-                              userId: user.userId
-                            });
+                            socket.emit(
+                              'kickUser',
+                              {
+                                channelId: channelId,
+                                userId: user.userId
+                              },
+                              (res: string) => {
+                                if (res === 'kickUser Success!') {
+                                  toast({
+                                    title: '유저가 추방되었습니다.',
+                                    description: '유저가 추방되었습니다.'
+                                  });
+                                  setOpen(false);
+                                } else
+                                  toast({
+                                    title: '유저 추방 실패',
+                                    description: res
+                                  });
+                              }
+                            );
                           }}
                         >
                           유저 추방

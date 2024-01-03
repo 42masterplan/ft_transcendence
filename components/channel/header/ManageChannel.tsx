@@ -27,8 +27,9 @@ export default function ManageChannel({
   const [socket] = useSocket('channel');
   const [channelPassword, setChannelPassword] = useState('');
   const {toast} = useToast();
+  const [open, setOpen] = useState(false);
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className='bg-custom4 justify-self-end'>
           <RiChatSettingsLine className='h-6 w-6' />
@@ -45,9 +46,9 @@ export default function ManageChannel({
           </DialogDescription>
         </DialogHeader>
         <div className='grid gap-6 py-6 '>
-          <ParticipantListSlider channelId={channelId} />
-          <BanUserListSlider channelId={channelId} />
-          <AdminUserListSlider channelId={channelId} />
+          <ParticipantListSlider channelId={channelId} setOpen={setOpen} />
+          <BanUserListSlider channelId={channelId} setOpen={setOpen} />
+          <AdminUserListSlider channelId={channelId} setOpen />
           <div>
             <Label htmlFor='channel_password' className='text-right'>
               비밀번호 변경
@@ -75,6 +76,7 @@ export default function ManageChannel({
                           title: '비밀번호가 변경되었습니다.',
                           description: '비밀번호가 변경되었습니다.'
                         });
+                        setOpen(false);
                       } else {
                         toast({
                           title: '비밀번호 변경 실패',
