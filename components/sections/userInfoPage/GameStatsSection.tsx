@@ -48,15 +48,12 @@ export default function GameStatsSection({
    */
 
   useEffect(() => {
-    if (userName === undefined) {
+    if (userName === undefined || userName === null || userName === '') {
       return;
     }
     fetchData({
       method: 'get',
-      url: '/users/rank',
-      params: {
-        name: userName
-      },
+      url: '/users/rank/' + userName,
       errorTitle: '유저 정보 조회 실패',
       errorDescription: '유저 정보 조회에 실패했습니다.',
       disableSuccessToast: true

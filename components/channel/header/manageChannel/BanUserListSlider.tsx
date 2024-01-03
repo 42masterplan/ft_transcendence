@@ -1,41 +1,40 @@
 import useSocket from '@/hooks/useSocket';
-import {useCallback, useEffect, useState} from 'react';
+import {useRef, useEffect, useState} from 'react';
 import AvatarIcon from '@/components/avatar/AvatarIcon';
 import {BiSolidXCircle} from 'react-icons/bi';
-import useSocketAction from '@/hooks/useSocketAction';
+import {useToast} from '@/components/shadcn/ui/use-toast';
 interface BanUserListType {
   channelId: string;
   userId: string;
   profileImage: string;
   userName: string;
 }
-export default function BanUserListSlider({channelId}: {channelId: string}) {
+export default function BanUserListSlider({
+  channelId,
+  setOpen
+}: {
+  channelId: string;
+  setOpen: any;
+}) {
   const [socket] = useSocket('channel');
   const [banUserList, setBanUserList] = useState([] as BanUserListType[]);
-  const banUserHandler: (res: {
-    bannedUsers: BanUserListType[];
-    channelId: string;
-  }) => void = useCallback(
-    (res: {bannedUsers: BanUserListType[]; channelId: string}) => {
-      if (res.channelId !== channelId) return;
-      setBanUserList(res.bannedUsers);
-    },
-    [channelId]
-  );
+  const banUserListRef = useRef(banUserList);
+  const {toast} = useToast();
   useEffect(() => {
-    socket.on('getBannedUsers', banUserHandler);
+    socket.on(
+      'getBannedUsers',
+      (res: {bannedUsers: BanUserListType[]; channelId: string}) => {
+        if (res.channelId !== channelId) return;
+        setBanUserList(res.bannedUsers);
+        banUserListRef.current = res.bannedUsers;
+      }
+    );
     socket.emit('getBannedUsers', {channelId: channelId});
     return () => {
-      socket.off('getBannedUsers', banUserHandler);
+      socket.off('getBannedUsers');
     };
-  }, [socket, banUserHandler, channelId]);
-  const unBanUserAction = useSocketAction(
-    'unBanUser',
-    'unBanUser Success!',
-    '유저를 밴 해제했습니다. 이제 유저는 다시 입장 할 수 있습니다.',
-    'unBanUser Fail!',
-    '유저를 밴 해제하는데 실패했습니다.'
-  );
+  }, [socket]);
+
   return (
     <div className=' border border-amber-400 h-40 p-2'>
       <p>밴 유저 목록</p>
@@ -44,18 +43,41 @@ export default function BanUserListSlider({channelId}: {channelId: string}) {
           return (
             <div className='flex' key={banUser.userId}>
               <BiSolidXCircle
-                className='h-10 w-10 hover:bg-custom4 rounded-full absolute z-10 '
+                className='h-6 w-6 hover:bg-custom4 rounded-full absolute z-10 '
                 onClick={() => {
-                  unBanUserAction(channelId, banUser.userId, banUser.userName);
+                  socket.emit(
+                    'unBanUser',
+                    {
+                      channelId: channelId,
+                      userId: banUser.userId,
+                      userName: banUser.userName
+                    },
+                    (res: string) => {
+                      if (res === 'unBanUser Success!') {
+                        toast({
+                          title: '밴 해제 성공',
+                          description: res
+                        });
+                        setOpen(false);
+                      } else {
+                        toast({
+                          title: '밴 해제 실패',
+                          description: res,
+                          variant: 'destructive'
+                        });
+                        socket.emit('getBannedUsers', {channelId: channelId});
+                      }
+                    }
+                  );
                 }}
               />
-              <p>
+              <div>
                 <AvatarIcon
                   avatarName={banUser.profileImage}
                   size='h-20 w-20'
                 />
-                <p>{banUser.userName}</p>
-              </p>
+                <div>{banUser.userName}</div>
+              </div>
             </div>
           );
         })}

@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useReducer, useRef} from 'react';
+import {useCallback, useEffect, useReducer, useRef, useState} from 'react';
 import Image from 'next/image';
 import WaitImage from '@/public/postcss.config.png';
 import useSocket from '@/hooks/useSocket';
@@ -72,11 +72,11 @@ export default function ChannelPage() {
     initialStateInfo
   );
   const [messageState, messageDispatch] = useReducer(messageReducer, []);
+  const [historyLoading, setHistoryLoading] = useState(false);
   const [socket] = useSocket('channel');
-  const {channelName, channelId} = channelInfoState;
   const channelInfoRef = useRef(channelInfoState);
   const [myInfoSocket] = useSocket('alarm');
-
+  const {channelName, channelId} = channelInfoState;
   useEffect(() => {
     socket.on('connect', () => {
       console.log('---------connected----------');
@@ -97,7 +97,6 @@ export default function ChannelPage() {
       console.log('---------disconnected----------');
     });
     return () => {
-      console.log('---------off----------');
       socket.off('connect');
       socket.off('disconnect');
     };
@@ -110,13 +109,15 @@ export default function ChannelPage() {
         infoDispatch={infoDispatch}
         messageDispatch={messageDispatch}
         ref={channelInfoRef}
+        setHistoryLoading={setHistoryLoading}
       />
       <div className='flex flex-col h-full w-full'>
         <ChannelHeader
           channelInfoState={channelInfoState}
           infoDispatch={infoDispatch}
         />
-        {channelName === '' ? (
+        {channelInfoState.channelName === '' ||
+        channelInfoRef.current.channelName === '' ? (
           <Image
             src={WaitImage}
             alt='채널에 참여해주세요'
@@ -130,9 +131,13 @@ export default function ChannelPage() {
                 messageState={messageState}
                 messageDispatch={messageDispatch}
                 ref={channelInfoRef}
+                historyLoading={historyLoading}
               />
             </ScrollableContainer>
-            <ChannelInput channelId={channelId} />
+            <ChannelInput
+              channelId={channelId}
+              historyLoading={historyLoading}
+            />
           </>
         )}
       </div>

@@ -1,7 +1,6 @@
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle
 } from '@/components/shadcn/ui/card';
@@ -46,15 +45,12 @@ export default function MatchHistorySection({
    */
 
   useEffect(() => {
-    if (userName === undefined) {
+    if (userName === undefined || userName === '') {
       return;
     }
     fetchData({
       method: 'get',
-      url: '/users/matches',
-      params: {
-        name: userName
-      },
+      url: '/users/matches/' + userName,
       errorTitle: '매치 정보 조회 실패',
       errorDescription: '매치 정보 조회에 실패했습니다.',
       disableSuccessToast: true

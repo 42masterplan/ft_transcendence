@@ -19,11 +19,13 @@ export default React.forwardRef(function ChannelBody(
   {
     channelInfoState,
     messageState,
-    messageDispatch
+    messageDispatch,
+    historyLoading
   }: {
     channelInfoState: channelStateType;
     messageState: MsgHistoryType[];
     messageDispatch: any;
+    historyLoading: any;
   },
   channelInfoRef: any
 ) {
@@ -111,6 +113,11 @@ export default React.forwardRef(function ChannelBody(
           )}
         </div>
       </ScrollableContainer>
+      {historyLoading && (
+        <div className='absolute top-1/2 left-1/2  transform -translate-x-1/2 -translate-y-1/2'>
+          <div className='animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-custom1'></div>
+        </div>
+      )}
     </div>
   );
 });
