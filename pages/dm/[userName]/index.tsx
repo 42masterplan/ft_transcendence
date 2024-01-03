@@ -71,7 +71,6 @@ export default function DMPage() {
       disableSuccessToast: true
     });
     socket.emit('DmHistory', chatUser, (data: any) => {
-      console.log('DmHistory', data);
       if (data === 'DmHistory Fail!')
         toast({
           title: 'DM 가져오기 실패!',

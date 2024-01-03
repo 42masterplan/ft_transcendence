@@ -25,7 +25,6 @@ export default function Validation() {
       });
       Router.push('/');
     } else if (success === false) {
-      console.log('hi');
       requestCode({
         method: 'post',
         url: '/users/two-factor-auth',
@@ -37,7 +36,6 @@ export default function Validation() {
   }, []);
   useEffect(() => {
     if (success === true) setEmail(response.email);
-    console.log(response);
   }, [response]);
   useEffect(() => {
     if (isSuccess === true && codeSuccess === true) {
@@ -50,7 +48,6 @@ export default function Validation() {
         description: '인증 코드가 틀렸습니다!'
       });
     }
-    console.log(codeSuccess);
   }, [codeSuccess]);
 
   const handleClick = () => {

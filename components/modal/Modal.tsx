@@ -52,7 +52,6 @@ export default function Modal({
         className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm z-10'
         onClick={() => {
           setIsModalOpen(false);
-          console.log('Modal closed');
         }}
       >
         <div
@@ -66,7 +65,6 @@ export default function Modal({
               size='icon'
               onClick={() => {
                 setIsModalOpen(false);
-                console.log('Modal closed');
               }}
             >
               <X />

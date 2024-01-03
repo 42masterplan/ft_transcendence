@@ -75,7 +75,6 @@ export default function NotificationBtn() {
       setNotificationCount((prev) => prev + 1);
     });
     socket.on('error', (error) => {
-      console.log(error);
       toast({
         title: 'Error',
         description: error,
@@ -85,7 +84,6 @@ export default function NotificationBtn() {
       router.push('/welcome/double-tab');
     });
     socket.on('normalGameCancel', (matchId: string) => {
-      console.log('gameCanceled: ', matchId);
       setMatchRequests((prev) =>
         prev.filter((match) => {
           match.matchId != matchId;

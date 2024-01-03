@@ -44,7 +44,6 @@ export default function SocialPage() {
     if (isSuccess === true) {
       if (searchTarget === 'all users') setAllUsers(response);
       if (searchTarget === 'friend') setFriends(response);
-      console.log('로딩끝', response);
       setLoading(false);
     }
   }, [isSuccess, response]);

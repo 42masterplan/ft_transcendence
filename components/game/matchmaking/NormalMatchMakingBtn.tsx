@@ -45,7 +45,6 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
         if (state.msg === 'gameRequestSuccess!') {
           setIsWaiting(true);
           setMatchId(state.matchId);
-          console.log('matchId has been set: ', state.matchId);
         } else {
           toast({
             title: '매칭 실패',

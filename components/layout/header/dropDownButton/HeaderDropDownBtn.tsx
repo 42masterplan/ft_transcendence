@@ -56,7 +56,6 @@ export default function HeaderDropDownBtn() {
   // get current page url
   const router = useRouter();
   const currentUrl = router.pathname;
-  // console.log(currentUrl);
 
   return (
     <Dialog>
