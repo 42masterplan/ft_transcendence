@@ -14,13 +14,12 @@ export default function LadderMatchMakingBtn() {
   const [rejection, setRejection] = useState(false);
   const {toast} = useToast();
   function startLadderMatchMaking() {
-    console.log('래더 매칭 시작');
     if (socket) socket.emit('ladderGameRequest');
   }
   function stopLadderMatchMaking() {
-    console.log('래더 매칭 취소');
     if (!rejection) socket.emit('ladderGameCancel');
   }
+
   useEffect(() => {
     socket.on('ladderGameReject', () => {
       setRejection(true);
@@ -30,6 +29,15 @@ export default function LadderMatchMakingBtn() {
       });
     });
   }, [socket]);
+
+  useEffect(() => {
+    function handleBeforeUnload(e: BeforeUnloadEvent) {
+      if (!rejection && socket) socket.emit('ladderGameCancel');
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [socket, rejection]);
+
   return (
     <MatchMakingDialog onClose={() => stopLadderMatchMaking()}>
       <MatchMakingDialogTrigger asChild>
