@@ -68,7 +68,13 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   useEffect(() => {
     if (isSuccess === true) setFriends(response);
   }, [isSuccess, response]);
-
+  useEffect(() => {
+    function handleBeforeUnload(e: BeforeUnloadEvent) {
+      socket.emit('normalGameCancel', {matchId: matchId});
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [socket, matchId]);
   return isWaiting === false ? (
     <MatchMakingDialog>
       <MatchMakingDialogTrigger asChild>

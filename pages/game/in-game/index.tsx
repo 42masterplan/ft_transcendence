@@ -8,7 +8,8 @@ import {
   BACKGROUND_SHADOW_COLOR,
   RENDERING_RATE,
   GAME_TIME_LIMIT,
-  SCORE_LIMIT
+  SCORE_LIMIT,
+  PRE_GAME_TIME
 } from '@/lib/game/macros';
 import Player from '@/classes/Player';
 import Ball from '@/classes/Ball';
@@ -21,6 +22,8 @@ import GameResult from '@/components/game/ingame/GameResult';
 import {io, Socket} from 'socket.io-client';
 import {useRouter} from 'next/router';
 import getAuthorization from '@/lib/utils/cookieUtils';
+import PlayerPortrait from '@/components/game/PlayerPortrait';
+import Divider from '@/components/game/ingame/Divider';
 
 function prepGame(
   canvas: HTMLCanvasElement,
@@ -150,6 +153,7 @@ export default function Game() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const keysPressed = useRef<{[key: string]: boolean}>({});
+  const [preGameTime, setPreGameTime] = useState(PRE_GAME_TIME);
   const [time, setTime] = useState(GAME_TIME_LIMIT);
   const [score, setScore] = useState({playerA: 0, playerB: 0});
   const [gameover, setGameOver] = useState(false);
@@ -167,6 +171,20 @@ export default function Game() {
     theme: string;
   };
   const [initSocket, setInitSocket] = useState(false);
+  const [backgroundImage, setBackgroundImage] = useState(''); // 상태로 배경 이미지 URL을 관리
+  const [gameStarted, setGameStarted] = useState(false);
+  const [socket, setSocket] = useState<Socket | null>(null);
+
+  useEffect(() => {
+    function handleBeforeUnload(event: any) {
+      event.preventDefault();
+      event.returnValue =
+        '게임이 진행중입니다. 정말로 나가시겠습니까? (이 경우 기권패로 처리됩니다.)';
+      return '게임이 진행중입니다. 정말로 나가시겠습니까? (이 경우 기권패로 처리됩니다.)';
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, []);
 
   useEffect(() => {
     if (gameMode != '' && matchId != '' && side != '') setInitSocket(true);
@@ -179,13 +197,7 @@ export default function Game() {
   }, [router.query, router.isReady]);
 
   useEffect(() => {
-    if (!initSocket) return;
-    const socket = io('http://localhost:8080/game' as string, {
-      transports: ['websocket'],
-      auth: {
-        Authorization: `Bearer ${getAuthorization()}`
-      }
-    });
+    if (!gameStarted || !socket) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const c = canvas.getContext('2d');
@@ -204,11 +216,6 @@ export default function Game() {
     const backgroundImage = new Image();
     if (theme && theme != 'Default')
       backgroundImage.src = `/gameThemes/${theme}.png`;
-    socket.emit('joinRoom', {
-      matchId: matchId,
-      gameMode: gameMode,
-      side: side
-    });
     socket.on('joinedRoom', () => {
       listenToSocketEvents(
         socket,
@@ -225,6 +232,7 @@ export default function Game() {
         particles
       );
     });
+    socket.emit('gameReady');
     setInterval(() => {
       handleKeys(keysPressed, playerA, playerB, socket);
     }, RENDERING_RATE);
@@ -266,9 +274,56 @@ export default function Game() {
       socket.disconnect();
       cancelAnimationFrame(animationId);
     };
-  }, [initSocket]);
+  }, [gameStarted, socket]);
 
-  return (
+  useEffect(() => {
+    if (!initSocket || gameMode == '' || matchId == '' || side == '') return;
+    const newSocket = io('http://localhost:8080/game' as string, {
+      transports: ['websocket'],
+      auth: {
+        Authorization: `Bearer ${getAuthorization()}`
+      }
+    });
+    newSocket.emit('joinRoom', {
+      matchId: matchId,
+      gameMode: gameMode,
+      side: side
+    });
+    setSocket(newSocket);
+  }, [gameMode, initSocket, matchId, side]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setPreGameTime((prevTime) => {
+        if (prevTime === 1) {
+          clearInterval(timer); // 타이머를 여기서 정지
+          setGameStarted(true);
+          return 0; // 시간이 0이 되었으므로 0을 반환
+        }
+        return prevTime - 1; // 시간을 감소시킴
+      });
+    }, 1000);
+    if (theme && theme !== 'Default') {
+      const imageSrc = `/gameThemes/${theme}.png`;
+      const img = new Image();
+      img.onload = () => {
+        setBackgroundImage(imageSrc);
+      };
+      img.src = imageSrc;
+    }
+    return () => clearInterval(timer);
+  }, []);
+
+  const style =
+    backgroundImage != ''
+      ? {
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: 'cover', // 배경 이미지가 컨테이너를 꽉 채우도록 설정
+          backgroundPosition: 'center center' // 이미지를 중앙에 위치시킴
+        }
+      : {};
+
+  return gameStarted ? (
     <div className='relative min-h-screen flex justify-center items-center'>
       {gameover ? (
         <GameResult
@@ -301,6 +356,20 @@ export default function Game() {
           <ScoreBoard AScore={score.playerA} BScore={score.playerB} />
         </>
       )}
+    </div>
+  ) : (
+    <div className='flex flex-col items-center justify-center pt-8 gap-10 h-full'>
+      <h1 className='text-4xl text-white font-bold'>
+        게임 시작까지: {preGameTime}
+      </h1>
+      <div
+        className='w-[400px] h-[600px] py-[50px] bg-slate-800 rounded-[10px] shadow border border-black flex flex-col justify-between items-center'
+        style={style}
+      >
+        <PlayerPortrait name={bName} profileImage={bProfileImage} />
+        <Divider />
+        <PlayerPortrait name={aName} profileImage={aProfileImage} />
+      </div>
     </div>
   );
 }

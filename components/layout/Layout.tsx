@@ -22,8 +22,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
         {children}
       </main>
       {router.pathname.startsWith('/welcome') ||
-      router.pathname.startsWith('/game/in-game') ||
-      router.pathname.startsWith('/game/pre-game') ? null : (
+      router.pathname.startsWith('/game/in-game') ? null : (
         <Footer
           className={`hidden sm:flex flex-row w-full items-center justify-between gap-4 px-3 h-[7vh]`}
         />

@@ -7,6 +7,7 @@ import {cn} from '@/lib/utils';
 
 interface MatchMakingDialogProps {
   onClose?: () => void;
+  isRejection?: boolean;
   children: React.ReactNode;
   open?: any;
   onOpenChange?: any;
@@ -15,6 +16,7 @@ interface MatchMakingDialogProps {
 
 const MatchMakingDialog = ({
   onClose,
+  isRejection,
   children,
   ...props
 }: MatchMakingDialogProps) => (
@@ -22,6 +24,7 @@ const MatchMakingDialog = ({
     {...props}
     onOpenChange={(open) => {
       if (!open) onClose?.();
+      if (isRejection) onClose?.();
     }}
   >
     {children}

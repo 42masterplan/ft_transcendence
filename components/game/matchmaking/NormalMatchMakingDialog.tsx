@@ -33,9 +33,8 @@ export default function NormalMatchMakingDialog(
   const [theme, setTheme] = useState(Theme.Default);
   const {toast} = useToast();
   function stopNormalMatchMaking() {
-    alarm_sock.emit('normalGameCancel', {matchId: matchId}); // need to change this to normalGameCancel
+    alarm_sock.emit('normalGameCancel', {matchId: matchId});
   }
-
   useEffect(() => {
     alarm_sock.on('normalGameReject', () => {
       setIsWaiting(false);
@@ -47,7 +46,15 @@ export default function NormalMatchMakingDialog(
     return () => {
       alarm_sock.off('normalGameReject');
     };
-  }, []);
+  }, [alarm_sock]);
+
+  useEffect(() => {
+    function handleBeforeUnload(e: BeforeUnloadEvent) {
+      alarm_sock.emit('normalGameCancel', {matchId: matchId});
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [alarm_sock, matchId]);
 
   return (
     <>
