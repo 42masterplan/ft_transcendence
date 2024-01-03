@@ -48,7 +48,7 @@ export default function ManageChannel({
         <div className='grid gap-6 py-6 '>
           <ParticipantListSlider channelId={channelId} setOpen={setOpen} />
           <BanUserListSlider channelId={channelId} setOpen={setOpen} />
-          <AdminUserListSlider channelId={channelId} setOpen />
+          <AdminUserListSlider channelId={channelId} setOpen={setOpen} />
           <div>
             <Label htmlFor='channel_password' className='text-right'>
               비밀번호 변경
