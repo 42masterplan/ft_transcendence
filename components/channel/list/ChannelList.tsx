@@ -12,11 +12,13 @@ export default React.forwardRef(function ChannelList(
   {
     channelInfoState,
     infoDispatch,
-    messageDispatch
+    messageDispatch,
+    setHistoryLoading
   }: {
     channelInfoState: channelStateType;
     messageDispatch: Dispatch<SetStateAction<any>>;
     infoDispatch: Dispatch<SetStateAction<any>>;
+    setHistoryLoading: any;
   },
   ref: any
 ) {
@@ -63,6 +65,7 @@ export default React.forwardRef(function ChannelList(
       payload: data
     });
     ref.current.message = data;
+    setHistoryLoading(false);
   }, []);
   const handleChannelClick = useCallback((channel: any) => {
     //채널방 클릭시 채널방 정보를 받아옵니다.
@@ -77,7 +80,7 @@ export default React.forwardRef(function ChannelList(
       payload: channel.name
     });
     ref.current.channelName = channel.name;
-
+    setHistoryLoading(true);
     socket.emit(
       'channelHistory',
       {channelId: ref.current.channelId},
