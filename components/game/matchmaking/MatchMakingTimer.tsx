@@ -8,9 +8,16 @@ export default function MatchMakingTimer(props: {
   matchId?: string;
   stopNormalMatchMaking?: any;
   setIsWaiting?: any;
+  isRejection?: boolean;
 }) {
   const [TimeNum, setTimeNum] = useState(10);
-  const {isAscending, stopNormalMatchMaking, setIsWaiting, matchId} = props;
+  const {
+    isAscending,
+    stopNormalMatchMaking,
+    setIsWaiting,
+    matchId,
+    isRejection
+  } = props;
   useEffect(() => {
     setTimeNum(0);
     if (isAscending === true) {
@@ -35,8 +42,14 @@ export default function MatchMakingTimer(props: {
 
   return (
     <span className='w-[480px] text-center text-[40px] font-bold font-[Roboto Mono]'>
-      {isAscending ? '0:' : ''}
-      {TimeNum}
+      {isRejection ? (
+        '😭'
+      ) : (
+        <>
+          {isAscending ? '0:' : ''}
+          {TimeNum}
+        </>
+      )}
     </span>
   );
 }
