@@ -4,7 +4,13 @@ import {Send} from 'lucide-react';
 import {useState} from 'react';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 import useSocket from '@/hooks/useSocket';
-const ChannelInput = ({channelId}: {channelId: string}) => {
+const ChannelInput = ({
+  channelId,
+  historyLoading
+}: {
+  channelId: string;
+  historyLoading: boolean;
+}) => {
   const [socket] = useSocket('channel');
   const [content, setContent] = useState('');
   const inputLength = content.trim().length;
@@ -14,7 +20,6 @@ const ChannelInput = ({channelId}: {channelId: string}) => {
       onSubmit={(event) => {
         event.preventDefault();
         if (inputLength === 0) return;
-        console.log('내!!channelId', channelId);
         socket.emit('newMessage', {content, channelId}, (msg: string) => {
           if (msg !== 'success') {
             toast({
@@ -34,7 +39,7 @@ const ChannelInput = ({channelId}: {channelId: string}) => {
         autoComplete='off'
         value={content}
         onChange={(event) => {
-          if (content.length > 500) return;
+          if (historyLoading || content.length > 500) return;
           setContent(event.target.value);
         }}
       />

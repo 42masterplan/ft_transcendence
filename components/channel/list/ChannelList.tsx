@@ -12,31 +12,28 @@ export default React.forwardRef(function ChannelList(
   {
     channelInfoState,
     infoDispatch,
-    messageDispatch
+    messageDispatch,
+    setHistoryLoading
   }: {
     channelInfoState: channelStateType;
     messageDispatch: Dispatch<SetStateAction<any>>;
     infoDispatch: Dispatch<SetStateAction<any>>;
+    setHistoryLoading: any;
   },
   ref: any
 ) {
   const [socket] = useSocket('channel');
   const router = useRouter();
   const {toast} = useToast();
-  const myChannelsListener = useCallback((data: EngagedChannelType[]) => {
-    infoDispatch({
-      type: 'ENGAGED_SET',
-      payload: data
-    });
-    console.log('마이채널 핸들러');
-    if (data.length > 0) {
+  const myChannelsListener = useCallback(
+    (data: EngagedChannelType[]) => {
       //current.channelId is not in data?
       for (const befChannel of ref.current.engagedChannels) {
         let isExist = false;
         for (const channel of data) {
           if (channel.id === befChannel.id) {
             isExist = true;
-            break;
+            continue;
           }
         }
         if (isExist === false) {
@@ -49,18 +46,26 @@ export default React.forwardRef(function ChannelList(
             type: 'CHANNEL_LEAVE'
           });
           ref.current.channelId = '';
-          ref.current.engagedChannels = data;
+          ref.current.channelName = '';
+
           break;
         }
       }
+      infoDispatch({
+        type: 'ENGAGED_SET',
+        payload: data
+      });
       ref.current.engagedChannels = data;
-    }
-  }, []);
+    },
+    [socket, channelInfoState]
+  );
   const channelHistoryHandler = useCallback((data: MsgHistoryType[]) => {
     messageDispatch({
       type: 'MESSAGE_SET',
       payload: data
     });
+    ref.current.message = data;
+    setHistoryLoading(false);
   }, []);
   const handleChannelClick = useCallback((channel: any) => {
     //채널방 클릭시 채널방 정보를 받아옵니다.
@@ -75,7 +80,7 @@ export default React.forwardRef(function ChannelList(
       payload: channel.name
     });
     ref.current.channelName = channel.name;
-    console.log('channelHistoryHandler', channel.id);
+    setHistoryLoading(true);
     socket.emit(
       'channelHistory',
       {channelId: ref.current.channelId},
