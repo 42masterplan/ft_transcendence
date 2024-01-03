@@ -1,4 +1,4 @@
-import {gameStatus, gameType} from '@/lib/types';
+import {gameStatus, gameType} from '@/types/game';
 
 export class Game {
   id: string; // UUID
