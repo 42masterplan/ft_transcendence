@@ -13,8 +13,6 @@ export class Game {
   startTime: Date | null;
   endTime: Date | null;
   theme: string;
-  // title: string; // TODO: Decide: Do we really need this? -> Nope.
-  // mode: "mode1" | "mode2" | "mode3" // TODO: Decide: Do we really need this? -> Yes, this will be theme.
   constructor() {
     this.id = '';
     this.type = 'Ladder';

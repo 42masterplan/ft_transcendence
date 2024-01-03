@@ -204,7 +204,6 @@ export default function Game() {
     if (!c) return;
     socket.on('gameFull', () => {
       router.push('/');
-      // TODO: layout으로 보내서 로그아웃 시키기
     });
     let animationId: number;
     const {playerA, playerB, ball, particles} = prepGame(
