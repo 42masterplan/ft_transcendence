@@ -1,7 +1,7 @@
 import {MatchMakingDialog, MatchMakingDialogContent} from './MatchMakingDialog';
 import MatchMakingTimer from './MatchMakingTimer';
 import useSocket from '@/hooks/useSocket';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Theme} from '@/lib/types';
 import ChildTab from '../ChildTab';
 import {Button} from '@/components/shadcn/ui/button';
@@ -33,8 +33,22 @@ export default function NormalMatchMakingDialog(
   const [theme, setTheme] = useState(Theme.Default);
   const {toast} = useToast();
   function stopNormalMatchMaking() {
-    alarm_sock.emit('gameCancel', {matchId: matchId});
+    alarm_sock.emit('normalGameCancel', {matchId: matchId}); // need to change this to normalGameCancel
   }
+
+  useEffect(() => {
+    alarm_sock.on('normalGameReject', () => {
+      setIsWaiting(false);
+      toast({
+        title: '매칭 실패',
+        description: '상대방이 매칭을 거절했습니다.'
+      });
+    });
+    return () => {
+      alarm_sock.off('normalGameReject');
+    };
+  }, []);
+
   return (
     <>
       <MatchMakingDialog
@@ -51,12 +65,10 @@ export default function NormalMatchMakingDialog(
             onClick={() => {
               setIsThemeSelecting(false);
               setIsWaiting(true);
-              console.log('theme: ', theme);
               alarm_sock.emit(
-                'gameRequest',
+                'normalGameRequest',
                 {
                   userId: userId,
-                  gameMode: 'normal',
                   theme: theme
                 },
                 (state: any) => {

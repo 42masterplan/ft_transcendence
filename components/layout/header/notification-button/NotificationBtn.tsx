@@ -84,9 +84,12 @@ export default function NotificationBtn() {
       disconnect();
       router.push('/welcome/double-tab');
     });
-    socket.on('gameCancel', (matchId: string) => {
+    socket.on('normalGameCancel', (matchId: string) => {
+      console.log('gameCanceled: ', matchId);
       setMatchRequests((prev) =>
-        prev.filter((match) => match.matchId != matchId)
+        prev.filter((match) => {
+          match.matchId != matchId;
+        })
       );
       setNotificationCount((prev) => prev - 1);
     });
@@ -121,7 +124,7 @@ export default function NotificationBtn() {
       socket.off('gameRequest');
       socket.off('gameStart');
       socket.off('error');
-      socket.off('gameCancel');
+      socket.off('normalGameCancel');
     };
   }, []);
   useEffect(() => {

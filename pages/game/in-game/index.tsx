@@ -273,12 +273,12 @@ export default function Game() {
       {gameover ? (
         <GameResult
           playerA={{
-            name: forfeit ? bName : aName,
-            profileImage: forfeit ? bProfileImage : aProfileImage
+            name: aName,
+            profileImage: aProfileImage
           }}
           playerB={{
-            name: forfeit ? aName : bName,
-            profileImage: forfeit ? aProfileImage : bProfileImage
+            name: bName,
+            profileImage: bProfileImage
           }}
           score={score}
           time={time}

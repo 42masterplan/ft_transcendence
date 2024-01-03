@@ -20,11 +20,11 @@ export default function GameStatus(props: {
         </div>
       ) : null}
       <div className='w-[220px] h-[400px] py-9 bg-slate-600  rounded-[10px] border border-black flex-col justify-center items-center gap-5 inline-flex'>
-        <PlayerPortrait {...playerA} />
+        <PlayerPortrait {...playerB} />
         <span className='text-center text-white text-[40px] font-bold font-[Roboto Mono]'>
           {time >= 60 ? Math.floor(time / 60) + ':' + (time % 60) : '0:' + time}
         </span>
-        <PlayerPortrait {...playerB} />
+        <PlayerPortrait {...playerA} />
       </div>
     </div>
   );

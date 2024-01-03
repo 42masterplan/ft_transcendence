@@ -1,11 +1,13 @@
 import {match} from 'assert';
 import {useEffect, useState} from 'react';
 
+const WAITING_TIME = 15;
+
 export default function MatchMakingTimer(props: {
   isAscending: boolean;
-  matchId: string;
-  stopNormalMatchMaking: any;
-  setIsWaiting: any;
+  matchId?: string;
+  stopNormalMatchMaking?: any;
+  setIsWaiting?: any;
 }) {
   const [TimeNum, setTimeNum] = useState(10);
   const {isAscending, stopNormalMatchMaking, setIsWaiting, matchId} = props;
@@ -17,7 +19,7 @@ export default function MatchMakingTimer(props: {
       }, 1000);
       return () => clearInterval(id);
     } else {
-      setTimeNum(10);
+      setTimeNum(WAITING_TIME);
       const id = setInterval(() => {
         setTimeNum((c) => c - 1);
       }, 1000);
@@ -26,7 +28,7 @@ export default function MatchMakingTimer(props: {
   }, []);
   useEffect(() => {
     if (!TimeNum && !isAscending) {
-      stopNormalMatchMaking({matchId});
+      stopNormalMatchMaking({matchId: matchId});
       setIsWaiting(false);
     }
   }, [TimeNum, isAscending]);

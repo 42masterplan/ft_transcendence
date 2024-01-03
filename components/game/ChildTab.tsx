@@ -35,6 +35,12 @@ export default function ChildTab({setTheme}: any) {
         >
           Swimming
         </TabsTrigger>
+        <TabsTrigger
+          value={Theme.Climbing}
+          onClick={() => setTheme(Theme.Climbing)}
+        >
+          Climbing
+        </TabsTrigger>
       </TabsList>
     </Tabs>
   );

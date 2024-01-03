@@ -5,34 +5,17 @@ import {
   MatchMakingDialogContent,
   MatchMakingDialogTrigger
 } from './MatchMakingDialog';
-import {useRouter} from 'next/router';
-import {useEffect} from 'react';
 import useSocket from '@/hooks/useSocket';
 
 export default function LadderMatchMakingBtn() {
-  const [socket] = useSocket('ladder');
-  const router = useRouter();
-
-  useEffect(() => {
-    socket.on('ladderMatch', (state) => {
-      console.log('래더 매치 발견', state);
-      router.push({
-        pathname: '/game/pre-game',
-        query: {id: state.id, theme: 'default'}
-      });
-    });
-    // THINK: 매치 메이킹 취소 성공 확인?
-    return () => {
-      socket.off('ladderMatch');
-    };
-  }, []);
+  const [socket] = useSocket('alarm');
   function startLadderMatchMaking() {
     console.log('래더 매칭 시작');
-    if (socket) socket.emit('ladderMatch');
+    if (socket) socket.emit('ladderGameRequest');
   }
   function stopLadderMatchMaking() {
     console.log('래더 매칭 취소');
-    if (socket) socket.emit('ladderMatchCancel');
+    if (socket) socket.emit('ladderGameCancel');
   }
 
   return (

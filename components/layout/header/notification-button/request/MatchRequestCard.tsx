@@ -28,15 +28,15 @@ export default function MatchRequestCard(props: NotificationCardProps) {
       prev.filter((match: any) => match.id !== newMatch.id)
     );
     setNotificationCount((prev: number) => prev - 1);
-    socket.emit('gameResponse', {
+    socket.emit('normalGameResponse', {
       isAccept: true,
       matchId: newMatch.id
     });
   };
 
   const handleReject = () => {
-    socket.emit('gameResponse', {
-      isAccept: true,
+    socket.emit('normalGameResponse', {
+      isAccept: false,
       matchId: newMatch.id
     });
     setMatchRequests((prev: any) =>
