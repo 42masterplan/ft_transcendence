@@ -28,6 +28,9 @@ export default function LadderMatchMakingBtn() {
         variant: 'destructive'
       });
     });
+    return () => {
+      socket.off('ladderGameReject');
+    };
   }, [socket]);
 
   useEffect(() => {
