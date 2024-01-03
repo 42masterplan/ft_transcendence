@@ -105,7 +105,6 @@ function listenToSocketEvents(
     setScore(backendScore);
   });
   socket.on('gameOver', (state) => {
-    console.log('game over');
     if (state.matchId != matchId) return;
     if (state.isForfeit) setForfeit(true);
     setGameOver(true);
@@ -245,7 +244,7 @@ export default function Game() {
       } else c.fillStyle = BACKGROUND_COLOR;
       c.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
       c.strokeStyle = 'white';
-      c.lineWidth = 2;
+      c.lineWidth = 10;
       c.strokeRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
       playerA.draw();
       playerB.draw();
@@ -266,6 +265,7 @@ export default function Game() {
       socket.off('gameOver');
       socket.off('updateTime');
       socket.off('deuce');
+      socket.off('gameFull');
       socket.off('joinedRoom');
       socket.off('gameFull');
       socket.off('connect');
