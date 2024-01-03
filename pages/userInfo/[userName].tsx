@@ -1,4 +1,3 @@
-import Router from 'next/router';
 import ScrollableContainer from '@/components/container/ScrollableContainer';
 import UserInfoCard from '@/components/card/userInfoCard/UserInfoCard';
 import {useEffect, useState} from 'react';
@@ -8,9 +7,10 @@ import AchievementSection from '@/components/sections/userInfoPage/AchievementSe
 import MatchHistorySection from '@/components/sections/userInfoPage/MatchHistorySection';
 import {User} from '@/classes/User';
 import SpinningLoader from '@/components/loader/SpinningLoader';
+import {useRouter} from 'next/router';
 
 export default function UserPage() {
-  const router = Router;
+  const router = useRouter();
   // get user name from url
   const userName = router.query.userName as string;
   const {fetchData, response, isSuccess, loading, error} = useAxios();
