@@ -17,7 +17,7 @@ export default function LadderGameSection() {
         <CardTitle className=' font-extrabold text-7xl text-rose-900'>
           Ladder Game
         </CardTitle>
-        <CardDescription>
+        <CardDescription className='text-white'>
           공통된 규칙을 따르며 승패를 겨루는 래더게임 입니다. 승리 혹은
           죽음뿐입니다......
         </CardDescription>
