@@ -1,5 +1,5 @@
 import PlayerPortrait from '@/components/game/PlayerPortrait';
-import {Player} from '@/DummyBackend/APIData';
+import {Player} from '@/types/game';
 
 export default function GameStatus(props: {
   gameover: boolean;

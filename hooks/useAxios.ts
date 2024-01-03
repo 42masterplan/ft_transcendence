@@ -83,7 +83,7 @@ const useAxios = () => {
 
         if (err?.response?.status === 401) {
           if (err.response.data.message === 'Email Required') {
-            router.push('/setEmail');
+            router.push('/welcome/setEmail');
           } else {
             removeCookie('accessToken');
             removeCookie('isTwoFactorDone');

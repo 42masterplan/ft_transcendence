@@ -1,21 +1,22 @@
 import UserInfoCard from '@/components/card/userInfoCard/UserInfoCard';
 import RequestButton from './RequestButton';
-import * as dummyAPI from '@/DummyBackend/notificationAPI';
-import * as Type from '@/lib/types';
-import {Game} from '@/lib/classes/Game';
-import {User} from '@/lib/classes/User';
+import {gameRequest} from '@/types/notification';
+import {GameInfoType} from '@/types/game';
+import {Game} from '@/classes/Game';
+import {User} from '@/classes/User';
 import useSocket from '@/hooks/useSocket';
+import {userInfoType} from '@/types/user';
 
 type NotificationCardProps = {
-  request: dummyAPI.gameRequest;
+  request: gameRequest;
   setMatchRequests: any;
   setNotificationCount: any;
 };
 
 export default function MatchRequestCard(props: NotificationCardProps) {
   const {request, setMatchRequests, setNotificationCount} = props;
-  const newMatch: Type.GameInfo = new Game();
-  const notificationShooter: Type.UserInfo = new User();
+  const newMatch: GameInfoType = new Game();
+  const notificationShooter: userInfoType = new User();
   const [socket] = useSocket('alarm');
   notificationShooter.name = request.userName;
   notificationShooter.profileImage = request.profileImage;

@@ -49,7 +49,6 @@ const SelectChannelType = ({
         value={channelType}
         onValueChange={(type) => {
           setChannelType(type);
-          console.log(type);
         }}
       >
         <SelectTrigger className=' bg-custom2 w-[342px]'>
@@ -172,7 +171,6 @@ export default function CreateChannel() {
       const {data}: {data: userType[]} = await Axios.get(`/users/friends`, {
         params: {id: 'user_id'}
       });
-      console.log(data);
       const results = [] as any;
       data.forEach((value) => {
         results.push({

@@ -26,7 +26,6 @@ const DMInput = ({setDMData, dmInfo}: {setDMData: any; dmInfo: dmInfoType}) => {
           },
           (ret: any) => {
             if (ret === 'DmNewMessage Success!') {
-              console.log('dm 보냄 성공', ret);
               setDMData((prev: dmMessageType[]) => {
                 return [
                   ...prev,

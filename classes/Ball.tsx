@@ -1,6 +1,6 @@
 import React from 'react';
 import Particle from './Particle';
-import {BALL_RADIUS, BALL_COLOR, BALL_VELOCITY} from '../game/macros';
+import {BALL_RADIUS, BALL_COLOR, BALL_VELOCITY} from '../lib/game/macros';
 
 interface BallProps {
   x: number;

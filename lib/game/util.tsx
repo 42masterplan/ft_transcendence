@@ -1,4 +1,4 @@
-import Player from '@/lib/classes/Player';
+import Player from '@/classes/Player';
 import {SCREEN_WIDTH, SCREEN_HEIGHT, PADDLE_OFFSET} from './macros';
 import {Socket} from 'socket.io-client';
 

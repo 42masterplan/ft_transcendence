@@ -69,7 +69,6 @@ export default React.forwardRef(function ChannelList(
   }, []);
   const handleChannelClick = useCallback((channel: any) => {
     //채널방 클릭시 채널방 정보를 받아옵니다.
-    console.log(`채널방 클릭시 '${channel.id}'채널방 정보를 받아옵니다.`);
     infoDispatch({
       type: 'ID_SET',
       payload: channel.id

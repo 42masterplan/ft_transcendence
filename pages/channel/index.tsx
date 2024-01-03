@@ -22,7 +22,6 @@ const initialStateInfo: channelStateType = {
 function channelInfoReducer(state: any, action: any) {
   switch (action.type) {
     case 'ID_SET': // channelId 변경됨
-      console.log('ID_SET', action.payload);
       return {
         ...state,
         channelId: action.payload

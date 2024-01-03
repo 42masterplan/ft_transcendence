@@ -4,7 +4,7 @@ import {
   TabsList,
   TabsTrigger
 } from '@/components/shadcn/ui/tabs';
-import {Theme} from '@/lib/types';
+import {Theme} from '@/types/game';
 import Image from 'next/image';
 
 export default function ChildTab({setTheme}: any) {
@@ -73,7 +73,12 @@ export default function ChildTab({setTheme}: any) {
         />
       </TabsContent>
       <TabsContent value={Theme.Soccer} className='flex justify-center'>
-        <Image src='/gameThemes/Profile/Soccer.png' width={200} height={200} />
+        <Image
+          src='/gameThemes/Profile/Soccer.png'
+          width={200}
+          height={200}
+          alt='이미지를 불러오는데 실패했습니다.'
+        />
       </TabsContent>
       <TabsContent value={Theme.Swimming} className='flex justify-center'>
         <Image

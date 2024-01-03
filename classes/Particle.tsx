@@ -1,6 +1,5 @@
 import React from 'react';
-import Player from './Player';
-import {BALL_COLOR} from '../game/macros';
+import {BALL_COLOR} from '../lib/game/macros';
 
 interface ParticleProps {
   x: number;

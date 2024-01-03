@@ -1,8 +1,8 @@
 import UserInfoCard from '@/components/card/userInfoCard/UserInfoCard';
 import RequestButton from './RequestButton';
-import {friendRequest} from '@/DummyBackend/notificationAPI';
-import * as Type from '@/lib/types';
-import {User} from '@/lib/classes/User';
+import {friendRequest} from '@/types/notification';
+import {userInfoType} from '@/types/user';
+import {User} from '@/classes/User';
 import useAxios from '@/hooks/useAxios';
 import {useEffect} from 'react';
 import {useToast} from '@/components/shadcn/ui/use-toast';
@@ -14,7 +14,7 @@ export default function FriendRequestCard({
   request: friendRequest;
   fetchList: () => void;
 }) {
-  const notificationShooter: Type.UserInfo = new User();
+  const notificationShooter: userInfoType = new User();
   notificationShooter.name = request.friend.name;
   notificationShooter.profileImage = request.friend.profileImage;
   const {fetchData: accept, isSuccess: isAcceptSuccess} = useAxios();

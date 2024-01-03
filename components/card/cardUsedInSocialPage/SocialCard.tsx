@@ -1,5 +1,5 @@
-import * as Type from '@/lib/types';
-import {User} from '@/lib/classes/User';
+import {userStatusType, userInfoType} from '@/types/user';
+import {User} from '@/classes/User';
 import UserInfoCard from '../userInfoCard/UserInfoCard';
 import ButtonGroup from './buttonGroup/ButtonGroup';
 import {AccordionItem} from '@radix-ui/react-accordion';
@@ -9,21 +9,21 @@ import {
 } from '@/components/shadcn/ui/accordion';
 import {TooltipProvider} from '@/components/shadcn/ui/tooltip';
 
-function userPropsToUserClass(props: SocialCardProps): Type.UserInfo {
+function userPropsToUserClass(props: SocialCardProps): userInfoType {
   const userClass = new User();
   userClass.id = props.id;
   userClass.profileImage = props.profileImage;
   userClass.name = props.name;
-  userClass.currentStatus = props.currentStatus as Type.userStatus;
+  userClass.currentStatus = props.currentStatus as userStatusType;
   userClass.introduction = props.introduction;
-  return userClass as Type.UserInfo;
+  return userClass as userInfoType;
 }
 
 interface SocialCardProps {
   id: string;
   profileImage: string;
   name: string;
-  currentStatus: Type.userStatus | string;
+  currentStatus: userStatusType | string;
   introduction: string;
   isFriend: boolean;
   isBlocked: boolean;

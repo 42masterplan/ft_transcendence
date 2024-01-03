@@ -45,9 +45,7 @@ export default React.forwardRef(function ChannelBody(
       profileImage,
       content
     }: MessageHandlerArgs) => {
-      console.log('newMessage');
       if (channelInfoRef?.current.channelId === channelId) {
-        console.log('메세지가 도착했습니다.');
         handleMessageAdd({
           id: userId,
           name: userName,
@@ -56,7 +54,6 @@ export default React.forwardRef(function ChannelBody(
         });
       }
       if (content.startsWith('[system]')) {
-        console.log('시스템 메세지가 도착했습니다.');
         if (!content.endsWith('뮤트되었습니다.')) socket.emit('myChannels');
       }
     },

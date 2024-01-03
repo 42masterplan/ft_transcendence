@@ -40,8 +40,5 @@ export default function ButtonGroup({
   } else if (isBlocked && !isFriend) {
     // blocked: unblock
     return <UnblockButton userId={userId} />;
-  } else {
-    // Error: invalid user status
-    console.log('from ButtonGroup: invalid user status');
   }
 }

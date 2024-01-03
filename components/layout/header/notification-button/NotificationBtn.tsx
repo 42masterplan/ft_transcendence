@@ -24,7 +24,7 @@
 
 import {Bell} from 'lucide-react';
 import {Button} from '@/components/shadcn/ui/button';
-import {ResponsiveDesign} from '../../../../lib/ResponsiveDesign';
+import {ResponsiveDesign} from '@/lib/ResponsiveDesign';
 import {
   Sheet,
   SheetContent,
@@ -39,7 +39,7 @@ import ScrollableContainer from '@/components/container/ScrollableContainer';
 import useSocket from '@/hooks/useSocket';
 import {useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
-import {gameRequest, friendRequest} from '@/DummyBackend/notificationAPI';
+import {gameRequest, friendRequest} from '@/types/notification';
 import useAxios from '@/hooks/useAxios';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 
@@ -75,7 +75,6 @@ export default function NotificationBtn() {
       setNotificationCount((prev) => prev + 1);
     });
     socket.on('error', (error) => {
-      console.log(error);
       toast({
         title: 'Error',
         description: error,
@@ -85,7 +84,6 @@ export default function NotificationBtn() {
       router.push('/welcome/double-tab');
     });
     socket.on('normalGameCancel', (matchId: string) => {
-      console.log('gameCanceled: ', matchId);
       setMatchRequests((prev) =>
         prev.filter((match) => {
           match.matchId != matchId;

@@ -4,7 +4,6 @@ import {useRouter} from 'next/router';
 import ScrollableContainer from '@/components/container/ScrollableContainer';
 import ChatMessage from '@/components/channel/body/ChatMessage';
 import useSocket from '@/hooks/useSocket';
-import {MsgHistoryType} from '@/types/channel';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 import {cn} from '@/lib/utils';
 import DMInput from '@/components/input/DmInput';
@@ -31,8 +30,6 @@ export default function DMPage() {
   const chatUser = router.query.userName || '';
   useEffect(() => {
     socket.on('DMNewMessage', ({dmId, participantId, content}) => {
-      console.log('DMNewMessage', dmId, participantId, content);
-      console.log('되나?', dmId, '인포', dmInfoRef.current.dmId);
       if (dmId !== dmInfoRef.current.dmId) return;
       setDMData((prev) => {
         return [
@@ -70,10 +67,10 @@ export default function DMPage() {
     fetchData({
       method: 'get',
       url: `users/friends/isFriend`,
-      params: {name: chatUser}
+      params: {name: chatUser},
+      disableSuccessToast: true
     });
     socket.emit('DmHistory', chatUser, (data: any) => {
-      console.log('DmHistory', data);
       if (data === 'DmHistory Fail!')
         toast({
           title: 'DM 가져오기 실패!',
@@ -124,41 +121,47 @@ export default function DMPage() {
     return <SpinningLoader />;
   return (
     <>
-      <div className=' bg-custom3 text-center text-lg'>{chatUser}</div>
-      <div className=' h-5/6'>
-        <ScrollableContainer className='rounded-none bg-custom2'>
-          <div>
-            {DMData?.map((msg: dmMessageType, idx: number) => (
-              <div
-                key={idx}
-                className={cn(
-                  'flex w-max max-w-[90%] rounded-lg px-3 text-sm',
-                  msg?._participantId === dmInfo.myId ? 'ml-auto' : 'p-2'
-                )}
-              >
-                <ChatMessage
-                  isMe={msg?._participantId === dmInfo.myId}
-                  size='md'
-                  message={msg?._content}
-                  side={msg?._participantId === dmInfo.myId ? 'right' : 'left'}
-                  className='m-2 hover:scale-[1.02] duration-200 hover:-translate-y-1 bg-custom4'
-                  ref={messageEndRef as any}
-                  profileImage={
-                    msg._participantId === dmInfo.myId
-                      ? dmInfo.myProfileImage
-                      : dmInfo.FriendProfileImage
-                  }
-                  user_name={
-                    msg._participantId === dmInfo.myId
-                      ? dmInfo.myName
-                      : dmInfo.FriendName
-                  }
-                  channelId={''}
-                  role={'user'}
-                  user_id={msg._participantId}
-                />
+      <div className=' text-xl font-bold text-center'>{chatUser}</div>
+      <div className='flex  flex-col h-full'>
+        <ScrollableContainer className='bg-custom2 rounded-none'>
+          <div className=' h-5/6'>
+            <ScrollableContainer className='rounded-none bg-custom2'>
+              <div>
+                {DMData?.map((msg: dmMessageType, idx: number) => (
+                  <div
+                    key={idx}
+                    className={cn(
+                      'flex w-max max-w-[90%] rounded-lg px-3 text-sm',
+                      msg?._participantId === dmInfo.myId ? 'ml-auto' : 'p-2'
+                    )}
+                  >
+                    <ChatMessage
+                      isMe={msg?._participantId === dmInfo.myId}
+                      size='md'
+                      message={msg?._content}
+                      side={
+                        msg?._participantId === dmInfo.myId ? 'right' : 'left'
+                      }
+                      className='m-2 hover:scale-[1.02] duration-200 hover:-translate-y-1 bg-custom4'
+                      ref={messageEndRef as any}
+                      profileImage={
+                        msg._participantId === dmInfo.myId
+                          ? dmInfo.myProfileImage
+                          : dmInfo.FriendProfileImage
+                      }
+                      user_name={
+                        msg._participantId === dmInfo.myId
+                          ? dmInfo.myName
+                          : dmInfo.FriendName
+                      }
+                      channelId={''}
+                      role={'user'}
+                      user_id={msg._participantId}
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
+            </ScrollableContainer>
           </div>
         </ScrollableContainer>
         <DMInput setDMData={setDMData} dmInfo={dmInfo} />

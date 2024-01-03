@@ -29,7 +29,6 @@ export default function BanUserListSlider({
       'getParticipants',
       (res: {participants: userListType[]; channelId: string}) => {
         //I want to filter me out of the list
-        console.log('파티씨판트');
         if (res.channelId !== channelId) return;
         setParticipants(res?.participants);
         participantsRef.current = res.participants;

@@ -43,13 +43,9 @@ export default function SetAvatar({
   const handleSuccess = () => {
     setProfileImage(avatarList[selected]);
     setSelected(15);
-    console.log('성공한 경우');
-    console.log(response);
-    console.log(response.profileImage);
     if (response != null) {
       const customAvatar =
         process.env.NEXT_PUBLIC_API_ENDPOINT + '/' + response.profileImage;
-      console.log(customAvatar);
       setAvatarList([...avatarList, customAvatar]);
       setCustomAvatar(customAvatar);
       setProfileImage(customAvatar);

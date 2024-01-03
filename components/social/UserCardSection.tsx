@@ -10,8 +10,6 @@ import {useEffect, useState} from 'react';
 import useAxios from '@/hooks/useAxios';
 // function to filter users. Returns filtered users.
 
-//TODO: 추후에 status별로 따로 요청 또는 소켓 통해서 사용자 상태 업데이트
-
 interface UserCardSectionProps {
   allUsers: userType[];
   friends: userType[];

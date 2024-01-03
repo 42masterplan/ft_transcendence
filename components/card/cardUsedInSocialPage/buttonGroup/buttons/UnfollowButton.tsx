@@ -27,7 +27,6 @@ export default function UnfollowButton({userId}: UnfollowButtonProps) {
             <ToastAction
               altText='Unfriend User'
               onClick={() => {
-                console.log('unfriend user');
                 fetchData({
                   method: 'delete',
                   url: '/users/friends/' + userId,
