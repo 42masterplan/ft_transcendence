@@ -134,7 +134,10 @@ export default function ChannelPage() {
                 historyLoading={historyLoading}
               />
             </ScrollableContainer>
-            <ChannelInput channelId={channelId} />
+            <ChannelInput
+              channelId={channelId}
+              historyLoading={historyLoading}
+            />
           </>
         )}
       </div>
