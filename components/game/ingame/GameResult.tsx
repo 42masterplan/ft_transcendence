@@ -1,6 +1,6 @@
 import PlayerPortrait from '@/components/game/PlayerPortrait';
 import LinkBtn from '../../button/LinkBtn';
-import {Player} from '@/DummyBackend/APIData';
+import {Player} from '@/types/game';
 import {GAME_TIME_LIMIT} from '@/lib/game/macros';
 
 const textcss =

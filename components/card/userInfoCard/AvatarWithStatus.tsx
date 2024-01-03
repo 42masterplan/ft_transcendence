@@ -9,13 +9,13 @@ import {
   AvatarImage
 } from '@/components/shadcn/ui/avatar';
 
-import {userStatus} from '@/lib/types';
+import {userStatusType} from '@/types/user';
 import {sizeType} from '@/lib/ResponsiveDesign';
 
 type AvatarWithStatusProps = {
   image: string;
   size: sizeType;
-  status?: userStatus | null;
+  status?: userStatusType | null;
   showStatus?: boolean;
 };
 

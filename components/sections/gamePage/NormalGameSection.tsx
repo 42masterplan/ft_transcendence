@@ -1,6 +1,5 @@
 import {useState} from 'react';
 import ChildTab from '@/components/game/ChildTab';
-import MatchMakingBtn from '@/components/game/matchmaking/LadderMatchMaking';
 import NormalMatchMakingBtn from '@/components/game/matchmaking/NormalMatchMakingBtn';
 import {
   Card,
@@ -10,14 +9,8 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/shadcn/ui/card';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger
-} from '@/components/shadcn/ui/tabs';
-import {Theme} from '@/lib/types';
-import LadderGameSection from '@/components/sections/gamePage/LadderGameSection';
+
+import {Theme} from '@/types/game';
 
 export default function NormalGameSection() {
   const [theme, setTheme] = useState(Theme.Default);

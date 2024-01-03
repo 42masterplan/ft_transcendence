@@ -2,7 +2,7 @@ import {MatchMakingDialog, MatchMakingDialogContent} from './MatchMakingDialog';
 import MatchMakingTimer from './MatchMakingTimer';
 import useSocket from '@/hooks/useSocket';
 import {useEffect, useState} from 'react';
-import {Theme} from '@/lib/types';
+import {Theme} from '@/types/game';
 import ChildTab from '../ChildTab';
 import {Button} from '@/components/shadcn/ui/button';
 import {useToast} from '@/components/shadcn/ui/use-toast';

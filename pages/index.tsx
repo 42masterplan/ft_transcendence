@@ -4,7 +4,7 @@ import Router from 'next/router';
 import useAxios from '@/hooks/useAxios';
 import {useEffect, useState} from 'react';
 import SpinningLoader from '@/components/loader/SpinningLoader';
-import {User} from '@/lib/classes/User';
+import {User} from '@/classes/User';
 import ScrollableContainer from '@/components/container/ScrollableContainer';
 import UserInfoCard from '@/components/card/userInfoCard/UserInfoCard';
 import GameStatsSection from '@/components/sections/userInfoPage/GameStatsSection';

@@ -1,4 +1,4 @@
-import * as API from '@/DummyBackend/mainAPI';
+import {rank} from '@/types/game';
 import {
   Card,
   CardContent,
@@ -10,7 +10,7 @@ import React from 'react';
 import DynamicProgressBar from '../../graph/DynamicProgressBar';
 
 interface GameStatsCardProps {
-  rank: API.rank;
+  rank: rank;
 }
 
 export default function GameStatsCard({rank}: GameStatsCardProps) {

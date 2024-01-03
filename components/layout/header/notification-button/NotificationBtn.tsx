@@ -24,7 +24,7 @@
 
 import {Bell} from 'lucide-react';
 import {Button} from '@/components/shadcn/ui/button';
-import {ResponsiveDesign} from '../../../../lib/ResponsiveDesign';
+import {ResponsiveDesign} from '@/lib/ResponsiveDesign';
 import {
   Sheet,
   SheetContent,
@@ -39,7 +39,7 @@ import ScrollableContainer from '@/components/container/ScrollableContainer';
 import useSocket from '@/hooks/useSocket';
 import {useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
-import {gameRequest, friendRequest} from '@/DummyBackend/notificationAPI';
+import {gameRequest, friendRequest} from '@/types/notification';
 import useAxios from '@/hooks/useAxios';
 import {useToast} from '@/components/shadcn/ui/use-toast';
 

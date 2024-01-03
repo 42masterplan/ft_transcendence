@@ -6,7 +6,7 @@ import useAxios from '@/hooks/useAxios';
 import GameStatsSection from '@/components/sections/userInfoPage/GameStatsSection';
 import AchievementSection from '@/components/sections/userInfoPage/AchievementSection';
 import MatchHistorySection from '@/components/sections/userInfoPage/MatchHistorySection';
-import {User} from '@/lib/classes/User';
+import {User} from '@/classes/User';
 import SpinningLoader from '@/components/loader/SpinningLoader';
 
 export default function UserPage() {

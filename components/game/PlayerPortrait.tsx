@@ -1,4 +1,4 @@
-import {Player} from '@/DummyBackend/APIData';
+import {Player} from '@/types/game';
 import AvatarWithStatus from '../card/userInfoCard/AvatarWithStatus';
 
 export default function PlayerPortrait(Player: Player) {

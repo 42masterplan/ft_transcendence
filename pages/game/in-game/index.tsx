@@ -10,9 +10,9 @@ import {
   GAME_TIME_LIMIT,
   SCORE_LIMIT
 } from '@/lib/game/macros';
-import Player from '@/lib/classes/Player';
-import Ball from '@/lib/classes/Ball';
-import Particle from '@/lib/classes/Particle';
+import Player from '@/classes/Player';
+import Ball from '@/classes/Ball';
+import Particle from '@/classes/Particle';
 import {useEffect, useRef, useState} from 'react';
 import {handleKeyDowns, handleKeyUps} from '@/lib/game/util';
 import ScoreBoard from '@/components/game/ingame/ScoreBoard';

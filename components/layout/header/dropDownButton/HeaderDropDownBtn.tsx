@@ -20,7 +20,7 @@ import {
 } from '@/components/shadcn/ui/dropdown-menu';
 import {Dialog, DialogTrigger} from '@/components/shadcn/ui/dialog';
 import ThemeSwitchBtn from '../ThemeSwitchBtn';
-import {ResponsiveDesign} from '../../../../lib/ResponsiveDesign';
+import {ResponsiveDesign} from '@/lib/ResponsiveDesign';
 import Link from 'next/link';
 import SettingsModal from './SettingModal';
 import {useRouter} from 'next/router';

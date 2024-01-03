@@ -1,7 +1,7 @@
 import {Gamepad2, MessagesSquare, Home, Trophy, Users} from 'lucide-react';
 
 import {Button} from '@/components/shadcn/ui/button';
-import {ResponsiveDesign} from '../../../lib/ResponsiveDesign';
+import {ResponsiveDesign} from '@/lib/ResponsiveDesign';
 import Link from 'next/link';
 
 // There are 5 types of buttons in the footer:

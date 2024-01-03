@@ -13,11 +13,11 @@
  */
 
 import AvatarWithStatus from './AvatarWithStatus';
-import {UserInfo} from '@/lib/types';
+import {userInfoType} from '@/types/user';
 import {sizeType} from '@/lib/ResponsiveDesign';
 
 type UserInfoCardProps = {
-  userInfo: UserInfo;
+  userInfo: userInfoType;
   size?: sizeType;
   side?: 'left' | 'right';
   printIntro?: boolean;
