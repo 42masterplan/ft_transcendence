@@ -25,7 +25,7 @@ import getAuthorization from '@/lib/utils/cookieUtils';
 import PlayerPortrait from '@/components/game/PlayerPortrait';
 import Divider from '@/components/game/ingame/Divider';
 import useSocket from '@/hooks/useSocket';
-
+const socketServerUrl = process.env.NEXT_PUBLIC_CHAT_SOCKET;
 function prepGame(
   canvas: HTMLCanvasElement,
   contextRef: any,
@@ -288,7 +288,7 @@ export default function Game() {
 
   useEffect(() => {
     if (!initSocket || gameMode == '' || matchId == '' || side == '') return;
-    const newSocket = io('http://localhost:8080/game' as string, {
+    const newSocket = io(`${socketServerUrl}:8080/game` as string, {
       transports: ['websocket'],
       auth: {
         Authorization: `Bearer ${getAuthorization()}`
