@@ -26,7 +26,7 @@ export default function MatchRequestCard(props: NotificationCardProps) {
   //reduce notification count
   const handleAccept = () => {
     setMatchRequests((prev: any) =>
-      prev.filter((match: any) => match.id !== newMatch.id)
+      prev.filter((match: gameRequest) => match.matchId !== newMatch.id)
     );
     setNotificationCount((prev: number) => prev - 1);
     socket.emit('normalGameResponse', {
@@ -40,8 +40,11 @@ export default function MatchRequestCard(props: NotificationCardProps) {
       isAccept: false,
       matchId: newMatch.id
     });
+    console.log('I reject !!: ', newMatch.id);
     setMatchRequests((prev: any) =>
-      prev.filter((match: any) => match.id !== newMatch.id)
+      prev.filter((match: gameRequest) => {
+        match.matchId !== newMatch.id;
+      })
     );
     setNotificationCount((prev: number) => prev - 1);
   };
