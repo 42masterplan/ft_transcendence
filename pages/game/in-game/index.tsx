@@ -323,6 +323,8 @@ export default function Game() {
   }, [gameMode, initSocket, matchId, side]);
 
   useEffect(() => {
+    if (!aName || !aProfileImage || !bName || !bProfileImage || !theme)
+      router.replace('/');
     const timer = setInterval(() => {
       setPreGameTime((prevTime) => {
         if (prevTime === 1) {
