@@ -28,6 +28,7 @@ type ChatMessageProps = {
   role: string;
   message: string;
   isMe: boolean;
+  isDm?: boolean;
 };
 
 export default React.forwardRef(function ChatMessage(
@@ -42,7 +43,8 @@ export default React.forwardRef(function ChatMessage(
     role = '',
     message = '',
     isMe,
-    user_id = ''
+    user_id = '',
+    isDm = false
   }: ChatMessageProps,
   ref: any
 ) {
@@ -156,6 +158,7 @@ export default React.forwardRef(function ChatMessage(
           channel_id={channelId}
           role={role}
           isMe={isMe}
+          isDm={isDm}
         />
       </div>
       <UserInfoTextContainer

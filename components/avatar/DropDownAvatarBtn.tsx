@@ -31,11 +31,13 @@ import {useEffect, useState} from 'react';
 const UserDropdownGroup = ({
   userId,
   userName,
-  setIsThemeSelecting
+  setIsThemeSelecting,
+  isDm
 }: {
   userId: string;
   userName: string;
   setIsThemeSelecting: any;
+  isDm: boolean;
 }) => {
   const router = useRouter();
   const {toast} = useToast();
@@ -90,24 +92,26 @@ const UserDropdownGroup = ({
           차단하기
         </span>
       </DropdownMenuItem>
-      <DropdownMenuItem>
-        <PiPaperPlaneTiltBold className='mr-2 h-4 w-4' />
-        <span
-          onClick={() => {
-            isFriend({
-              url: '/users/friends/isFriend',
-              method: 'get',
-              params: {
-                name: userName
-              },
-              disableSuccessToast: true,
-              disableErrorToast: true
-            });
-          }}
-        >
-          일대일 채팅
-        </span>
-      </DropdownMenuItem>
+      {isDm ? null : (
+        <DropdownMenuItem>
+          <PiPaperPlaneTiltBold className='mr-2 h-4 w-4' />
+          <span
+            onClick={() => {
+              isFriend({
+                url: '/users/friends/isFriend',
+                method: 'get',
+                params: {
+                  name: userName
+                },
+                disableSuccessToast: true,
+                disableErrorToast: true
+              });
+            }}
+          >
+            일대일 채팅
+          </span>
+        </DropdownMenuItem>
+      )}
     </DropdownMenuGroup>
   );
 };
@@ -119,6 +123,7 @@ interface DropdownAvatarBtnProps {
   channel_id: string;
   role: string;
   isMe: boolean;
+  isDm: boolean;
 }
 
 export default function DropdownAvatarBtn({
@@ -127,9 +132,9 @@ export default function DropdownAvatarBtn({
   user_id,
   channel_id,
   role,
-  isMe
+  isMe,
+  isDm
 }: DropdownAvatarBtnProps) {
-  const [alarm_sock] = useSocket('alarm');
   const [isWaiting, setIsWaiting] = useState(false);
   const [matchId, setMatchId] = useState('');
   const [isThemeSelecting, setIsThemeSelecting] = useState(false);
@@ -224,6 +229,7 @@ export default function DropdownAvatarBtn({
             userId={user_id}
             userName={user_name}
             setIsThemeSelecting={setIsThemeSelecting}
+            isDm={isDm}
           />
           <DropdownMenuSeparator />
           {role === 'admin' || role == 'owner' ? <AdminDropdownGroup /> : null}
