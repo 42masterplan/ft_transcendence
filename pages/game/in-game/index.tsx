@@ -24,6 +24,7 @@ import {useRouter} from 'next/router';
 import getAuthorization from '@/lib/utils/cookieUtils';
 import PlayerPortrait from '@/components/game/PlayerPortrait';
 import Divider from '@/components/game/ingame/Divider';
+import useSocket from '@/hooks/useSocket';
 
 function prepGame(
   canvas: HTMLCanvasElement,
@@ -174,17 +175,25 @@ export default function Game() {
   const [backgroundImage, setBackgroundImage] = useState(''); // 상태로 배경 이미지 URL을 관리
   const [gameStarted, setGameStarted] = useState(false);
   const [socket, setSocket] = useState<Socket | null>(null);
+  const [alarm_sock, disconnect] = useSocket('alarm');
 
   useEffect(() => {
     function handleBeforeUnload(event: any) {
       event.preventDefault();
       event.returnValue =
         '게임이 진행중입니다. 정말로 나가시겠습니까? (이 경우 기권패로 처리됩니다.)';
+      console.log(socket);
+      if (socket) {
+        console.log('게임 소켓 연결 해제');
+        socket.disconnect(); // 게임 소켓 연결 해제 -> 순서 강제
+      }
+      console.log('알람 소켓 연결 해제');
+      disconnect(); // 알람 소켓 연결 해제
       return '게임이 진행중입니다. 정말로 나가시겠습니까? (이 경우 기권패로 처리됩니다.)';
     }
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
     if (gameMode != '' && matchId != '' && side != '') setInitSocket(true);
