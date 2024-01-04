@@ -118,11 +118,22 @@ export default function NotificationBtn() {
         });
       }
     );
+    socket.on('newFriendRequest', () => {
+      console.log('new friend request');
+      fetchData({
+        method: 'get',
+        url: '/users/friends/request',
+        disableSuccessToast: true
+      });
+      setNotificationCount((prev) => prev + 1);
+    });
+
     return () => {
       socket.off('gameRequest');
       socket.off('gameStart');
       socket.off('error');
       socket.off('normalGameCancel');
+      socket.off('newFriendRequest');
     };
   }, []);
   useEffect(() => {
