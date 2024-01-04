@@ -66,7 +66,12 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
     });
   }, []); // ignore eslint warning. we only want to fetch data once ^^
   useEffect(() => {
-    if (isSuccess === true) setFriends(response);
+    if (isSuccess === true) {
+      response.forEach((friend: userType) => {
+        if (friend.currentStatus === 'online')
+          setFriends((prev) => [...prev, friend]);
+      });
+    }
   }, [isSuccess, response]);
   useEffect(() => {
     function handleBeforeUnload(e: BeforeUnloadEvent) {
