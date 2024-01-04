@@ -127,7 +127,17 @@ export default function NotificationBtn() {
       });
       setNotificationCount((prev) => prev + 1);
     });
-
+    socket.emit('isDoubleLogin', (isDoubleLogin: boolean) => {
+      if (isDoubleLogin) {
+        toast({
+          title: 'Error',
+          description: 'You are logged in from another device.',
+          variant: 'destructive'
+        });
+        disconnect();
+        router.push('/welcome/double-tab');
+      }
+    });
     return () => {
       socket.off('gameRequest');
       socket.off('gameStart');
@@ -135,7 +145,20 @@ export default function NotificationBtn() {
       socket.off('normalGameCancel');
       socket.off('newFriendRequest');
     };
-  }, []);
+  }, [socket]);
+  useEffect(() => {
+    socket.emit('isDoubleLogin', (isDoubleLogin: boolean) => {
+      if (isDoubleLogin) {
+        toast({
+          title: 'Error',
+          description: 'You are logged in from another device.',
+          variant: 'destructive'
+        });
+        disconnect();
+        router.push('/welcome/double-tab');
+      }
+    });
+  }, [router.pathname]);
   useEffect(() => {
     if (isSuccess) {
       setFriendRequests(response);
