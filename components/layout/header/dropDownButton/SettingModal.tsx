@@ -64,7 +64,6 @@ function SettingModalContents() {
           <Label htmlFor='two-step'>2단계 인증 활성화</Label>
         </div>
         <LinkBtn link='/welcome/setEmail'>2단계 인증 이메일 변경</LinkBtn>
-        <UnMemberBtn>회원 탈퇴</UnMemberBtn>
       </TabsContent>
     </Tabs>
     // </div>
