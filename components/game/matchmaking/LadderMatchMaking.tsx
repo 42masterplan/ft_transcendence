@@ -45,6 +45,7 @@ export default function LadderMatchMakingBtn() {
     <MatchMakingDialog onClose={() => stopLadderMatchMaking()}>
       <MatchMakingDialogTrigger asChild>
         <Button
+          className='w-40 h-16 bg-rose-900 text-2xl font-semibold text-gray-300'
           onClick={() => {
             startLadderMatchMaking();
             setRejection(false);

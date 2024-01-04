@@ -23,7 +23,6 @@ import {
   CardTitle
 } from '@/components/shadcn/ui/card';
 import {Button} from '../shadcn/ui/button';
-import {toast} from '../shadcn/ui/use-toast';
 
 export default function ChildTab({setTheme}: any) {
   // theme array
@@ -47,14 +46,7 @@ export default function ChildTab({setTheme}: any) {
               />
               <Button
                 className='bg-lime-600 hover:scale-110 hover:bg-lime-500 transition-transform'
-                onClick={() => {
-                  setTheme(theme);
-                  toast({
-                    title: '테마 설정 완료',
-                    description: `${theme} 테마로 설정되었습니다.`,
-                    duration: 5000
-                  });
-                }}
+                onClick={() => setTheme(theme)}
               >
                 Set Theme to {theme}
               </Button>

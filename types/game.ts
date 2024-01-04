@@ -9,12 +9,12 @@ export interface rank {
   tier: string;
 }
 export const Theme = {
+  Default: 'Default',
   Badminton: 'Badminton',
   Basketball: 'Basketball',
   Soccer: 'Soccer',
   Swimming: 'Swimming',
-  Climbing: 'Climbing',
-  Default: 'Default'
+  Climbing: 'Climbing'
 } as const;
 
 export type GameInfoType = {

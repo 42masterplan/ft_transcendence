@@ -142,6 +142,10 @@ export default function NotificationBtn() {
       setNotificationCount((prev) => prev + 1);
     }
   }, [isSuccess]);
+  let buttonStyle = 'flex relative flex-row justify-center items-center';
+  if (matchRequests.length !== 0 || friendRequests.length !== 0) {
+    buttonStyle += ' animate-bounce';
+  }
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -149,7 +153,7 @@ export default function NotificationBtn() {
         <Button
           variant='iconBtn'
           size='headerBtn'
-          className='flex relative flex-row justify-center items-center'
+          className={buttonStyle}
           onClick={() =>
             fetchData({
               method: 'get',
@@ -159,7 +163,7 @@ export default function NotificationBtn() {
           }
         >
           {/* This div is for match request -> if notification count is 0 -> do not display */}
-          {notificationCount === 0 ? null : (
+          {matchRequests.length === 0 ? null : (
             <span
               className='absolute 
               top-1 right-1 sm:top-1 sm:right-1.5
@@ -167,13 +171,13 @@ export default function NotificationBtn() {
               px-1 py-1  sm:px-1.5 sm:py-0.5
               text-[0px] sm:text-xs 
               font-bold leading-none text-red-100 transform translate-x-1/2 
-              -translate-y-1/2 bg-red-600 rounded-full '
+              -translate-y-1/2 bg-red-600 rounded-full animate-pulse'
             >
               {matchRequests.length}
             </span>
           )}
           {/* This div is for Notification Count -> if notification count is 0 -> do not display */}
-          {notificationCount === 0 ? null : (
+          {friendRequests.length === 0 ? null : (
             <span
               className='absolute 
               top-1 left-1 sm:top-1 sm:left-1.5
@@ -181,7 +185,7 @@ export default function NotificationBtn() {
               px-1 py-1  sm:px-1.5 sm:py-0.5
               text-[0px] sm:text-xs 
               font-bold leading-none text-red-100 transform -translate-x-1/2 
-              -translate-y-1/2 bg-indigo-600 rounded-full '
+              -translate-y-1/2 bg-indigo-600 rounded-full animate-pulse'
             >
               {friendRequests.length}
             </span>

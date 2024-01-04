@@ -12,8 +12,8 @@ export default function Header({className = ''}: HeaderProps) {
     <header className={className}>
       <HeaderDropDownBtn />
       <h1
-        className='font-mono text-custom3 font-bold tracking-[0.4rem] text-2xl sm:text-5xl text-center
-        px-2 truncate cursor-pointer active:bg-gray-400 rounded-md'
+        className='font-mono text-custom3 font-extrabold tracking-[0.4rem] text-3xl sm:text-5xl text-center
+        px-2 truncate cursor-pointer active:bg-gray-400 rounded-md animate-pulse'
         onClick={() => {
           router.push('/');
         }}
