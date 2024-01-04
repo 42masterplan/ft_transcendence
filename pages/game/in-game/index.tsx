@@ -24,6 +24,7 @@ import {useRouter} from 'next/router';
 import getAuthorization from '@/lib/utils/cookieUtils';
 import PlayerPortrait from '@/components/game/PlayerPortrait';
 import Divider from '@/components/game/ingame/Divider';
+import useSocket from '@/hooks/useSocket';
 
 function prepGame(
   canvas: HTMLCanvasElement,
@@ -105,10 +106,10 @@ function listenToSocketEvents(
     setScore(backendScore);
   });
   socket.on('gameOver', (state) => {
-    console.log('game over');
     if (state.matchId != matchId) return;
     if (state.isForfeit) setForfeit(true);
     setGameOver(true);
+    console.log('game over!!!');
     cancelAnimationFrame(animationId);
     socket.disconnect();
   });
@@ -174,17 +175,25 @@ export default function Game() {
   const [backgroundImage, setBackgroundImage] = useState(''); // 상태로 배경 이미지 URL을 관리
   const [gameStarted, setGameStarted] = useState(false);
   const [socket, setSocket] = useState<Socket | null>(null);
+  const [alarm_sock, disconnect] = useSocket('alarm');
 
   useEffect(() => {
     function handleBeforeUnload(event: any) {
       event.preventDefault();
       event.returnValue =
         '게임이 진행중입니다. 정말로 나가시겠습니까? (이 경우 기권패로 처리됩니다.)';
+      console.log(socket);
+      if (socket) {
+        console.log('게임 소켓 연결 해제');
+        socket.disconnect(); // 게임 소켓 연결 해제 -> 순서 강제
+      }
+      console.log('알람 소켓 연결 해제');
+      disconnect(); // 알람 소켓 연결 해제
       return '게임이 진행중입니다. 정말로 나가시겠습니까? (이 경우 기권패로 처리됩니다.)';
     }
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
     if (gameMode != '' && matchId != '' && side != '') setInitSocket(true);
@@ -197,7 +206,7 @@ export default function Game() {
   }, [router.query, router.isReady]);
 
   useEffect(() => {
-    if (!gameStarted || !socket) return;
+    if (!socket) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const c = canvas.getContext('2d');
@@ -231,7 +240,9 @@ export default function Game() {
         particles
       );
     });
+    // if (gameStarted)
     socket.emit('gameReady');
+    console.log('game ready emitted');
     setInterval(() => {
       handleKeys(keysPressed, playerA, playerB, socket);
     }, RENDERING_RATE);
@@ -288,7 +299,24 @@ export default function Game() {
       gameMode: gameMode,
       side: side
     });
+    newSocket.on('updateScore', (state) => {
+      if (state.matchId != matchId) return;
+      const backendScore = state.score;
+      setScore(backendScore);
+    });
+    newSocket.on('gameOver', (state) => {
+      if (state.matchId != matchId) return;
+      if (state.isForfeit) setForfeit(true);
+      setGameOver(true);
+      console.log('game over!!!');
+      newSocket.disconnect();
+    });
     setSocket(newSocket);
+    return () => {
+      newSocket.off('updateScore');
+      newSocket.off('gameOver');
+      newSocket.disconnect();
+    };
   }, [gameMode, initSocket, matchId, side]);
 
   useEffect(() => {
@@ -296,6 +324,7 @@ export default function Game() {
       setPreGameTime((prevTime) => {
         if (prevTime === 1) {
           clearInterval(timer); // 타이머를 여기서 정지
+          if (socket) socket.disconnect();
           setGameStarted(true);
           return 0; // 시간이 0이 되었으므로 0을 반환
         }
