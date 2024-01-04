@@ -1,15 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {Button} from '@/components/shadcn/ui/button';
 import {Switch} from '@/components/shadcn/ui/switch';
 import {Label} from '@/components/shadcn/ui/label';
-import {
-  DialogContent,
-  DialogHeader,
-  DialogTitle
-} from '@/components/shadcn/ui/dialog';
-
+import {DialogContent} from '@/components/shadcn/ui/dialog';
 import ScrollableContainer from '@/components/container/ScrollableContainer';
-import SetUserInfo from '@/components/userInfo/SetUserInfo';
+import ChangeUserInfo from '@/components/userInfo/ChangeUserInfo';
 import UnMemberBtn from '@/components/button/UnMemberBtn';
 import {
   Tabs,
@@ -47,7 +41,7 @@ function SettingModalContents() {
         <TabsTrigger value='another'>Another</TabsTrigger>
       </TabsList>
       <TabsContent value='account' className='text-center'>
-        <SetUserInfo mode='change' />
+        <ChangeUserInfo />
       </TabsContent>
       <TabsContent
         value='another'
