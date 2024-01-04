@@ -104,7 +104,7 @@ export default function NotificationBtn() {
         theme
       }: gameStartState) => {
         router.push({
-          pathname: 'game/in-game',
+          pathname: '/game/in-game',
           query: {
             matchId,
             aName,
