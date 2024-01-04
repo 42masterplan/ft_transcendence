@@ -30,11 +30,12 @@ export default function UnfollowButton({userId}: UnfollowButtonProps) {
                 fetchData({
                   method: 'delete',
                   url: '/users/friends/' + userId,
-                  errorTitle: 'Unfriend user failed',
-                  errorDescription: 'Please try again later.',
-                  successTitle: 'User unfriended',
+                  errorTitle: '친구 삭제 실패',
+                  errorDescription:
+                    '친구 삭제에 실패하였습니다. 새로고침 후 다시 시도해주세요',
+                  successTitle: '친구 삭제 완료',
                   successDescription:
-                    'You can still send friend request to this user.'
+                    '친구 삭제에 성공하였습니다. 이제 다시 친구 요청을 보낼 수 있습니다.'
                 });
               }}
             >

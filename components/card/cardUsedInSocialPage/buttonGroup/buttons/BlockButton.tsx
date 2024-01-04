@@ -23,10 +23,11 @@ export default function BlockButton({userId}: BlockButtonProps) {
       body: {
         id: userId
       },
-      errorTitle: 'Block request failed',
-      errorDescription: 'Please try again later.',
-      successTitle: 'User blocked',
-      successDescription: 'User blocked successfully.'
+      errorTitle: '차단 실패',
+      errorDescription:
+        '이미 차단된 사용자이거나 네트워크에 오류가 있습니다. 새로고침 후 다시 시도해주세요.',
+      successTitle: '유저 차단 완료',
+      successDescription: '유저 차단에 성공하였습니다.'
     });
   };
 
@@ -38,8 +39,8 @@ export default function BlockButton({userId}: BlockButtonProps) {
       className='hover:scale-[115%] duration-200'
       onClick={() => {
         toast({
-          title: 'Are you sure you want to block this user?',
-          description: 'Unfriend action will be followed.',
+          title: '이 유저를 정말 차단하시겠습니까?',
+          description: '차단하게 되면 친구가 끊기게 됩니다.',
           action: (
             <ToastAction altText='Block User' onClick={sendBlockRequest}>
               Block User
