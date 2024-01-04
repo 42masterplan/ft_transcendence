@@ -4,7 +4,7 @@ import FollowButton from './buttons/FollowButton';
 import UnfollowButton from './buttons/UnfollowButton';
 import MatchRequestButton from './buttons/MatchRequestButton';
 import DMButton from './buttons/DMButton';
-
+import ProfileButton from './buttons/ProfileButton';
 type buttonGroupProps = {
   userId: string;
   isFriend: boolean;
@@ -22,6 +22,7 @@ export default function ButtonGroup({
     // friend: DM, unfollow, match request, block
     return (
       <>
+        <ProfileButton userName={userName} />
         <DMButton userName={userName} />
         <UnfollowButton userId={userId} />
         <MatchRequestButton userId={userId} />
@@ -32,6 +33,7 @@ export default function ButtonGroup({
     // not friend and not blocked: follow, match request, block
     return (
       <>
+        <ProfileButton userName={userName} />
         <FollowButton userId={userId} />
         <MatchRequestButton userId={userId} />
         <BlockButton userId={userId} />
@@ -39,6 +41,12 @@ export default function ButtonGroup({
     );
   } else if (isBlocked && !isFriend) {
     // blocked: unblock
-    return <UnblockButton userId={userId} />;
+
+    return (
+      <>
+        <ProfileButton userName={userName} />
+        <UnblockButton userId={userId} />;
+      </>
+    );
   }
 }

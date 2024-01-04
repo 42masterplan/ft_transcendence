@@ -86,8 +86,6 @@ const useAxios = () => {
             router.push('/welcome/setEmail');
           } else {
             removeCookie('accessToken');
-            removeCookie('isTwoFactorDone');
-            removeCookie('hasAccount');
             router.push('/welcome');
           }
         }

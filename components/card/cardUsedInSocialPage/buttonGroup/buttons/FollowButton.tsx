@@ -20,10 +20,10 @@ export default function FollowButton({userId}: FollowButtonProps) {
           body: {
             friendId: userId
           },
-          successTitle: 'Friend request sent',
-          successDescription: 'Wait for them to accept your friend request.',
-          errorTitle: 'Friend request failed',
-          errorDescription: 'Please try again later.'
+          successTitle: '친구 요청 전송',
+          successDescription: '친구 요청을 전송하였습니다.',
+          errorTitle: '친구 요청 전송 실패',
+          errorDescription: '친구 요청 전송을 실패하였습니다.'
         });
       }}
     >

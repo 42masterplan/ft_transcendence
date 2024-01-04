@@ -22,8 +22,6 @@ export default function LogOutBtn({children}: {children: React.ReactNode}) {
               altText='Log Out'
               onClick={() => {
                 removeCookie('accessToken');
-                removeCookie('isTwoFactorDone');
-                removeCookie('hasAccount');
                 router.push('/welcome');
               }}
             >

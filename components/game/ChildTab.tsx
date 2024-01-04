@@ -88,6 +88,14 @@ export default function ChildTab({setTheme}: any) {
           alt='이미지를 불러오는데 실패했습니다.'
         />
       </TabsContent>
+      <TabsContent value={Theme.Climbing} className='flex justify-center'>
+        <Image
+          src='/gameThemes/Profile/Climbing.png'
+          width={200}
+          height={200}
+          alt='이미지를 불러오는데 실패했습니다.'
+        />
+      </TabsContent>
     </Tabs>
   );
 }

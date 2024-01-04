@@ -1,16 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {Button} from '@/components/shadcn/ui/button';
 import {Switch} from '@/components/shadcn/ui/switch';
 import {Label} from '@/components/shadcn/ui/label';
-import {
-  DialogContent,
-  DialogHeader,
-  DialogTitle
-} from '@/components/shadcn/ui/dialog';
-
+import {DialogContent} from '@/components/shadcn/ui/dialog';
 import ScrollableContainer from '@/components/container/ScrollableContainer';
-import SetUserInfo from '@/components/userInfo/SetUserInfo';
-import UnMemberBtn from '@/components/button/UnMemberBtn';
+import ChangeUserInfo from '@/components/userInfo/ChangeUserInfo';
 import {
   Tabs,
   TabsContent,
@@ -37,7 +30,6 @@ function SettingModalContents() {
     if (isSuccess === true) setIs2faEnabled(!is2faEnabled);
   }, [isSuccess]);
   return (
-    // <div className='flex flex-col'>
     <Tabs
       defaultValue='account'
       className='flex flex-col space-y-2 items-center '
@@ -47,7 +39,7 @@ function SettingModalContents() {
         <TabsTrigger value='another'>Another</TabsTrigger>
       </TabsList>
       <TabsContent value='account' className='text-center'>
-        <SetUserInfo mode='change' />
+        <ChangeUserInfo />
       </TabsContent>
       <TabsContent
         value='another'
@@ -70,9 +62,7 @@ function SettingModalContents() {
           <Label htmlFor='two-step'>2단계 인증 활성화</Label>
         </div>
         <LinkBtn link='/welcome/setEmail'>2단계 인증 이메일 변경</LinkBtn>
-        <UnMemberBtn>회원 탈퇴</UnMemberBtn>
       </TabsContent>
     </Tabs>
-    // </div>
   );
 }
