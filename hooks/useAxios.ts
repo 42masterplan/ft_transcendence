@@ -85,7 +85,7 @@ const useAxios = () => {
           if (err.response.data.message === 'Email Required') {
             router.push('/welcome/setEmail');
           } else {
-            removeCookie('accessToken');
+            removeCookie('accessToken', {path: '/'});
             router.push('/welcome');
           }
         }
