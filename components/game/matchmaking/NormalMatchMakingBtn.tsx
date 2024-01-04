@@ -57,7 +57,6 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   }
   useEffect(() => {
     fetchData({
-      // API로 받을거임.
       method: 'get',
       url: '/users/friends',
       errorTitle: '유저 정보 조회 실패',
@@ -66,7 +65,13 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
     });
   }, []); // ignore eslint warning. we only want to fetch data once ^^
   useEffect(() => {
-    if (isSuccess === true) setFriends(response);
+    if (isSuccess === true) {
+      setFriends([]);
+      response.forEach((friend: userType) => {
+        if (friend.currentStatus === 'on-line')
+          setFriends((prev) => [...prev, friend]);
+      });
+    }
   }, [isSuccess, response]);
   useEffect(() => {
     function handleBeforeUnload(e: BeforeUnloadEvent) {
@@ -75,6 +80,26 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [socket, matchId]);
+  useEffect(() => {
+    // 이벤트 리스너 등록
+    const handleChangeStatus = () => {
+      fetchData({
+        method: 'get',
+        url: '/users/friends',
+        errorTitle: '유저 정보 조회 실패',
+        errorDescription: '유저 정보 조회에 실패했습니다.',
+        disableSuccessToast: true
+      });
+    };
+
+    socket.on('changeStatus', handleChangeStatus);
+
+    // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
+    return () => {
+      socket.off('changeStatus', handleChangeStatus);
+    };
+  }, [socket]);
+
   return isWaiting === false ? (
     <MatchMakingDialog>
       <MatchMakingDialogTrigger asChild>

@@ -36,10 +36,10 @@ export default function NormalMatchMakingDialog(
     alarm_sock.emit('normalGameCancel', {matchId: matchId});
   }
   useEffect(() => {
-    alarm_sock.on('normalGameReject', () => {
+    alarm_sock.on('normalGameReject', (msg: string) => {
       setIsWaiting(false);
       toast({
-        title: '매칭 실패',
+        title: msg,
         description: '상대방이 매칭을 거절했습니다.'
       });
     });

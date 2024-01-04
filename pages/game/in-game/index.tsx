@@ -294,10 +294,8 @@ export default function Game() {
         Authorization: `Bearer ${getAuthorization()}`
       }
     });
-    newSocket.emit('joinRoom', {
-      matchId: matchId,
-      gameMode: gameMode,
-      side: side
+    newSocket.on('invalidMatch', () => {
+      router.replace('/');
     });
     newSocket.on('updateScore', (state) => {
       if (state.matchId != matchId) return;
@@ -311,6 +309,11 @@ export default function Game() {
       console.log('game over!!!');
       newSocket.disconnect();
     });
+    newSocket.emit('joinRoom', {
+      matchId: matchId,
+      gameMode: gameMode,
+      side: side
+    });
     setSocket(newSocket);
     return () => {
       newSocket.off('updateScore');
@@ -320,6 +323,8 @@ export default function Game() {
   }, [gameMode, initSocket, matchId, side]);
 
   useEffect(() => {
+    if (!aName || !aProfileImage || !bName || !bProfileImage || !theme)
+      router.replace('/');
     const timer = setInterval(() => {
       setPreGameTime((prevTime) => {
         if (prevTime === 1) {
