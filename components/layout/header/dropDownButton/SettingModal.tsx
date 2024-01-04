@@ -4,7 +4,6 @@ import {Label} from '@/components/shadcn/ui/label';
 import {DialogContent} from '@/components/shadcn/ui/dialog';
 import ScrollableContainer from '@/components/container/ScrollableContainer';
 import ChangeUserInfo from '@/components/userInfo/ChangeUserInfo';
-import UnMemberBtn from '@/components/button/UnMemberBtn';
 import {
   Tabs,
   TabsContent,
@@ -31,7 +30,6 @@ function SettingModalContents() {
     if (isSuccess === true) setIs2faEnabled(!is2faEnabled);
   }, [isSuccess]);
   return (
-    // <div className='flex flex-col'>
     <Tabs
       defaultValue='account'
       className='flex flex-col space-y-2 items-center '
@@ -66,6 +64,5 @@ function SettingModalContents() {
         <LinkBtn link='/welcome/setEmail'>2단계 인증 이메일 변경</LinkBtn>
       </TabsContent>
     </Tabs>
-    // </div>
   );
 }
