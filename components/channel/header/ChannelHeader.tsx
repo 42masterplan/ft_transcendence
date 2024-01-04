@@ -1,6 +1,4 @@
-import CreateChannel from './createChannel/CreateChannel';
 import ManageChannel from '@/components/channel/header/ManageChannel';
-import PublicRoomList from './publicRoom/PublicRoomList';
 import {CiLogout} from 'react-icons/ci';
 import {Button} from '@/components/shadcn/ui/button';
 import {channelStateType} from '@/types/channel';
@@ -14,16 +12,11 @@ export default function ChannelHeader({
 }) {
   const [socket] = useSocket('channel');
   return (
-    <div className='bg-custom2 w-full'>
-      <div className='bg-custom2 w-full flex justify-between font-bold text-3xl'>
-        <PublicRoomList />
-        {channelInfoState.channelName === '' ? '채널에 참여해주세요' : '채널명'}
-        <CreateChannel />
-      </div>
+    <div className='bg-custom2 w-full rounded-xl'>
       {channelInfoState.channelName === '' ? (
         ''
       ) : (
-        <div className='flex justify-between  py-1 font-bold text-2xl'>
+        <div className='flex justify-between py-3 px-2 font-bold text-2xl items-center'>
           <Button
             variant='iconBtn'
             className='bg-custom4'

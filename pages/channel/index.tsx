@@ -1,6 +1,4 @@
 import {useCallback, useEffect, useReducer, useRef, useState} from 'react';
-import Image from 'next/image';
-import WaitImage from '@/public/postcss.config.png';
 import useSocket from '@/hooks/useSocket';
 import ChannelBody from '@/components/channel/body/ChannelBody';
 import ChannelList from '@/components/channel/list/ChannelList';
@@ -9,6 +7,7 @@ import ScrollableContainer from '@/components/container/ScrollableContainer';
 import ChannelInput from '@/components/channel/body/ChannelInput';
 import {channelStateType} from '@/types/channel';
 import {MsgHistoryType} from '@/types/channel';
+import GridChannelList from '@/components/channel/list/GridChannelList';
 
 const initialStateInfo: channelStateType = {
   channelName: '',
@@ -103,24 +102,30 @@ export default function ChannelPage() {
 
   return (
     <div className='flex h-full'>
-      <ChannelList
-        channelInfoState={channelInfoState}
-        infoDispatch={infoDispatch}
-        messageDispatch={messageDispatch}
-        ref={channelInfoRef}
-        setHistoryLoading={setHistoryLoading}
-      />
-      <div className='flex flex-col h-full w-full'>
+      {channelInfoState.channelName === '' ||
+      channelInfoRef.current.channelName === '' ? null : (
+        <ChannelList
+          channelInfoState={channelInfoState}
+          infoDispatch={infoDispatch}
+          messageDispatch={messageDispatch}
+          ref={channelInfoRef}
+          setHistoryLoading={setHistoryLoading}
+        />
+      )}
+
+      <div className='flex flex-col h-full w-full gap-2'>
         <ChannelHeader
           channelInfoState={channelInfoState}
           infoDispatch={infoDispatch}
         />
         {channelInfoState.channelName === '' ||
         channelInfoRef.current.channelName === '' ? (
-          <Image
-            src={WaitImage}
-            alt='채널에 참여해주세요'
-            className='bg-custom4 h-full w-full'
+          <GridChannelList
+            channelInfoState={channelInfoState}
+            infoDispatch={infoDispatch}
+            messageDispatch={messageDispatch}
+            ref={channelInfoRef}
+            setHistoryLoading={setHistoryLoading}
           />
         ) : (
           <>
