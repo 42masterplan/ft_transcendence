@@ -122,20 +122,21 @@ export default function DMPage() {
   return (
     <>
       <div className=' text-xl font-bold text-center'>{chatUser}</div>
-      <div className='flex  flex-col h-full'>
-        <ScrollableContainer className='bg-custom2 rounded-none'>
-          <div className=' h-5/6'>
-            <ScrollableContainer className='rounded-none bg-custom2'>
+      <div className='flex flex-col h-5/6'>
+        <ScrollableContainer className='bg-custom2 rounded-none h-full'>
+          <div className='min-h-5/6 '>
+            <ScrollableContainer className='rounded-none bg-custom2 min-h-5/6'>
               <div>
                 {DMData?.map((msg: dmMessageType, idx: number) => (
                   <div
                     key={idx}
                     className={cn(
                       'flex w-max max-w-[90%] rounded-lg px-3 text-sm',
-                      msg?._participantId === dmInfo.myId ? 'ml-auto' : 'p-2'
+                      msg?._participantId === dmInfo.myId ? 'ml-auto' : ''
                     )}
                   >
                     <ChatMessage
+                      isDm={true}
                       isMe={msg?._participantId === dmInfo.myId}
                       size='md'
                       message={msg?._content}
