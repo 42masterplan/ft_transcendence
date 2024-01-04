@@ -294,10 +294,8 @@ export default function Game() {
         Authorization: `Bearer ${getAuthorization()}`
       }
     });
-    newSocket.emit('joinRoom', {
-      matchId: matchId,
-      gameMode: gameMode,
-      side: side
+    newSocket.on('invalidMatch', () => {
+      router.replace('/');
     });
     newSocket.on('updateScore', (state) => {
       if (state.matchId != matchId) return;
@@ -310,6 +308,11 @@ export default function Game() {
       setGameOver(true);
       console.log('game over!!!');
       newSocket.disconnect();
+    });
+    newSocket.emit('joinRoom', {
+      matchId: matchId,
+      gameMode: gameMode,
+      side: side
     });
     setSocket(newSocket);
     return () => {
