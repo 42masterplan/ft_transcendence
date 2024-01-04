@@ -288,7 +288,7 @@ export default function Game() {
 
   useEffect(() => {
     if (!initSocket || gameMode == '' || matchId == '' || side == '') return;
-    const newSocket = io(`${socketServerUrl}:8080/game` as string, {
+    const newSocket = io(`${socketServerUrl}/game` as string, {
       transports: ['websocket'],
       auth: {
         Authorization: `Bearer ${getAuthorization()}`
