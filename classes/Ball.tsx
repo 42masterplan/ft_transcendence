@@ -36,6 +36,7 @@ export default class Ball extends React.Component<BallProps> {
   resetPosition(particles: Particle[]) {
     const nowX = this.x;
     const nowY = this.y;
+    if (particles.length > 0) return;
     for (let i = 0; i < 16; i++)
       particles.push(new Particle({x: nowX, y: nowY, c: this.props.c}));
     this.velocity = {x: 0, y: 0};
