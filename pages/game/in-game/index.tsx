@@ -196,7 +196,7 @@ export default function Game() {
   }, [router.query, router.isReady]);
 
   useEffect(() => {
-    if (!gameStarted || !socket) return;
+    if (!socket) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const c = canvas.getContext('2d');
@@ -230,6 +230,7 @@ export default function Game() {
         particles
       );
     });
+    // if (gameStarted)
     socket.emit('gameReady');
     setInterval(() => {
       handleKeys(keysPressed, playerA, playerB, socket);
@@ -244,7 +245,7 @@ export default function Game() {
       } else c.fillStyle = BACKGROUND_COLOR;
       c.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
       c.strokeStyle = 'white';
-      c.lineWidth = 10;
+      c.lineWidth = 2;
       c.strokeRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
       playerA.draw();
       playerB.draw();
@@ -265,7 +266,6 @@ export default function Game() {
       socket.off('gameOver');
       socket.off('updateTime');
       socket.off('deuce');
-      socket.off('gameFull');
       socket.off('joinedRoom');
       socket.off('gameFull');
       socket.off('connect');
