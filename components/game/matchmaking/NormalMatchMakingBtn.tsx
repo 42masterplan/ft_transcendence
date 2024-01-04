@@ -100,6 +100,19 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
     };
   }, [socket]);
 
+  useEffect(() => {
+    socket.on('normalGameReject', (msg: string) => {
+      setIsWaiting(false);
+      toast({
+        title: msg,
+        description: '상대방이 매칭을 거절했습니다.'
+      });
+    });
+    return () => {
+      socket.off('normalGameReject');
+    };
+  }, [socket]);
+
   return isWaiting === false ? (
     <MatchMakingDialog>
       <MatchMakingDialogTrigger asChild>
