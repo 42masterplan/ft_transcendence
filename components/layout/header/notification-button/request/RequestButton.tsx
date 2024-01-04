@@ -33,16 +33,16 @@ export default function RequestButton({
 
   let toastTitle: string;
   if (requestType === 'match') {
-    toastTitle = 'Are you sure you want to accept this match request?';
+    toastTitle = '게임을 시작하시겠습니까?';
   } else if (requestType === 'friend') {
-    toastTitle = 'Are you sure you want to accept this friend request?';
+    toastTitle = '친구 요청을 수락하시겠습니까?';
   }
 
   let toastDescription: string;
   if (requestType === 'match') {
-    toastDescription = 'Click the button to accept the match request.';
+    toastDescription = '버튼을 누르면 게임이 시작됩니다.';
   } else if (requestType === 'friend') {
-    toastDescription = 'Click the button to accept the friend request.';
+    toastDescription = '버튼을 누르면 친구가 됩니다.';
   }
 
   return (

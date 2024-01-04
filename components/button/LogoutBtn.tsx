@@ -1,4 +1,3 @@
-import {Button} from '@/components/shadcn/ui/button';
 import {useToast} from '../shadcn/ui/use-toast';
 import {ToastAction} from '../shadcn/ui/toast';
 import {useRouter} from 'next/router';
@@ -13,15 +12,15 @@ export default function LogOutBtn({children}: {children: React.ReactNode}) {
     <div
       onClick={() => {
         toast({
-          title: 'Are you sure you want to log out?',
-          description: 'This action cannot be undone.',
+          title: '정말로 로그아웃 하시겠습니까?',
+          description: '로그아웃 하시면 다시 로그인을 해야합니다.',
           variant: 'destructive',
 
           action: (
             <ToastAction
               altText='Log Out'
               onClick={() => {
-                removeCookie('accessToken');
+                removeCookie('accessToken', {path: '/'});
                 router.push('/welcome');
               }}
             >

@@ -37,22 +37,10 @@ export default function FriendRequestCard({
     });
   };
   useEffect(() => {
-    if (isAcceptSuccess) {
-      toast({
-        title: 'Friend request accepted',
-        description: 'You are now friends with ' + notificationShooter.name
-      });
-      fetchList();
-    }
+    if (isAcceptSuccess) fetchList();
   }, [isAcceptSuccess]);
   useEffect(() => {
-    if (isRejectSuccess) {
-      toast({
-        title: 'Friend request rejected',
-        description: 'You are not friends with ' + notificationShooter.name
-      });
-      fetchList();
-    }
+    if (isRejectSuccess) fetchList();
   }, [isRejectSuccess]);
   return (
     <div className='flex flex-row justify-between items-center'>

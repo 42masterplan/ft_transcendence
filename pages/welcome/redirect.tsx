@@ -15,8 +15,7 @@ export default function Redirect() {
         if (res.status === 200) {
           setCookie('accessToken', res.data.accessToken, {
             path: '/',
-            sameSite: 'strict',
-
+            sameSite: 'strict'
           });
 
           if (res.data.hasAccount) {
@@ -28,17 +27,17 @@ export default function Redirect() {
           else router.replace('/welcome/register');
         } else if (res.status === 401) {
           toast({
-            title: 'Error',
-            description: 'It is auth_code Error',
+            title: '에러',
+            description: '인증이 만료되었습니다. 다시 로그인해주세요.',
             variant: 'destructive'
           });
-          removeCookie('accessToken');
+          removeCookie('accessToken', {path: '/'});
           router.replace('/welcome');
         }
       })
       .catch((err) => {
         toast({
-          title: 'Error',
+          title: '에러',
           description: `>>> [LOGIN] 🤬 ERROR', ${err.message}`,
           variant: 'destructive'
         });

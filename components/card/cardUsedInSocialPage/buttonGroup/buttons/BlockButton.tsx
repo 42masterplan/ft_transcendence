@@ -10,6 +10,7 @@ type BlockButtonProps = {
 
 export default function BlockButton({userId}: BlockButtonProps) {
   const {fetchData, isSuccess} = useAxios();
+  const {toast} = useToast();
   useEffect(() => {
     if (isSuccess) {
       location.reload();
@@ -31,7 +32,6 @@ export default function BlockButton({userId}: BlockButtonProps) {
     });
   };
 
-  const {toast} = useToast();
   return (
     <Button
       variant='destructive'

@@ -14,14 +14,6 @@ import {
   CarouselPrevious
 } from '@/components/shadcn/ui/carousel';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/shadcn/ui/card';
 import {Button} from '../shadcn/ui/button';
 import {toast} from '../shadcn/ui/use-toast';
 

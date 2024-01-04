@@ -16,7 +16,7 @@ function filterUsers(users: userType[], searchTargetInput: string) {
   // filter input
   if (searchTargetInput !== '') {
     users = users.filter((user) =>
-      user.name.toLowerCase().includes(searchTargetInput.toLowerCase())
+      user?.name?.toLowerCase()?.includes(searchTargetInput?.toLowerCase())
     );
   }
   return users;
