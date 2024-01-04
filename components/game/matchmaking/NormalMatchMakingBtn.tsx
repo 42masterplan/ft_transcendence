@@ -116,7 +116,9 @@ export default function NormalMatchMakingBtn({theme}: {theme: string}) {
   return isWaiting === false ? (
     <MatchMakingDialog>
       <MatchMakingDialogTrigger asChild>
-        <Button>Start Match</Button>
+        <Button className='w-40 h-16 bg-lime-600 text-2xl font-semibold'>
+          Start Match
+        </Button>
       </MatchMakingDialogTrigger>
       <MatchMakingDialogContent className='w-[480px] h-[500px] bg-custom1 rounded-[10px] shadow flex-col justify-center items-center gap-[20px] inline-flex'>
         <div className='flex flex-col w-full h-[390px] px-3 gap-2'>

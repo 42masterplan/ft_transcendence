@@ -6,96 +6,64 @@ import {
 } from '@/components/shadcn/ui/tabs';
 import {Theme} from '@/types/game';
 import Image from 'next/image';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious
+} from '@/components/shadcn/ui/carousel';
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '@/components/shadcn/ui/card';
+import {Button} from '../shadcn/ui/button';
+import {toast} from '../shadcn/ui/use-toast';
 
 export default function ChildTab({setTheme}: any) {
+  // theme array
+  const themes = [];
+  // push all themes to array
+  for (const theme in Theme) {
+    themes.push(theme);
+  }
   return (
-    <Tabs defaultValue={Theme.Default}>
-      <TabsList>
-        <TabsTrigger
-          value={Theme.Default}
-          onClick={() => setTheme(Theme.Default)}
-        >
-          Default
-        </TabsTrigger>
-        <TabsTrigger
-          value={Theme.Badminton}
-          onClick={() => setTheme(Theme.Badminton)}
-        >
-          Badminton
-        </TabsTrigger>
-        <TabsTrigger
-          value={Theme.Basketball}
-          onClick={() => setTheme(Theme.Basketball)}
-        >
-          Basketball
-        </TabsTrigger>
-        <TabsTrigger
-          value={Theme.Soccer}
-          onClick={() => setTheme(Theme.Soccer)}
-        >
-          Soccer
-        </TabsTrigger>
-        <TabsTrigger
-          value={Theme.Swimming}
-          onClick={() => setTheme(Theme.Swimming)}
-        >
-          Swimming
-        </TabsTrigger>
-        <TabsTrigger
-          value={Theme.Climbing}
-          onClick={() => setTheme(Theme.Climbing)}
-        >
-          Climbing
-        </TabsTrigger>
-      </TabsList>
-      <TabsContent value={Theme.Default} className='flex justify-center'>
-        <Image
-          src='/gameThemes/Profile/Default.jpg'
-          width={200}
-          height={200}
-          alt='이미지를 불러오는데 실패했습니다.'
-        />
-      </TabsContent>
-      <TabsContent value={Theme.Badminton} className='flex justify-center'>
-        <Image
-          src='/gameThemes/Profile/Badminton.png'
-          width={200}
-          height={200}
-          alt='이미지를 불러오는데 실패했습니다.'
-        />
-      </TabsContent>
-      <TabsContent value={Theme.Basketball} className='flex justify-center'>
-        <Image
-          src='/gameThemes/Profile/Basketball.png'
-          width={200}
-          height={200}
-          alt='이미지를 불러오는데 실패했습니다.'
-        />
-      </TabsContent>
-      <TabsContent value={Theme.Soccer} className='flex justify-center'>
-        <Image
-          src='/gameThemes/Profile/Soccer.png'
-          width={200}
-          height={200}
-          alt='이미지를 불러오는데 실패했습니다.'
-        />
-      </TabsContent>
-      <TabsContent value={Theme.Swimming} className='flex justify-center'>
-        <Image
-          src='/gameThemes/Profile/Swimming.png'
-          width={200}
-          height={200}
-          alt='이미지를 불러오는데 실패했습니다.'
-        />
-      </TabsContent>
-      <TabsContent value={Theme.Climbing} className='flex justify-center'>
-        <Image
-          src='/gameThemes/Profile/Climbing.png'
-          width={200}
-          height={200}
-          alt='이미지를 불러오는데 실패했습니다.'
-        />
-      </TabsContent>
-    </Tabs>
+    <Carousel className='w-full max-w-xs'>
+      <CarouselContent>
+        {themes.map((theme) => (
+          <CarouselItem key={theme}>
+            <div className='flex flex-col justify-center items-center p-1 gap-3'>
+              <Image
+                src={`/gameThemes/Profile/${theme}.png`}
+                width={300}
+                height={300}
+                alt='이미지를 불러오는데 실패했습니다.'
+                className='rounded-full'
+              />
+              <Button
+                className='bg-lime-600 hover:scale-110 hover:bg-lime-500 transition-transform'
+                onClick={() => {
+                  setTheme(theme);
+                  toast({
+                    title: '테마 설정 완료',
+                    description: `${theme} 테마로 설정되었습니다.`,
+                    duration: 5000
+                  });
+                }}
+              >
+                Set Theme to {theme}
+              </Button>
+            </div>
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+      <CarouselPrevious />
+      <CarouselNext />
+    </Carousel>
   );
 }
