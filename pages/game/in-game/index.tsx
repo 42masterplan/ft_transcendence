@@ -108,6 +108,7 @@ function listenToSocketEvents(
     if (state.matchId != matchId) return;
     if (state.isForfeit) setForfeit(true);
     setGameOver(true);
+    console.log('game over!!!');
     cancelAnimationFrame(animationId);
     socket.disconnect();
   });
@@ -232,6 +233,7 @@ export default function Game() {
     });
     // if (gameStarted)
     socket.emit('gameReady');
+    console.log('game ready emitted');
     setInterval(() => {
       handleKeys(keysPressed, playerA, playerB, socket);
     }, RENDERING_RATE);
@@ -288,7 +290,24 @@ export default function Game() {
       gameMode: gameMode,
       side: side
     });
+    newSocket.on('updateScore', (state) => {
+      if (state.matchId != matchId) return;
+      const backendScore = state.score;
+      setScore(backendScore);
+    });
+    newSocket.on('gameOver', (state) => {
+      if (state.matchId != matchId) return;
+      if (state.isForfeit) setForfeit(true);
+      setGameOver(true);
+      console.log('game over!!!');
+      newSocket.disconnect();
+    });
     setSocket(newSocket);
+    return () => {
+      newSocket.off('updateScore');
+      newSocket.off('gameOver');
+      newSocket.disconnect();
+    };
   }, [gameMode, initSocket, matchId, side]);
 
   useEffect(() => {
@@ -296,6 +315,7 @@ export default function Game() {
       setPreGameTime((prevTime) => {
         if (prevTime === 1) {
           clearInterval(timer); // 타이머를 여기서 정지
+          if (socket) socket.disconnect();
           setGameStarted(true);
           return 0; // 시간이 0이 되었으므로 0을 반환
         }
