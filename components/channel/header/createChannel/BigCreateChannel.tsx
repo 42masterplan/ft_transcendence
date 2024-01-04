@@ -156,7 +156,7 @@ const PasswordInput = ({
   );
 };
 
-export default function CreateChannel() {
+export default function BigCreateChannel() {
   const [open, setOpen] = useState(false);
   const [channelName, setChannelName] = useState('');
   const [channelType, setChannelType] = useState('');
@@ -237,13 +237,13 @@ export default function CreateChannel() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          className=' rounded-xl bg-custom4'
+          className='bg-custom3 hover:bg-custom4 w-60 h-36 rounded-2xl hover:scale-[1.1] hover:-translate-y-1 transition duration-300 '
           onClick={() => {
             fetchUserInfos();
           }}
         >
-          <MessageSquarePlus className='h-6 w-6' />
-          <p className='text-6'> 채널 생성</p>
+          <MessageSquarePlus className='h-14 w-14' />
+          <p className='px-2 text-3xl font-bold'>채널 생성</p>
           <span className='sr-only'>Public Room List</span>
         </Button>
       </DialogTrigger>

@@ -17,18 +17,18 @@ const DialogBtn = ({socket}: any) => {
   return (
     <DialogTrigger asChild>
       <Button
-        className='rounded-xl bg-custom4'
+        className='bg-custom3 hover:bg-custom4 w-60 h-36 rounded-2xl hover:scale-[1.1] hover:-translate-y-1 transition duration-300 '
         onClick={() => socket.emit('getPublicChannels')}
       >
-        <LuGlobe2 className='h-6 w-6' />
-        <p className='text-6'>공개 채널</p>
+        <LuGlobe2 className='h-14 w-14' />
+        <p className='px-2 text-3xl font-bold'>공개 채널</p>
         <span className='sr-only'>Public Room List</span>
       </Button>
     </DialogTrigger>
   );
 };
 
-export default function PublicRoomList() {
+export default function BigPublicRoomList() {
   const [socket] = useSocket('channel');
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
