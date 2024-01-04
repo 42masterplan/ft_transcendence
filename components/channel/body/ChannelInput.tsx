@@ -23,7 +23,7 @@ const ChannelInput = ({
         socket.emit('newMessage', {content, channelId}, (msg: string) => {
           if (msg !== 'success') {
             toast({
-              title: 'Error',
+              title: '에러가 발생했습니다.',
               description: msg
             });
           }

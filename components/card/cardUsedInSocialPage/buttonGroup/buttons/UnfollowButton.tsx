@@ -22,7 +22,7 @@ export default function UnfollowButton({userId}: UnfollowButtonProps) {
       className='bg-custom2/40 hover:bg-custom2/60 hover:scale-[115%] duration-200'
       onClick={() => {
         toast({
-          title: 'Are you sure you want to unfriend this user?',
+          title: '정말로 친구를 삭제하시겠습니까?',
           action: (
             <ToastAction
               altText='Unfriend User'

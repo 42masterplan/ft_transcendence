@@ -76,7 +76,7 @@ export default function NotificationBtn() {
     });
     socket.on('error', (error) => {
       toast({
-        title: 'Error',
+        title: '에러',
         description: error,
         variant: 'destructive'
       });
@@ -130,8 +130,8 @@ export default function NotificationBtn() {
     socket.emit('isDoubleLogin', (isDoubleLogin: boolean) => {
       if (isDoubleLogin) {
         toast({
-          title: 'Error',
-          description: 'You are logged in from another device.',
+          title: '에러',
+          description: '다른 기기에서 로그인 된 상태입니다.',
           variant: 'destructive'
         });
         disconnect();
@@ -150,8 +150,8 @@ export default function NotificationBtn() {
     socket.emit('isDoubleLogin', (isDoubleLogin: boolean) => {
       if (isDoubleLogin) {
         toast({
-          title: 'Error',
-          description: 'You are logged in from another device.',
+          title: '에러',
+          description: '다른 기기에서 로그인 된 상태입니다.',
           variant: 'destructive'
         });
         disconnect();

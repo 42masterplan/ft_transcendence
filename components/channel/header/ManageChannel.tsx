@@ -12,7 +12,6 @@ import {
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogFooter,
   DialogTitle,
   DialogTrigger
 } from '@/components/shadcn/ui/dialog';
