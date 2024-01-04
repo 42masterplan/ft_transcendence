@@ -7,34 +7,20 @@ import {useCookies} from 'react-cookie';
 import {toast} from '@/components/shadcn/ui/use-toast';
 export default function Redirect() {
   const router = useRouter();
-  const [, setCookie, removeCookie] = useCookies();
+  const [cookie, setCookie, removeCookie] = useCookies();
   async function login(auth_code: string | string[]) {
     await Axios.get('/auth/callback', {params: {code: auth_code}})
       .then((res) => {
         console.log('>>> [LOGIN] ✅ SUCCESS', res.data);
-        setCookie('hasAccount', res.data.hasAccount, {
-          path: '/',
-          sameSite: 'strict',
-          secure: true
-        });
         if (res.status === 200) {
           setCookie('accessToken', res.data.accessToken, {
             path: '/',
             sameSite: 'strict',
-            secure: true
+
           });
-          setCookie('isTwoFactorDone', false, {
-            path: '/',
-            sameSite: 'strict',
-            secure: true
-          });
+
           if (res.data.hasAccount) {
             if (res.data.isTwoFactorEnabled === false) {
-              setCookie('isTwoFactorDone', true, {
-                path: '/',
-                sameSite: 'strict',
-                secure: true
-              });
               router.replace('/');
             } else router.replace('/welcome/2step-auth');
           } else if (res.data.hasProfile === true)

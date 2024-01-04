@@ -5,12 +5,10 @@ import {Button} from '@/components/shadcn/ui/button';
 import SetUserName from './SetUserName';
 import {useRouter} from 'next/router';
 import {useToast} from '@/components/shadcn/ui/use-toast';
-import {useCookies} from 'react-cookie';
 import useAxios from '@/hooks/useAxios';
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle
@@ -37,21 +35,10 @@ export default function SetUserInfo({
     process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI1 || ''
   );
 
-  const [cookie, setCookie, removeCookie] = useCookies();
   const router = useRouter();
   useEffect(() => {
     if (isSuccess === true) {
       if (mode == 'register') {
-        setCookie('hasAccount', true, {
-          path: '/',
-          sameSite: 'strict',
-          secure: true
-        });
-        setCookie('isTwoFactorDone', true, {
-          path: '/',
-          sameSite: 'strict',
-          secure: true
-        });
         router.push('/welcome/setEmail');
       } else {
         location.reload();

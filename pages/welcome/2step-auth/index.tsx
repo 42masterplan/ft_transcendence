@@ -10,21 +10,12 @@ import useAxios from '@/hooks/useAxios';
 import SpinningLoader from '@/components/loader/SpinningLoader';
 export default function Validation() {
   const [code, setCode] = useState('');
-  const [cookie, setCookie] = useCookies();
   const {fetchData: requestCode, isSuccess: success, response} = useAxios();
   const {fetchData: postCode, isSuccess, response: codeSuccess} = useAxios();
   const [email, setEmail] = useState('');
   const {toast} = useToast();
   useEffect(() => {
-    const isTwoFactorDone = cookie.isTwoFactorDone;
-
-    if (isTwoFactorDone) {
-      toast({
-        title: '이미 인증 완료',
-        description: '이미 2단계 인증이 완료되었습니다'
-      });
-      Router.push('/');
-    } else if (success === false) {
+    if (success === false) {
       requestCode({
         method: 'post',
         url: '/users/two-factor-auth',
@@ -39,7 +30,6 @@ export default function Validation() {
   }, [response]);
   useEffect(() => {
     if (isSuccess === true && codeSuccess === true) {
-      setCookie('isTwoFactorDone', true, {path: '/'});
       Router.push('/');
     } else if (codeSuccess === false) {
       toast({

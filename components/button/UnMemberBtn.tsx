@@ -14,8 +14,6 @@ export default function UnMemberBtn({children}: {children: React.ReactNode}) {
   useEffect(() => {
     if (isSuccess === true) {
       removeCookie('accessToken');
-      removeCookie('isTwoFactorDone');
-      removeCookie('hasAccount');
       router.push('/welcome');
     }
   }, [isSuccess]);
