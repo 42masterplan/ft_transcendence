@@ -7,7 +7,8 @@ import {SocialPageNavBar} from '@/components/social/SocialPageNavBar';
 import UserCardSection from '@/components/social/UserCardSection';
 import SpinningLoader from '@/components/loader/SpinningLoader';
 import useAxios from '@/hooks/useAxios';
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useRef} from 'react';
+import useSocket from '@/hooks/useSocket';
 
 export default function SocialPage() {
   // search options
@@ -20,6 +21,37 @@ export default function SocialPage() {
   const [friends, setFriends] = useState<userType[]>([]);
   // fetch data
   const [loading, setLoading] = useState(true);
+  const [alarmSocket] = useSocket('alarm');
+
+  useEffect(() => {
+    if (alarmSocket) {
+      alarmSocket.on('changeStatus', () => {
+        console.log('changeStatus');
+        if (searchTarget === 'friend') {
+          fetchData({
+            method: 'get',
+            url: '/users/friends',
+            errorTitle: '유저 정보 조회 실패',
+            errorDescription: '유저 정보 조회에 실패했습니다.',
+            disableSuccessToast: true
+          });
+        } else if (searchTarget === 'all users') {
+          fetchData({
+            method: 'get',
+            url: '/users',
+            errorTitle: '유저 정보 조회 실패',
+            errorDescription: '유저 정보 조회에 실패했습니다.',
+            disableSuccessToast: true
+          });
+        }
+      });
+    }
+    return () => {
+      if (alarmSocket) {
+        alarmSocket.off('changeStatus');
+      }
+    };
+  }, [alarmSocket, searchTarget]);
   useEffect(() => {
     setLoading(true);
     if (searchTarget === 'friend') {
