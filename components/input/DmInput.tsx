@@ -68,7 +68,12 @@ const DMInput = ({setDMData, dmInfo}: {setDMData: any; dmInfo: dmInfoType}) => {
           setContent(event.target.value);
         }}
       />
-      <Button type='submit' size='icon' disabled={inputLength === 0}>
+      <Button
+        type='submit'
+        size='icon'
+        disabled={inputLength === 0}
+        className='hover:scale-[1.1] transition'
+      >
         <Send className='h-4 w-4' />
         <span className='sr-only'>Send</span>
       </Button>

@@ -406,6 +406,17 @@ export default function Game() {
         <Divider />
         <PlayerPortrait name={aName} profileImage={aProfileImage} />
       </div>
+      <div className='text-sm text-white font-bold'>
+        <p>
+          규칙: 10점을 먼저 달성하거나, 1분 30초 안에 더 많은 점수를 획득한
+          플레이어가 승리합니다.
+        </p>
+        <p>경기 도중 나가게 되면 기권패로 처리됩니다.</p>
+        <p>
+          1분 30초가 지나도 동점인 경우, 듀스 상황이 발생하여 공의 속도가
+          빨라지고 2점 차이가 나면 경기가 종료됩니다.
+        </p>
+      </div>
     </div>
   );
 }
