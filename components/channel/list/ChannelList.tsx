@@ -112,15 +112,15 @@ export default React.forwardRef(function ChannelList(
         {channelInfoState.engagedChannels.map((channel: EngagedChannelType) => (
           <Button
             className={cn(
-              ' mx-1 bg-custom1 hover:bg-custom1-500 justify-between hover:scale-[1.02] hover:-translate-y-1 transition duration-300 ',
-              channel.id == channelInfoState.channelId ? 'bg-custom3 h-16' : ''
+              ' mx-1 bg-custom3 hover:bg-custom3-500 justify-between hover:scale-[1.02] hover:-translate-y-1 transition duration-300 ',
+              channel.id == channelInfoState.channelId ? 'bg-custom4 h-16' : ''
             )}
             onClick={() => {
               handleChannelClick(channel);
             }}
             key={channel.id}
           >
-            <div className=' text-gray-300 truncate ...'>{channel.name}</div>
+            <div className='truncate ...'>{channel.name}</div>
             <div className=' rounded-xl text-center bg-gray-400 w-5'>
               {channel.userCount}
             </div>
