@@ -40,7 +40,7 @@ export default function SetEmail() {
     if (response == true) setFixEmail(true);
   }, [emailDone, response]);
   useEffect(() => {
-    if (codeResponse === true) Router.push('/');
+    if (codeResponse === true) Router.push('/', undefined, {shallow: false});
     else if (codeDone === true)
       toast({
         title: '인증 실패',
