@@ -27,7 +27,10 @@ export default function NormalGameSection() {
             즐겨보세요!
           </CardDescription>
         </CardHeader>
-        <CardContent className='flex justify-center'>
+        <CardContent className='flex flex-col items-center justify-center gap-5'>
+          <div className=' text-3xl font-semibold bg-lime-600 p-3 rounded-xl animate-bounce-3times'>
+            테마를 선택해 주세요!
+          </div>
           <ChildTab setTheme={setTheme} />
         </CardContent>
         <CardFooter className='flex justify-center'>
