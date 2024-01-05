@@ -295,6 +295,7 @@ export default function Game() {
       }
     });
     newSocket.on('invalidMatch', () => {
+      newSocket.disconnect();
       router.replace('/');
     });
     newSocket.on('updateScore', (state) => {
@@ -323,8 +324,10 @@ export default function Game() {
   }, [gameMode, initSocket, matchId, side]);
 
   useEffect(() => {
-    if (!aName || !aProfileImage || !bName || !bProfileImage || !theme)
+    if (!aName || !aProfileImage || !bName || !bProfileImage || !theme) {
+      if (socket) socket.disconnect();
       router.replace('/');
+    }
     const timer = setInterval(() => {
       setPreGameTime((prevTime) => {
         if (prevTime === 1) {
