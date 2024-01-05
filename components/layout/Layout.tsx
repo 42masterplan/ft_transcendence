@@ -2,10 +2,26 @@ import Header from './header/Header';
 import Footer from './footer/Footer';
 import {Toaster} from '@/components/shadcn/ui/toaster';
 import {useRouter} from 'next/router';
-
+import {useEffect} from 'react';
+import useSocket from '@/hooks/useSocket';
+import {useToast} from '../shadcn/ui/use-toast';
 export default function Layout({children}: {children: React.ReactNode}) {
   const router = useRouter();
-
+  const [socket, disconnect] = useSocket('alarm', {autoConnect: false});
+  const {toast} = useToast();
+  useEffect(() => {
+    socket.emit('isDoubleLogin', (isDoubleLogin: boolean) => {
+      if (isDoubleLogin) {
+        toast({
+          title: '에러',
+          description: '다른 기기에서 로그인 된 상태입니다.',
+          variant: 'destructive'
+        });
+        disconnect();
+        router.push('/welcome/double-tab');
+      }
+    });
+  }, [router.pathname]);
   return (
     <>
       {router.pathname.startsWith('/welcome') ||
