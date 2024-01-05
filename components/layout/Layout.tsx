@@ -7,7 +7,7 @@ import useSocket from '@/hooks/useSocket';
 import {useToast} from '../shadcn/ui/use-toast';
 export default function Layout({children}: {children: React.ReactNode}) {
   const router = useRouter();
-  const [socket] = useSocket('alarm', {autoConnect: false});
+  const [socket] = useSocket('alarm');
   const {toast} = useToast();
   useEffect(() => {
     socket.emit('isDoubleLogin', (isDoubleLogin: boolean) => {
