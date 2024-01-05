@@ -20,6 +20,14 @@ const ChannelInput = ({
       onSubmit={(event) => {
         event.preventDefault();
         if (inputLength === 0) return;
+        if (content.length > 250) {
+          toast({
+            title: '채팅 전송 실패!',
+            variant: 'destructive',
+            description: '채팅은 250자 이내로 입력해주세요.'
+          });
+          return;
+        }
         socket.emit('newMessage', {content, channelId}, (msg: string) => {
           if (msg !== 'success') {
             toast({
