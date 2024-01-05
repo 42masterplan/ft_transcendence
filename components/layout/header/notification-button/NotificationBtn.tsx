@@ -64,6 +64,7 @@ export default function NotificationBtn() {
   );
   const {fetchData, response, isSuccess} = useAxios();
   const {toast} = useToast();
+
   useEffect(() => {
     fetchData({
       method: 'get',
@@ -128,7 +129,18 @@ export default function NotificationBtn() {
       socket.off('newFriendRequest');
     };
   }, [socket]);
-
+  useEffect(() => {
+    socket.emit('isDoubleLogin', (isDoubleLogin: boolean) => {
+      if (isDoubleLogin) {
+        toast({
+          title: '에러',
+          description: '다른 기기에서 로그인 된 상태입니다.',
+          variant: 'destructive'
+        });
+        router.push('/welcome/double-tab');
+      }
+    });
+  }, [socket, router.pathname]);
   useEffect(() => {
     if (isSuccess) {
       setFriendRequests(response);
