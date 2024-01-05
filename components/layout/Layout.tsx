@@ -7,7 +7,7 @@ import useSocket from '@/hooks/useSocket';
 import {useToast} from '../shadcn/ui/use-toast';
 export default function Layout({children}: {children: React.ReactNode}) {
   const router = useRouter();
-  const [socket, disconnect] = useSocket('alarm', {autoConnect: false});
+  const [socket] = useSocket('alarm', {autoConnect: false});
   const {toast} = useToast();
   useEffect(() => {
     socket.emit('isDoubleLogin', (isDoubleLogin: boolean) => {
@@ -17,7 +17,6 @@ export default function Layout({children}: {children: React.ReactNode}) {
           description: '다른 기기에서 로그인 된 상태입니다.',
           variant: 'destructive'
         });
-        disconnect();
         router.push('/welcome/double-tab');
       }
     });
