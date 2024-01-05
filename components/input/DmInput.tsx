@@ -1,6 +1,6 @@
 import {Input} from '@/components/shadcn/ui/input';
 import {Button} from '@/components/shadcn/ui/button';
-import {Router, Send} from 'lucide-react';
+import {Send} from 'lucide-react';
 import {useState} from 'react';
 import useSocket from '@/hooks/useSocket';
 import {useToast} from '@/components/shadcn/ui/use-toast';
@@ -17,6 +17,14 @@ const DMInput = ({setDMData, dmInfo}: {setDMData: any; dmInfo: dmInfoType}) => {
       onSubmit={(event) => {
         event.preventDefault();
         if (content === '') return;
+        if (content.length > 500) {
+          toast({
+            title: 'DM 전송 실패!',
+            variant: 'destructive',
+            description: 'DM은 250자 이내로 입력해주세요.'
+          });
+          return;
+        }
         socket.emit(
           'DmNewMessage',
           {
