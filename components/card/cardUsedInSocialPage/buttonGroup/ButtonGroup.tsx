@@ -25,7 +25,6 @@ export default function ButtonGroup({
         <ProfileButton userName={userName} />
         <DMButton userName={userName} />
         <UnfollowButton userId={userId} />
-        <MatchRequestButton userId={userId} />
         <BlockButton userId={userId} />
       </>
     );
@@ -35,7 +34,6 @@ export default function ButtonGroup({
       <>
         <ProfileButton userName={userName} />
         <FollowButton userId={userId} />
-        <MatchRequestButton userId={userId} />
         <BlockButton userId={userId} />
       </>
     );
@@ -45,7 +43,7 @@ export default function ButtonGroup({
     return (
       <>
         <ProfileButton userName={userName} />
-        <UnblockButton userId={userId} />;
+        <UnblockButton userId={userId} />
       </>
     );
   }
