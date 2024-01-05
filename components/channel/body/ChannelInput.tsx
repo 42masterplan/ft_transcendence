@@ -23,7 +23,7 @@ const ChannelInput = ({
         socket.emit('newMessage', {content, channelId}, (msg: string) => {
           if (msg !== 'success') {
             toast({
-              title: '에러가 발생했습니다.',
+              title: '채팅을 보내는데 실패했습니다.',
               description: msg
             });
           }
