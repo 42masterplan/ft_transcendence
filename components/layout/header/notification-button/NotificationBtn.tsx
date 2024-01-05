@@ -56,7 +56,7 @@ interface gameStartState {
 
 export default function NotificationBtn() {
   const router = useRouter();
-  const [socket, disconnect] = useSocket('alarm', {autoConnect: false});
+  const [socket, disconnect] = useSocket('alarm');
   const [matchRequests, setMatchRequests] = useState<gameRequest[]>([]);
   const [friendRequests, setFriendRequests] = useState<friendRequest[]>([]);
   const [notificationCount, setNotificationCount] = useState(
@@ -74,15 +74,7 @@ export default function NotificationBtn() {
       setMatchRequests((prev) => [...prev, state]);
       setNotificationCount((prev) => prev + 1);
     });
-    socket.on('error', (error) => {
-      toast({
-        title: '에러',
-        description: error,
-        variant: 'destructive'
-      });
-      disconnect();
-      router.push('/welcome/double-tab');
-    });
+
     socket.on('normalGameCancel', (matchId: string) => {
       setMatchRequests((prev) =>
         prev.filter((match) => {

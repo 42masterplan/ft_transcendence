@@ -20,7 +20,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
         router.push('/welcome/double-tab');
       }
     });
-  }, [router.pathname]);
+  }, [toast, socket, router.pathname]);
   return (
     <>
       {router.pathname.startsWith('/welcome') ||
