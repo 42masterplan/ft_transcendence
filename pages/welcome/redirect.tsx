@@ -11,7 +11,7 @@ export default function Redirect() {
   async function login(auth_code: string | string[]) {
     await Axios.get('/auth/callback', {params: {code: auth_code}})
       .then((res) => {
-        console.log('>>> [LOGIN] ✅ SUCCESS', res.data);
+        // console.log('>>> [LOGIN] ✅ SUCCESS', res.data);
         if (res.status === 200) {
           setCookie('accessToken', res.data.accessToken, {
             path: '/',
