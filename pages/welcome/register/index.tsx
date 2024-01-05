@@ -25,9 +25,8 @@ export default function Register() {
 
   const router = useRouter();
   useEffect(() => {
-    if (isSuccess === true) {
-      router.push('/welcome/setEmail');
-    }
+    if (isSuccess === true)
+      router.push('/welcome/setEmail', undefined, {shallow: false});
   }, [isSuccess]);
   const handleSubmit = (e: any) => {
     e.preventDefault();

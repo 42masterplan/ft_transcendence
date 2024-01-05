@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Title from '@/components/Title';
 import {useEffect, useState} from 'react';
 import {useToast} from '@/components/shadcn/ui/use-toast';
-import {useCookies} from 'react-cookie';
+
 import Router from 'next/router';
 import useAxios from '@/hooks/useAxios';
 import SpinningLoader from '@/components/loader/SpinningLoader';
@@ -30,7 +30,7 @@ export default function Validation() {
   }, [response]);
   useEffect(() => {
     if (isSuccess === true && codeSuccess === true) {
-      Router.push('/');
+      Router.push('/', undefined, {shallow: false});
     } else if (codeSuccess === false) {
       toast({
         variant: 'destructive',
