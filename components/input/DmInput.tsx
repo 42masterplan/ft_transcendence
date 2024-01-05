@@ -1,6 +1,6 @@
 import {Input} from '@/components/shadcn/ui/input';
 import {Button} from '@/components/shadcn/ui/button';
-import {Router, Send} from 'lucide-react';
+import {Send} from 'lucide-react';
 import {useState} from 'react';
 import useSocket from '@/hooks/useSocket';
 import {useToast} from '@/components/shadcn/ui/use-toast';
