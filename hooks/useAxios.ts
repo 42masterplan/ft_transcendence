@@ -88,6 +88,8 @@ const useAxios = () => {
             removeCookie('accessToken', {path: '/'});
             router.push('/welcome');
           }
+        } else if (err?.response?.status === 404) {
+          router.push('/404');
         }
       } finally {
         setLoading(false);
