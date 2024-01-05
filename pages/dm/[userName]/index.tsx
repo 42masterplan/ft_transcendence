@@ -120,10 +120,10 @@ export default function DMPage() {
   if (loading || dmInfo.dmId === '' || dmInfo.myId === '')
     return <SpinningLoader />;
   return (
-    <>
-      <div className=' text-xl font-bold text-center'>{chatUser}</div>
-      <div className='flex flex-col h-5/6'>
-        <ScrollableContainer className='bg-custom2 rounded-none h-full'>
+    <div>
+      <div className='text-xl font-bold text-center py-3'>{chatUser} 와 DM</div>
+      <div className='flex flex-col h-full p-2 gap-2'>
+        <ScrollableContainer className='h-[80vh] sm:h-[75vh] bg-custom2 rounded-xl'>
           <div className='min-h-5/6 '>
             <ScrollableContainer className='rounded-none bg-custom2 min-h-5/6'>
               <div>
@@ -167,6 +167,6 @@ export default function DMPage() {
         </ScrollableContainer>
         <DMInput setDMData={setDMData} dmInfo={dmInfo} />
       </div>
-    </>
+    </div>
   );
 }
