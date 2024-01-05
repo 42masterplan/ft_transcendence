@@ -406,7 +406,7 @@ export default function Game() {
         <Divider />
         <PlayerPortrait name={aName} profileImage={aProfileImage} />
       </div>
-      <div className='text-sm text-white font-bold'>
+      <div className='text-sm text-gray-500 font-bold'>
         <p>
           규칙: 10점을 먼저 달성하거나, 1분 30초 안에 더 많은 점수를 획득한
           플레이어가 승리합니다.
