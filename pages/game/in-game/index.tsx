@@ -178,19 +178,36 @@ export default function Game() {
   const [alarm_sock, disconnect] = useSocket('alarm');
 
   useEffect(() => {
+    function disconnectSocket() {
+      return new Promise<void>((resolve, reject) => {
+        if (!socket) return;
+        // 소켓 연결을 해제합니다.
+        socket.disconnect();
+        console.log('소켓이 이미 연결 해제된 상태입니다.');
+        resolve(); // 소켓이 이미 연결 해제된 경우, 프로미스를 즉시 해결합니다.
+      });
+    }
+
     function handleBeforeUnload(event: any) {
       event.preventDefault();
       event.returnValue =
         '게임이 진행중입니다. 정말로 나가시겠습니까? (이 경우 기권패로 처리됩니다.)';
-      console.log(socket);
-      if (socket) {
-        console.log('게임 소켓 연결 해제');
-        socket.disconnect(); // 게임 소켓 연결 해제 -> 순서 강제
+
+      async function disconnectAsync() {
+        console.log(socket);
+        if (socket) {
+          console.log('게임 소켓 연결 해제');
+          await disconnectSocket(); // 여기에서 대기
+        }
+        console.log('알람 소켓 연결 해제');
+        disconnect(); // 알람 소켓 연결 해제
       }
-      console.log('알람 소켓 연결 해제');
-      disconnect(); // 알람 소켓 연결 해제
+
+      disconnectAsync();
+
       return '게임이 진행중입니다. 정말로 나가시겠습니까? (이 경우 기권패로 처리됩니다.)';
     }
+
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [socket]);
@@ -406,7 +423,7 @@ export default function Game() {
         <Divider />
         <PlayerPortrait name={aName} profileImage={aProfileImage} />
       </div>
-      <div className='text-sm text-white font-bold'>
+      <div className='text-sm text-gray-500 font-bold'>
         <p>
           규칙: 10점을 먼저 달성하거나, 1분 30초 안에 더 많은 점수를 획득한
           플레이어가 승리합니다.
