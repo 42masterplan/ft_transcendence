@@ -109,7 +109,7 @@ function listenToSocketEvents(
     if (state.matchId != matchId) return;
     if (state.isForfeit) setForfeit(true);
     setGameOver(true);
-    console.log('game over!!!');
+    // console.log('game over!!!');
     cancelAnimationFrame(animationId);
     socket.disconnect();
   });
@@ -183,7 +183,7 @@ export default function Game() {
         if (!socket) return;
         // 소켓 연결을 해제합니다.
         socket.disconnect();
-        console.log('소켓이 이미 연결 해제된 상태입니다.');
+        // console.log('소켓이 이미 연결 해제된 상태입니다.');
         resolve(); // 소켓이 이미 연결 해제된 경우, 프로미스를 즉시 해결합니다.
       });
     }
@@ -194,12 +194,12 @@ export default function Game() {
         '게임이 진행중입니다. 정말로 나가시겠습니까? (이 경우 기권패로 처리됩니다.)';
 
       async function disconnectAsync() {
-        console.log(socket);
+        // console.log(socket);
         if (socket) {
-          console.log('게임 소켓 연결 해제');
+          // console.log('게임 소켓 연결 해제');
           await disconnectSocket(); // 여기에서 대기
         }
-        console.log('알람 소켓 연결 해제');
+        // console.log('알람 소켓 연결 해제');
         disconnect(); // 알람 소켓 연결 해제
       }
 
@@ -259,7 +259,7 @@ export default function Game() {
     });
     // if (gameStarted)
     socket.emit('gameReady');
-    console.log('game ready emitted');
+    // console.log('game ready emitted');
     setInterval(() => {
       handleKeys(keysPressed, playerA, playerB, socket);
     }, RENDERING_RATE);
@@ -287,7 +287,7 @@ export default function Game() {
     };
     gameLoop();
     return () => {
-      console.log('game unmounted');
+      // console.log('game unmounted');
       socket.off('updatePlayers');
       socket.off('updateBall');
       socket.off('updateScore');
@@ -324,7 +324,7 @@ export default function Game() {
       if (state.matchId != matchId) return;
       if (state.isForfeit) setForfeit(true);
       setGameOver(true);
-      console.log('game over!!!');
+      // console.log('game over!!!');
       newSocket.disconnect();
     });
     newSocket.emit('joinRoom', {

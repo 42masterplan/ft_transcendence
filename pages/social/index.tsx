@@ -26,7 +26,7 @@ export default function SocialPage() {
   useEffect(() => {
     if (alarmSocket) {
       alarmSocket.on('changeStatus', () => {
-        console.log('changeStatus');
+        // console.log('changeStatus');
         if (searchTarget === 'friend') {
           fetchData({
             method: 'get',

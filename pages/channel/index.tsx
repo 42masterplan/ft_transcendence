@@ -77,7 +77,7 @@ export default function ChannelPage() {
   const {channelName, channelId} = channelInfoState;
   useEffect(() => {
     socket.on('connect', () => {
-      console.log('---------connected----------');
+      // console.log('---------connected----------');
     });
     myInfoSocket.emit('myInfo', (data: any) => {
       infoDispatch({
@@ -92,7 +92,7 @@ export default function ChannelPage() {
       };
     });
     socket.on('disconnect', () => {
-      console.log('---------disconnected----------');
+      // console.log('---------disconnected----------');
     });
     return () => {
       socket.off('connect');

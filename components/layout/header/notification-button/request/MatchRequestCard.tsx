@@ -40,7 +40,7 @@ export default function MatchRequestCard(props: NotificationCardProps) {
       isAccept: false,
       matchId: newMatch.id
     });
-    console.log('I reject !!: ', newMatch.id);
+    // console.log('I reject !!: ', newMatch.id);
     setMatchRequests((prev: any) =>
       prev.filter((match: gameRequest) => {
         match.matchId !== newMatch.id;

@@ -112,7 +112,7 @@ export default function NotificationBtn() {
       }
     );
     socket.on('newFriendRequest', () => {
-      console.log('new friend request');
+      // console.log('new friend request');
       fetchData({
         method: 'get',
         url: '/users/friends/request',

@@ -68,7 +68,7 @@ const useAxios = () => {
       } catch (err: any) {
         setError(err);
         // Log the error stack trace (for debugging purposes)
-        console.log('Error Stack Trace:', err);
+        // console.log('Error Stack Trace:', err);
 
         let error_description = err?.response
           ? err.response.data.message
