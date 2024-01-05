@@ -373,7 +373,7 @@ export default function Game() {
           }}
           score={score}
           time={time}
-          winner={score.playerA >= SCORE_LIMIT ? true : false}
+          winner={score.playerA >= score.playerB ? true : false}
           forfeit={forfeit}
         />
       ) : (
