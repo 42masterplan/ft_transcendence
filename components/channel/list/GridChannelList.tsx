@@ -136,17 +136,15 @@ export default React.forwardRef(function GridChannelList(
               (channel: EngagedChannelType) => (
                 <Button
                   className={
-                    'mx-1 pl-6 h-36 bg-custom1 rounded-3xl hover:bg-custom1-500 justify-between hover:scale-[1.05] hover:-translate-y-1 transition duration-300 '
+                    'mx-1 pl-6 h-36 bg-custom4 rounded-3xl hover:bg-custom1-500 justify-between hover:scale-[1.05] hover:-translate-y-1 transition duration-300 '
                   }
                   onClick={() => {
                     handleChannelClick(channel);
                   }}
                   key={channel.id}
                 >
-                  <div className=' text-gray-300 text-2xl truncate ...'>
-                    {channel.name}
-                  </div>
-                  <div className='flex justify-center items-center text-custom4 rounded-lg text-center bg-custom3 w-10 h-10'>
+                  <div className='text-2xl truncate ...'>{channel.name}</div>
+                  <div className='flex justify-center items-center rounded-lg text-center bg-custom3 w-10 h-10'>
                     {channel.userCount}
                   </div>
                 </Button>
