@@ -52,73 +52,73 @@ export default function SetEmail() {
   if (loading == true) return <SpinningLoader />;
   return (
     <>
-      <div>
+      <div className='flex flex-col items-center justify-center w-full h-[100vh] p-6 gap-5'>
         <Title />
-        <div className='flex flex-col items-center w-full h-auto rounded-lg p-6  gap-3'>
-          <h1
-            className='font-roboto-mono text-4xl
-            font-semibold leading-10 tracking-normal text-center m-3 '
-          >
-            2단계 인증 이메일 설정
-          </h1>
-          <Image
-            src='/space_dog.png'
-            width={400}
-            height={400}
-            alt='2단계 인증'
-            className='h-1/3 w-1/3'
-          />
-          <>
-            <div className=' flex  flex-col gap-3'>
-              <Label htmlFor='text'>2단계 인증에 필요한 Email</Label>
-              <div className='w-full items-center gap-1.5   flex'>
-                <Input
-                  type='text'
-                  id='text'
-                  placeholder='당신의 Email이 필요해요'
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    validateEmail(e);
-                  }}
-                  disabled={fixEmail}
-                />
-                <Button
-                  variant='default'
-                  disabled={message !== '올바른 이메일 형식 입니다.'}
-                  onClick={() => {
-                    if (fixEmail) {
-                      setFixEmail(false);
-                    } else {
-                      fetchEmail({
-                        method: 'put',
-                        url: '/users/two-factor-auth/email',
-                        body: {email: email},
-                        errorDescription: '이메일 설정에 실패 했습니다.',
-                        errorTitle: '이메일 설정 실패',
-                        successTitle: '이메일 설정 성공',
-                        successDescription:
-                          '이메일 설정에 성공 했습니다. 인증코드는 설정한 이메일을 확인해주세요!'
-                      });
-                    }
-                  }}
-                  className='flex flex-col items-center justify-center w-1/3 h-10'
-                >
-                  {message === '올바른 이메일 형식 입니다.' && !fixEmail
-                    ? '코드 전송'
-                    : '변경'}
-                </Button>
-              </div>
-              {message === '올바른 이메일 형식 입니다.' ? (
-                <div className='text-xs text-blue-500'>{message}</div>
-              ) : (
-                <div className='text-xs text-red-500'>{message}</div>
-              )}
-              {fixEmail ? (
-                <InputValidCode fetchData={fetchCode} disabled={!emailDone} />
-              ) : null}
-            </div>
-          </>
+        <h1
+          className='font-roboto-mono text-4xl
+            font-semibold leading-10 tracking-normal text-center m-3'
+        >
+          2단계 인증 이메일 설정
+        </h1>
+        <Image
+          src='/space_dog.png'
+          width={400}
+          height={400}
+          alt='2단계 인증'
+          className='animate-pulse'
+        />
+
+        <div className=' flex flex-col gap-3 w-2/3 '>
+          <Label htmlFor='text' className='text-xl'>
+            2단계 인증에 필요한 Email
+          </Label>
+          <div className=' flex w-full items-center gap-2'>
+            <Input
+              className='flex-1'
+              type='text'
+              id='text'
+              placeholder='당신의 Email이 필요해요'
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                validateEmail(e);
+              }}
+              disabled={fixEmail}
+            />
+            <Button
+              variant='default'
+              disabled={message !== '올바른 이메일 형식 입니다.'}
+              onClick={() => {
+                if (fixEmail) {
+                  setFixEmail(false);
+                } else {
+                  fetchEmail({
+                    method: 'put',
+                    url: '/users/two-factor-auth/email',
+                    body: {email: email},
+                    errorDescription: '이메일 설정에 실패 했습니다.',
+                    errorTitle: '이메일 설정 실패',
+                    successTitle: '이메일 설정 성공',
+                    successDescription:
+                      '이메일 설정에 성공 했습니다. 인증코드는 설정한 이메일을 확인해주세요!'
+                  });
+                }
+              }}
+              className='flex flex-col items-center justify-center  h-10 w-20'
+            >
+              {message === '올바른 이메일 형식 입니다.' && !fixEmail
+                ? '코드 전송'
+                : '변경'}
+            </Button>
+          </div>
+          {message === '올바른 이메일 형식 입니다.' ? (
+            <div className='text-xs text-blue-500'>{message}</div>
+          ) : (
+            <div className='text-xs text-red-500'>{message}</div>
+          )}
+          {fixEmail ? (
+            <InputValidCode fetchData={fetchCode} disabled={!emailDone} />
+          ) : null}
         </div>
       </div>
     </>
