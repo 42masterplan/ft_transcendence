@@ -11,7 +11,7 @@ export default function InputValidCode({
 }) {
   const [code, setCode] = useState<string>('');
   return (
-    <div className='flex w-full max-w-sm gap-2'>
+    <div className=' flex w-full items-center gap-2'>
       <Input
         type='number'
         id='text'
@@ -40,7 +40,7 @@ export default function InputValidCode({
             disableSuccessToast: true
           });
         }}
-        className='flex flex-col items-center justify-center w-1/3 h-10'
+        className='flex flex-col items-center justify-center  h-10 w-20'
       >
         확인
       </Button>
