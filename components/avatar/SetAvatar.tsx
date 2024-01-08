@@ -34,7 +34,8 @@ export default function SetAvatar({
     process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI12 || '',
     process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI13 || '',
     process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI14 || '',
-    process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI15 || ''
+    process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI15 || '',
+    process.env.NEXT_PUBLIC_CHARACTER_DEFAULT_AVATAR || ''
   ]);
 
   useEffect(() => {
@@ -46,7 +47,9 @@ export default function SetAvatar({
     if (response != null) {
       const customAvatar =
         process.env.NEXT_PUBLIC_API_ENDPOINT + '/' + response.profileImage;
-      setAvatarList([...avatarList, customAvatar]);
+      const tmp = [...avatarList];
+      tmp[15] = customAvatar;
+      setAvatarList(tmp);
       setCustomAvatar(customAvatar);
       setProfileImage(customAvatar);
     }
@@ -91,28 +94,28 @@ export default function SetAvatar({
     return rows;
   };
   const renderAvatarSquare = (id: string, idx: number) => (
-    <div className='flex items-center space-x-2' key={id}>
+    <div className='flex items-center space-x-2 ' key={id}>
       <RadioGroupItem
         value={id}
         id={id}
         checked={id === selected.toString()}
-        className='peer sr-only'
+        className='peer sr-only '
         onClick={() => clickHandler(id)}
       />
       <Label
         htmlFor={idx.toString()}
-        className='flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-1 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary'
+        className='flex flex-col items-center justify-between rounded-md border-2 border-muted  p-1 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary bg-custom1'
       >
-        {renderAvatarIcon(id)}
+        {
+          <AvatarIcon
+            key={id}
+            size='h-full w-full'
+            avatarName={avatarList[parseInt(id)]}
+          />
+        }
       </Label>
     </div>
   );
-  const renderAvatarIcon = (id: string) =>
-    id !== '15' ? (
-      <AvatarIcon key={id} size='' avatarName={avatarList[parseInt(id)]} />
-    ) : (
-      <AvatarIcon key={id} size='' avatarName={customAvatar} />
-    );
   const clickHandler = (id: string) => {
     if (id === '15') {
       // Use ref to access file input
@@ -123,9 +126,9 @@ export default function SetAvatar({
     }
   };
   return (
-    <div className={`w-full ${hoverEffect}`}>
+    <div className={`w-full ${hoverEffect} bg-red-300`}>
       <h1 className={titleFontStyle}>아바타 선택</h1>
-      <div className='flex place-content-center py-2'>
+      <div className='flex place-content-center py-2 bg-blue-300'>
         <label htmlFor='profile-upload' />
         <form>
           <input
