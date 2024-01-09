@@ -27,13 +27,15 @@ export default function FriendRequestCard({
       url: '/users/friends/request',
       body: {
         requestId: request.id
-      }
+      },
+      disableSuccessToast: true
     });
   };
   const handleReject = () => {
     reject({
       method: 'delete',
-      url: `/users/friends/request/${request.id}`
+      url: `/users/friends/request/${request.id}`,
+      disableSuccessToast: true
     });
   };
   useEffect(() => {
