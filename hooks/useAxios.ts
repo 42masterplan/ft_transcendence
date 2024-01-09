@@ -87,6 +87,13 @@ const useAxios = () => {
           }
         } else if (err?.response?.status === 404) {
           router.push('/404');
+        } else if (err?.response?.status === 409) {
+          if (!disableErrorToast)
+            toast({
+              title: errorTitle || 'Error',
+              description: err?.response?.data?.message || errorDescription,
+              variant: 'default'
+            });
         } else {
           if (!disableErrorToast)
             toast({
