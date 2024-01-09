@@ -70,26 +70,37 @@ const useAxios = () => {
         // Log the error stack trace (for debugging purposes)
         // console.log('Error Stack Trace:', err);
 
-        let error_description = err?.response
-          ? err.response.data.message
-          : 'An error occurred ';
         setSuccess(false);
-        if (disableErrorToast) return;
-        toast({
-          title: errorTitle || 'Error',
-          description: error_description + ' ' + errorDescription,
-          variant: 'destructive'
-        });
 
         if (err?.response?.status === 401) {
           if (err.response.data.message === 'Email Required') {
             router.push('/welcome/setEmail');
           } else {
             removeCookie('accessToken', {path: '/'});
-            router.push('/welcome');
+            if (!disableErrorToast)
+              toast({
+                title: '재로그인 필요',
+                description:
+                  '다시 로그인해주세요. 로그인 정보가 만료되었습니다.'
+              });
+            router.push('/welcome', undefined, {shallow: true});
           }
         } else if (err?.response?.status === 404) {
           router.push('/404');
+        } else if (err?.response?.status === 409) {
+          if (!disableErrorToast)
+            toast({
+              title: errorTitle || 'Error',
+              description: err?.response?.data?.message || errorDescription,
+              variant: 'default'
+            });
+        } else {
+          if (!disableErrorToast)
+            toast({
+              title: errorTitle || 'Error',
+              description: errorDescription,
+              variant: 'default'
+            });
         }
       } finally {
         setLoading(false);

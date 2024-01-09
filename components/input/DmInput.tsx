@@ -17,7 +17,7 @@ const DMInput = ({setDMData, dmInfo}: {setDMData: any; dmInfo: dmInfoType}) => {
       onSubmit={(event) => {
         event.preventDefault();
         if (content === '') return;
-        if (content.length > 500) {
+        if (content.length > 250) {
           toast({
             title: 'DM 전송 실패!',
             variant: 'destructive',
@@ -72,7 +72,6 @@ const DMInput = ({setDMData, dmInfo}: {setDMData: any; dmInfo: dmInfoType}) => {
         autoComplete='off'
         value={content}
         onChange={(event) => {
-          if (content.length > 500) return;
           setContent(event.target.value);
         }}
       />

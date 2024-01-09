@@ -8,11 +8,13 @@ import {
   CardTitle
 } from '@/components/shadcn/ui/card';
 import {useEffect, useState} from 'react';
-
+import {Switch} from '@/components/shadcn/ui/switch';
+import {Label} from '@/components/shadcn/ui/label';
 import useAxios from '@/hooks/useAxios';
 import SpinningLoader from '../loader/SpinningLoader';
 import ChangeAvatar from './ChangeAvatar';
 import ChangeUserName from './ChangeUserName';
+import LinkBtn from '@/components/button/LinkBtn';
 export default function ChangeUserInfo() {
   const {fetchData, isSuccess, response} = useAxios();
   const {toast} = useToast();
@@ -20,7 +22,8 @@ export default function ChangeUserInfo() {
   const [myInfo, setMyInfo] = useState({
     profileImage: '',
     name: '',
-    introduction: ''
+    introduction: '',
+    is2faEnabled: false
   });
   useEffect(() => {
     fetchData({
@@ -89,6 +92,27 @@ export default function ChangeUserInfo() {
         <Button className={`w-full ${hoverEffect}`} onClick={handleSubmit}>
           상태메세지 변경
         </Button>
+        <div className='flex justify-center space-x-2'>
+          <Switch
+            id='two-step'
+            checked={myInfo.is2faEnabled}
+            onClick={() => {
+              fetchData({
+                method: 'put',
+                url: '/users',
+                body: {
+                  is2faEnabled: !myInfo.is2faEnabled
+                }
+              });
+              const newMyInfo = {...myInfo};
+              newMyInfo.is2faEnabled = !myInfo.is2faEnabled;
+              setMyInfo(newMyInfo);
+              location.reload();
+            }}
+          />
+          <Label htmlFor='two-step'>2단계 인증 활성화</Label>
+        </div>
+        <LinkBtn link='/welcome/setEmail'>2단계 인증 이메일 변경</LinkBtn>
       </CardContent>
     </Card>
   );

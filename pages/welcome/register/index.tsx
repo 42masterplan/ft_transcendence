@@ -37,7 +37,8 @@ export default function Register() {
         name: nickname,
         profileImage: profileImage,
         introduction: statusMsg
-      }
+      },
+      disableSuccessToast: true
     });
   };
 
