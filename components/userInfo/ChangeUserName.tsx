@@ -88,12 +88,14 @@ export default function ChangeUserName() {
             }
             setNickname(e.target.value);
           }}
+          disabled={!isDuplicated}
         />
         <Button
           variant='default'
           onClick={() => {
             checkNickname();
           }}
+          disabled={!isDuplicated}
         >
           중복 확인
         </Button>
