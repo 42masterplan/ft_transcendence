@@ -1,7 +1,8 @@
 import PlayerPortrait from '@/components/game/PlayerPortrait';
-import LinkBtn from '../../button/LinkBtn';
+import {useRouter} from 'next/router';
 import {Player} from '@/types/game';
 import {GAME_TIME_LIMIT} from '@/lib/game/macros';
+import {Button} from '@/components/shadcn/ui/button';
 
 const textcss =
   'text-center text-white text-[40px] font-bold font-[Roboto Mono]';
@@ -16,6 +17,7 @@ export default function GameResult(props: {
 }) {
   const {playerA, playerB, score, winner, forfeit} = props;
   const time = GAME_TIME_LIMIT - props.time; // how long the game lasted
+  const router = useRouter();
   // console.log('A won: ', winner);
   // console.log('forfeit: ', forfeit);
 
@@ -66,8 +68,20 @@ export default function GameResult(props: {
         {time >= 60 ? Math.floor(time / 60) + ':' + (time % 60) : '0:' + time}
       </span>
       <div className='flex flex-row justify-center gap-20'>
-        <LinkBtn link='/'>마이페이지로 가기</LinkBtn>
-        <LinkBtn link='/game'>한판 더 하기!</LinkBtn>
+        <Button
+          onClick={() => {
+            router.replace('/');
+          }}
+        >
+          마이페이지로 가기
+        </Button>
+        <Button
+          onClick={() => {
+            router.replace('/game');
+          }}
+        >
+          한판 더 하기
+        </Button>
       </div>
     </div>
   );
