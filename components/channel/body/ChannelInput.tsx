@@ -47,7 +47,7 @@ const ChannelInput = ({
         autoComplete='off'
         value={content}
         onChange={(event) => {
-          if (historyLoading || content.length > 500) return;
+          if (historyLoading) return;
           setContent(event.target.value);
         }}
       />
