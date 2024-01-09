@@ -10,7 +10,9 @@ export default function ChangeAvatar({beforeAvatar}: {beforeAvatar: string}) {
   const [customAvatar, setCustomAvatar] = useState('');
   const {fetchData, response, isSuccess} = useAxios();
   const {fetchData: postAvatar, isSuccess: setAvatarSuccess} = useAxios();
-  const [profileImage, setProfileImage] = useState('');
+  const [profileImage, setProfileImage] = useState(
+    process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI1
+  );
   const fileUploadRef = useRef<HTMLInputElement>(null);
   const [avatarList, setAvatarList] = useState([
     process.env.NEXT_PUBLIC_CHARACTER_HOSTING_URI1 || '',
