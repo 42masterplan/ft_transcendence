@@ -2,18 +2,36 @@
 ## Online RealTime Chatting & Pong Game Service
 
 ### 1. Login & Register 
+
+#### 1-1.Login
 <img width="500" alt="image" src="https://github.com/42masterplan/ft_transcendence/assets/92737157/ece96228-3dbd-4418-a17b-b2a7fe248ad9">
 <img width="500" alt="image" src="https://github.com/42masterplan/ft_transcendence/assets/92737157/95c83fdc-092a-4b70-9edb-2fd30f94c4ed">
+
+#### 1-2. Register
 <img width="500" alt="image" src="https://github.com/42masterplan/ft_transcendence/assets/92737157/08a495c2-fb6b-4c2f-a70f-71ba512e72e1">
 <img width="500" alt="image" src="https://github.com/42masterplan/ft_transcendence/assets/92737157/6c35c2f6-3137-4f5f-af4a-088b72298d6e">
+
+#### 1-3. Set Email For 2FA authorization code
 <img width="500" alt="image" src="https://github.com/42masterplan/ft_transcendence/assets/92737157/f6c84653-9a67-41b0-9718-d58ad756b304">
 <img width="500" alt="image" src="https://github.com/42masterplan/ft_transcendence/assets/92737157/bcf1d186-fe5a-4486-8d5f-b5107e3b51e9">
 
 
 
-### 2. Profile (Game History, Achievements) 
+### 2. Profile & (Game History, Achievements)
+#### 2-1. Light Mode & Dark Mode
+<img width="500" alt="image" src="https://github.com/42masterplan/ft_transcendence/assets/92737157/622d9a60-05c3-4f5a-8c39-3e209935d946">
+<img width="500" alt="image" src="https://github.com/42masterplan/ft_transcendence/assets/92737157/1c2fe285-0948-4604-bc1d-4df46e5887cd">
+
+#### 2-2. Change User Info
+<img width="500" alt="image" src="https://github.com/42masterplan/ft_transcendence/assets/92737157/06fe1594-a7d5-4b16-adf0-b0a826b4fe88">
+
+
 
 ### 3. Social Page (Show in-game, on/offline status, Friend Profile, Block, UnBlock)
+<img width="500" alt="image" src="https://github.com/42masterplan/ft_transcendence/assets/92737157/296c9d7e-8d20-4bf1-ba08-3d1ca21672a5">
+
+
+
 ### 4.Game (Ladder And Normal Game)
 
 ### 5.Channel (Chat rooms with multiple users)
