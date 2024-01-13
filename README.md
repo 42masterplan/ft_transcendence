@@ -97,14 +97,51 @@
 <p>If there are no channels you are engaged with, the page will look like this.</p>
 <p>참여 중인 채널이 없는 경우 페이지는 다음과 같이 표시됩니다</p>
 <img width="500" alt="image" src="https://github.com/42masterplan/ft_transcendence/assets/92737157/6534fa70-481e-4946-a14d-555edc5253d9">
-<p>참여중인 채널이 있는 경우 페이지는 다음과 같이 제가 참여한 방들이 표시됩니다.</p>
-<img width="500" alt="image" src="https://github.com/42masterplan/ft_transcendence/assets/92737157/c0efee3a-65b4-4db2-ad90-6952034791c8">
-<p>공개 채널 목록을 통해 공개된 채널중 원하는 채널에 참여할 수 있습니다.이곳에는 제가 참여한 채널 목록은 나오지 않습니다.</p>
+<p>If you have a channel you're engaged with, the page displays the rooms you're engaged with, as shown below.</p>
+<p>참여 중인 채널이 있는 경우 페이지에 다음과 같이 참여 중인 방이 표시됩니다.</p>
+<img width="1000" alt="image" src="https://github.com/42masterplan/ft_transcendence/assets/92737157/c0efee3a-65b4-4db2-ad90-6952034791c8">
+<p>You can join any publicly available channel from the Public Channels list</p> 
+<p>공개 채널 목록에서 공개적으로 제공되는 모든 채널에 참여할 수 있습니다.</p> 
+<p>Here, you won't see a list of channels you've joined.</p>
+<p>여기에는 내가 참여한 채널 목록이 표시되지 않습니다.</p>
+<img width="1000" alt="image" src="https://github.com/42masterplan/ft_transcendence/assets/92737157/ea8a6daf-4c11-4297-92f8-02f6df00f5a9">
+<p>When you create a channel, you can decide whether to make it public or private.</p>
+<p>채널을 만들 때 공개 또는 비공개로 설정할지 여부를 결정할 수 있습니다.</p>
+<p>The difference between public and private is whether you can join from the room's public list. Private rooms are between friends and can only be joined by invitation when you first create the room.</p>
+<p>공개와 비공개의 차이점은 방의 공개 목록에서 참여할 수 있는지 여부입니다. 비공개 대화방은 친구 간의 대화방으로, 처음 대화방을 만들 때 초대를 통해서만 참여할 수 있습니다.</p>
+<p>When you create a channel, you become the room leader. You can invite your friends to join the room, similar to how invitations work in KakaoTalk.</p>
+<p>채널을 만들면 룸 리더가 됩니다. 친구를 초대할 수 있으며, 친구는 카카오톡의 초대 방식과 유사하게 방에 참여하게 됩니다.</p>
 <img width="1000" alt="image" src="https://github.com/42masterplan/ft_transcendence/assets/92737157/7d4e35d5-653a-4468-8457-4f86510c0750">
+<p>When you click Channels, you'll see a list of channels you're in on the left, and you can chat with other users.</p>
+<p>채널을 클릭하면 왼쪽에 내가 참여 중인 채널 목록이 표시되고 다른 사용자와 채팅을 할 수 있습니다.</p>
+<p>If you block a user, their messages will no longer appear in the channel, but if you unblock them later, their messages will appear again.</p>
+<p>사용자를 차단하면 해당 사용자의 메시지가 더 이상 채널에 표시되지 않지만, 나중에 차단을 해제하면 메시지가 다시 표시됩니다.</p>
+<p>Channels are divided into three permission levels: room moderators who can create rooms, admins who can block or mute other users, and regular users.</p>
+<p>채널은 방을 만들 수 있는 방 운영자, 다른 사용자를 차단하거나 음소거할 수 있는 관리자, 일반 사용자의 세 가지 권한 수준으로 나뉩니다.</p>
+<img width="1000" alt="image" src="https://github.com/42masterplan/ft_transcendence/assets/92737157/f314208d-802b-4ac8-a368-aa1785cd6c5f">
+<p>A normal user is a user who can only chat without any other permissions, and is set as a normal user by default when entering a new chat room.</p>
+<p>일반 사용자는 다른 권한 없이 채팅만 할 수 있는 사용자를 말하며, 새 대화방에 입장하면 기본적으로 일반 사용자로 설정됩니다.</p>
+<img width="1000" alt="image" src="https://github.com/42masterplan/ft_transcendence/assets/92737157/8432fda8-611f-463f-9ca7-a872c520db5b">
+<img width="1000" alt="image" src="https://github.com/42masterplan/ft_transcendence/assets/92737157/849a07f7-a1e8-4088-87c9-06f909212c3a">
+<p>Admins can ban, block, and mute regular users. A room captain becomes an admin when he or she is assigned to a room as an admin.</p>
+<p>관리자는 일반 사용자를 금지, 차단 및 뮤트할 수 있습니다. 방장이 방에 관리자로 지정되면 관리자가 됩니다.</p>
+<img width="1000" alt="image" src="https://github.com/42masterplan/ft_transcendence/assets/92737157/bfb127f5-9c1d-4c32-8624-0639f779c065">
+<p>Muting a user makes them unavailable to chat for 3 minutes.</p>
+<p>사용자를 뮤트하면 해당 사용자는 3분 동안 채팅을 할 수 없게 됩니다.</p>
+<p>관리자는 방장을 쫓아내거나, 차단하거나, 뮤트할 수 없습니다</p>
+<p>Admins can't kick, block, or mute a room moderators</p>
+<img width="1000" alt="image" src="https://github.com/42masterplan/ft_transcendence/assets/92737157/0c414bd7-1b23-4812-9ed3-4e250494ae09">
+<p>A room captain has the basic permissions of an admin, plus the additional permissions to unblock blocked users, assign admins, and change the room's password.</p>
+<p>방장은 관리자의 기본 권한과 함께 금지된 사용자를 차단 해제하고, 관리자를 지정하고, 룸의 비밀번호를 변경할 수 있는 추가 권한을 갖습니다.
+<p>When a room leader leaves a channel, the user with the highest permissions, from oldest to newest, becomes the leader. </p>
+<p>방장이 채널을 떠나면 가장 오래된 사용자부터 가장 최근 사용자까지 가장 높은 권한을 가진 사용자가 방장이 됩니다. </p>
 
 
 ### 6.DM
+<img width="1000" alt="image" src="https://github.com/42masterplan/ft_transcendence/assets/92737157/02408a09-d40b-45fc-a65f-54f658a88306">
+<p>DMs are one-on-one chats between users. Only friends can send each other DMs.</p>
 
-### 7.Notification (Friend Request & Game Request)
+<p>DM은 사용자 간의 일대일 채팅입니다. 친구만 서로에게 쪽지를 보낼 수 있습니다.</p>
+<p>If you delete a friend, they won't be able to send each other DMs, but their conversation history will be retained.</p>
+<p>친구를 삭제하면 서로에게 쪽지를 보낼 수 없지만 대화 내역은 유지됩니다.</p>
 
-![image](https://github.com/42masterplan/ft_transcendence/assets/92737157/06c2dc06-eaef-493f-aad3-437b231f5ac4)
